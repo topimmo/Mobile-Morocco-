@@ -236,10 +236,10 @@ const ProductCard = ({
 
   return (
     <Card
-      className={`w-full max-w-[320px] sm:max-w-full md:max-w-[320px] overflow-hidden transition-all duration-200 hover:shadow-md bg-white cursor-pointer ${isPremium ? "ring-2 ring-sky-600 ring-offset-2" : ""} ${isFeatured ? "shadow-lg" : ""}`}
+      className={`w-full overflow-hidden transition-all duration-200 hover:shadow-md bg-white cursor-pointer flex flex-col ${isPremium ? "ring-2 ring-sky-600 ring-offset-2" : ""} ${isFeatured ? "shadow-lg" : ""}`}
       onClick={handleCardClick}
     >
-      <div className="relative h-40 sm:h-48 overflow-hidden bg-gray-100">
+      <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
         {isPremium && (
           <div className="absolute top-0 left-0 z-20 bg-sky-600 text-white px-2 py-1 text-xs font-bold">
             PREMIUM
@@ -377,8 +377,8 @@ const ProductCard = ({
         </Badge>
       </div>
 
-      <CardContent className="p-3 sm:p-4">
-        <h3 className="font-medium text-base sm:text-lg line-clamp-2 mb-1 sm:mb-2 h-12 sm:h-14">
+      <CardContent className="p-3 sm:p-4 flex-1">
+        <h3 className="font-medium text-base sm:text-lg line-clamp-2 mb-1 sm:mb-2 min-h-[3rem]">
           {title}
         </h3>
         <p className="text-lg sm:text-xl font-bold text-sky-600 mb-1 sm:mb-2">
@@ -398,7 +398,7 @@ const ProductCard = ({
         </div>
       </CardContent>
 
-      <CardFooter className="p-3 sm:p-4 pt-0 flex flex-col gap-2">
+      <CardFooter className="p-3 sm:p-4 pt-0 flex flex-col gap-2 mt-auto">
         <div className="flex gap-2 w-full">
           <Button
             className="flex-1 text-xs sm:text-sm"

@@ -74,7 +74,7 @@ function Navigation() {
   };
 
   return (
-    <nav className={cn('bg-secondary border-b border-border sticky top-0 z-50', isRTL && 'rtl')}>
+    <nav className={cn('bg-secondary border-b border-border sticky top-0 z-50')} dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className={cn('flex justify-between items-center', isRTL && 'flex-row-reverse')}>
           {/* Logo */}
@@ -106,7 +106,7 @@ function Navigation() {
           <div className={cn('hidden md:flex items-center gap-3', isRTL && 'flex-row-reverse')}>
             {/* Publish Phone CTA */}
             <Link to="/publish-phone">
-              <Button size="sm" className={cn('bg-sky-600 hover:bg-sky-700', isRTL && 'flex-row-reverse')}>
+              <Button size="sm" className={cn('bg-sky-600 hover:bg-sky-700 whitespace-nowrap', isRTL && 'flex-row-reverse')}>
                 <Plus className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
                 {isRTL ? 'نشر تلفوني' : 'Publier'}
               </Button>
@@ -175,13 +175,17 @@ function Navigation() {
             <button
               onClick={() => setLanguage(language === 'ar' ? 'fr' : 'ar')}
               className="p-2 rounded-lg hover:bg-muted transition-colors"
+              aria-label={language === 'ar' ? 'Switch to French' : 'Switch to Arabic'}
             >
               <Globe className="h-5 w-5" />
             </button>
             
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <button className="p-2 rounded-lg hover:bg-muted transition-colors">
+                <button 
+                  className="p-2 rounded-lg hover:bg-muted transition-colors"
+                  aria-label="Open menu"
+                >
                   <Menu className="h-6 w-6" />
                 </button>
               </SheetTrigger>
