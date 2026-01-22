@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   Phone,
   Smartphone,
@@ -49,7 +50,7 @@ const CategorySection = ({
         language === "ar"
           ? "هواتف جديدة ومستعملة من مختلف العلامات التجارية"
           : "Téléphones neufs et d'occasion de différentes marques",
-      link: "/category/phones",
+      link: "/products?category=phones",
       subCategories: [
         {
           id: "new-phones",
@@ -58,7 +59,7 @@ const CategorySection = ({
             language === "ar"
               ? "أحدث الهواتف الذكية من مختلف العلامات التجارية"
               : "Les derniers smartphones de différentes marques",
-          link: "/category/new-phones",
+          link: "/products?category=phones&subcategory=new-phones",
         },
         {
           id: "used-phones",
@@ -67,7 +68,7 @@ const CategorySection = ({
             language === "ar"
               ? "هواتف بحالة جيدة وبأسعار مناسبة"
               : "Téléphones en bon état à des prix abordables",
-          link: "/category/used-phones",
+          link: "/products?category=phones&subcategory=used-phones",
         },
       ],
     },
@@ -79,7 +80,7 @@ const CategorySection = ({
         language === "ar"
           ? "سماعات، أغطية، شواحن وملحقات أخرى"
           : "Écouteurs, coques, chargeurs et autres accessoires",
-      link: "/category/accessories",
+      link: "/products?category=accessories",
       subCategories: [
         {
           id: "cases-protectors",
@@ -91,7 +92,7 @@ const CategorySection = ({
             language === "ar"
               ? "حماية لهاتفك من الصدمات والخدوش"
               : "Protection pour votre téléphone contre les chocs et rayures",
-          link: "/category/accessories/cases-protectors",
+          link: "/products?category=accessories&subcategory=cases-protectors",
         },
         {
           id: "chargers-earphones",
@@ -100,7 +101,7 @@ const CategorySection = ({
             language === "ar"
               ? "شواحن وسماعات أصلية وعالية الجودة"
               : "Chargeurs et écouteurs originaux et de haute qualité",
-          link: "/category/accessories/chargers-earphones",
+          link: "/products?category=accessories&subcategory=chargers-earphones",
         },
         {
           id: "cables-misc",
@@ -112,7 +113,7 @@ const CategorySection = ({
             language === "ar"
               ? "كابلات وأدوات متنوعة لهاتفك"
               : "Câbles et outils divers pour votre téléphone",
-          link: "/category/accessories/cables-misc",
+          link: "/products?category=accessories&subcategory=cables-misc",
         },
       ],
     },
@@ -124,7 +125,7 @@ const CategorySection = ({
         language === "ar"
           ? "قطع غيار جديدة ومستعملة لمختلف أنواع الهواتف"
           : "Pièces détachées neuves et d'occasion pour différents types de téléphones",
-      link: "/category/spare-parts",
+      link: "/products?category=spare-parts",
       subCategories: [
         {
           id: "new-spare-parts",
@@ -134,7 +135,7 @@ const CategorySection = ({
             language === "ar"
               ? "قطع غيار أصلية جديدة لمختلف أنواع الهواتف"
               : "Pièces détachées neuves originales pour différents types de téléphones",
-          link: "/category/new-spare-parts",
+          link: "/products?category=spare-parts&subcategory=new-spare-parts",
         },
         {
           id: "used-spare-parts",
@@ -146,7 +147,7 @@ const CategorySection = ({
             language === "ar"
               ? "قطع غيار مستعملة بحالة جيدة وبأسعار مناسبة"
               : "Pièces détachées d'occasion en bon état à des prix abordables",
-          link: "/category/used-spare-parts",
+          link: "/products?category=spare-parts&subcategory=used-spare-parts",
         },
       ],
     },
@@ -158,16 +159,16 @@ const CategorySection = ({
         language === "ar"
           ? "أدوات ومعدات احترافية لصيانة الهواتف"
           : "Outils et équipements professionnels pour la réparation de téléphones",
-      link: "/category/repair-equipment",
+      link: "/products?category=repair-equipment",
       subCategories: [
         {
           id: "new-equipment",
           name: language === "ar" ? "معدات جديدة" : "Équipement neuf",
           description:
             language === "ar"
-              ? "أدوات ومعدات جديدة لصيانة الهواتف"
+              ? "أدوات ومعدات جديدة لصيانة اله��اتف"
               : "Outils et équipements neufs pour la réparation de téléphones",
-          link: "/category/repair-equipment/new",
+          link: "/products?category=repair-equipment&subcategory=new-equipment",
         },
         {
           id: "used-equipment",
@@ -176,7 +177,7 @@ const CategorySection = ({
             language === "ar"
               ? "أدوات ومعدات مستعملة بحالة جيدة وبأسعار مناسبة"
               : "Outils et équipements d'occasion en bon état à des prix abordables",
-          link: "/category/repair-equipment/used",
+          link: "/products?category=repair-equipment&subcategory=used-equipment",
         },
       ],
     },
@@ -197,7 +198,7 @@ const CategorySection = ({
             language === "ar"
               ? "فنيون يبحثون عن فرص عمل"
               : "Techniciens à la recherche d'opportunités d'emploi",
-          link: "/technicians/jobs",
+          link: "/technicians?filter=jobs",
         },
         {
           id: "offering-services",
@@ -206,7 +207,7 @@ const CategorySection = ({
             language === "ar"
               ? "فنيون يقدمون خدمات الصيانة والإصلاح"
               : "Techniciens offrant des services de maintenance et de réparation",
-          link: "/technicians/services",
+          link: "/technicians?filter=services",
         },
       ],
     },
@@ -285,9 +286,9 @@ const CategorySection = ({
                   <PopoverContent className="w-64 p-0" align="center">
                     <div className="grid gap-1 p-2">
                       {category.subCategories.map((subCategory) => (
-                        <a
+                        <Link
                           key={subCategory.id}
-                          href={subCategory.link}
+                          to={subCategory.link}
                           className="block p-2 hover:bg-muted rounded-md transition-colors"
                         >
                           <h4 className="font-medium text-sm">
@@ -296,14 +297,14 @@ const CategorySection = ({
                           <p className="text-muted-foreground text-xs">
                             {subCategory.description}
                           </p>
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </PopoverContent>
                 </Popover>
               ) : (
-                <a
-                  href={category.link || `#${category.id}`}
+                <Link
+                  to={category.link || `/products?category=${category.id}`}
                   className="block h-full"
                 >
                   <Card className="h-full cursor-pointer hover:border-primary hover:shadow-md transition-all duration-300">
@@ -345,7 +346,7 @@ const CategorySection = ({
                       </p>
                     </CardContent>
                   </Card>
-                </a>
+                </Link>
               )}
             </motion.div>
           ))}

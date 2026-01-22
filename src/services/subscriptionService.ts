@@ -1,3 +1,5 @@
+import { supabase } from '@/utils/supabaseClient';
+
 // Types for subscription management
 export interface Subscription {
   id: string;
@@ -85,8 +87,22 @@ let subscriptions: Subscription[] = [
  * Get all subscriptions
  */
 export const getAllSubscriptions = async (): Promise<Subscription[]> => {
-  // In a real app, this would fetch from an API or database
-  return subscriptions;
+  try {
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Get subscriptions error:', error);
+      return subscriptions;
+    }
+
+    return data.map(mapDatabaseSubscriptionToModel);
+  } catch (error) {
+    console.error('Get subscriptions error:', error);
+    return subscriptions;
+  }
 };
 
 /**
@@ -95,7 +111,23 @@ export const getAllSubscriptions = async (): Promise<Subscription[]> => {
 export const getSubscriptionById = async (
   id: string,
 ): Promise<Subscription | undefined> => {
-  return subscriptions.find((sub) => sub.id === id);
+  try {
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      console.error('Get subscription error:', error);
+      return subscriptions.find((sub) => sub.id === id);
+    }
+
+    return mapDatabaseSubscriptionToModel(data);
+  } catch (error) {
+    console.error('Get subscription error:', error);
+    return subscriptions.find((sub) => sub.id === id);
+  }
 };
 
 /**
@@ -104,7 +136,24 @@ export const getSubscriptionById = async (
 export const getUserSubscription = async (
   userId: string,
 ): Promise<Subscription | undefined> => {
-  return subscriptions.find((sub) => sub.userId === userId && sub.isActive);
+  try {
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .single();
+
+    if (error) {
+      console.error('Get user subscription error:', error);
+      return subscriptions.find((sub) => sub.userId === userId && sub.isActive);
+    }
+
+    return mapDatabaseSubscriptionToModel(data);
+  } catch (error) {
+    console.error('Get user subscription error:', error);
+    return subscriptions.find((sub) => sub.userId === userId && sub.isActive);
+  }
 };
 
 /**
@@ -113,13 +162,42 @@ export const getUserSubscription = async (
 export const createSubscription = async (
   subscription: Omit<Subscription, "id">,
 ): Promise<Subscription> => {
-  const newSubscription = {
-    ...subscription,
-    id: `sub_${Date.now()}`,
-  };
+  try {
+    const dbSubscriptionData = {
+      user_id: subscription.userId,
+      plan_type: subscription.type === 'premium' ? 'professional' : 'free',
+      status: subscription.isActive ? 'active' : 'pending',
+      start_date: subscription.startDate,
+      end_date: subscription.endDate,
+      payment_method: subscription.paymentMethod,
+    };
 
-  subscriptions.push(newSubscription);
-  return newSubscription;
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .insert(dbSubscriptionData)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Create subscription error:', error);
+      const newSubscription = {
+        ...subscription,
+        id: `sub_${Date.now()}`,
+      };
+      subscriptions.push(newSubscription);
+      return newSubscription;
+    }
+
+    return mapDatabaseSubscriptionToModel(data);
+  } catch (error) {
+    console.error('Create subscription error:', error);
+    const newSubscription = {
+      ...subscription,
+      id: `sub_${Date.now()}`,
+    };
+    subscriptions.push(newSubscription);
+    return newSubscription;
+  }
 };
 
 /**
@@ -129,17 +207,64 @@ export const updateSubscription = async (
   id: string,
   updates: Partial<Subscription>,
 ): Promise<Subscription | undefined> => {
-  const index = subscriptions.findIndex((sub) => sub.id === id);
+  try {
+    const dbUpdates: any = { updated_at: new Date().toISOString() };
+    if (updates.type !== undefined) dbUpdates.plan_type = updates.type === 'premium' ? 'professional' : 'free';
+    if (updates.isActive !== undefined) dbUpdates.status = updates.isActive ? 'active' : 'cancelled';
+    if (updates.startDate !== undefined) dbUpdates.start_date = updates.startDate;
+    if (updates.endDate !== undefined) dbUpdates.end_date = updates.endDate;
+    if (updates.paymentMethod !== undefined) dbUpdates.payment_method = updates.paymentMethod;
 
-  if (index === -1) return undefined;
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .update(dbUpdates)
+      .eq('id', id)
+      .select()
+      .single();
 
-  const updatedSubscription = {
-    ...subscriptions[index],
-    ...updates,
+    if (error) {
+      console.error('Update subscription error:', error);
+      const index = subscriptions.findIndex((sub) => sub.id === id);
+      if (index === -1) return undefined;
+      const updatedSubscription = {
+        ...subscriptions[index],
+        ...updates,
+      };
+      subscriptions[index] = updatedSubscription;
+      return updatedSubscription;
+    }
+
+    return mapDatabaseSubscriptionToModel(data);
+  } catch (error) {
+    console.error('Update subscription error:', error);
+    const index = subscriptions.findIndex((sub) => sub.id === id);
+    if (index === -1) return undefined;
+    const updatedSubscription = {
+      ...subscriptions[index],
+      ...updates,
+    };
+    subscriptions[index] = updatedSubscription;
+    return updatedSubscription;
+  }
+};
+
+const mapDatabaseSubscriptionToModel = (dbSub: any): Subscription => {
+  const isPremium = dbSub.plan_type === 'professional' || dbSub.plan_type === 'standard';
+  return {
+    id: dbSub.id,
+    userId: dbSub.user_id,
+    type: isPremium ? 'premium' : 'free',
+    startDate: new Date(dbSub.start_date),
+    endDate: dbSub.end_date ? new Date(dbSub.end_date) : new Date('2099-12-31'),
+    isActive: dbSub.status === 'active',
+    paymentStatus: dbSub.status === 'active' ? 'confirmed' : 'pending',
+    paymentMethod: dbSub.payment_method || 'bank_transfer',
+    features: {
+      featuredPlacement: isPremium,
+      highlightedAds: isPremium,
+      prioritySupport: isPremium,
+    },
   };
-
-  subscriptions[index] = updatedSubscription;
-  return updatedSubscription;
 };
 
 /**

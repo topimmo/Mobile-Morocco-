@@ -1,0 +1,1006 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
+export type PageKey = 'home' | 'categories' | 'category' | 'city' | 'listings' | 'listing_details' | 'repair_shops' | 'repair_shop_details' | 'services' | 'stores' | 'store_details' | 'phones' | 'spare_parts' | 'equipment' | 'advertise' | 'item_details';
+export type SlotType = 'top' | 'bottom';
+export type UserRole = 'admin' | 'advertiser' | 'user';
+export type ListingStatus = 'pending' | 'approved' | 'rejected' | 'hidden';
+export type CampaignStatus = 'draft' | 'submitted' | 'pending_review' | 'approved' | 'active' | 'expired' | 'rejected' | 'paused' | 'completed';
+export type BookingStatus = 'pending' | 'confirmed' | 'cancelled';
+export type ItemType = 'phone' | 'spare_part' | 'equipment';
+export type ItemCondition = 'new' | 'used';
+export type StoreType = 'shop' | 'individual';
+export type PaymentStatus = 'pending' | 'uploaded' | 'verified' | 'rejected';
+
+export interface Database {
+  public: {
+    Tables: {
+      profiles: {
+        Row: {
+          id: string;
+          email: string | null;
+          full_name: string | null;
+          phone: string | null;
+          avatar_url: string | null;
+          role: UserRole;
+          city_id: string | null;
+          is_verified: boolean;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          email?: string | null;
+          full_name?: string | null;
+          phone?: string | null;
+          avatar_url?: string | null;
+          role?: UserRole;
+          city_id?: string | null;
+          is_verified?: boolean;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string | null;
+          full_name?: string | null;
+          phone?: string | null;
+          avatar_url?: string | null;
+          role?: UserRole;
+          city_id?: string | null;
+          is_verified?: boolean;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      cities: {
+        Row: {
+          id: string;
+          name_fr: string;
+          name_ar: string;
+          slug: string;
+          region_fr: string | null;
+          region_ar: string | null;
+          lat: number | null;
+          lng: number | null;
+          is_active: boolean;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name_fr: string;
+          name_ar: string;
+          slug: string;
+          region_fr?: string | null;
+          region_ar?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          is_active?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name_fr?: string;
+          name_ar?: string;
+          slug?: string;
+          region_fr?: string | null;
+          region_ar?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          is_active?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+      };
+      neighborhoods: {
+        Row: {
+          id: string;
+          city_id: string;
+          name: string;
+          slug: string;
+          is_verified: boolean;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          city_id: string;
+          name: string;
+          slug: string;
+          is_verified?: boolean;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          city_id?: string;
+          name?: string;
+          slug?: string;
+          is_verified?: boolean;
+          created_by?: string | null;
+          created_at?: string;
+        };
+      };
+      categories: {
+        Row: {
+          id: string;
+          name_fr: string;
+          name_ar: string;
+          slug: string;
+          icon: string | null;
+          parent_id: string | null;
+          sort_order: number;
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name_fr: string;
+          name_ar: string;
+          slug: string;
+          icon?: string | null;
+          parent_id?: string | null;
+          sort_order?: number;
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name_fr?: string;
+          name_ar?: string;
+          slug?: string;
+          icon?: string | null;
+          parent_id?: string | null;
+          sort_order?: number;
+          is_active?: boolean;
+          created_at?: string;
+        };
+      };
+      listings: {
+        Row: {
+          id: string;
+          user_id: string;
+          title_fr: string;
+          title_ar: string;
+          slug: string;
+          description_fr: string | null;
+          description_ar: string | null;
+          price: number | null;
+          currency: string;
+          category_id: string | null;
+          city_id: string | null;
+          neighborhood_id: string | null;
+          condition: 'new' | 'used' | 'refurbished' | null;
+          brand: string | null;
+          model: string | null;
+          status: ListingStatus;
+          whatsapp: string | null;
+          phone: string | null;
+          whatsapp_clicks: number;
+          phone_clicks: number;
+          view_count: number;
+          meta_title: string | null;
+          meta_description: string | null;
+          is_featured: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          title_fr: string;
+          title_ar: string;
+          slug?: string;
+          description_fr?: string | null;
+          description_ar?: string | null;
+          price?: number | null;
+          currency?: string;
+          category_id?: string | null;
+          city_id?: string | null;
+          neighborhood_id?: string | null;
+          condition?: 'new' | 'used' | 'refurbished' | null;
+          brand?: string | null;
+          model?: string | null;
+          status?: ListingStatus;
+          whatsapp?: string | null;
+          phone?: string | null;
+          whatsapp_clicks?: number;
+          phone_clicks?: number;
+          view_count?: number;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          is_featured?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          title_fr?: string;
+          title_ar?: string;
+          slug?: string;
+          description_fr?: string | null;
+          description_ar?: string | null;
+          price?: number | null;
+          currency?: string;
+          category_id?: string | null;
+          city_id?: string | null;
+          neighborhood_id?: string | null;
+          condition?: 'new' | 'used' | 'refurbished' | null;
+          brand?: string | null;
+          model?: string | null;
+          status?: ListingStatus;
+          whatsapp?: string | null;
+          phone?: string | null;
+          whatsapp_clicks?: number;
+          phone_clicks?: number;
+          view_count?: number;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          is_featured?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      listing_images: {
+        Row: {
+          id: string;
+          listing_id: string;
+          image_url: string;
+          alt_text_fr: string | null;
+          alt_text_ar: string | null;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          listing_id: string;
+          image_url: string;
+          alt_text_fr?: string | null;
+          alt_text_ar?: string | null;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          listing_id?: string;
+          image_url?: string;
+          alt_text_fr?: string | null;
+          alt_text_ar?: string | null;
+          sort_order?: number;
+          created_at?: string;
+        };
+      };
+      repair_shops: {
+        Row: {
+          id: string;
+          user_id: string;
+          name_fr: string;
+          name_ar: string;
+          slug: string;
+          description_fr: string | null;
+          description_ar: string | null;
+          address_fr: string | null;
+          address_ar: string | null;
+          city_id: string | null;
+          neighborhood_id: string | null;
+          lat: number | null;
+          lng: number | null;
+          phone: string | null;
+          whatsapp: string | null;
+          specialties: string[];
+          working_hours: Json;
+          status: ListingStatus;
+          whatsapp_clicks: number;
+          phone_clicks: number;
+          view_count: number;
+          meta_title: string | null;
+          meta_description: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name_fr: string;
+          name_ar: string;
+          slug?: string;
+          description_fr?: string | null;
+          description_ar?: string | null;
+          address_fr?: string | null;
+          address_ar?: string | null;
+          city_id?: string | null;
+          neighborhood_id?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          phone?: string | null;
+          whatsapp?: string | null;
+          specialties?: string[];
+          working_hours?: Json;
+          status?: ListingStatus;
+          whatsapp_clicks?: number;
+          phone_clicks?: number;
+          view_count?: number;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          name_fr?: string;
+          name_ar?: string;
+          slug?: string;
+          description_fr?: string | null;
+          description_ar?: string | null;
+          address_fr?: string | null;
+          address_ar?: string | null;
+          city_id?: string | null;
+          neighborhood_id?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          phone?: string | null;
+          whatsapp?: string | null;
+          specialties?: string[];
+          working_hours?: Json;
+          status?: ListingStatus;
+          whatsapp_clicks?: number;
+          phone_clicks?: number;
+          view_count?: number;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      shop_images: {
+        Row: {
+          id: string;
+          shop_id: string;
+          image_url: string;
+          alt_text_fr: string | null;
+          alt_text_ar: string | null;
+          is_cover: boolean;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          shop_id: string;
+          image_url: string;
+          alt_text_fr?: string | null;
+          alt_text_ar?: string | null;
+          is_cover?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          shop_id?: string;
+          image_url?: string;
+          alt_text_fr?: string | null;
+          alt_text_ar?: string | null;
+          is_cover?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+      };
+      banner_slots: {
+        Row: {
+          id: string;
+          page: PageKey;
+          slot: SlotType;
+          desktop_sizes: string[];
+          mobile_sizes: string[];
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          page: PageKey;
+          slot: SlotType;
+          desktop_sizes: string[];
+          mobile_sizes: string[];
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          page?: PageKey;
+          slot?: SlotType;
+          desktop_sizes?: string[];
+          mobile_sizes?: string[];
+          is_active?: boolean;
+          created_at?: string;
+        };
+      };
+      ad_campaigns: {
+        Row: {
+          id: string;
+          advertiser_id: string;
+          title: string;
+          description: string | null;
+          target_url: string;
+          banner_desktop_url: string | null;
+          banner_mobile_url: string | null;
+          slot: SlotType;
+          duration_days: number;
+          start_date: string;
+          end_date: string;
+          status: CampaignStatus;
+          total_impressions: number;
+          total_clicks: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          advertiser_id: string;
+          title: string;
+          description?: string | null;
+          target_url: string;
+          banner_desktop_url?: string | null;
+          banner_mobile_url?: string | null;
+          slot: SlotType;
+          duration_days: number;
+          start_date: string;
+          end_date: string;
+          status?: CampaignStatus;
+          total_impressions?: number;
+          total_clicks?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          advertiser_id?: string;
+          title?: string;
+          description?: string | null;
+          target_url?: string;
+          banner_desktop_url?: string | null;
+          banner_mobile_url?: string | null;
+          slot?: SlotType;
+          duration_days?: number;
+          start_date?: string;
+          end_date?: string;
+          status?: CampaignStatus;
+          total_impressions?: number;
+          total_clicks?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      ad_bookings: {
+        Row: {
+          id: string;
+          campaign_id: string;
+          page: PageKey;
+          slot: SlotType;
+          start_date: string;
+          end_date: string;
+          status: BookingStatus;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          campaign_id: string;
+          page: PageKey;
+          slot: SlotType;
+          start_date: string;
+          end_date: string;
+          status?: BookingStatus;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          campaign_id?: string;
+          page?: PageKey;
+          slot?: SlotType;
+          start_date?: string;
+          end_date?: string;
+          status?: BookingStatus;
+          created_at?: string;
+        };
+      };
+      ad_events: {
+        Row: {
+          id: string;
+          campaign_id: string;
+          booking_id: string | null;
+          event_type: 'impression' | 'click';
+          page: string;
+          slot: string;
+          user_agent: string | null;
+          ip_address: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          campaign_id: string;
+          booking_id?: string | null;
+          event_type: 'impression' | 'click';
+          page: string;
+          slot: string;
+          user_agent?: string | null;
+          ip_address?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          campaign_id?: string;
+          booking_id?: string | null;
+          event_type?: 'impression' | 'click';
+          page?: string;
+          slot?: string;
+          user_agent?: string | null;
+          ip_address?: string | null;
+          created_at?: string;
+        };
+      };
+      adsense_units: {
+        Row: {
+          id: string;
+          page: PageKey;
+          slot: SlotType;
+          client_id: string;
+          unit_id: string;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          page: PageKey;
+          slot: SlotType;
+          client_id: string;
+          unit_id: string;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          page?: PageKey;
+          slot?: SlotType;
+          client_id?: string;
+          unit_id?: string;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      otp_requests: {
+        Row: {
+          id: string;
+          phone: string;
+          code_hash: string;
+          expires_at: string;
+          verified: boolean;
+          attempts: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          phone: string;
+          code_hash: string;
+          expires_at: string;
+          verified?: boolean;
+          attempts?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          phone?: string;
+          code_hash?: string;
+          expires_at?: string;
+          verified?: boolean;
+          attempts?: number;
+          created_at?: string;
+        };
+      };
+      stores: {
+        Row: {
+          id: string;
+          user_id: string;
+          name_fr: string;
+          name_ar: string;
+          slug: string;
+          description_fr: string | null;
+          description_ar: string | null;
+          store_type: StoreType;
+          address_fr: string | null;
+          address_ar: string | null;
+          city_id: string | null;
+          neighborhood_id: string | null;
+          neighborhood_custom: string | null;
+          lat: number | null;
+          lng: number | null;
+          phone: string | null;
+          whatsapp: string | null;
+          email: string | null;
+          website: string | null;
+          working_hours: Json;
+          working_days: string[];
+          emergency_service: boolean;
+          status: ListingStatus;
+          whatsapp_clicks: number;
+          phone_clicks: number;
+          view_count: number;
+          rating_avg: number;
+          rating_count: number;
+          meta_title: string | null;
+          meta_description: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name_fr: string;
+          name_ar: string;
+          slug?: string;
+          description_fr?: string | null;
+          description_ar?: string | null;
+          store_type?: StoreType;
+          address_fr?: string | null;
+          address_ar?: string | null;
+          city_id?: string | null;
+          neighborhood_id?: string | null;
+          neighborhood_custom?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          phone?: string | null;
+          whatsapp?: string | null;
+          email?: string | null;
+          website?: string | null;
+          working_hours?: Json;
+          working_days?: string[];
+          emergency_service?: boolean;
+          status?: ListingStatus;
+          whatsapp_clicks?: number;
+          phone_clicks?: number;
+          view_count?: number;
+          rating_avg?: number;
+          rating_count?: number;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          name_fr?: string;
+          name_ar?: string;
+          slug?: string;
+          description_fr?: string | null;
+          description_ar?: string | null;
+          store_type?: StoreType;
+          address_fr?: string | null;
+          address_ar?: string | null;
+          city_id?: string | null;
+          neighborhood_id?: string | null;
+          neighborhood_custom?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          phone?: string | null;
+          whatsapp?: string | null;
+          email?: string | null;
+          website?: string | null;
+          working_hours?: Json;
+          working_days?: string[];
+          emergency_service?: boolean;
+          status?: ListingStatus;
+          whatsapp_clicks?: number;
+          phone_clicks?: number;
+          view_count?: number;
+          rating_avg?: number;
+          rating_count?: number;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      store_images: {
+        Row: {
+          id: string;
+          store_id: string;
+          image_url: string;
+          alt_text_fr: string | null;
+          alt_text_ar: string | null;
+          is_cover: boolean;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          store_id: string;
+          image_url: string;
+          alt_text_fr?: string | null;
+          alt_text_ar?: string | null;
+          is_cover?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          store_id?: string;
+          image_url?: string;
+          alt_text_fr?: string | null;
+          alt_text_ar?: string | null;
+          is_cover?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+      };
+      items: {
+        Row: {
+          id: string;
+          store_id: string;
+          item_type: ItemType;
+          condition: ItemCondition;
+          title_fr: string;
+          title_ar: string;
+          slug: string;
+          description_fr: string | null;
+          description_ar: string | null;
+          price: number | null;
+          price_text: string | null;
+          currency: string;
+          brand: string | null;
+          model: string | null;
+          city_id: string | null;
+          neighborhood_id: string | null;
+          neighborhood_custom: string | null;
+          phone: string | null;
+          whatsapp: string | null;
+          status: ListingStatus;
+          whatsapp_clicks: number;
+          phone_clicks: number;
+          view_count: number;
+          meta_title: string | null;
+          meta_description: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          store_id: string;
+          item_type: ItemType;
+          condition: ItemCondition;
+          title_fr: string;
+          title_ar: string;
+          slug?: string;
+          description_fr?: string | null;
+          description_ar?: string | null;
+          price?: number | null;
+          price_text?: string | null;
+          currency?: string;
+          brand?: string | null;
+          model?: string | null;
+          city_id?: string | null;
+          neighborhood_id?: string | null;
+          neighborhood_custom?: string | null;
+          phone?: string | null;
+          whatsapp?: string | null;
+          status?: ListingStatus;
+          whatsapp_clicks?: number;
+          phone_clicks?: number;
+          view_count?: number;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          store_id?: string;
+          item_type?: ItemType;
+          condition?: ItemCondition;
+          title_fr?: string;
+          title_ar?: string;
+          slug?: string;
+          description_fr?: string | null;
+          description_ar?: string | null;
+          price?: number | null;
+          price_text?: string | null;
+          currency?: string;
+          brand?: string | null;
+          model?: string | null;
+          city_id?: string | null;
+          neighborhood_id?: string | null;
+          neighborhood_custom?: string | null;
+          phone?: string | null;
+          whatsapp?: string | null;
+          status?: ListingStatus;
+          whatsapp_clicks?: number;
+          phone_clicks?: number;
+          view_count?: number;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      item_images: {
+        Row: {
+          id: string;
+          item_id: string;
+          image_url: string;
+          alt_text_fr: string | null;
+          alt_text_ar: string | null;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          item_id: string;
+          image_url: string;
+          alt_text_fr?: string | null;
+          alt_text_ar?: string | null;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          item_id?: string;
+          image_url?: string;
+          alt_text_fr?: string | null;
+          alt_text_ar?: string | null;
+          sort_order?: number;
+          created_at?: string;
+        };
+      };
+      repair_services: {
+        Row: {
+          id: string;
+          store_id: string;
+          service_name_fr: string;
+          service_name_ar: string;
+          slug: string;
+          description_fr: string | null;
+          description_ar: string | null;
+          device_types: string[];
+          price: number | null;
+          price_on_request: boolean;
+          estimated_duration: string | null;
+          city_id: string | null;
+          neighborhood_id: string | null;
+          neighborhood_custom: string | null;
+          phone: string | null;
+          whatsapp: string | null;
+          status: ListingStatus;
+          whatsapp_clicks: number;
+          phone_clicks: number;
+          view_count: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          store_id: string;
+          service_name_fr: string;
+          service_name_ar: string;
+          slug?: string;
+          description_fr?: string | null;
+          description_ar?: string | null;
+          device_types?: string[];
+          price?: number | null;
+          price_on_request?: boolean;
+          estimated_duration?: string | null;
+          city_id?: string | null;
+          neighborhood_id?: string | null;
+          neighborhood_custom?: string | null;
+          phone?: string | null;
+          whatsapp?: string | null;
+          status?: ListingStatus;
+          whatsapp_clicks?: number;
+          phone_clicks?: number;
+          view_count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          store_id?: string;
+          service_name_fr?: string;
+          service_name_ar?: string;
+          slug?: string;
+          description_fr?: string | null;
+          description_ar?: string | null;
+          device_types?: string[];
+          price?: number | null;
+          price_on_request?: boolean;
+          estimated_duration?: string | null;
+          city_id?: string | null;
+          neighborhood_id?: string | null;
+          neighborhood_custom?: string | null;
+          phone?: string | null;
+          whatsapp?: string | null;
+          status?: ListingStatus;
+          whatsapp_clicks?: number;
+          phone_clicks?: number;
+          view_count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      store_reviews: {
+        Row: {
+          id: string;
+          store_id: string;
+          reviewer_name: string;
+          reviewer_phone: string | null;
+          rating: number;
+          comment: string | null;
+          status: 'pending' | 'approved' | 'rejected';
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          store_id: string;
+          reviewer_name: string;
+          reviewer_phone?: string | null;
+          rating: number;
+          comment?: string | null;
+          status?: 'pending' | 'approved' | 'rejected';
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          store_id?: string;
+          reviewer_name?: string;
+          reviewer_phone?: string | null;
+          rating?: number;
+          comment?: string | null;
+          status?: 'pending' | 'approved' | 'rejected';
+          created_at?: string;
+        };
+      };
+    };
+    Views: Record<string, never>;
+    Functions: {
+      check_booking_availability: {
+        Args: {
+          p_page: string;
+          p_slot: string;
+          p_start_date: string;
+          p_end_date: string;
+          p_exclude_campaign_id?: string;
+        };
+        Returns: boolean;
+      };
+      get_booking_calendar: {
+        Args: {
+          p_page: string;
+          p_slot: string;
+          p_from_date?: string;
+          p_to_date?: string;
+        };
+        Returns: Array<{
+          booking_date: string;
+          is_booked: boolean;
+          campaign_id: string | null;
+        }>;
+      };
+    };
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
+  };
+}
+
+export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
+export type Insertable<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Insert'];
+export type Updatable<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Update'];

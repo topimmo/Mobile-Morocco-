@@ -27,6 +27,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import SubscriptionList from "@/components/admin/SubscriptionList";
+import RealTimeStats from "@/components/admin/RealTimeStats";
 
 const AdminDashboard = () => {
   const [language, setLanguage] = useState<"ar" | "fr">("ar");
@@ -44,6 +45,11 @@ const AdminDashboard = () => {
     featuredAds: 0,
     expiringAds: 0,
   });
+
+  // Pagination state
+  const [pendingPage, setPendingPage] = useState(1);
+  const [listingsPage, setListingsPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Fetch ad and subscription statistics
   useEffect(() => {
@@ -93,33 +99,51 @@ const AdminDashboard = () => {
     { id: 4, name: "Layla Benjelloun", type: "Customer", date: "2023-06-13" },
   ];
 
-  // Mock data for pending reviews
-  const pendingReviews = [
-    {
-      id: 101,
-      title: "iPhone 13 Pro",
-      seller: "TechImport",
-      date: "2023-06-15",
-    },
-    {
-      id: 102,
-      title: "Samsung Galaxy S21",
-      seller: "MobileWorld",
-      date: "2023-06-15",
-    },
-    {
-      id: 103,
-      title: "AirPods Pro",
-      seller: "AccessoryShop",
-      date: "2023-06-14",
-    },
-    {
-      id: 104,
-      title: "Xiaomi Redmi Note",
-      seller: "SmartGadgets",
-      date: "2023-06-14",
-    },
+  // Mock data for pending reviews - expanded dataset
+  const allPendingReviews = [
+    { id: 101, title: "iPhone 13 Pro", seller: "TechImport", date: "2023-06-15" },
+    { id: 102, title: "Samsung Galaxy S21", seller: "MobileWorld", date: "2023-06-15" },
+    { id: 103, title: "AirPods Pro", seller: "AccessoryShop", date: "2023-06-14" },
+    { id: 104, title: "Xiaomi Redmi Note", seller: "SmartGadgets", date: "2023-06-14" },
+    { id: 105, title: "OnePlus 9", seller: "TechImport", date: "2023-06-13" },
+    { id: 106, title: "Google Pixel 6", seller: "MobileWorld", date: "2023-06-13" },
+    { id: 107, title: "iPhone 12 Mini", seller: "AccessoryShop", date: "2023-06-12" },
+    { id: 108, title: "Samsung S20 FE", seller: "SmartGadgets", date: "2023-06-12" },
+    { id: 109, title: "Huawei P40", seller: "TechImport", date: "2023-06-11" },
+    { id: 110, title: "Oppo Find X3", seller: "MobileWorld", date: "2023-06-11" },
+    { id: 111, title: "Realme GT", seller: "AccessoryShop", date: "2023-06-10" },
+    { id: 112, title: "Vivo X60", seller: "SmartGadgets", date: "2023-06-10" },
   ];
+
+  // Paginate pending reviews
+  const paginatedPendingReviews = allPendingReviews.slice(
+    (pendingPage - 1) * itemsPerPage,
+    pendingPage * itemsPerPage
+  );
+  const totalPendingPages = Math.ceil(allPendingReviews.length / itemsPerPage);
+
+  // Mock data for all listings - expanded dataset
+  const allListings = [
+    { id: 201, title: "iPhone 14 Pro Max", seller: "TechImport", price: "12000 MAD", status: "active", date: "2023-06-15" },
+    { id: 202, title: "Samsung Galaxy S23", seller: "MobileWorld", price: "9500 MAD", status: "active", date: "2023-06-15" },
+    { id: 203, title: "MacBook Pro M2", seller: "AccessoryShop", price: "25000 MAD", status: "pending", date: "2023-06-14" },
+    { id: 204, title: "iPad Air", seller: "SmartGadgets", price: "6500 MAD", status: "active", date: "2023-06-14" },
+    { id: 205, title: "AirPods Max", seller: "TechImport", price: "5500 MAD", status: "active", date: "2023-06-13" },
+    { id: 206, title: "Apple Watch Series 8", seller: "MobileWorld", price: "4200 MAD", status: "pending", date: "2023-06-13" },
+    { id: 207, title: "Samsung Tab S8", seller: "AccessoryShop", price: "5800 MAD", status: "active", date: "2023-06-12" },
+    { id: 208, title: "Google Pixel 7 Pro", seller: "SmartGadgets", price: "8500 MAD", status: "active", date: "2023-06-12" },
+    { id: 209, title: "Sony WH-1000XM5", seller: "TechImport", price: "3800 MAD", status: "pending", date: "2023-06-11" },
+    { id: 210, title: "Nothing Phone 2", seller: "MobileWorld", price: "7200 MAD", status: "active", date: "2023-06-11" },
+    { id: 211, title: "OnePlus 11", seller: "AccessoryShop", price: "7800 MAD", status: "active", date: "2023-06-10" },
+    { id: 212, title: "Xiaomi 13 Pro", seller: "SmartGadgets", price: "8900 MAD", status: "pending", date: "2023-06-10" },
+  ];
+
+  // Paginate listings
+  const paginatedListings = allListings.slice(
+    (listingsPage - 1) * itemsPerPage,
+    listingsPage * itemsPerPage
+  );
+  const totalListingsPages = Math.ceil(allListings.length / itemsPerPage);
 
   const isRTL = language === "ar";
   const dir = isRTL ? "rtl" : "ltr";
@@ -141,6 +165,9 @@ const AdminDashboard = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <a href="/preview" className="text-sm text-primary hover:underline">
+              Preview Dashboard
+            </a>
             <Button
               variant="ghost"
               size="icon"
@@ -183,6 +210,7 @@ const AdminDashboard = () => {
               <DollarSign className="mr-2 h-4 w-4" />
               {isRTL ? "الاشتراكات" : "Abonnements"}
             </Button>
+
             <Button variant="ghost" className="w-full justify-start">
               <Bell className="mr-2 h-4 w-4" />
               {isRTL ? "الإشعارات" : "Notifications"}
@@ -203,6 +231,11 @@ const AdminDashboard = () => {
           <h1 className="text-2xl font-bold mb-6">
             {isRTL ? "لوحة المعلومات" : "Tableau de bord"}
           </h1>
+
+          {/* Real-Time Statistics */}
+          <div className="mb-8">
+            <RealTimeStats />
+          </div>
 
           {/* Statistics Cards */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
@@ -439,7 +472,7 @@ const AdminDashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {pendingReviews.map((review) => (
+                        {paginatedPendingReviews.map((review) => (
                           <tr
                             key={review.id}
                             className="border-b hover:bg-muted/50"
@@ -462,6 +495,44 @@ const AdminDashboard = () => {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+                  
+                  {/* Pagination Controls for Pending Reviews */}
+                  <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                    <div className="text-sm text-muted-foreground">
+                      {isRTL ? `إظهار ${(pendingPage - 1) * itemsPerPage + 1}-${Math.min(pendingPage * itemsPerPage, allPendingReviews.length)} من ${allPendingReviews.length}` : `Affichage ${(pendingPage - 1) * itemsPerPage + 1}-${Math.min(pendingPage * itemsPerPage, allPendingReviews.length)} sur ${allPendingReviews.length}`}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setPendingPage(p => Math.max(1, p - 1))}
+                        disabled={pendingPage === 1}
+                      >
+                        {isRTL ? "السابق" : "Précédent"}
+                      </Button>
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: totalPendingPages }, (_, i) => i + 1).map(page => (
+                          <Button
+                            key={page}
+                            size="sm"
+                            variant={page === pendingPage ? "default" : "outline"}
+                            onClick={() => setPendingPage(page)}
+                            className="min-w-[2rem]"
+                          >
+                            {page}
+                          </Button>
+                        ))}
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setPendingPage(p => Math.min(totalPendingPages, p + 1))}
+                        disabled={pendingPage === totalPendingPages}
+                      >
+                        {isRTL ? "التالي" : "Suivant"}
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -578,62 +649,85 @@ const AdminDashboard = () => {
                       <TableRow>
                         <TableHead>{isRTL ? "المعرف" : "ID"}</TableHead>
                         <TableHead>{isRTL ? "العنوان" : "Titre"}</TableHead>
-                        <TableHead>{isRTL ? "النوع" : "Type"}</TableHead>
-                        <TableHead>
-                          {isRTL ? "الموقع" : "Emplacement"}
-                        </TableHead>
-                        <TableHead>{isRTL ? "المدة" : "Durée"}</TableHead>
+                        <TableHead>{isRTL ? "البائع" : "Vendeur"}</TableHead>
+                        <TableHead>{isRTL ? "السعر" : "Prix"}</TableHead>
                         <TableHead>{isRTL ? "الحالة" : "Statut"}</TableHead>
+                        <TableHead>{isRTL ? "التاريخ" : "Date"}</TableHead>
                         <TableHead>{isRTL ? "الإجراءات" : "Actions"}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      <TableRow>
-                        <TableCell>AD001</TableCell>
-                        <TableCell>iPhone 13 Pro Max</TableCell>
-                        <TableCell>Banner</TableCell>
-                        <TableCell>Home Page</TableCell>
-                        <TableCell>30 days</TableCell>
-                        <TableCell>
-                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
-                            {isRTL ? "نشط" : "Actif"}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Button size="sm" variant="outline">
-                              {isRTL ? "عرض" : "Voir"}
-                            </Button>
-                            <Button size="sm" variant="default">
-                              {isRTL ? "تعديل" : "Modifier"}
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>AD002</TableCell>
-                        <TableCell>Samsung Galaxy S21</TableCell>
-                        <TableCell>Sidebar</TableCell>
-                        <TableCell>Category Page</TableCell>
-                        <TableCell>15 days</TableCell>
-                        <TableCell>
-                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">
-                            {isRTL ? "قيد المراجعة" : "En révision"}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Button size="sm" variant="outline">
-                              {isRTL ? "عرض" : "Voir"}
-                            </Button>
-                            <Button size="sm" variant="default">
-                              {isRTL ? "تعديل" : "Modifier"}
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
+                      {paginatedListings.map((listing) => (
+                        <TableRow key={listing.id}>
+                          <TableCell>{listing.id}</TableCell>
+                          <TableCell>{listing.title}</TableCell>
+                          <TableCell>{listing.seller}</TableCell>
+                          <TableCell>{listing.price}</TableCell>
+                          <TableCell>
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              listing.status === 'active' 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                              {listing.status === 'active' 
+                                ? (isRTL ? "نشط" : "Actif") 
+                                : (isRTL ? "قيد المراجعة" : "En révision")
+                              }
+                            </span>
+                          </TableCell>
+                          <TableCell>{listing.date}</TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button size="sm" variant="outline">
+                                {isRTL ? "عرض" : "Voir"}
+                              </Button>
+                              <Button size="sm" variant="default">
+                                {isRTL ? "تعديل" : "Modifier"}
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
+                  
+                  {/* Pagination Controls for Listings */}
+                  <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                    <div className="text-sm text-muted-foreground">
+                      {isRTL ? `إظهار ${(listingsPage - 1) * itemsPerPage + 1}-${Math.min(listingsPage * itemsPerPage, allListings.length)} من ${allListings.length}` : `Affichage ${(listingsPage - 1) * itemsPerPage + 1}-${Math.min(listingsPage * itemsPerPage, allListings.length)} sur ${allListings.length}`}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setListingsPage(p => Math.max(1, p - 1))}
+                        disabled={listingsPage === 1}
+                      >
+                        {isRTL ? "السابق" : "Précédent"}
+                      </Button>
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: totalListingsPages }, (_, i) => i + 1).map(page => (
+                          <Button
+                            key={page}
+                            size="sm"
+                            variant={page === listingsPage ? "default" : "outline"}
+                            onClick={() => setListingsPage(page)}
+                            className="min-w-[2rem]"
+                          >
+                            {page}
+                          </Button>
+                        ))}
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setListingsPage(p => Math.min(totalListingsPages, p + 1))}
+                        disabled={listingsPage === totalListingsPages}
+                      >
+                        {isRTL ? "التالي" : "Suivant"}
+                      </Button>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import {
   Heart,
   Star,
@@ -20,6 +20,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useFavorites } from "@/contexts/FavoritesContext";
+import { useComparison } from "@/contexts/ComparisonContext";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ProductCardProps {
   id?: string;
@@ -32,7 +36,7 @@ interface ProductCardProps {
   sellerName?: string;
   sellerRating?: number;
   location?: string;
-  isFavorite?: boolean;
+  initialFavorite?: boolean;
   phoneNumber?: string;
   showPhoneNumber?: boolean;
   enableWhatsApp?: boolean;
@@ -42,6 +46,18 @@ interface ProductCardProps {
   onCompare?: (id: string) => void;
   onContactSeller?: (id: string) => void;
   onReport?: (id: string) => void;
+  specs?: {
+    brand?: string;
+    model?: string;
+    storage?: string;
+    ram?: string;
+    display?: string;
+    camera?: string;
+    battery?: string;
+    os?: string;
+    color?: string;
+    warranty?: string;
+  };
 }
 
 const ProductCard = ({
@@ -55,7 +71,7 @@ const ProductCard = ({
   sellerName = "Tech Marketplace",
   sellerRating = 4.5,
   location = "Casablanca",
-  isFavorite = false,
+  initialFavorite = false,
   phoneNumber = "0612345678",
   showPhoneNumber = false,
   enableWhatsApp = false,
@@ -65,8 +81,33 @@ const ProductCard = ({
   onCompare = () => {},
   onContactSeller = () => {},
   onReport = () => {},
+  specs,
 }: ProductCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { isFavorite, addToFavorites, removeFromFavorites } = useFavorites();
+  const { addToComparison, isInComparison } = useComparison();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Create product object for context operations
+  const productData = {
+    id,
+    title,
+    price,
+    currency,
+    condition,
+    image: image || "",
+    images,
+    sellerName,
+    sellerRating,
+    location,
+    phoneNumber,
+    showPhoneNumber,
+    enableWhatsApp,
+    isPremium,
+    isFeatured,
+    specs,
+  };
 
   // If images array is empty but we have a single image, use that
   const allImages =
@@ -89,11 +130,18 @@ const ProductCard = ({
       prevIndex === 0 ? allImages.length - 1 : prevIndex - 1,
     );
   };
+
   const handleFavoriteClick = () => {
+    if (isFavorite(id)) {
+      removeFromFavorites(id);
+    } else {
+      addToFavorites(productData);
+    }
     onFavoriteToggle(id);
   };
 
   const handleCompareClick = () => {
+    addToComparison(productData);
     onCompare(id);
   };
 
@@ -103,6 +151,61 @@ const ProductCard = ({
 
   const handleReportClick = () => {
     onReport(id);
+  };
+
+  const handleCardClick = () => {
+    navigate(`/product/${id}`);
+  };
+
+  const handleShareProduct = () => {
+    // Create share data
+    const shareData = {
+      title: title,
+      text: `Check out this ${condition} ${title} for ${price} ${currency}`,
+      url: window.location.href.split("?")[0] + `?product=${id}`,
+    };
+
+    // Use Web Share API if available
+    if (
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare(shareData)
+    ) {
+      navigator
+        .share(shareData)
+        .then(() => {
+          toast({
+            title: "Partagé avec succès",
+            description: "Le produit a été partagé.",
+          });
+        })
+        .catch((error) => {
+          // Fallback to copy link if sharing fails
+          copyToClipboard();
+        });
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      copyToClipboard();
+    }
+  };
+
+  const copyToClipboard = () => {
+    const productUrl = window.location.href.split("?")[0] + `?product=${id}`;
+    navigator.clipboard
+      .writeText(productUrl)
+      .then(() => {
+        toast({
+          title: "Lien copié",
+          description: "Le lien a été copié dans le presse-papiers.",
+        });
+      })
+      .catch(() => {
+        toast({
+          title: "Erreur",
+          description: "Impossible de copier le lien.",
+          variant: "destructive",
+        });
+      });
   };
 
   const formatWhatsAppNumber = (number: string) => {
@@ -128,9 +231,13 @@ const ProductCard = ({
     }
   };
 
+  const isProductFavorite = isFavorite(id);
+  const isProductInComparison = isInComparison(id);
+
   return (
     <Card
-      className={`w-full max-w-[320px] sm:max-w-full md:max-w-[320px] overflow-hidden transition-all duration-200 hover:shadow-md bg-white ${isPremium ? "ring-2 ring-sky-600 ring-offset-2" : ""} ${isFeatured ? "shadow-lg" : ""}`}
+      className={`w-full max-w-[320px] sm:max-w-full md:max-w-[320px] overflow-hidden transition-all duration-200 hover:shadow-md bg-white cursor-pointer ${isPremium ? "ring-2 ring-sky-600 ring-offset-2" : ""} ${isFeatured ? "shadow-lg" : ""}`}
+      onClick={handleCardClick}
     >
       <div className="relative h-40 sm:h-48 overflow-hidden bg-gray-100">
         {isPremium && (
@@ -189,7 +296,7 @@ const ProductCard = ({
             {allImages.map((_, index) => (
               <div
                 key={index}
-                className={`h-1.5 w-1.5 rounded-full ${index === currentImageIndex ? "bg-primary" : "bg-white/70"}`}
+                className={`h-1.5 w-1.5 rounded-full cursor-pointer ${index === currentImageIndex ? "bg-primary" : "bg-white/70"}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   setCurrentImageIndex(index);
@@ -210,13 +317,13 @@ const ProductCard = ({
                   onClick={handleFavoriteClick}
                 >
                   <Heart
-                    className={`h-3 w-3 sm:h-4 sm:w-4 ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"}`}
+                    className={`h-3 w-3 sm:h-4 sm:w-4 ${isProductFavorite ? "fill-red-500 text-red-500" : "text-gray-600"}`}
                   />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
                 <p>
-                  {isFavorite ? "Remove from favorites" : "Add to favorites"}
+                  {isProductFavorite ? "Remove from favorites" : "Add to favorites"}
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -228,14 +335,14 @@ const ProductCard = ({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full bg-white/90 backdrop-blur-sm h-7 w-7 sm:h-8 sm:w-8"
+                  className={`rounded-full bg-white/90 backdrop-blur-sm h-7 w-7 sm:h-8 sm:w-8 ${isProductInComparison ? "ring-2 ring-blue-500" : ""}`}
                   onClick={handleCompareClick}
                 >
-                  <BarChart2 className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600" />
+                  <BarChart2 className={`h-3 w-3 sm:h-4 sm:w-4 ${isProductInComparison ? "text-blue-600" : "text-gray-600"}`} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Add to comparison</p>
+                <p>{isProductInComparison ? "In comparison" : "Add to comparison"}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -247,6 +354,7 @@ const ProductCard = ({
                   variant="outline"
                   size="icon"
                   className="rounded-full bg-white/90 backdrop-blur-sm h-7 w-7 sm:h-8 sm:w-8"
+                  onClick={handleShareProduct}
                 >
                   <Share2 className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600" />
                 </Button>
@@ -370,4 +478,4 @@ const ProductCard = ({
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

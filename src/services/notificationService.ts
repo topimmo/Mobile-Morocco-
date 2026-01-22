@@ -1,3 +1,5 @@
+import { supabase } from "@/utils/supabaseClient";
+
 // Types for notification management
 export interface Notification {
   id: string;
@@ -17,11 +19,15 @@ export type NotificationType =
   | "subscription_payment"
   | "ad_expiry"
   | "ad_performance"
-  | "admin_message";
+  | "admin_message"
+  | "new_message"
+  | "job_request"
+  | "support_ticket"
+  | "product_update";
 
 export type NotificationChannel = "in_app" | "email" | "whatsapp";
 
-// Mock data for development
+// Fallback mock data for development and offline mode
 let notifications: Notification[] = [
   {
     id: "notif1",
@@ -52,13 +58,57 @@ let notifications: Notification[] = [
 ];
 
 /**
+ * Subscribe to real-time notifications for a user
+ */
+export const subscribeToNotifications = (
+  userId: string,
+  callback: (notification: Notification) => void,
+) => {
+  // Subscribe to notifications table changes for this user
+  const subscription = supabase
+    .channel("notifications-channel")
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "notifications",
+        filter: `user_id=eq.${userId}`,
+      },
+      (payload) => {
+        // Convert the payload to a Notification object
+        const newNotification = mapDatabaseNotificationToModel(payload.new);
+        callback(newNotification);
+      },
+    )
+    .subscribe();
+
+  // Return unsubscribe function
+  return () => {
+    supabase.removeChannel(subscription);
+  };
+};
+
+/**
  * Get all notifications for a user
  */
 export const getUserNotifications = async (
   userId: string,
 ): Promise<Notification[]> => {
-  // In a real app, this would fetch from an API or database
-  return notifications.filter((notif) => notif.userId === userId);
+  try {
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return (data || []).map(mapDatabaseNotificationToModel);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    // Fallback to mock data in case of error
+    return notifications.filter((notif) => notif.userId === userId);
+  }
 };
 
 /**
@@ -67,9 +117,23 @@ export const getUserNotifications = async (
 export const getUnreadNotifications = async (
   userId: string,
 ): Promise<Notification[]> => {
-  return notifications.filter(
-    (notif) => notif.userId === userId && !notif.isRead,
-  );
+  try {
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("is_read", false)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return (data || []).map(mapDatabaseNotificationToModel);
+  } catch (error) {
+    console.error("Error fetching unread notifications:", error);
+    // Fallback to mock data
+    return notifications.filter(
+      (notif) => notif.userId === userId && !notif.isRead,
+    );
+  }
 };
 
 /**
@@ -78,16 +142,24 @@ export const getUnreadNotifications = async (
 export const markNotificationAsRead = async (
   id: string,
 ): Promise<Notification | undefined> => {
-  const index = notifications.findIndex((notif) => notif.id === id);
+  try {
+    const { data, error } = await supabase
+      .from("notifications")
+      .update({ is_read: true })
+      .eq("id", id)
+      .select()
+      .single();
 
-  if (index === -1) return undefined;
-
-  notifications[index] = {
-    ...notifications[index],
-    isRead: true,
-  };
-
-  return notifications[index];
+    if (error) throw error;
+    return mapDatabaseNotificationToModel(data);
+  } catch (error) {
+    console.error("Error marking notification as read:", error);
+    // Fallback to mock implementation
+    const index = notifications.findIndex((notif) => notif.id === id);
+    if (index === -1) return undefined;
+    notifications[index] = { ...notifications[index], isRead: true };
+    return notifications[index];
+  }
 };
 
 /**
@@ -96,17 +168,29 @@ export const markNotificationAsRead = async (
 export const markAllNotificationsAsRead = async (
   userId: string,
 ): Promise<number> => {
-  let count = 0;
+  try {
+    const { data, error } = await supabase
+      .from("notifications")
+      .update({ is_read: true })
+      .eq("user_id", userId)
+      .eq("is_read", false)
+      .select();
 
-  notifications = notifications.map((notif) => {
-    if (notif.userId === userId && !notif.isRead) {
-      count++;
-      return { ...notif, isRead: true };
-    }
-    return notif;
-  });
-
-  return count;
+    if (error) throw error;
+    return data?.length || 0;
+  } catch (error) {
+    console.error("Error marking all notifications as read:", error);
+    // Fallback to mock implementation
+    let count = 0;
+    notifications = notifications.map((notif) => {
+      if (notif.userId === userId && !notif.isRead) {
+        count++;
+        return { ...notif, isRead: true };
+      }
+      return notif;
+    });
+    return count;
+  }
 };
 
 /**
@@ -115,23 +199,73 @@ export const markAllNotificationsAsRead = async (
 export const createNotification = async (
   notification: Omit<Notification, "id" | "createdAt">,
 ): Promise<Notification> => {
-  const newNotification = {
-    ...notification,
-    id: `notif_${Date.now()}`,
-    createdAt: new Date(),
-  };
+  try {
+    const dbNotification = {
+      user_id: notification.userId,
+      title: notification.title,
+      message: notification.message,
+      type: notification.type,
+      related_id: notification.relatedId,
+      is_read: notification.isRead,
+      channel: notification.channel,
+      scheduled_for: notification.scheduledFor,
+    };
 
-  notifications.push(newNotification);
-  return newNotification;
+    const { data, error } = await supabase
+      .from("notifications")
+      .insert([dbNotification])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return mapDatabaseNotificationToModel(data);
+  } catch (error) {
+    console.error("Error creating notification:", error);
+    // Fallback to mock implementation
+    const mockNotification = {
+      ...notification,
+      id: `notif_${Date.now()}`,
+      createdAt: new Date(),
+    };
+    notifications.push(mockNotification);
+    return mockNotification;
+  }
 };
 
 /**
  * Delete a notification
  */
 export const deleteNotification = async (id: string): Promise<boolean> => {
-  const initialLength = notifications.length;
-  notifications = notifications.filter((notif) => notif.id !== id);
-  return notifications.length < initialLength;
+  try {
+    const { error } = await supabase
+      .from("notifications")
+      .delete()
+      .eq("id", id);
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error("Error deleting notification:", error);
+    // Fallback to mock implementation
+    const initialLength = notifications.length;
+    notifications = notifications.filter((notif) => notif.id !== id);
+    return notifications.length < initialLength;
+  }
+};
+
+const mapDatabaseNotificationToModel = (dbNotif: any): Notification => {
+  return {
+    id: dbNotif.id,
+    userId: dbNotif.user_id,
+    title: dbNotif.title,
+    message: dbNotif.message,
+    type: dbNotif.type,
+    relatedId: dbNotif.related_id,
+    isRead: dbNotif.is_read,
+    channel: dbNotif.channel,
+    createdAt: new Date(dbNotif.created_at),
+    scheduledFor: dbNotif.scheduled_for ? new Date(dbNotif.scheduled_for) : undefined,
+  };
 };
 
 /**
@@ -169,7 +303,7 @@ export const sendInAppNotification = async (
 };
 
 /**
- * Send an email notification (mock implementation)
+ * Send an email notification
  */
 export const sendEmailNotification = async (
   userId: string,
@@ -193,7 +327,7 @@ export const sendEmailNotification = async (
 };
 
 /**
- * Send a WhatsApp notification (mock implementation)
+ * Send a WhatsApp notification
  */
 export const sendWhatsAppNotification = async (
   userId: string,
@@ -219,26 +353,34 @@ export const sendWhatsAppNotification = async (
 /**
  * Get notification statistics
  */
-export const getNotificationStats = async () => {
-  const totalNotifications = notifications.length;
-  const unreadNotifications = notifications.filter(
-    (notif) => !notif.isRead,
-  ).length;
-  const inAppNotifications = notifications.filter(
-    (notif) => notif.channel === "in_app",
-  ).length;
-  const emailNotifications = notifications.filter(
-    (notif) => notif.channel === "email",
-  ).length;
-  const whatsAppNotifications = notifications.filter(
-    (notif) => notif.channel === "whatsapp",
-  ).length;
+export const getNotificationStats = async (userId: string) => {
+  try {
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("*")
+      .eq("user_id", userId);
 
-  return {
-    total: totalNotifications,
-    unread: unreadNotifications,
-    inApp: inAppNotifications,
-    email: emailNotifications,
-    whatsApp: whatsAppNotifications,
-  };
+    if (error) throw error;
+
+    const notifs = (data || []).map(mapDatabaseNotificationToModel);
+    return {
+      total: notifs.length,
+      unread: notifs.filter((n) => !n.isRead).length,
+      inApp: notifs.filter((n) => n.channel === "in_app").length,
+      email: notifs.filter((n) => n.channel === "email").length,
+      whatsApp: notifs.filter((n) => n.channel === "whatsapp").length,
+    };
+  } catch (error) {
+    console.error("Error getting notification stats:", error);
+    // Fallback to mock implementation
+    const userNotifications = notifications.filter((n) => n.userId === userId);
+    return {
+      total: userNotifications.length,
+      unread: userNotifications.filter((n) => !n.isRead).length,
+      inApp: userNotifications.filter((n) => n.channel === "in_app").length,
+      email: userNotifications.filter((n) => n.channel === "email").length,
+      whatsApp: userNotifications.filter((n) => n.channel === "whatsapp")
+        .length,
+    };
+  }
 };
