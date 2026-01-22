@@ -184,9 +184,9 @@ function Navigation() {
               <SheetTrigger asChild>
                 <button 
                   className="p-2 rounded-lg hover:bg-muted transition-colors"
-                  aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                  aria-label="Open menu"
                 >
-                  {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                  <Menu className="h-6 w-6" />
                 </button>
               </SheetTrigger>
               <SheetContent side={isRTL ? 'right' : 'left'} className="w-[280px]">

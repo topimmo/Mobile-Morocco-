@@ -259,7 +259,7 @@ const ProductCard = ({
         <img
           src={allImages[currentImageIndex]}
           alt={`${title} - image ${currentImageIndex + 1}`}
-          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105 absolute inset-0"
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
         />
 
         {/* Navigation arrows - only show if there are multiple images */}
