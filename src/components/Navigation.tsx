@@ -78,7 +78,7 @@ function Navigation() {
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className={cn('flex justify-between items-center', isRTL && 'flex-row-reverse')}>
           {/* Logo - Swiss Design */}
-          <Link to="/" className="text-xl md:text-2xl font-bold text-foreground">
+          <Link to="/" className="text-xl md:text-2xl font-bold text-gray-900">
             Mobile Morocco
           </Link>
 
