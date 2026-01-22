@@ -24,7 +24,7 @@ const ComparisonFloatingButton = () => {
         <PopoverTrigger asChild>
           <Button
             size="lg"
-            className="rounded-full shadow-lg hover:shadow-xl transition-shadow relative bg-primary hover:bg-primary/90"
+            className="rounded-full shadow-sm hover:shadow-md transition-shadow relative bg-primary hover:bg-primary/90"
           >
             <BarChart2 className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
             {isRTL ? 'مقارنة' : 'Comparer'}

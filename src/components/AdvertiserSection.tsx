@@ -116,7 +116,7 @@ const AdvertiserSection: React.FC<AdvertiserSectionProps> = ({
               <img
                 src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80"
                 alt="Advertising"
-                className="rounded-lg object-cover shadow-xl"
+                className="rounded-lg object-cover shadow-md"
                 width={500}
                 height={400}
               />

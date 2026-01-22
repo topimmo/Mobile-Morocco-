@@ -241,7 +241,7 @@ export default function AdvertisePage() {
           
           {user ? (
             <Link to="/advertiser/dashboard">
-              <Button size="lg" variant="secondary" className="text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-lg hover:shadow-xl transition-all">
+              <Button size="lg" variant="secondary" className="text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-sm hover:shadow-md transition-all">
                 {labels.goToDashboard}
                 <ArrowIcon className={cn('h-5 w-5', isRTL ? 'mr-2' : 'ml-2')} />
               </Button>
@@ -249,7 +249,7 @@ export default function AdvertisePage() {
           ) : (
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
               <Link to="/auth/register?role=advertiser">
-                <Button size="lg" variant="secondary" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-lg hover:shadow-xl transition-all">
+                <Button size="lg" variant="secondary" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-sm hover:shadow-md transition-all">
                   {labels.createAccount}
                   <ArrowIcon className={cn('h-5 w-5', isRTL ? 'mr-2' : 'ml-2')} />
                 </Button>
