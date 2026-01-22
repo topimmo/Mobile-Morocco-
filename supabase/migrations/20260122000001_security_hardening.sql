@@ -11,9 +11,14 @@
 -- ----------------------------------------
 -- Profiles: Add missing INSERT policy
 -- ----------------------------------------
+-- Note: Profile is created via trigger on auth.users insert, so this policy
+-- allows the trigger to insert with matching id = auth.uid()
 DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
 CREATE POLICY "Users can insert own profile" ON profiles
-  FOR INSERT WITH CHECK (auth.uid() = id);
+  FOR INSERT WITH CHECK (
+    auth.uid() = id 
+    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
 
 -- ----------------------------------------
 -- OTP Requests: Secure OTP handling with rate limiting
@@ -80,7 +85,7 @@ WITH CHECK (
 
 -- Prevent updates to existing files (immutable storage pattern for security)
 -- Users should delete and re-upload rather than update
-CREATE POLICY "Prevent file updates"
+CREATE POLICY "Immutable storage - deny all updates"
 ON storage.objects FOR UPDATE
 USING (false);
 
@@ -104,9 +109,9 @@ USING (
 ALTER TABLE listings 
   ALTER COLUMN title SET NOT NULL,
   ALTER COLUMN description SET NOT NULL,
-  ADD CONSTRAINT title_not_empty CHECK (LENGTH(TRIM(title)) >= 3),
-  ADD CONSTRAINT description_not_empty CHECK (LENGTH(TRIM(description)) >= 10),
-  ADD CONSTRAINT price_positive CHECK (price > 0);
+  ADD CONSTRAINT listings_title_not_empty CHECK (LENGTH(TRIM(title)) >= 3),
+  ADD CONSTRAINT listings_description_not_empty CHECK (LENGTH(TRIM(description)) >= 10),
+  ADD CONSTRAINT listings_price_positive CHECK (price > 0);
 
 -- ----------------------------------------
 -- Repair Shops: Prevent empty/invalid data
@@ -114,8 +119,8 @@ ALTER TABLE listings
 ALTER TABLE repair_shops
   ALTER COLUMN name SET NOT NULL,
   ALTER COLUMN description SET NOT NULL,
-  ADD CONSTRAINT name_not_empty CHECK (LENGTH(TRIM(name)) >= 3),
-  ADD CONSTRAINT description_not_empty CHECK (LENGTH(TRIM(description)) >= 10);
+  ADD CONSTRAINT repair_shops_name_not_empty CHECK (LENGTH(TRIM(name)) >= 3),
+  ADD CONSTRAINT repair_shops_description_not_empty CHECK (LENGTH(TRIM(description)) >= 10);
 
 -- ----------------------------------------
 -- Reviews: Prevent spam reviews
@@ -288,6 +293,7 @@ CREATE TRIGGER enforce_review_rate_limit
 
 -- Indexes for efficient RLS policy checks
 CREATE INDEX IF NOT EXISTS idx_profiles_role ON profiles(role) WHERE role = 'admin';
+CREATE INDEX IF NOT EXISTS idx_profiles_id_admin ON profiles(id) WHERE role = 'admin';
 CREATE INDEX IF NOT EXISTS idx_listings_status_user ON listings(status, user_id);
 CREATE INDEX IF NOT EXISTS idx_repair_shops_status_user ON repair_shops(status, user_id);
 CREATE INDEX IF NOT EXISTS idx_reviews_visible ON reviews(is_visible) WHERE is_visible = true;

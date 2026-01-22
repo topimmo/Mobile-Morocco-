@@ -291,7 +291,7 @@ This multi-layered security approach protects user data even if client-side code
 
 If you discover a security vulnerability, please report it to:
 
-- **Email**: security@mobilemorocco.com (or platform admin email)
+- **Email**: [Contact platform administrator for security email]
 - **Do Not**: Publicly disclose the vulnerability until it has been addressed
 - **Include**: 
   - Description of the vulnerability
