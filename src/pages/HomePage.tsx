@@ -167,25 +167,27 @@ export default function HomePage() {
             {/* Card 1: Phones & Accessories */}
             <Card className="hover:shadow-md transition-shadow border border-border bg-white min-h-[280px]">
               <CardContent className="p-8 text-center h-full flex flex-col justify-between">
-                <div className="mb-6 flex justify-center">
-                  <Smartphone className="h-12 w-12 text-foreground" />
+                <div>
+                  <div className="mb-6 flex justify-center">
+                    <Smartphone className="h-12 w-12 text-foreground" />
+                  </div>
+                  <h3 className={cn(
+                    'text-xl font-bold mb-3 text-foreground',
+                    isRTL && 'text-right'
+                  )}>
+                    {isRTL 
+                      ? 'اختيار كبير من الهواتف'
+                      : 'Large sélection de téléphones'}
+                  </h3>
+                  <p className={cn(
+                    'text-sm text-muted-foreground mb-6 leading-relaxed',
+                    isRTL && 'text-right'
+                  )}>
+                    {isRTL
+                      ? 'هواتف جديدة ومستعملة، إكسسوارات وقطع غيار أصلية'
+                      : 'neufs et d\'occasion, accessoires et pièces détachées'}
+                  </p>
                 </div>
-                <h3 className={cn(
-                  'text-xl font-bold mb-3 text-foreground',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL 
-                    ? 'اختيار كبير من الهواتف'
-                    : 'Large sélection de téléphones'}
-                </h3>
-                <p className={cn(
-                  'text-sm text-muted-foreground mb-6 leading-relaxed',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL
-                    ? 'هواتف جديدة ومستعملة، إكسسوارات وقطع غيار أصلية'
-                    : 'neufs et d\'occasion, accessoires et pièces détachées'}
-                </p>
                 <Link to="/listings">
                   <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-medium">
                     {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
@@ -197,25 +199,27 @@ export default function HomePage() {
             {/* Card 2: Repair Services */}
             <Card className="hover:shadow-md transition-shadow border border-border bg-white min-h-[280px]">
               <CardContent className="p-8 text-center h-full flex flex-col justify-between">
-                <div className="mb-6 flex justify-center">
-                  <Wrench className="h-12 w-12 text-foreground" />
+                <div>
+                  <div className="mb-6 flex justify-center">
+                    <Wrench className="h-12 w-12 text-foreground" />
+                  </div>
+                  <h3 className={cn(
+                    'text-xl font-bold mb-3 text-foreground',
+                    isRTL && 'text-right'
+                  )}>
+                    {isRTL 
+                      ? 'تقنيون مؤهلون'
+                      : 'Trouvez des techniciens qualifiés'}
+                  </h3>
+                  <p className={cn(
+                    'text-sm text-muted-foreground mb-6 leading-relaxed',
+                    isRTL && 'text-right'
+                  )}>
+                    {isRTL
+                      ? 'لإصلاح أجهزتك بكفاءة وسرعة'
+                      : 'pour réparer vos appareils'}
+                  </p>
                 </div>
-                <h3 className={cn(
-                  'text-xl font-bold mb-3 text-foreground',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL 
-                    ? 'تقنيون مؤهلون'
-                    : 'Trouvez des techniciens qualifiés'}
-                </h3>
-                <p className={cn(
-                  'text-sm text-muted-foreground mb-6 leading-relaxed',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL
-                    ? 'لإصلاح أجهزتك بكفاءة وسرعة'
-                    : 'pour réparer vos appareils'}
-                </p>
                 <Link to="/repair-shops">
                   <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground w-full font-medium">
                     {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
@@ -227,25 +231,27 @@ export default function HomePage() {
             {/* Card 3: Community */}
             <Card className="hover:shadow-md transition-shadow border border-border bg-white min-h-[280px]">
               <CardContent className="p-8 text-center h-full flex flex-col justify-between">
-                <div className="mb-6 flex justify-center">
-                  <Users className="h-12 w-12 text-foreground" />
+                <div>
+                  <div className="mb-6 flex justify-center">
+                    <Users className="h-12 w-12 text-foreground" />
+                  </div>
+                  <h3 className={cn(
+                    'text-xl font-bold mb-3 text-foreground',
+                    isRTL && 'text-right'
+                  )}>
+                    {isRTL 
+                      ? 'انضم إلى مجتمعنا'
+                      : 'Rejoignez notre communauté'}
+                  </h3>
+                  <p className={cn(
+                    'text-sm text-muted-foreground mb-6 leading-relaxed',
+                    isRTL && 'text-right'
+                  )}>
+                    {isRTL
+                      ? 'من المستوردين والفنيين والعملاء'
+                      : 'd\'importateurs, techniciens et clients'}
+                  </p>
                 </div>
-                <h3 className={cn(
-                  'text-xl font-bold mb-3 text-foreground',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL 
-                    ? 'انضم إلى مجتمعنا'
-                    : 'Rejoignez notre communauté'}
-                </h3>
-                <p className={cn(
-                  'text-sm text-muted-foreground mb-6 leading-relaxed',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL
-                    ? 'من المستوردين والفنيين والعملاء'
-                    : 'd\'importateurs, techniciens et clients'}
-                </p>
                 <Link to="/auth/register">
                   <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-medium">
                     {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
