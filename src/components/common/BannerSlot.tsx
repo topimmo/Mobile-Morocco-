@@ -70,7 +70,7 @@ export function BannerSlot({ page, slot, showPlaceholder = true }: BannerSlotPro
     return (
       <div className={cn(
         'w-full animate-pulse',
-        slot === 'sidebar' ? 'h-64' : 'h-20 md:h-24'
+        slot === 'sidebar' ? 'h-64' : 'h-24'
       )}>
         <div className="bg-muted rounded-lg h-full w-full" />
       </div>
@@ -86,7 +86,7 @@ export function BannerSlot({ page, slot, showPlaceholder = true }: BannerSlotPro
     return (
       <div className={cn(
         'banner-slot w-full overflow-hidden rounded-lg',
-        slot === 'sidebar' ? 'h-auto' : ''
+        slot === 'sidebar' ? 'h-64' : 'h-24'
       )}>
         <a
           href={banner.campaign.target_url}
@@ -99,12 +99,12 @@ export function BannerSlot({ page, slot, showPlaceholder = true }: BannerSlotPro
               console.error('Error logging click:', error);
             }
           }}
-          className="block w-full"
+          className="block w-full h-full"
         >
           <img
             src={bannerUrl}
             alt={banner.campaign.title}
-            className="w-full h-auto object-cover"
+            className="w-full h-full object-cover"
             loading="lazy"
           />
         </a>
@@ -117,7 +117,7 @@ export function BannerSlot({ page, slot, showPlaceholder = true }: BannerSlotPro
     return (
       <div className={cn(
         'banner-slot w-full overflow-hidden rounded-lg bg-muted flex items-center justify-center',
-        slot === 'sidebar' ? 'h-64' : 'h-20 md:h-24'
+        slot === 'sidebar' ? 'h-64' : 'h-24'
       )}>
         <div className="text-center text-muted-foreground">
           <p className="text-sm">AdSense: {adsenseUnit.unit_id}</p>
@@ -131,10 +131,10 @@ export function BannerSlot({ page, slot, showPlaceholder = true }: BannerSlotPro
     return (
       <div className={cn(
         'banner-slot w-full overflow-hidden rounded-lg',
-        slot === 'sidebar' ? 'h-64' : 'py-4 md:py-6'
+        slot === 'sidebar' ? 'h-64' : 'h-24'
       )}>
         <div className={cn(
-          'w-full h-full bg-gradient-to-r flex items-center justify-center px-4 py-3 md:py-4 rounded-lg',
+          'w-full h-full bg-gradient-to-r flex items-center justify-center px-4 rounded-lg',
           placeholderConfig.gradient
         )}>
           <div className="flex items-center gap-3 md:gap-4">

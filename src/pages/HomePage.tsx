@@ -161,12 +161,12 @@ export default function HomePage() {
       <BannerSlot page="home" slot="top" />
 
       {/* Hero Section with Feature Cards - Swiss Design */}
-      <section className="py-12 px-4 bg-white">
+      <section className="py-12 px-4 bg-white min-h-[400px]">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1: Phones & Accessories */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
-              <CardContent className="p-8 text-center">
+            <Card className="hover:shadow-md transition-shadow border border-border bg-white min-h-[280px]">
+              <CardContent className="p-8 text-center h-full flex flex-col justify-between">
                 <div className="mb-6 flex justify-center">
                   <Smartphone className="h-12 w-12 text-foreground" />
                 </div>
@@ -195,8 +195,8 @@ export default function HomePage() {
             </Card>
 
             {/* Card 2: Repair Services */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
-              <CardContent className="p-8 text-center">
+            <Card className="hover:shadow-md transition-shadow border border-border bg-white min-h-[280px]">
+              <CardContent className="p-8 text-center h-full flex flex-col justify-between">
                 <div className="mb-6 flex justify-center">
                   <Wrench className="h-12 w-12 text-foreground" />
                 </div>
@@ -225,8 +225,8 @@ export default function HomePage() {
             </Card>
 
             {/* Card 3: Community */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
-              <CardContent className="p-8 text-center">
+            <Card className="hover:shadow-md transition-shadow border border-border bg-white min-h-[280px]">
+              <CardContent className="p-8 text-center h-full flex flex-col justify-between">
                 <div className="mb-6 flex justify-center">
                   <Users className="h-12 w-12 text-foreground" />
                 </div>

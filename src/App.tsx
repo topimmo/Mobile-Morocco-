@@ -75,14 +75,15 @@ function AppContent() {
     <div className="min-h-screen bg-background">
       {/* Global network status banner */}
       <NetworkErrorBanner isOffline={isOffline} className="sticky top-0 z-50" />
-      <Suspense
-        fallback={
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-          </div>
-        }
-      >
-        <Routes>
+      <main>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+            </div>
+          }
+        >
+          <Routes>
           {/* Public Pages - Wrapped with PageErrorBoundary */}
           <Route path="/" element={<PageErrorBoundary><Home /></PageErrorBoundary>} />
           <Route path="/categories/:slug" element={<PageErrorBoundary><CategoryPage /></PageErrorBoundary>} />
@@ -171,6 +172,7 @@ function AppContent() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
+      </main>
       <ComparisonFloatingButton />
       <Toaster />
     </div>
