@@ -89,7 +89,7 @@ const AdvertiserSection: React.FC<AdvertiserSectionProps> = ({
       dir={dir}
     >
       {/* Hero Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-primary/20 to-primary/5">
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
         <div className="container px-4 md:px-6">
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="space-y-4">
@@ -116,7 +116,7 @@ const AdvertiserSection: React.FC<AdvertiserSectionProps> = ({
               <img
                 src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80"
                 alt="Advertising"
-                className="rounded-lg object-cover shadow-xl"
+                className="rounded-lg object-cover shadow-md"
                 width={500}
                 height={400}
               />

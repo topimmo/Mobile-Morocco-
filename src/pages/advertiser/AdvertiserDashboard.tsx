@@ -118,14 +118,14 @@ export default function AdvertiserDashboard() {
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { color: string; icon: any }> = {
       draft: { color: 'bg-gray-500', icon: Clock },
-      submitted: { color: 'bg-blue-500', icon: Clock },
+      submitted: { color: 'bg-primary', icon: Clock },
       pending_review: { color: 'bg-yellow-500', icon: AlertCircle },
       approved: { color: 'bg-green-500', icon: CheckCircle },
       active: { color: 'bg-green-600', icon: CheckCircle },
       expired: { color: 'bg-gray-600', icon: XCircle },
       rejected: { color: 'bg-red-500', icon: XCircle },
       paused: { color: 'bg-orange-500', icon: AlertCircle },
-      completed: { color: 'bg-blue-600', icon: CheckCircle },
+      completed: { color: 'bg-primary', icon: CheckCircle },
     };
     
     const { color, icon: Icon } = statusMap[status] || { color: 'bg-gray-500', icon: Clock };
@@ -197,8 +197,8 @@ export default function AdvertiserDashboard() {
           <Card>
             <CardContent className="pt-6">
               <div className={cn('flex items-center gap-4', isRTL && 'flex-row-reverse')}>
-                <div className="p-3 bg-blue-100 rounded-lg">
-                  <BarChart3 className="h-6 w-6 text-blue-600" />
+                <div className="p-3 bg-muted rounded-lg">
+                  <BarChart3 className="h-6 w-6 text-primary" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.total}</p>

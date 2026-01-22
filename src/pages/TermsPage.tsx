@@ -10,7 +10,7 @@ export default function TermsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-background">
       <SEO
         title="Conditions d'Utilisation"
         description="Consultez les conditions d'utilisation de Mobile Maroc. Termes et conditions légales pour tous les utilisateurs."

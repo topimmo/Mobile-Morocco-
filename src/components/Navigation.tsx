@@ -220,7 +220,7 @@ function Navigation() {
                     to="/publish-phone"
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      'px-4 py-3 rounded-lg text-base font-medium transition-colors flex items-center gap-3 bg-sky-600 text-white hover:bg-sky-700',
+                      'px-4 py-3 rounded-lg text-base font-medium transition-colors flex items-center gap-3 bg-primary text-primary-foreground hover:bg-primary/90',
                       isRTL && 'flex-row-reverse text-right'
                     )}
                   >

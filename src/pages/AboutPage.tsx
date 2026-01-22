@@ -11,7 +11,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-background">
       <SEO
         title="À Propos de Mobile Maroc"
         description="Découvrez Mobile Maroc, la plateforme de confiance pour acheter, vendre et réparer des téléphones au Maroc."
@@ -32,7 +32,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-muted">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Notre Mission</h2>
           <p className="text-lg text-gray-700 leading-relaxed mb-6">
@@ -51,7 +51,7 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 gap-8">
             <Card>
               <CardHeader>
-                <Shield className="w-8 h-8 text-blue-600 mb-2" />
+                <Shield className="w-8 h-8 text-primary mb-2" />
                 <CardTitle>Confiance & Sécurité</CardTitle>
               </CardHeader>
               <CardContent>
@@ -63,7 +63,7 @@ export default function AboutPage() {
 
             <Card>
               <CardHeader>
-                <Users className="w-8 h-8 text-blue-600 mb-2" />
+                <Users className="w-8 h-8 text-primary mb-2" />
                 <CardTitle>Accessibilité</CardTitle>
               </CardHeader>
               <CardContent>
@@ -75,7 +75,7 @@ export default function AboutPage() {
 
             <Card>
               <CardHeader>
-                <Zap className="w-8 h-8 text-blue-600 mb-2" />
+                <Zap className="w-8 h-8 text-primary mb-2" />
                 <CardTitle>Innovation</CardTitle>
               </CardHeader>
               <CardContent>
@@ -87,7 +87,7 @@ export default function AboutPage() {
 
             <Card>
               <CardHeader>
-                <Award className="w-8 h-8 text-blue-600 mb-2" />
+                <Award className="w-8 h-8 text-primary mb-2" />
                 <CardTitle>Qualité</CardTitle>
               </CardHeader>
               <CardContent>
@@ -108,7 +108,7 @@ export default function AboutPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <Smartphone className="w-5 h-5 mr-2 text-blue-600" />
+                  <Smartphone className="w-5 h-5 mr-2 text-primary" />
                   Clients
                 </CardTitle>
               </CardHeader>
@@ -122,7 +122,7 @@ export default function AboutPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <Globe className="w-5 h-5 mr-2 text-blue-600" />
+                  <Globe className="w-5 h-5 mr-2 text-primary" />
                   Importateurs
                 </CardTitle>
               </CardHeader>
@@ -136,7 +136,7 @@ export default function AboutPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <Zap className="w-5 h-5 mr-2 text-blue-600" />
+                  <Zap className="w-5 h-5 mr-2 text-primary" />
                   Techniciens
                 </CardTitle>
               </CardHeader>
@@ -156,15 +156,15 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">Par les Chiffres</h2>
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">10K+</div>
+              <div className="text-4xl font-bold text-primary mb-2">10K+</div>
               <p className="text-gray-600">Produits Listés</p>
             </div>
             <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">5K+</div>
+              <div className="text-4xl font-bold text-primary mb-2">5K+</div>
               <p className="text-gray-600">Vendeurs Actifs</p>
             </div>
             <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">50K+</div>
+              <div className="text-4xl font-bold text-primary mb-2">50K+</div>
               <p className="text-gray-600">Utilisateurs Satisfaits</p>
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 gap-6">
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
                   ✓
                 </div>
               </div>
@@ -190,7 +190,7 @@ export default function AboutPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
                   ✓
                 </div>
               </div>
@@ -202,7 +202,7 @@ export default function AboutPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
                   ✓
                 </div>
               </div>
@@ -214,7 +214,7 @@ export default function AboutPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
                   ✓
                 </div>
               </div>
@@ -226,7 +226,7 @@ export default function AboutPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
                   ✓
                 </div>
               </div>
@@ -238,7 +238,7 @@ export default function AboutPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
                   ✓
                 </div>
               </div>
@@ -252,7 +252,7 @@ export default function AboutPage() {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-600 text-white">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-primary text-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">Prêt à Commencer ?</h2>
           <p className="text-xl mb-8 opacity-90">
@@ -260,7 +260,7 @@ export default function AboutPage() {
           </p>
           <a
             href="/register"
-            className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+            className="inline-block bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
           >
             S'Inscrire Maintenant
           </a>

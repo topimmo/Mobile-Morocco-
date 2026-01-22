@@ -83,7 +83,7 @@ const ROLE_OPTIONS: RoleOption[] = [
         'Communication directe avec les clients'
       ]
     },
-    color: 'from-blue-500 to-cyan-600'
+    color: 'from-primary to-primary'
   },
   {
     id: 'technician',
@@ -245,7 +245,7 @@ export default function RegisterPage() {
   const selectedRoleData = ROLE_OPTIONS.find(r => r.id === selectedRole);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center px-4 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
       <SEO
         title={labels.pageTitle}
         description="Créez votre compte Mobile Maroc pour publier vos annonces et accéder à toutes les fonctionnalités de la plateforme."
@@ -292,7 +292,7 @@ export default function RegisterPage() {
                 >
                   <CardHeader className="pb-3">
                     <div className={cn(
-                      "w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center mb-3",
+                      "w-12 h-12 rounded-xl bg-muted flex items-center justify-center mb-3",
                       role.color
                     )}>
                       <role.icon className="h-6 w-6 text-white" />
@@ -351,7 +351,7 @@ export default function RegisterPage() {
               {selectedRoleData && (
                 <div className="flex items-center gap-3 mb-4">
                   <div className={cn(
-                    "w-10 h-10 rounded-lg bg-gradient-to-br flex items-center justify-center",
+                    "w-10 h-10 rounded-lg bg-muted flex items-center justify-center",
                     selectedRoleData.color
                   )}>
                     <selectedRoleData.icon className="h-5 w-5 text-white" />

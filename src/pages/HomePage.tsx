@@ -536,7 +536,7 @@ export default function HomePage() {
                         </p>
                       )}
                       <p className={cn(
-                        'font-bold text-blue-600',
+                        'font-bold text-primary',
                         isRTL && 'text-right'
                       )}>
                         {formatPrice(listing.price)}
@@ -699,10 +699,10 @@ export default function HomePage() {
                 {isRTL ? 'روابط سريعة' : 'Accès Rapide'}
               </h4>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/" className="hover:text-blue-400 transition">{isRTL ? 'الرئيسية' : 'Accueil'}</Link></li>
-                <li><Link to="/listings" className="hover:text-blue-400 transition">{isRTL ? 'الإعلانات' : 'Produits'}</Link></li>
-                <li><Link to="/technicians" className="hover:text-blue-400 transition">{isRTL ? 'الفنيين' : 'Techniciens'}</Link></li>
-                <li><Link to="/repair-shops" className="hover:text-blue-400 transition">{isRTL ? 'محلات الإصلاح' : 'Ateliers de Réparation'}</Link></li>
+                <li><Link to="/" className="hover:text-primary transition">{isRTL ? 'الرئيسية' : 'Accueil'}</Link></li>
+                <li><Link to="/listings" className="hover:text-primary transition">{isRTL ? 'الإعلانات' : 'Produits'}</Link></li>
+                <li><Link to="/technicians" className="hover:text-primary transition">{isRTL ? 'الفنيين' : 'Techniciens'}</Link></li>
+                <li><Link to="/repair-shops" className="hover:text-primary transition">{isRTL ? 'محلات الإصلاح' : 'Ateliers de Réparation'}</Link></li>
               </ul>
             </div>
             <div>
@@ -710,10 +710,10 @@ export default function HomePage() {
                 {isRTL ? 'معلومات' : 'Information'}
               </h4>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/about" className="hover:text-blue-400 transition">{isRTL ? 'من نحن' : 'À Propos'}</Link></li>
-                <li><Link to="/faq" className="hover:text-blue-400 transition">{isRTL ? 'الأسئلة الشائعة' : 'FAQ'}</Link></li>
-                <li><Link to="/contact" className="hover:text-blue-400 transition">{isRTL ? 'اتصل بنا' : 'Nous Contacter'}</Link></li>
-                <li><Link to="/advertiser/dashboard" className="hover:text-blue-400 transition">{isRTL ? 'كن بائعا' : 'Devenir Vendeur'}</Link></li>
+                <li><Link to="/about" className="hover:text-primary transition">{isRTL ? 'من نحن' : 'À Propos'}</Link></li>
+                <li><Link to="/faq" className="hover:text-primary transition">{isRTL ? 'الأسئلة الشائعة' : 'FAQ'}</Link></li>
+                <li><Link to="/contact" className="hover:text-primary transition">{isRTL ? 'اتصل بنا' : 'Nous Contacter'}</Link></li>
+                <li><Link to="/advertiser/dashboard" className="hover:text-primary transition">{isRTL ? 'كن بائعا' : 'Devenir Vendeur'}</Link></li>
               </ul>
             </div>
             <div>
@@ -735,8 +735,8 @@ export default function HomePage() {
           <div className="border-t border-gray-700 mt-8 pt-8">
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
               <div className="flex gap-6 flex-wrap text-sm">
-                <Link to="/terms" className="hover:text-blue-400 transition">{isRTL ? 'شروط الاستخدام' : "Conditions d'Utilisation"}</Link>
-                <Link to="/privacy" className="hover:text-blue-400 transition">{isRTL ? 'سياسة الخصوصية' : 'Politique de Confidentialité'}</Link>
+                <Link to="/terms" className="hover:text-primary transition">{isRTL ? 'شروط الاستخدام' : "Conditions d'Utilisation"}</Link>
+                <Link to="/privacy" className="hover:text-primary transition">{isRTL ? 'سياسة الخصوصية' : 'Politique de Confidentialité'}</Link>
               </div>
               <p className="text-sm">© 2025 Mobile Maroc. {isRTL ? 'جميع الحقوق محفوظة.' : 'Tous droits réservés.'}</p>
             </div>

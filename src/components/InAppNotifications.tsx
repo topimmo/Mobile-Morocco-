@@ -83,7 +83,7 @@ const InAppNotifications: React.FC<InAppNotificationsProps> = ({
         return <Clock className="h-4 w-4 text-yellow-500" />;
       case "ad_expiry":
       case "ad_performance":
-        return <BarChart3 className="h-4 w-4 text-blue-500" />;
+        return <BarChart3 className="h-4 w-4 text-primary" />;
       case "admin_message":
         return <AlertTriangle className="h-4 w-4 text-red-500" />;
       default:

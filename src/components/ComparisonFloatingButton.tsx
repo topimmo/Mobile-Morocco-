@@ -24,13 +24,13 @@ const ComparisonFloatingButton = () => {
         <PopoverTrigger asChild>
           <Button
             size="lg"
-            className="rounded-full shadow-lg hover:shadow-xl transition-shadow relative bg-sky-600 hover:bg-sky-700"
+            className="rounded-full shadow-sm hover:shadow-md transition-shadow relative bg-primary hover:bg-primary/90"
           >
             <BarChart2 className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
             {isRTL ? 'مقارنة' : 'Comparer'}
             <Badge
               variant="secondary"
-              className={`${isRTL ? 'mr-2' : 'ml-2'} bg-white text-sky-600 hover:bg-white`}
+              className={`${isRTL ? 'mr-2' : 'ml-2'} bg-white text-primary hover:bg-white`}
             >
               {comparisonList.length}/3
             </Badge>
@@ -90,7 +90,7 @@ const ComparisonFloatingButton = () => {
             </div>
 
             <Button 
-              className="w-full bg-sky-600 hover:bg-sky-700" 
+              className="w-full bg-primary hover:bg-primary/90" 
               onClick={() => navigate("/compare")}
             >
               {isRTL ? 'عرض المقارنة التفصيلية' : 'Voir la comparaison détaillée'}

@@ -60,20 +60,20 @@ export default function AboutPage() {
               </p>
               <ul className="space-y-3 text-gray-600">
                 <li className="flex items-start">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></div>
                   Faciliter l'accès aux dernières technologies mobiles
                 </li>
                 <li className="flex items-start">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></div>
                   Soutenir les entreprises locales et les techniciens
                 </li>
                 <li className="flex items-start">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></div>
                   Garantir des transactions sécurisées et transparentes
                 </li>
               </ul>
             </div>
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 p-8 rounded-2xl">
+            <div className="bg-gradient-to-br from-muted to-muted p-8 rounded-2xl">
               <img 
                 src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" 
                 alt="Mission" 
@@ -90,7 +90,7 @@ export default function AboutPage() {
             {stats.map((stat, index) => (
               <Card key={index} className="text-center">
                 <CardContent className="pt-6">
-                  <stat.icon className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                  <stat.icon className="h-12 w-12 text-primary mx-auto mb-4" />
                   <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
                   <div className="text-gray-600">{stat.label}</div>
                 </CardContent>
@@ -112,7 +112,7 @@ export default function AboutPage() {
                     className="w-24 h-24 rounded-full mx-auto mb-4"
                   />
                   <CardTitle className="text-xl">{member.name}</CardTitle>
-                  <p className="text-blue-600 font-medium">{member.role}</p>
+                  <p className="text-primary font-medium">{member.role}</p>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600">{member.description}</p>
@@ -128,7 +128,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card>
               <CardHeader>
-                <Award className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <Award className="h-12 w-12 text-primary mx-auto mb-4" />
                 <CardTitle className="text-center">Qualité</CardTitle>
               </CardHeader>
               <CardContent>
@@ -140,7 +140,7 @@ export default function AboutPage() {
 
             <Card>
               <CardHeader>
-                <Users className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <Users className="h-12 w-12 text-primary mx-auto mb-4" />
                 <CardTitle className="text-center">Communauté</CardTitle>
               </CardHeader>
               <CardContent>
@@ -152,7 +152,7 @@ export default function AboutPage() {
 
             <Card>
               <CardHeader>
-                <Clock className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <Clock className="h-12 w-12 text-primary mx-auto mb-4" />
                 <CardTitle className="text-center">Innovation</CardTitle>
               </CardHeader>
               <CardContent>
@@ -165,13 +165,13 @@ export default function AboutPage() {
         </div>
 
         {/* Contact CTA */}
-        <div className="text-center bg-blue-50 rounded-2xl p-12">
+        <div className="text-center bg-muted rounded-2xl p-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Rejoignez-nous</h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Que vous soyez acheteur, vendeur ou technicien, Mobile Morocco est votre partenaire de confiance.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button size="lg" className="bg-primary hover:bg-primary/90">
               Créer un compte
             </Button>
             <Button size="lg" variant="outline">

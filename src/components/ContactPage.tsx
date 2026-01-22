@@ -99,7 +99,7 @@ export default function ContactPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <MessageCircle className="h-6 w-6 mr-2 text-blue-600" />
+                  <MessageCircle className="h-6 w-6 mr-2 text-primary" />
                   Envoyez-nous un message
                 </CardTitle>
               </CardHeader>
@@ -196,8 +196,8 @@ export default function ContactPage() {
               <Card key={index}>
                 <CardContent className="pt-6">
                   <div className="flex items-start space-x-4">
-                    <div className="bg-blue-100 p-3 rounded-lg">
-                      <info.icon className="h-6 w-6 text-blue-600" />
+                    <div className="bg-muted p-3 rounded-lg">
+                      <info.icon className="h-6 w-6 text-primary" />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-900 mb-2">{info.title}</h3>

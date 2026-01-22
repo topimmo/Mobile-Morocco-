@@ -241,7 +241,7 @@ export default function AdvertisePage() {
           
           {user ? (
             <Link to="/advertiser/dashboard">
-              <Button size="lg" variant="secondary" className="text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-lg hover:shadow-xl transition-all">
+              <Button size="lg" variant="secondary" className="text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-sm hover:shadow-md transition-all">
                 {labels.goToDashboard}
                 <ArrowIcon className={cn('h-5 w-5', isRTL ? 'mr-2' : 'ml-2')} />
               </Button>
@@ -249,7 +249,7 @@ export default function AdvertisePage() {
           ) : (
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
               <Link to="/auth/register?role=advertiser">
-                <Button size="lg" variant="secondary" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-lg hover:shadow-xl transition-all">
+                <Button size="lg" variant="secondary" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-sm hover:shadow-md transition-all">
                   {labels.createAccount}
                   <ArrowIcon className={cn('h-5 w-5', isRTL ? 'mr-2' : 'ml-2')} />
                 </Button>
@@ -314,7 +314,7 @@ export default function AdvertisePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {BANNER_PLACEMENTS.map((placement) => (
                   <Card key={placement.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                    <CardHeader className="bg-gradient-to-br from-gray-100 to-gray-50 p-4 md:p-6">
+                    <CardHeader className="bg-muted p-4 md:p-6">
                       <CardTitle className={cn('text-base md:text-lg', isRTL && 'text-right')}>
                         {isRTL ? placement.name.ar : placement.name.fr}
                       </CardTitle>

@@ -225,7 +225,7 @@ const ProductCard = ({
       case "used":
         return "bg-amber-100 text-amber-800 hover:bg-amber-200";
       case "refurbished":
-        return "bg-blue-100 text-blue-800 hover:bg-blue-200";
+        return "bg-muted text-secondary hover:bg-muted";
       default:
         return "bg-gray-100 text-gray-800 hover:bg-gray-200";
     }
@@ -236,12 +236,12 @@ const ProductCard = ({
 
   return (
     <Card
-      className={`w-full overflow-hidden transition-all duration-200 hover:shadow-md bg-white cursor-pointer flex flex-col ${isPremium ? "ring-2 ring-sky-600 ring-offset-2" : ""} ${isFeatured ? "shadow-lg" : ""}`}
+      className={`w-full overflow-hidden transition-all duration-200 hover:shadow-md bg-white cursor-pointer flex flex-col ${isPremium ? "ring-2 ring-primary ring-offset-2" : ""} ${isFeatured ? "shadow-lg" : ""}`}
       onClick={handleCardClick}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
         {isPremium && (
-          <div className="absolute top-0 left-0 z-20 bg-sky-600 text-white px-2 py-1 text-xs font-bold">
+          <div className="absolute top-0 left-0 z-20 bg-primary text-white px-2 py-1 text-xs font-bold">
             PREMIUM
           </div>
         )}
@@ -335,10 +335,10 @@ const ProductCard = ({
                 <Button
                   variant="outline"
                   size="icon"
-                  className={`rounded-full bg-white/90 backdrop-blur-sm h-7 w-7 sm:h-8 sm:w-8 ${isProductInComparison ? "ring-2 ring-blue-500" : ""}`}
+                  className={`rounded-full bg-white/90 backdrop-blur-sm h-7 w-7 sm:h-8 sm:w-8 ${isProductInComparison ? "ring-2 ring-primary" : ""}`}
                   onClick={handleCompareClick}
                 >
-                  <BarChart2 className={`h-3 w-3 sm:h-4 sm:w-4 ${isProductInComparison ? "text-blue-600" : "text-gray-600"}`} />
+                  <BarChart2 className={`h-3 w-3 sm:h-4 sm:w-4 ${isProductInComparison ? "text-primary" : "text-gray-600"}`} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -381,7 +381,7 @@ const ProductCard = ({
         <h3 className="font-medium text-base sm:text-lg line-clamp-2 mb-1 sm:mb-2 min-h-[3rem]">
           {title}
         </h3>
-        <p className="text-lg sm:text-xl font-bold text-sky-600 mb-1 sm:mb-2">
+        <p className="text-lg sm:text-xl font-bold text-primary mb-1 sm:mb-2">
           {price.toLocaleString()} {currency}
         </p>
         <div className="flex items-center justify-between text-xs sm:text-sm text-gray-600">

@@ -125,7 +125,7 @@ const RegistrationForm = () => {
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <div className="flex justify-center mb-6">
-          <Link to="/" className="flex items-center text-blue-600 hover:text-blue-700">
+          <Link to="/" className="flex items-center text-primary hover:text-primary">
             <ArrowLeft className="w-5 h-5 mr-2" />
             Retour à l'accueil
           </Link>
@@ -332,15 +332,15 @@ const RegistrationForm = () => {
                   name="terms"
                   type="checkbox"
                   required
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                 />
                 <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
                   J'accepte les{' '}
-                  <Link to="/terms" className="text-blue-600 hover:text-blue-500">
+                  <Link to="/terms" className="text-primary hover:text-primary">
                     conditions d'utilisation
                   </Link>{' '}
                   et la{' '}
-                  <Link to="/privacy" className="text-blue-600 hover:text-blue-500">
+                  <Link to="/privacy" className="text-primary hover:text-primary">
                     politique de confidentialité
                   </Link>
                 </label>
@@ -358,7 +358,7 @@ const RegistrationForm = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Déjà un compte ?{' '}
-                <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
+                <Link to="/login" className="font-medium text-primary hover:text-primary">
                   Se connecter
                 </Link>
               </p>

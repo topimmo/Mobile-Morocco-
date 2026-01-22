@@ -97,7 +97,7 @@ export default function FAQPage() {
     : faqItems;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-background">
       <SEO
         title="Questions Fréquemment Posées"
         description="Trouvez les réponses aux questions courantes sur Mobile Maroc, nos services et comment utiliser la plateforme."
@@ -121,7 +121,7 @@ export default function FAQPage() {
             placeholder="Rechercher une question..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </section>
@@ -137,7 +137,7 @@ export default function FAQPage() {
               <Accordion type="single" collapsible className="w-full">
                 {filteredItems.map((item) => (
                   <AccordionItem key={item.id} value={item.id} className="border rounded-lg mb-4 px-4">
-                    <AccordionTrigger className="text-left hover:text-blue-600 py-4">
+                    <AccordionTrigger className="text-left hover:text-primary py-4">
                       <span className="font-semibold">{item.question}</span>
                     </AccordionTrigger>
                     <AccordionContent className="pb-4 text-gray-700">
@@ -150,7 +150,7 @@ export default function FAQPage() {
           ) : (
             categories.map((category) => (
               <div key={category} className="mb-12">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-4 border-b-2 border-blue-600">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-4 border-b-2 border-primary">
                   {category}
                 </h2>
                 <Accordion type="single" collapsible className="w-full">
@@ -158,7 +158,7 @@ export default function FAQPage() {
                     .filter(item => item.category === category)
                     .map((item) => (
                       <AccordionItem key={item.id} value={item.id} className="border rounded-lg mb-4 px-4">
-                        <AccordionTrigger className="text-left hover:text-blue-600 py-4">
+                        <AccordionTrigger className="text-left hover:text-primary py-4">
                           <span className="font-semibold">{item.question}</span>
                         </AccordionTrigger>
                         <AccordionContent className="pb-4 text-gray-700">
@@ -174,13 +174,13 @@ export default function FAQPage() {
       </section>
 
       {/* Contact Support Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-muted">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Vous n'avez pas trouvé votre réponse ?</h2>
           <p className="text-gray-600 mb-6">Notre équipe de support est là pour vous aider</p>
           <a
             href="/contact"
-            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+            className="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition"
           >
             Nous Contacter
           </a>

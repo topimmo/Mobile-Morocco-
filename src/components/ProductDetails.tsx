@@ -102,7 +102,7 @@ export default function ProductDetails() {
       case 'used':
         return 'bg-amber-100 text-amber-800';
       case 'refurbished':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-muted text-secondary';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -174,7 +174,7 @@ export default function ProductDetails() {
             {/* Main Image */}
             <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-sm">
               {product.isPremium && (
-                <div className="absolute top-4 left-4 z-20 bg-sky-600 text-white px-3 py-1 text-sm font-bold rounded">
+                <div className="absolute top-4 left-4 z-20 bg-primary text-white px-3 py-1 text-sm font-bold rounded">
                   PREMIUM
                 </div>
               )}
@@ -243,13 +243,13 @@ export default function ProductDetails() {
                         variant="outline"
                         size="icon"
                         className={`bg-white/90 backdrop-blur-sm ${
-                          isInComparison(product.id) ? 'ring-2 ring-blue-500' : ''
+                          isInComparison(product.id) ? 'ring-2 ring-primary' : ''
                         }`}
                         onClick={handleCompareClick}
                       >
                         <BarChart2
                           className={`h-4 w-4 ${
-                            isInComparison(product.id) ? 'text-blue-600' : 'text-gray-600'
+                            isInComparison(product.id) ? 'text-primary' : 'text-gray-600'
                           }`}
                         />
                       </Button>
@@ -287,7 +287,7 @@ export default function ProductDetails() {
                   <button
                     key={index}
                     className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
-                      index === currentImageIndex ? 'border-sky-600' : 'border-gray-200'
+                      index === currentImageIndex ? 'border-primary' : 'border-gray-200'
                     }`}
                     onClick={() => setCurrentImageIndex(index)}
                   >
@@ -318,7 +318,7 @@ export default function ProductDetails() {
               </div>
               
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.title}</h1>
-              <p className="text-4xl font-bold text-sky-600 mb-4">
+              <p className="text-4xl font-bold text-primary mb-4">
                 {product.price.toLocaleString()} {product.currency}
               </p>
             </div>
@@ -415,8 +415,8 @@ export default function ProductDetails() {
                       {(product.specs.brand || product.specs.model) && (
                         <div className="bg-gray-50 rounded-lg p-4">
                           <div className="flex items-center gap-2 mb-2">
-                            <div className="w-8 h-8 bg-sky-100 rounded-full flex items-center justify-center">
-                              <Phone className="h-4 w-4 text-sky-600" />
+                            <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+                              <Phone className="h-4 w-4 text-primary" />
                             </div>
                             <span className="text-sm font-medium text-gray-500">Marque / Modèle</span>
                           </div>
@@ -461,8 +461,8 @@ export default function ProductDetails() {
                       {product.specs.display && (
                         <div className="bg-gray-50 rounded-lg p-4">
                           <div className="flex items-center gap-2 mb-2">
-                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                              <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+                              <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                               </svg>
                             </div>
@@ -664,19 +664,19 @@ export default function ProductDetails() {
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                     <div>
-                      <div className="text-2xl font-bold text-sky-600">98%</div>
+                      <div className="text-2xl font-bold text-primary">98%</div>
                       <div className="text-sm text-gray-600">Avis positifs</div>
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-sky-600">24h</div>
+                      <div className="text-2xl font-bold text-primary">24h</div>
                       <div className="text-sm text-gray-600">Temps de réponse</div>
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-sky-600">156</div>
+                      <div className="text-2xl font-bold text-primary">156</div>
                       <div className="text-sm text-gray-600">Ventes réalisées</div>
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-sky-600">2 ans</div>
+                      <div className="text-2xl font-bold text-primary">2 ans</div>
                       <div className="text-sm text-gray-600">Sur la plateforme</div>
                     </div>
                   </div>
