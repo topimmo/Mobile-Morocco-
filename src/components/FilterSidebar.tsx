@@ -92,9 +92,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   ];
 
   const handlePriceChange = (value: number[]) => {
-    const newFilters = {
+    const newFilters: FilterState = {
       ...filters,
-      priceRange: [value[0], value[1] || filters.priceRange[1]],
+      priceRange: [value[0], value[1] ?? filters.priceRange[1]] as [number, number],
     };
     setFilters(newFilters);
     onFilterChange(newFilters);
@@ -153,8 +153,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   };
 
   const resetFilters = () => {
-    const defaultFilters = {
-      priceRange: [0, 10000],
+    const defaultFilters: FilterState = {
+      priceRange: [0, 10000] as [number, number],
       brands: [],
       condition: "",
       sellerType: [],
@@ -169,7 +169,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="w-full max-w-full sm:max-w-[280px] h-full bg-background border-r p-3 sm:p-4 overflow-y-auto">
+    <div className="w-full max-w-full sm:max-w-[280px] h-full bg-background border-r p-3 sm:p-4 overflow-y-auto max-h-[80vh] sm:max-h-none">
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <h2 className="text-base sm:text-lg font-semibold">Filters</h2>
         <div className="flex gap-2">

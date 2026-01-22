@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { ChevronDown, Filter, SlidersHorizontal } from "lucide-react";
+import { useToast } from "./ui/use-toast";
 
 interface Product {
   id: string;
@@ -49,6 +50,7 @@ const ProductGrid = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("newest");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const { toast } = useToast();
 
   // Mock products if none provided
   const mockProducts: Product[] = [
@@ -201,7 +203,10 @@ const ProductGrid = ({
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Use requestAnimationFrame for better performance
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
   };
 
   const handleSortChange = (value: string) => {
@@ -312,7 +317,12 @@ const ProductGrid = ({
                 enableWhatsApp={product.seller.enableWhatsApp}
                 isPremium={product.id === "1" || product.id === "5"}
                 isFeatured={product.id === "2" || product.id === "7"}
-                onReport={(id) => console.log(`Reporting product ${id}`)}
+                onReport={(id) => {
+                  toast({
+                    title: "Produit signalé",
+                    description: "Merci pour votre signalement. Nous allons l'examiner.",
+                  });
+                }}
               />
             ))}
           </div>

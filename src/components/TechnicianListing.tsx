@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { technicians, techniciensFr } from "@/data/technicians";
 import TechnicianProfile from "./TechnicianProfile";
 import { Input } from "@/components/ui/input";
@@ -11,8 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { Technician } from "@/types/technician";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface TechnicianListingProps {
   language?: "ar" | "fr";
@@ -31,6 +32,11 @@ const TechnicianListing: React.FC<TechnicianListingProps> = ({
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedService, setSelectedService] = useState<string>("");
   const [showFilters, setShowFilters] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 12;
+  
+  // Debounce search term for better performance
+  const debouncedSearch = useDebounce(searchTerm, 400);
 
   // Extract unique cities and services for filter options
   const cities = [...new Set(techData.map((tech) => tech.city))];
@@ -39,14 +45,14 @@ const TechnicianListing: React.FC<TechnicianListingProps> = ({
   useEffect(() => {
     let filtered = techData;
 
-    // Apply search filter
-    if (searchTerm) {
+    // Apply search filter (use debounced value)
+    if (debouncedSearch) {
       filtered = filtered.filter(
         (tech) =>
-          tech.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          tech.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          tech.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+          tech.city.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
           tech.services.some((service) =>
-            service.toLowerCase().includes(searchTerm.toLowerCase()),
+            service.toLowerCase().includes(debouncedSearch.toLowerCase()),
           ),
       );
     }
@@ -64,7 +70,15 @@ const TechnicianListing: React.FC<TechnicianListingProps> = ({
     }
 
     setFilteredTechnicians(filtered);
-  }, [searchTerm, selectedCity, selectedService, techData]);
+    setCurrentPage(1); // Reset to page 1 when filters change
+  }, [debouncedSearch, selectedCity, selectedService, techData]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredTechnicians.length / ITEMS_PER_PAGE);
+  const paginatedTechnicians = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredTechnicians.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredTechnicians, currentPage]);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
@@ -207,15 +221,45 @@ const TechnicianListing: React.FC<TechnicianListingProps> = ({
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredTechnicians.map((technician) => (
-                <TechnicianProfile
-                  key={technician.id}
-                  technician={technician}
-                  language={language}
-                />
-              ))}
-            </div>
+            <>
+              <div className="text-sm text-gray-600 mb-4">
+                {filteredTechnicians.length} {isRTL ? "نتيجة" : "résultat(s)"}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {paginatedTechnicians.map((technician) => (
+                  <TechnicianProfile
+                    key={technician.id}
+                    technician={technician}
+                    language={language}
+                  />
+                ))}
+              </div>
+              
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-4 mt-8">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    {isRTL ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                  </Button>
+                  <span className="text-sm text-gray-600">
+                    {isRTL ? `${currentPage} من ${totalPages}` : `${currentPage} sur ${totalPages}`}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                  >
+                    {isRTL ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>

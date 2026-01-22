@@ -1,0 +1,22 @@
+# Mobile Maroc - robots.txt
+User-agent: *
+Allow: /
+
+# Disallow admin and auth pages
+Disallow: /admin/
+Disallow: /advertiser/
+Disallow: /auth/
+
+# Allow search engines to index all public pages
+Allow: /listings
+Allow: /listings/*
+Allow: /categories/*
+Allow: /cities/*
+Allow: /repair-shops
+Allow: /repair-shops/*
+
+# Sitemap location
+Sitemap: https://mobilemaroc.ma/sitemap.xml
+
+# Crawl-delay for politeness (optional)
+Crawl-delay: 1
