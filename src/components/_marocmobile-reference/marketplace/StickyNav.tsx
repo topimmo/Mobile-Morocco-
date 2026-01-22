@@ -1,7 +1,7 @@
 import { Search, User, Menu, Globe, X, Scale, Store, Wrench } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface StickyNavProps {
   variant?: "light" | "dark";

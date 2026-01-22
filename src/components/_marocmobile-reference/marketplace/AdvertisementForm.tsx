@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import StickyNav from "./StickyNav";
 import Footer from "./Footer";
 import { supabase } from "@/lib/supabase";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 type Placement = "homepage" | "category" | "city";
