@@ -83,7 +83,7 @@ const ROLE_OPTIONS: RoleOption[] = [
         'Communication directe avec les clients'
       ]
     },
-    color: 'from-blue-500 to-cyan-600'
+    color: 'from-primary to-primary'
   },
   {
     id: 'technician',

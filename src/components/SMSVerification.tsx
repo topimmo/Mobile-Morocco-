@@ -119,8 +119,8 @@ export default function SMSVerification({
   return (
     <Card className="w-full max-w-md mx-auto bg-white">
       <CardHeader className="text-center">
-        <div className="mx-auto mb-4 p-3 bg-blue-100 rounded-full w-fit">
-          <MessageSquare className="h-6 w-6 text-blue-600" />
+        <div className="mx-auto mb-4 p-3 bg-muted rounded-full w-fit">
+          <MessageSquare className="h-6 w-6 text-primary" />
         </div>
         <CardTitle className="text-xl font-bold">
           {t('verification.phone')}
@@ -193,7 +193,7 @@ export default function SMSVerification({
               variant="ghost"
               onClick={handleResendCode}
               disabled={isLoading}
-              className="text-blue-600 hover:text-blue-700"
+              className="text-primary hover:text-primary"
             >
               {t('verification.resend')}
             </Button>

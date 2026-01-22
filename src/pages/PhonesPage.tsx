@@ -156,8 +156,8 @@ export default function PhonesPage() {
       <section className="py-8 px-4 bg-white border-b">
         <div className="max-w-6xl mx-auto">
           <div className={cn('flex items-center gap-3 mb-4', isRTL && 'flex-row-reverse')}>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <Smartphone className="h-8 w-8 text-blue-600" />
+            <div className="p-3 bg-muted rounded-lg">
+              <Smartphone className="h-8 w-8 text-primary" />
             </div>
             <div>
               <h1 className={cn('text-3xl font-bold', isRTL && 'text-right')}>{labels.title}</h1>
@@ -166,7 +166,7 @@ export default function PhonesPage() {
             {/* CTA Buttons */}
             <div className={cn('flex gap-3 ml-auto', isRTL && 'mr-auto ml-0')}>
               <Link to="/publish-phone">
-                <Button className="bg-sky-600 hover:bg-sky-700">
+                <Button className="bg-primary hover:bg-primary/90">
                   <Plus className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
                   {labels.publishPhone}
                 </Button>
@@ -307,7 +307,7 @@ export default function PhonesPage() {
                             {getCityName(item.city as City, language)}
                           </p>
                         )}
-                        <p className={cn('font-bold text-lg text-blue-600', isRTL && 'text-right')}>
+                        <p className={cn('font-bold text-lg text-primary', isRTL && 'text-right')}>
                           {formatPrice(item.price, item.price_text)}
                         </p>
                         

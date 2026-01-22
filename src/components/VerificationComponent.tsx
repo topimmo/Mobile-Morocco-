@@ -21,7 +21,7 @@ export default function VerificationComponent({ onVerificationComplete }: Verifi
   const moroccanOperators = [
     { prefix: '+212 6', name: 'Orange', color: 'bg-orange-500' },
     { prefix: '+212 7', name: 'Inwi', color: 'bg-red-500' },
-    { prefix: '+212 5', name: 'Maroc Telecom', color: 'bg-blue-500' }
+    { prefix: '+212 5', name: 'Maroc Telecom', color: 'bg-muted0' }
   ];
 
   const validateMoroccanPhone = (phone: string): boolean => {
@@ -92,8 +92,8 @@ export default function VerificationComponent({ onVerificationComplete }: Verifi
     <div className="bg-white min-h-screen p-4">
       <Card className="max-w-md mx-auto">
         <CardHeader className="text-center">
-          <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-            <Shield className="w-8 h-8 text-blue-600" />
+          <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+            <Shield className="w-8 h-8 text-primary" />
           </div>
           <CardTitle className="text-xl font-bold">
             {step === 'phone' && 'Vérification du numéro'}
@@ -151,7 +151,7 @@ export default function VerificationComponent({ onVerificationComplete }: Verifi
           {step === 'code' && (
             <>
               <div className="text-center space-y-2">
-                <MessageCircle className="w-12 h-12 text-blue-600 mx-auto" />
+                <MessageCircle className="w-12 h-12 text-primary mx-auto" />
                 <p className="text-sm text-gray-600">
                   Code envoyé au {phoneNumber}
                 </p>

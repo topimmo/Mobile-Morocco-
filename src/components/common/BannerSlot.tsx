@@ -18,7 +18,7 @@ const PLACEHOLDER_BANNERS = {
     subtext: 'تواصل معنا للإعلان • Contactez-nous pour annoncer',
   },
   middle: {
-    gradient: 'from-blue-600 via-blue-700 to-indigo-700',
+    gradient: 'from-secondary via-secondary to-secondary',
     text: 'عروض حصرية • Offres Exclusives',
     subtext: 'احجز مساحتك الإعلانية الآن • Réservez votre espace publicitaire',
   },

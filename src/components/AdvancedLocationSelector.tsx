@@ -205,10 +205,10 @@ const AdvancedLocationSelector: React.FC<AdvancedLocationSelectorProps> = ({
 
         {/* Affichage de la localisation actuelle */}
         {currentLocation && (
-          <div className="p-3 bg-blue-50 rounded-lg">
+          <div className="p-3 bg-muted rounded-lg">
             <div className="flex items-center gap-2 mb-2">
-              <MapPin className="h-4 w-4 text-blue-600" />
-              <span className="font-medium text-blue-900">Localisation sélectionnée</span>
+              <MapPin className="h-4 w-4 text-primary" />
+              <span className="font-medium text-secondary">Localisation sélectionnée</span>
             </div>
             <div className="flex flex-wrap gap-2">
               <Badge variant="secondary">{currentLocation.city}</Badge>

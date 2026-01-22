@@ -74,7 +74,7 @@ const FavoritesPage = () => {
       case "used":
         return "bg-amber-100 text-amber-800";
       case "refurbished":
-        return "bg-blue-100 text-blue-800";
+        return "bg-muted text-secondary";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -207,7 +207,7 @@ const FavoritesPage = () => {
                   className="w-full h-full object-cover"
                 />
                 {product.isPremium && (
-                  <div className="absolute top-2 left-2 bg-sky-600 text-white px-2 py-1 text-xs font-bold rounded">
+                  <div className="absolute top-2 left-2 bg-primary text-white px-2 py-1 text-xs font-bold rounded">
                     PREMIUM
                   </div>
                 )}
@@ -223,7 +223,7 @@ const FavoritesPage = () => {
                   {product.title}
                 </CardTitle>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-2xl font-bold text-sky-600">
+                  <span className="text-2xl font-bold text-primary">
                     {product.price.toLocaleString()} {product.currency || "MAD"}
                   </span>
                   <Badge className={getConditionColor(product.condition)}>

@@ -261,7 +261,7 @@ export default function AdminDashboard() {
                 ) : (
                   <span className="text-2xl font-bold">{stats?.totalUsers || 0}</span>
                 )}
-                <Users className="h-5 w-5 text-blue-500" />
+                <Users className="h-5 w-5 text-primary" />
               </div>
             </CardContent>
           </Card>
@@ -624,7 +624,7 @@ export default function AdminDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-blue-500" />
+                  <TrendingUp className="h-5 w-5 text-primary" />
                   {isRTL ? 'النشاط الأخير' : 'Activité récente'}
                 </CardTitle>
                 <CardDescription>
@@ -647,9 +647,9 @@ export default function AdminDashboard() {
                   <div className="space-y-3">
                     {recentActivity.map((item, index) => (
                       <div key={`${item.type}-${item.id}`} className="flex items-center gap-3 p-2 rounded hover:bg-muted/50">
-                        <div className={`p-2 rounded-full ${item.type === 'listing' ? 'bg-blue-100' : 'bg-green-100'}`}>
+                        <div className={`p-2 rounded-full ${item.type === 'listing' ? 'bg-muted' : 'bg-green-100'}`}>
                           {item.type === 'listing' ? (
-                            <ShoppingBag className="h-4 w-4 text-blue-600" />
+                            <ShoppingBag className="h-4 w-4 text-primary" />
                           ) : (
                             <Wrench className="h-4 w-4 text-green-600" />
                           )}

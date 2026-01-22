@@ -52,7 +52,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ position, className = "" }) => {
 
   return (
     <div className={`relative ${className}`}>
-      <Card className="overflow-hidden border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50">
+      <Card className="overflow-hidden border-2 border-muted bg-gradient-to-r from-muted to-purple-50">
         <div className="relative">
           <button
             onClick={handleClose}

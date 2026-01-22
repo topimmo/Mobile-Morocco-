@@ -85,7 +85,7 @@ const LoginForm = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center mb-6">
-          <Link to="/" className="flex items-center text-blue-600 hover:text-blue-700">
+          <Link to="/" className="flex items-center text-primary hover:text-primary">
             <ArrowLeft className="w-5 h-5 mr-2" />
             Retour à l'accueil
           </Link>
@@ -154,7 +154,7 @@ const LoginForm = () => {
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                   />
                   <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                     Se souvenir de moi
@@ -162,7 +162,7 @@ const LoginForm = () => {
                 </div>
 
                 <div className="text-sm">
-                  <Link to="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">
+                  <Link to="/forgot-password" className="font-medium text-primary hover:text-primary">
                     Mot de passe oublié ?
                   </Link>
                 </div>
@@ -190,7 +190,7 @@ const LoginForm = () => {
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-600">
                   Pas encore de compte ?{' '}
-                  <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
+                  <Link to="/register" className="font-medium text-primary hover:text-primary">
                     Créer un compte
                   </Link>
                 </p>

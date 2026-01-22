@@ -114,7 +114,7 @@ export default function InfluencerList() {
                 <TableCell className="font-medium">
                   {influencer.name}
                   {influencer.is_verified && (
-                    <span className="ml-1 text-blue-500">✓</span>
+                    <span className="ml-1 text-primary">✓</span>
                   )}
                 </TableCell>
                 <TableCell>{influencer.platform}</TableCell>

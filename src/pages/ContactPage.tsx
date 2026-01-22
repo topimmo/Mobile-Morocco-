@@ -60,21 +60,21 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Info Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-muted">
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             <Card>
               <CardHeader>
-                <Mail className="w-8 h-8 text-blue-600 mb-2" />
+                <Mail className="w-8 h-8 text-primary mb-2" />
                 <CardTitle>Email</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-2">Pour les demandes générales :</p>
-                <a href="mailto:info@mobilemaroc.ma" className="text-blue-600 font-semibold hover:underline">
+                <a href="mailto:info@mobilemaroc.ma" className="text-primary font-semibold hover:underline">
                   info@mobilemaroc.ma
                 </a>
                 <p className="text-gray-600 mt-4 mb-2">Pour le support technique :</p>
-                <a href="mailto:support@mobilemaroc.ma" className="text-blue-600 font-semibold hover:underline">
+                <a href="mailto:support@mobilemaroc.ma" className="text-primary font-semibold hover:underline">
                   support@mobilemaroc.ma
                 </a>
               </CardContent>
@@ -82,16 +82,16 @@ export default function ContactPage() {
 
             <Card>
               <CardHeader>
-                <Phone className="w-8 h-8 text-blue-600 mb-2" />
+                <Phone className="w-8 h-8 text-primary mb-2" />
                 <CardTitle>Téléphone</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-2">Service Client :</p>
-                <a href="tel:+212522123456" className="text-blue-600 font-semibold hover:underline">
+                <a href="tel:+212522123456" className="text-primary font-semibold hover:underline">
                   +212 5 22 12 34 56
                 </a>
                 <p className="text-gray-600 mt-4 mb-2">WhatsApp Business :</p>
-                <a href="https://wa.me/212522123456" className="text-blue-600 font-semibold hover:underline">
+                <a href="https://wa.me/212522123456" className="text-primary font-semibold hover:underline">
                   +212 5 22 12 34 56
                 </a>
               </CardContent>
@@ -99,7 +99,7 @@ export default function ContactPage() {
 
             <Card>
               <CardHeader>
-                <MapPin className="w-8 h-8 text-blue-600 mb-2" />
+                <MapPin className="w-8 h-8 text-primary mb-2" />
                 <CardTitle>Localisation</CardTitle>
               </CardHeader>
               <CardContent>
@@ -113,7 +113,7 @@ export default function ContactPage() {
 
             <Card>
               <CardHeader>
-                <Clock className="w-8 h-8 text-blue-600 mb-2" />
+                <Clock className="w-8 h-8 text-primary mb-2" />
                 <CardTitle>Horaires</CardTitle>
               </CardHeader>
               <CardContent>
@@ -212,7 +212,7 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
                   Envoyer le Message
                 </Button>
               </form>

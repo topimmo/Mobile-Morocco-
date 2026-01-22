@@ -119,8 +119,8 @@ class ErrorBoundary extends Component<Props, State> {
       },
       notfound: {
         icon: AlertCircle,
-        iconBg: 'bg-blue-100',
-        iconColor: 'text-blue-600',
+        iconBg: 'bg-muted',
+        iconColor: 'text-primary',
         titleFr: 'Page non trouvée',
         titleAr: 'الصفحة غير موجودة',
         messageFr: 'La page que vous recherchez n\'existe pas.',

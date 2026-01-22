@@ -152,7 +152,7 @@ export default function LocationSelector({ onLocationSelect, showDeliveryEstimat
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-blue-600" />
+            <MapPin className="w-5 h-5 text-primary" />
             Sélectionner votre localisation
           </CardTitle>
         </CardHeader>
@@ -225,9 +225,9 @@ export default function LocationSelector({ onLocationSelect, showDeliveryEstimat
 
           {/* Informations de livraison */}
           {selectedCity && showDeliveryEstimate && (
-            <Card className="bg-blue-50 border-blue-200">
+            <Card className="bg-muted border-muted">
               <CardContent className="pt-4">
-                <h4 className="font-medium text-blue-800 mb-2">Informations de livraison</h4>
+                <h4 className="font-medium text-secondary mb-2">Informations de livraison</h4>
                 {(() => {
                   const deliveryInfo = getDeliveryInfo(selectedCity);
                   return deliveryInfo ? (

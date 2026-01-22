@@ -302,7 +302,7 @@ export default function RepairShopsPage() {
                                   <MessageCircle className="h-4 w-4 text-green-600" />
                                 )}
                                 {shop.phone && (
-                                  <Phone className="h-4 w-4 text-blue-600" />
+                                  <Phone className="h-4 w-4 text-primary" />
                                 )}
                               </div>
                             </div>

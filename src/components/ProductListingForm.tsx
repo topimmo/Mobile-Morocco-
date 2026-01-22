@@ -817,10 +817,10 @@ const ProductListingForm: React.FC<ProductListingFormProps> = ({
         {/* Terms and Submit */}
         <Card>
           <CardContent className="pt-6">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="bg-muted border border-muted rounded-lg p-4 mb-6">
               <div className="flex items-start gap-3">
-                <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
-                <div className="text-sm text-blue-800">
+                <AlertCircle className="h-5 w-5 text-primary mt-0.5" />
+                <div className="text-sm text-secondary">
                   <p className="font-medium mb-1">Before submitting:</p>
                   <ul className="list-disc list-inside space-y-1">
                     <li>Ensure all information is accurate and complete</li>

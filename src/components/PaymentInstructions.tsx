@@ -72,7 +72,7 @@ const PaymentInstructions: React.FC<PaymentInstructionsProps> = ({
     {
       id: 'maroc_telecom',
       name: 'Maroc Telecom Cash',
-      icon: <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">M</div>,
+      icon: <div className="w-6 h-6 bg-muted0 rounded-full flex items-center justify-center text-white text-xs font-bold">M</div>,
       description: 'Paiement via Maroc Telecom Cash',
       fees: 'Gratuit',
       processingTime: 'Instantané'
@@ -88,7 +88,7 @@ const PaymentInstructions: React.FC<PaymentInstructionsProps> = ({
     {
       id: 'bank_transfer',
       name: 'Virement bancaire',
-      icon: <Building2 className="w-6 h-6 text-blue-600" />,
+      icon: <Building2 className="w-6 h-6 text-primary" />,
       description: 'Virement vers le compte du vendeur',
       fees: 'Selon votre banque',
       processingTime: '1-2 jours ouvrables'
@@ -198,9 +198,9 @@ const PaymentInstructions: React.FC<PaymentInstructionsProps> = ({
 
       case 'bank_transfer':
         return (
-          <Card className="border-blue-200 bg-blue-50">
+          <Card className="border-muted bg-muted">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-blue-800">
+              <CardTitle className="flex items-center gap-2 text-secondary">
                 <Building2 className="w-5 h-5" />
                 Virement bancaire
               </CardTitle>

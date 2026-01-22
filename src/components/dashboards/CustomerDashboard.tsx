@@ -77,7 +77,7 @@ export default function CustomerDashboard() {
           </div>
           <div className="flex gap-2">
             <Link to="/publish-phone">
-              <Button className="bg-sky-600 hover:bg-sky-700">
+              <Button className="bg-primary hover:bg-primary/90">
                 <Plus className="h-4 w-4 mr-2" />
                 نشر تلفوني
               </Button>

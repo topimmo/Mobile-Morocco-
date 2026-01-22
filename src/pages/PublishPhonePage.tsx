@@ -340,7 +340,7 @@ export default function PublishPhonePage() {
               <p className="text-gray-600 mb-8">{t.successMessage}</p>
               <Button
                 onClick={() => navigate(`/items/${newItemSlug}`)}
-                className="w-full bg-sky-600 hover:bg-sky-700"
+                className="w-full bg-primary hover:bg-primary/90"
               >
                 {t.viewListing}
                 {isRTL ? <ArrowLeft className="mr-2 h-4 w-4" /> : <ArrowRight className="ml-2 h-4 w-4" />}
@@ -360,11 +360,11 @@ export default function PublishPhonePage() {
         <main className="container mx-auto px-4 py-12">
           <div className="max-w-md mx-auto text-center">
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <Smartphone className="w-16 h-16 text-sky-600 mx-auto mb-6" />
+              <Smartphone className="w-16 h-16 text-primary mx-auto mb-6" />
               <h1 className="text-2xl font-bold text-gray-900 mb-4">{t.loginRequired}</h1>
               <Button
                 onClick={() => navigate('/auth/login')}
-                className="w-full bg-sky-600 hover:bg-sky-700"
+                className="w-full bg-primary hover:bg-primary/90"
               >
                 {t.login}
               </Button>
@@ -384,8 +384,8 @@ export default function PublishPhonePage() {
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-sky-100 rounded-full mb-4">
-              <Smartphone className="w-8 h-8 text-sky-600" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-muted rounded-full mb-4">
+              <Smartphone className="w-8 h-8 text-primary" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{t.pageTitle}</h1>
             <p className="text-gray-600">{t.pageDescription}</p>
@@ -624,7 +624,7 @@ export default function PublishPhonePage() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-sky-600 hover:bg-sky-700 text-lg py-6"
+                  className="w-full bg-primary hover:bg-primary/90 text-lg py-6"
                 >
                   {loading ? (
                     <>

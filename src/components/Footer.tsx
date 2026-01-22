@@ -101,13 +101,13 @@ function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-2">
                 <Mail size={18} />
-                <a href="mailto:support@mobilemaroc.ma" className="hover:text-blue-400 transition">
+                <a href="mailto:support@mobilemaroc.ma" className="hover:text-primary transition">
                   support@mobilemaroc.ma
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone size={18} />
-                <a href="tel:+212522123456" className="hover:text-blue-400 transition">
+                <a href="tel:+212522123456" className="hover:text-primary transition">
                   +212 5 22 12 34 56
                 </a>
               </li>
@@ -126,10 +126,10 @@ function Footer() {
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 text-sm">
           {/* Legal Links */}
           <div className="flex gap-4 md:gap-6 flex-wrap text-sm">
-            <Link to="/terms" className="hover:text-blue-400 transition">
+            <Link to="/terms" className="hover:text-primary transition">
               Conditions d'Utilisation
             </Link>
-            <Link to="/privacy" className="hover:text-blue-400 transition">
+            <Link to="/privacy" className="hover:text-primary transition">
               Politique de Confidentialité
             </Link>
           </div>

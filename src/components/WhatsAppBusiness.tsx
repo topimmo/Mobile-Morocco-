@@ -169,7 +169,7 @@ export default function WhatsAppBusiness({
             variant="ghost"
             size="sm"
             onClick={() => setShowCustomMessage(!showCustomMessage)}
-            className="text-blue-600 hover:text-blue-700"
+            className="text-primary hover:text-primary"
           >
             {showCustomMessage ? 'Masquer' : 'Message personnalisé'}
           </Button>

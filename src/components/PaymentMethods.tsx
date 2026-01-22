@@ -41,9 +41,9 @@ export default function PaymentMethods({
     {
       id: 'maroc_telecom',
       name: t('payment.maroc_telecom'),
-      icon: <Smartphone className="h-5 w-5 text-blue-500" />,
+      icon: <Smartphone className="h-5 w-5 text-primary" />,
       description: 'Paiement via Maroc Telecom Cash',
-      color: 'border-blue-200 hover:border-blue-300'
+      color: 'border-muted hover:border-primary'
     },
     {
       id: 'cash_delivery',
@@ -112,7 +112,7 @@ export default function PaymentMethods({
         <RadioGroup value={selectedMethod} onValueChange={setSelectedMethod}>
           <div className="grid gap-3">
             {paymentMethods.map((method) => (
-              <div key={method.id} className={`border-2 rounded-lg p-4 cursor-pointer transition-colors ${method.color} ${selectedMethod === method.id ? 'ring-2 ring-blue-500' : ''}`}>
+              <div key={method.id} className={`border-2 rounded-lg p-4 cursor-pointer transition-colors ${method.color} ${selectedMethod === method.id ? 'ring-2 ring-primary' : ''}`}>
                 <Label htmlFor={method.id} className="cursor-pointer">
                   <div className="flex items-center space-x-3">
                     <RadioGroupItem value={method.id} id={method.id} />
@@ -161,9 +161,9 @@ export default function PaymentMethods({
         )}
 
         {selectedMethod === 'bank_transfer' && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="font-medium text-blue-800 mb-2">Informations bancaires</h4>
-            <div className="text-sm text-blue-700 space-y-1">
+          <div className="bg-muted border border-muted rounded-lg p-4">
+            <h4 className="font-medium text-secondary mb-2">Informations bancaires</h4>
+            <div className="text-sm text-primary space-y-1">
               <p><strong>Banque:</strong> Attijariwafa Bank</p>
               <p><strong>RIB:</strong> 007 780 0000123456789012 34</p>
               <p><strong>Bénéficiaire:</strong> MobileMorocco SARL</p>
