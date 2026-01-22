@@ -6,27 +6,39 @@
 
 @layer base {
   :root {
-    /* Swiss Design - Light theme with Black, White, Orange */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
+    /* Dark Swiss Design - Professional marketplace theme */
+    /* Dark background (almost black) */
+    --background: 0 0% 8%;
+    --foreground: 0 0% 95%;
+    /* Card background (slightly lighter than background) */
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+    /* Popover */
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
+    /* Orange primary color */
     --primary: 24 95% 53%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
+    --primary-foreground: 0 0% 5%;
+    /* Secondary (dark gray) */
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 95%;
+    /* Muted (medium gray) */
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 65%;
+    /* Orange accent */
     --accent: 24 95% 53%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
+    --accent-foreground: 0 0% 5%;
+    /* Destructive */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
+    /* Borders (subtle gray) */
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    /* Ring (orange for focus) */
     --ring: 24 95% 53%;
+    /* Minimal border radius for Swiss design */
     --radius: 0.25rem;
+    /* Chart colors */
     --chart-1: 24 95% 53%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -34,26 +46,26 @@
     --chart-5: 27 87% 67%;
   }
 
+  /* Keep dark theme consistent - no light mode */
   .dark {
-    /* Swiss Design - Optional dark mode */
-    --background: 0 0% 10%;
+    --background: 0 0% 8%;
     --foreground: 0 0% 95%;
     --card: 0 0% 12%;
     --card-foreground: 0 0% 95%;
-    --popover: 0 0% 12%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 95%;
     --primary: 24 95% 53%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 20%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 0 0% 16%;
     --secondary-foreground: 0 0% 95%;
     --muted: 0 0% 18%;
-    --muted-foreground: 0 0% 60%;
+    --muted-foreground: 0 0% 65%;
     --accent: 24 95% 53%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
+    --accent-foreground: 0 0% 5%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
     --ring: 24 95% 53%;
   }
 

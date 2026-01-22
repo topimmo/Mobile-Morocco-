@@ -24,6 +24,7 @@ import { useFavorites } from "@/contexts/FavoritesContext";
 import { useComparison } from "@/contexts/ComparisonContext";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
   id?: string;
@@ -218,41 +219,34 @@ const ProductCard = ({
     return `https://wa.me/${formattedNumber}?text=Hello, I saw your listing and would like more details`;
   };
 
-  const getConditionColor = (condition: string) => {
-    switch (condition) {
-      case "new":
-        return "bg-green-100 text-green-800 hover:bg-green-200";
-      case "used":
-        return "bg-amber-100 text-amber-800 hover:bg-amber-200";
-      case "refurbished":
-        return "bg-blue-100 text-blue-800 hover:bg-blue-200";
-      default:
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
-    }
-  };
-
   const isProductFavorite = isFavorite(id);
   const isProductInComparison = isInComparison(id);
 
   return (
     <Card
-      className={`w-full overflow-hidden transition-all duration-200 hover:shadow-md bg-white cursor-pointer flex flex-col ${isPremium ? "ring-2 ring-sky-600 ring-offset-2" : ""} ${isFeatured ? "shadow-lg" : ""}`}
+      className={cn(
+        "w-full overflow-hidden transition-all duration-200 hover:border-primary/50 bg-card cursor-pointer flex flex-col",
+        // Fixed height to prevent CLS
+        "h-[440px] sm:h-[460px]",
+        isPremium && "border-primary border-2",
+        isFeatured && "border-accent"
+      )}
       onClick={handleCardClick}
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+      <div className="relative aspect-[4/3] overflow-hidden bg-muted flex-shrink-0">
         {isPremium && (
-          <div className="absolute top-0 left-0 z-20 bg-sky-600 text-white px-2 py-1 text-xs font-bold">
-            PREMIUM
+          <div className="absolute top-0 left-0 z-20 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold uppercase">
+            Premium
           </div>
         )}
         {isFeatured && (
-          <div className="absolute top-0 right-0 z-20 bg-amber-500 text-white px-2 py-1 text-xs font-bold">
-            FEATURED
+          <div className="absolute top-0 right-0 z-20 bg-accent text-accent-foreground px-3 py-1 text-xs font-bold uppercase">
+            Featured
           </div>
         )}
         {condition === "new" && (
-          <div className="absolute top-0 right-0 z-20 bg-green-500 text-white px-2 py-1 text-xs font-bold">
-            NEW
+          <div className="absolute top-0 right-0 z-20 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold uppercase">
+            New
           </div>
         )}
         {/* Image carousel */}
@@ -266,37 +260,40 @@ const ProductCard = ({
         {allImages.length > 1 && (
           <>
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
-              className="absolute left-1 top-1/2 transform -translate-y-1/2 h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-white/80 backdrop-blur-sm z-10"
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 h-8 w-8 rounded-sm bg-background/80 backdrop-blur-sm hover:bg-background/90 z-10"
               onClick={(e) => {
                 e.stopPropagation();
                 prevImage();
               }}
             >
-              <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+              <ChevronLeft className="h-4 w-4" />
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
-              className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-white/80 backdrop-blur-sm z-10"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 rounded-sm bg-background/80 backdrop-blur-sm hover:bg-background/90 z-10"
               onClick={(e) => {
                 e.stopPropagation();
                 nextImage();
               }}
             >
-              <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
+              <ChevronRight className="h-4 w-4" />
             </Button>
           </>
         )}
 
         {/* Image indicators */}
         {allImages.length > 1 && (
-          <div className="absolute bottom-1 left-0 right-0 flex justify-center gap-1 z-10">
+          <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5 z-10">
             {allImages.map((_, index) => (
               <div
                 key={index}
-                className={`h-1.5 w-1.5 rounded-full cursor-pointer ${index === currentImageIndex ? "bg-primary" : "bg-white/70"}`}
+                className={cn(
+                  "h-1.5 w-1.5 rounded-full cursor-pointer transition-all",
+                  index === currentImageIndex ? "bg-primary w-3" : "bg-muted-foreground/50"
+                )}
                 onClick={(e) => {
                   e.stopPropagation();
                   setCurrentImageIndex(index);
@@ -311,13 +308,16 @@ const ProductCard = ({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="icon"
-                  className="rounded-full bg-white/90 backdrop-blur-sm h-7 w-7 sm:h-8 sm:w-8"
+                  className="rounded-sm bg-background/80 backdrop-blur-sm hover:bg-background/90 h-8 w-8"
                   onClick={handleFavoriteClick}
                 >
                   <Heart
-                    className={`h-3 w-3 sm:h-4 sm:w-4 ${isProductFavorite ? "fill-red-500 text-red-500" : "text-gray-600"}`}
+                    className={cn(
+                      "h-4 w-4",
+                      isProductFavorite ? "fill-primary text-primary" : "text-foreground"
+                    )}
                   />
                 </Button>
               </TooltipTrigger>
@@ -333,12 +333,18 @@ const ProductCard = ({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="icon"
-                  className={`rounded-full bg-white/90 backdrop-blur-sm h-7 w-7 sm:h-8 sm:w-8 ${isProductInComparison ? "ring-2 ring-blue-500" : ""}`}
+                  className={cn(
+                    "rounded-sm bg-background/80 backdrop-blur-sm hover:bg-background/90 h-8 w-8",
+                    isProductInComparison && "border border-primary"
+                  )}
                   onClick={handleCompareClick}
                 >
-                  <BarChart2 className={`h-3 w-3 sm:h-4 sm:w-4 ${isProductInComparison ? "text-blue-600" : "text-gray-600"}`} />
+                  <BarChart2 className={cn(
+                    "h-4 w-4",
+                    isProductInComparison ? "text-primary" : "text-foreground"
+                  )} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -351,12 +357,12 @@ const ProductCard = ({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="icon"
-                  className="rounded-full bg-white/90 backdrop-blur-sm h-7 w-7 sm:h-8 sm:w-8"
+                  className="rounded-sm bg-background/80 backdrop-blur-sm hover:bg-background/90 h-8 w-8"
                   onClick={handleShareProduct}
                 >
-                  <Share2 className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600" />
+                  <Share2 className="h-4 w-4 text-foreground" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -366,8 +372,12 @@ const ProductCard = ({
           </TooltipProvider>
         </div>
         <Badge
-          className={`absolute bottom-2 left-2 text-xs sm:text-sm ${getConditionColor(condition)}`}
-          variant="outline"
+          className={cn(
+            "absolute bottom-2 left-2 text-xs font-medium border-0",
+            condition === "new" && "bg-primary text-primary-foreground",
+            condition === "used" && "bg-muted text-muted-foreground",
+            condition === "refurbished" && "bg-secondary text-secondary-foreground"
+          )}
         >
           {condition === "new"
             ? "New"
@@ -377,32 +387,32 @@ const ProductCard = ({
         </Badge>
       </div>
 
-      <CardContent className="p-3 sm:p-4 flex-1">
-        <h3 className="font-medium text-base sm:text-lg line-clamp-2 mb-1 sm:mb-2 min-h-[3rem]">
+      <CardContent className="p-4 flex-1 flex flex-col">
+        <h3 className="font-semibold text-base sm:text-lg line-clamp-2 mb-2 text-foreground h-14">
           {title}
         </h3>
-        <p className="text-lg sm:text-xl font-bold text-sky-600 mb-1 sm:mb-2">
+        <p className="text-xl sm:text-2xl font-bold text-primary mb-2">
           {price.toLocaleString()} {currency}
         </p>
-        <div className="flex items-center justify-between text-xs sm:text-sm text-gray-600">
+        <div className="flex items-center justify-between text-sm text-muted-foreground mb-1">
           <div className="flex items-center gap-1">
-            <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-amber-400 text-amber-400" />
+            <Star className="h-4 w-4 fill-primary text-primary" />
             <span>{sellerRating}</span>
             <span className="mx-1">•</span>
             <span className="truncate">{sellerName}</span>
           </div>
         </div>
-        <div className="flex items-center mt-1 text-xs sm:text-sm text-gray-500">
-          <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-1" />
+        <div className="flex items-center text-sm text-muted-foreground">
+          <MapPin className="h-3 w-3 mr-1" />
           <span>{location}</span>
         </div>
       </CardContent>
 
-      <CardFooter className="p-3 sm:p-4 pt-0 flex flex-col gap-2 mt-auto">
+      <CardFooter className="p-4 pt-0 flex flex-col gap-2 mt-auto border-t border-border">
         <div className="flex gap-2 w-full">
           <Button
-            className="flex-1 text-xs sm:text-sm"
-            variant="outline"
+            className="flex-1 text-sm"
+            size="sm"
             onClick={handleContactSellerClick}
           >
             Contact Seller
@@ -414,10 +424,10 @@ const ProductCard = ({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full h-8 w-8"
+                  className="h-9 w-9"
                   onClick={handleReportClick}
                 >
-                  <Flag className="h-4 w-4 text-gray-600" />
+                  <Flag className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -431,18 +441,18 @@ const ProductCard = ({
           <div className="flex gap-2 w-full">
             {showPhoneNumber && (
               <Button
-                className="flex-1 text-xs sm:text-sm flex items-center gap-1"
+                className="flex-1 text-sm flex items-center gap-2"
                 variant="secondary"
                 size="sm"
               >
-                <Phone className="h-3 w-3" />
+                <Phone className="h-4 w-4" />
                 {phoneNumber}
               </Button>
             )}
 
             {enableWhatsApp && (
               <Button
-                className="flex-1 text-xs sm:text-sm flex items-center gap-1"
+                className="flex-1 text-sm flex items-center gap-2"
                 variant="secondary"
                 size="sm"
                 asChild
@@ -452,27 +462,13 @@ const ProductCard = ({
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <MessageCircle className="h-3 w-3" />
+                  <MessageCircle className="h-4 w-4" />
                   WhatsApp
                 </a>
               </Button>
             )}
           </div>
         )}
-
-        <div className="flex items-center justify-center w-full mt-1">
-          <div className="flex items-center">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star
-                key={star}
-                className={`h-3 w-3 ${star <= Math.round(sellerRating) ? "fill-amber-400 text-amber-400" : "text-gray-300"}`}
-              />
-            ))}
-            <span className="text-xs text-gray-500 ml-1">
-              ({sellerRating.toFixed(1)})
-            </span>
-          </div>
-        </div>
       </CardFooter>
     </Card>
   );

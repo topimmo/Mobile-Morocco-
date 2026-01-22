@@ -74,11 +74,11 @@ function Navigation() {
   };
 
   return (
-    <nav className={cn('bg-white border-b border-border sticky top-0 z-50 shadow-sm')} dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="max-w-6xl mx-auto px-4 py-4">
+    <nav className={cn('bg-card border-b border-border sticky top-0 z-50')} dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="max-w-7xl mx-auto px-4 py-3">
         <div className={cn('flex justify-between items-center', isRTL && 'flex-row-reverse')}>
-          {/* Logo - Swiss Design */}
-          <Link to="/" className="text-xl md:text-2xl font-bold text-gray-900">
+          {/* Logo - Dark Swiss Design */}
+          <Link to="/" className="text-xl md:text-2xl font-bold text-foreground flex-shrink-0 w-48">
             Mobile Morocco
           </Link>
 
