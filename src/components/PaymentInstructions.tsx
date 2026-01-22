@@ -72,7 +72,7 @@ const PaymentInstructions: React.FC<PaymentInstructionsProps> = ({
     {
       id: 'maroc_telecom',
       name: 'Maroc Telecom Cash',
-      icon: <div className="w-6 h-6 bg-muted0 rounded-full flex items-center justify-center text-white text-xs font-bold">M</div>,
+      icon: <div className="w-6 h-6 bg-muted rounded-full flex items-center justify-center text-white text-xs font-bold">M</div>,
       description: 'Paiement via Maroc Telecom Cash',
       fees: 'Gratuit',
       processingTime: 'Instantané'

@@ -21,7 +21,7 @@ export default function VerificationComponent({ onVerificationComplete }: Verifi
   const moroccanOperators = [
     { prefix: '+212 6', name: 'Orange', color: 'bg-orange-500' },
     { prefix: '+212 7', name: 'Inwi', color: 'bg-red-500' },
-    { prefix: '+212 5', name: 'Maroc Telecom', color: 'bg-muted0' }
+    { prefix: '+212 5', name: 'Maroc Telecom', color: 'bg-muted' }
   ];
 
   const validateMoroccanPhone = (phone: string): boolean => {

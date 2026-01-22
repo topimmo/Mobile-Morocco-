@@ -146,7 +146,7 @@ export default function StoreProfilePage() {
               <div className={cn("flex items-center gap-3 mb-2", isRTL && "flex-row-reverse")}>
                 <h1 className="text-3xl font-bold">{getStoreName(store, language)}</h1>
                 {(store as any).is_verified && (
-                  <Badge className="bg-muted0"><CheckCircle className="h-3 w-3 mr-1" />{labels.verified}</Badge>
+                  <Badge className="bg-muted"><CheckCircle className="h-3 w-3 mr-1" />{labels.verified}</Badge>
                 )}
               </div>
               <div className={cn("flex items-center gap-4 mb-4 text-gray-500", isRTL && "flex-row-reverse")}>
