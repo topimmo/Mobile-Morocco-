@@ -74,11 +74,11 @@ function Navigation() {
   };
 
   return (
-    <nav className={cn('bg-secondary border-b border-border sticky top-0 z-50')} dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="max-w-6xl mx-auto px-4 py-3">
+    <nav className={cn('bg-white border-b border-border sticky top-0 z-50 shadow-sm')} dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="max-w-6xl mx-auto px-4 py-4">
         <div className={cn('flex justify-between items-center', isRTL && 'flex-row-reverse')}>
-          {/* Logo */}
-          <Link to="/" className="text-xl md:text-2xl font-bold text-primary">
+          {/* Logo - Swiss Design */}
+          <Link to="/" className="text-xl md:text-2xl font-bold text-gray-900">
             Mobile Morocco
           </Link>
 
@@ -89,10 +89,10 @@ function Navigation() {
                 key={link.to}
                 to={link.to}
                 className={cn(
-                  'px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2',
+                  'px-3 py-2 text-sm font-medium transition-colors flex items-center gap-2',
                   isActive(link.to)
-                    ? 'bg-primary text-primary-foreground'
-                    : 'hover:bg-muted text-muted-foreground hover:text-foreground',
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground',
                   isRTL && 'flex-row-reverse'
                 )}
               >
@@ -104,9 +104,9 @@ function Navigation() {
 
           {/* Desktop Right Section */}
           <div className={cn('hidden md:flex items-center gap-3', isRTL && 'flex-row-reverse')}>
-            {/* Publish Phone CTA */}
+            {/* Publish Phone CTA - Swiss Design */}
             <Link to="/publish-phone">
-              <Button size="sm" className={cn('bg-sky-600 hover:bg-sky-700 whitespace-nowrap', isRTL && 'flex-row-reverse')}>
+              <Button size="sm" className={cn('bg-primary hover:bg-primary/90 font-medium whitespace-nowrap', isRTL && 'flex-row-reverse')}>
                 <Plus className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
                 {isRTL ? 'نشر تلفوني' : 'Publier'}
               </Button>
@@ -116,12 +116,12 @@ function Navigation() {
             <button
               onClick={() => setLanguage(language === 'ar' ? 'fr' : 'ar')}
               className={cn(
-                'flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-colors',
+                'flex items-center gap-2 px-3 py-2 hover:bg-muted transition-colors font-medium',
                 isRTL && 'flex-row-reverse'
               )}
             >
               <Globe className="h-4 w-4" />
-              <span className="text-sm font-medium">{language === 'ar' ? 'FR' : 'AR'}</span>
+              <span className="text-sm">{language === 'ar' ? 'FR' : 'AR'}</span>
             </button>
 
             {/* Auth Links */}

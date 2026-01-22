@@ -5,27 +5,27 @@ function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-gray-300">
-      {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-6 md:mb-8">
+    <footer className="bg-secondary text-secondary-foreground border-t border-border">
+      {/* Main Footer Content - Swiss Design */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-8 md:mb-12">
           {/* Company Info */}
           <div>
             <h3 className="text-white text-lg font-bold mb-4">Mobile Maroc</h3>
-            <p className="text-sm mb-4">
+            <p className="text-sm mb-6 leading-relaxed">
               La plateforme leader pour acheter, vendre et réparer des téléphones mobiles au Maroc.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-blue-400 transition" aria-label="Facebook">
+              <a href="#" className="hover:text-primary transition" aria-label="Facebook">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="hover:text-blue-400 transition" aria-label="Twitter">
+              <a href="#" className="hover:text-primary transition" aria-label="Twitter">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="hover:text-blue-400 transition" aria-label="Instagram">
+              <a href="#" className="hover:text-primary transition" aria-label="Instagram">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="hover:text-blue-400 transition" aria-label="LinkedIn">
+              <a href="#" className="hover:text-primary transition" aria-label="LinkedIn">
                 <Linkedin size={20} />
               </a>
             </div>
@@ -33,35 +33,35 @@ function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Accès Rapide</h4>
+            <h4 className="text-white font-bold mb-4">Accès Rapide</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="hover:text-blue-400 transition">
+                <Link to="/" className="hover:text-primary transition text-sm">
                   Accueil
                 </Link>
               </li>
               <li>
-                <Link to="/phones" className="hover:text-blue-400 transition">
+                <Link to="/phones" className="hover:text-primary transition text-sm">
                   Téléphones
                 </Link>
               </li>
               <li>
-                <Link to="/spare-parts" className="hover:text-blue-400 transition">
+                <Link to="/spare-parts" className="hover:text-primary transition text-sm">
                   Pièces Détachées
                 </Link>
               </li>
               <li>
-                <Link to="/equipment" className="hover:text-blue-400 transition">
+                <Link to="/equipment" className="hover:text-primary transition text-sm">
                   Équipements
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="hover:text-blue-400 transition">
+                <Link to="/services" className="hover:text-primary transition text-sm">
                   Services de Réparation
                 </Link>
               </li>
               <li>
-                <Link to="/stores" className="hover:text-blue-400 transition">
+                <Link to="/stores" className="hover:text-primary transition text-sm">
                   Boutiques
                 </Link>
               </li>
@@ -70,25 +70,25 @@ function Footer() {
 
           {/* Information */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Information</h4>
+            <h4 className="text-white font-bold mb-4">Information</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="hover:text-blue-400 transition">
+                <Link to="/about" className="hover:text-primary transition text-sm">
                   À Propos
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="hover:text-blue-400 transition">
+                <Link to="/faq" className="hover:text-primary transition text-sm">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-blue-400 transition">
+                <Link to="/contact" className="hover:text-primary transition text-sm">
                   Nous Contacter
                 </Link>
               </li>
               <li>
-                <Link to="/advertise" className="hover:text-blue-400 transition">
+                <Link to="/advertise" className="hover:text-primary transition text-sm">
                   Publicité
                 </Link>
               </li>
@@ -97,7 +97,7 @@ function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Nous Contacter</h4>
+            <h4 className="text-white font-bold mb-4">Nous Contacter</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2">
                 <Mail size={18} />
