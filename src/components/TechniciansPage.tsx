@@ -215,9 +215,9 @@ export default function TechniciansPage() {
 
         // Try to fetch technicians from profiles table (if available)
         // This is prepared for future DB integration
-        const { data: dbTechnicians, error } = await supabase
+        const { data: dbTechnicians, error }: { data: any[] | null; error: any } = await (supabase as any)
           .from('profiles')
-          .select(`*, city:cities(*)`)
+          .select('*')
           .eq('user_type', 'technician')
           .eq('status', 'approved');
 

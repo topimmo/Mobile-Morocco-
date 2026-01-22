@@ -138,7 +138,7 @@ function getMockStores(): StoreWithRelations[] {
       phone: '+212 661 234 567', whatsapp: '212661234567', email: 'contact@techmobile.ma', website: null,
       working_hours: {}, working_days: ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam'], emergency_service: false,
       status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, rating_avg: 4.5, rating_count: 23,
-      meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
+      meta_title: null, meta_description: null, is_demo: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: '2', user_id: '2', name_fr: 'Mobile Expert Rabat', name_ar: 'خبير الموبايل الرباط', slug: 'mobile-expert-rabat',
@@ -148,7 +148,7 @@ function getMockStores(): StoreWithRelations[] {
       phone: '+212 662 345 678', whatsapp: '212662345678', email: 'info@mobileexpert.ma', website: null,
       working_hours: {}, working_days: ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam'], emergency_service: true,
       status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, rating_avg: 4.8, rating_count: 45,
-      meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
+      meta_title: null, meta_description: null, is_demo: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: '3', user_id: '3', name_fr: 'Vendeur Particulier', name_ar: 'بائع فردي', slug: 'vendeur-particulier',
@@ -158,7 +158,7 @@ function getMockStores(): StoreWithRelations[] {
       phone: '+212 663 456 789', whatsapp: '212663456789', email: null, website: null,
       working_hours: {}, working_days: [], emergency_service: false,
       status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, rating_avg: 4.2, rating_count: 8,
-      meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
+      meta_title: null, meta_description: null, is_demo: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     }
   ];
 }
@@ -396,7 +396,7 @@ function getMockItems(itemType?: ItemType): ItemWithRelations[] {
       price: 14999, price_text: null, currency: 'MAD', brand: 'Apple', model: 'iPhone 15 Pro Max',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Maarif, Casablanca',
       phone: '+212 661 234 567', whatsapp: '212661234567',
-      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0,
+      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     },
     {
@@ -406,7 +406,7 @@ function getMockItems(itemType?: ItemType): ItemWithRelations[] {
       price: 11500, price_text: null, currency: 'MAD', brand: 'Samsung', model: 'Galaxy S24 Ultra',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Agdal, Rabat',
       phone: '+212 662 345 678', whatsapp: '212662345678',
-      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0,
+      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     },
     {
@@ -416,7 +416,7 @@ function getMockItems(itemType?: ItemType): ItemWithRelations[] {
       price: 6500, price_text: null, currency: 'MAD', brand: 'Xiaomi', model: '14 Pro',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Guéliz, Marrakech',
       phone: '+212 663 456 789', whatsapp: '212663456789',
-      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0,
+      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     }
   ];
@@ -429,7 +429,7 @@ function getMockItems(itemType?: ItemType): ItemWithRelations[] {
       price: 2800, price_text: null, currency: 'MAD', brand: 'Apple', model: 'iPhone 14 Pro',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Derb Omar, Casablanca',
       phone: '+212 661 234 567', whatsapp: '212661234567',
-      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0,
+      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     },
     {
@@ -439,7 +439,7 @@ function getMockItems(itemType?: ItemType): ItemWithRelations[] {
       price: 350, price_text: null, currency: 'MAD', brand: 'Samsung', model: 'Galaxy S23',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Derb Omar, Casablanca',
       phone: '+212 661 234 567', whatsapp: '212661234567',
-      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0,
+      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     }
   ];
@@ -452,7 +452,7 @@ function getMockItems(itemType?: ItemType): ItemWithRelations[] {
       price: 4500, price_text: null, currency: 'MAD', brand: 'JBC', model: 'CD-2BE',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Hay Mohammadi, Casablanca',
       phone: '+212 661 234 567', whatsapp: '212661234567',
-      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0,
+      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     },
     {
@@ -462,7 +462,7 @@ function getMockItems(itemType?: ItemType): ItemWithRelations[] {
       price: 2800, price_text: null, currency: 'MAD', brand: 'AmScope', model: 'SM-4TZ-144A',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Agdal, Rabat',
       phone: '+212 662 345 678', whatsapp: '212662345678',
-      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0,
+      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     }
   ];
@@ -730,7 +730,7 @@ function getMockServices(): ServiceWithRelations[] {
       price: 800, price_on_request: false, estimated_duration: '30-60 min',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Maarif, Casablanca',
       phone: '+212 661 234 567', whatsapp: '212661234567',
-      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0,
+      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
       store: {
         id: '1', user_id: '1', name_fr: 'TechMobile Casablanca', name_ar: 'تك موبايل الدار البيضاء', slug: 'techmobile-casa',
@@ -739,7 +739,7 @@ function getMockServices(): ServiceWithRelations[] {
         phone: '+212 661 234 567', whatsapp: '212661234567', email: null, website: null,
         working_hours: {}, working_days: [], emergency_service: true,
         status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, rating_avg: 4.5, rating_count: 23,
-        meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
+        meta_title: null, meta_description: null, is_demo: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
       }
     },
     {
@@ -749,7 +749,7 @@ function getMockServices(): ServiceWithRelations[] {
       price: null, price_on_request: true, estimated_duration: '1-2 heures',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Agdal, Rabat',
       phone: '+212 662 345 678', whatsapp: '212662345678',
-      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0,
+      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
       store: {
         id: '2', user_id: '2', name_fr: 'Mobile Expert Rabat', name_ar: 'خبير الموبايل الرباط', slug: 'mobile-expert-rabat',
@@ -758,7 +758,7 @@ function getMockServices(): ServiceWithRelations[] {
         phone: '+212 662 345 678', whatsapp: '212662345678', email: null, website: null,
         working_hours: {}, working_days: [], emergency_service: false,
         status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, rating_avg: 4.8, rating_count: 45,
-        meta_title: null, meta_description: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
+        meta_title: null, meta_description: null, is_demo: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
       }
     },
     {
@@ -768,7 +768,7 @@ function getMockServices(): ServiceWithRelations[] {
       price: 200, price_on_request: false, estimated_duration: '15-30 min',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Maarif, Casablanca',
       phone: '+212 661 234 567', whatsapp: '212661234567',
-      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0,
+      status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     }
   ];

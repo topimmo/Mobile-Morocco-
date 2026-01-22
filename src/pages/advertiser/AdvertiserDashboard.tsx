@@ -27,15 +27,15 @@ import {
 
 interface Campaign {
   id: string;
-  name: string;
-  banner_image_url: string;
-  destination_url: string;
+  title: string;
+  target_url: string;
+  banner_desktop_url: string | null;
   start_date: string;
   end_date: string;
   status: string;
   payment_status: string;
-  impressions: number;
-  clicks: number;
+  total_impressions: number | null;
+  total_clicks: number | null;
   created_at: string;
 }
 
@@ -148,8 +148,8 @@ export default function AdvertiserDashboard() {
   const stats = {
     total: campaigns.length,
     active: campaigns.filter(c => c.status === 'active').length,
-    impressions: campaigns.reduce((sum, c) => sum + (c.impressions || 0), 0),
-    clicks: campaigns.reduce((sum, c) => sum + (c.clicks || 0), 0),
+    impressions: campaigns.reduce((sum, c) => sum + (c.total_impressions || 0), 0),
+    clicks: campaigns.reduce((sum, c) => sum + (c.total_clicks || 0), 0),
   };
 
   if (loading) {
@@ -278,10 +278,10 @@ export default function AdvertiserDashboard() {
                 {filteredCampaigns.map((campaign) => (
                   <Card key={campaign.id} className="overflow-hidden">
                     <div className="h-32 bg-gray-200 relative">
-                      {campaign.banner_image_url ? (
+                      {campaign.banner_desktop_url ? (
                         <img
-                          src={campaign.banner_image_url}
-                          alt={campaign.name}
+                          src={campaign.banner_desktop_url}
+                          alt={campaign.title}
                           className="w-full h-full object-cover"
                         />
                       ) : (
@@ -295,7 +295,7 @@ export default function AdvertiserDashboard() {
                     </div>
                     <CardContent className="p-4">
                       <h3 className={cn('font-semibold mb-2 truncate', isRTL && 'text-right')}>
-                        {campaign.name}
+                        {campaign.title}
                       </h3>
                       
                       <div className="space-y-2 text-sm text-gray-600 mb-4">
@@ -308,11 +308,11 @@ export default function AdvertiserDashboard() {
                         <div className={cn('flex items-center justify-between', isRTL && 'flex-row-reverse')}>
                           <div className={cn('flex items-center gap-1', isRTL && 'flex-row-reverse')}>
                             <Eye className="h-4 w-4" />
-                            <span>{(campaign.impressions || 0).toLocaleString()}</span>
+                            <span>{(campaign.total_impressions || 0).toLocaleString()}</span>
                           </div>
                           <div className={cn('flex items-center gap-1', isRTL && 'flex-row-reverse')}>
                             <MousePointer className="h-4 w-4" />
-                            <span>{(campaign.clicks || 0).toLocaleString()}</span>
+                            <span>{(campaign.total_clicks || 0).toLocaleString()}</span>
                           </div>
                         </div>
                       </div>
