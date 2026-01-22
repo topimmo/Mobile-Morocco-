@@ -63,16 +63,16 @@ export default function AboutPage() {
                   la vente et la réparation de téléphones mobiles tout en soutenant l'économie locale.
                 </p>
                 <ul className="space-y-3 text-muted-foreground">
-                  <li className="flex items-start" dir="auto">
-                    <div className="w-2 h-2 bg-primary rounded-full mt-2 ltr:mr-3 rtl:ml-3 flex-shrink-0"></div>
+                  <li className="flex items-start gap-3" dir="auto">
+                    <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
                     Faciliter l'accès aux dernières technologies mobiles
                   </li>
-                  <li className="flex items-start" dir="auto">
-                    <div className="w-2 h-2 bg-primary rounded-full mt-2 ltr:mr-3 rtl:ml-3 flex-shrink-0"></div>
+                  <li className="flex items-start gap-3" dir="auto">
+                    <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
                     Soutenir les entreprises locales et les techniciens
                   </li>
-                  <li className="flex items-start" dir="auto">
-                    <div className="w-2 h-2 bg-primary rounded-full mt-2 ltr:mr-3 rtl:ml-3 flex-shrink-0"></div>
+                  <li className="flex items-start gap-3" dir="auto">
+                    <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
                     Garantir des transactions sécurisées et transparentes
                   </li>
                 </ul>

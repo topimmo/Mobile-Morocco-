@@ -197,7 +197,7 @@ export default function ContactPage() {
               {contactInfo.map((info, index) => (
                 <Card key={index}>
                   <CardContent className="pt-6">
-                    <div className="flex items-start space-x-4" dir="auto">
+                    <div className="flex items-start gap-4" dir="auto">
                       <div className="bg-primary/10 p-3 rounded-lg">
                         <info.icon className="h-6 w-6 text-primary" />
                       </div>
