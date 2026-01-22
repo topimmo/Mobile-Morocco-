@@ -160,20 +160,18 @@ export default function HomePage() {
       {/* Top Banner */}
       <BannerSlot page="home" slot="top" />
 
-      {/* Hero Section with Feature Cards */}
-      <section className="py-8 px-4 bg-white">
+      {/* Hero Section with Feature Cards - Swiss Design */}
+      <section className="py-12 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1: Phones & Accessories */}
-            <Card className="hover:shadow-lg transition-all border-0 bg-gradient-to-br from-blue-50 to-blue-100/50">
+            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
               <CardContent className="p-8 text-center">
-                <div className="mb-4 flex justify-center">
-                  <div className="bg-blue-200/50 p-3 rounded-lg">
-                    <Smartphone className="h-8 w-8 text-blue-600" />
-                  </div>
+                <div className="mb-6 flex justify-center">
+                  <Smartphone className="h-12 w-12 text-foreground" />
                 </div>
                 <h3 className={cn(
-                  'text-lg font-semibold mb-3 text-gray-900',
+                  'text-xl font-bold mb-3 text-foreground',
                   isRTL && 'text-right'
                 )}>
                   {isRTL 
@@ -181,7 +179,7 @@ export default function HomePage() {
                     : 'Large sélection de téléphones'}
                 </h3>
                 <p className={cn(
-                  'text-sm text-gray-600 mb-4 leading-relaxed',
+                  'text-sm text-muted-foreground mb-6 leading-relaxed',
                   isRTL && 'text-right'
                 )}>
                   {isRTL
@@ -189,7 +187,7 @@ export default function HomePage() {
                     : 'neufs et d\'occasion, accessoires et pièces détachées'}
                 </p>
                 <Link to="/listings">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-medium">
                     {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
                   </Button>
                 </Link>
@@ -197,15 +195,13 @@ export default function HomePage() {
             </Card>
 
             {/* Card 2: Repair Services */}
-            <Card className="hover:shadow-lg transition-all border-0 bg-gradient-to-br from-purple-50 to-purple-100/50">
+            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
               <CardContent className="p-8 text-center">
-                <div className="mb-4 flex justify-center">
-                  <div className="bg-purple-200/50 p-3 rounded-lg">
-                    <Wrench className="h-8 w-8 text-purple-600" />
-                  </div>
+                <div className="mb-6 flex justify-center">
+                  <Wrench className="h-12 w-12 text-foreground" />
                 </div>
                 <h3 className={cn(
-                  'text-lg font-semibold mb-3 text-gray-900',
+                  'text-xl font-bold mb-3 text-foreground',
                   isRTL && 'text-right'
                 )}>
                   {isRTL 
@@ -213,7 +209,7 @@ export default function HomePage() {
                     : 'Trouvez des techniciens qualifiés'}
                 </h3>
                 <p className={cn(
-                  'text-sm text-gray-600 mb-4 leading-relaxed',
+                  'text-sm text-muted-foreground mb-6 leading-relaxed',
                   isRTL && 'text-right'
                 )}>
                   {isRTL
@@ -221,7 +217,7 @@ export default function HomePage() {
                     : 'pour réparer vos appareils'}
                 </p>
                 <Link to="/repair-shops">
-                  <Button className="bg-purple-600 hover:bg-purple-700 text-white w-full">
+                  <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground w-full font-medium">
                     {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
                   </Button>
                 </Link>
@@ -229,15 +225,13 @@ export default function HomePage() {
             </Card>
 
             {/* Card 3: Community */}
-            <Card className="hover:shadow-lg transition-all border-0 bg-gradient-to-br from-amber-50 to-amber-100/50">
+            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
               <CardContent className="p-8 text-center">
-                <div className="mb-4 flex justify-center">
-                  <div className="bg-amber-200/50 p-3 rounded-lg">
-                    <Users className="h-8 w-8 text-amber-600" />
-                  </div>
+                <div className="mb-6 flex justify-center">
+                  <Users className="h-12 w-12 text-foreground" />
                 </div>
                 <h3 className={cn(
-                  'text-lg font-semibold mb-3 text-gray-900',
+                  'text-xl font-bold mb-3 text-foreground',
                   isRTL && 'text-right'
                 )}>
                   {isRTL 
@@ -245,7 +239,7 @@ export default function HomePage() {
                     : 'Rejoignez notre communauté'}
                 </h3>
                 <p className={cn(
-                  'text-sm text-gray-600 mb-4 leading-relaxed',
+                  'text-sm text-muted-foreground mb-6 leading-relaxed',
                   isRTL && 'text-right'
                 )}>
                   {isRTL
@@ -253,7 +247,7 @@ export default function HomePage() {
                     : 'd\'importateurs, techniciens et clients'}
                 </p>
                 <Link to="/auth/register">
-                  <Button className="bg-amber-600 hover:bg-amber-700 text-white w-full">
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-medium">
                     {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
                   </Button>
                 </Link>
@@ -261,12 +255,12 @@ export default function HomePage() {
             </Card>
           </div>
 
-          {/* Publish Phone CTA */}
-          <div className="mt-8 text-center">
+          {/* Publish Phone CTA - Swiss Design */}
+          <div className="mt-12 text-center">
             <Link to="/publish-phone">
               <Button 
                 size="lg" 
-                className="bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold shadow-sm hover:shadow-md transition-shadow"
               >
                 <Smartphone className={cn("h-5 w-5", isRTL ? "ml-2" : "mr-2")} />
                 {isRTL ? 'نشر تلفوني' : 'Publier mon téléphone'}
@@ -277,37 +271,37 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Arabic Content Section */}
-      <section className="py-8 px-4 bg-white">
+      {/* Arabic Content Section - Swiss Design */}
+      <section className="py-12 px-4 bg-muted">
         <div className="max-w-6xl mx-auto">
           {/* Arabic titles and descriptions */}
           <div className={cn(
-            'grid grid-cols-1 md:grid-cols-3 gap-6 mb-8',
+            'grid grid-cols-1 md:grid-cols-3 gap-8',
             isRTL && 'text-right'
           )}>
             {isRTL && (
               <>
                 <div className="text-center">
-                  <h3 className="text-base font-semibold text-gray-800 mb-2">
+                  <h3 className="text-lg font-bold text-foreground mb-3">
                     معلومات وطرق حديثة
                   </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     حيث تجد لوحة معلومات حديثة لتتبع معاملاتك والتحكم بحسابك
                   </p>
                 </div>
                 <div className="text-center">
-                  <h3 className="text-base font-semibold text-gray-800 mb-2">
+                  <h3 className="text-lg font-bold text-foreground mb-3">
                     شراء وبيع بسهولة
                   </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     عملية شراء وبيع سهلة ومأمونة مع ضمانات لحماية المستخدمين
                   </p>
                 </div>
                 <div className="text-center">
-                  <h3 className="text-base font-semibold text-gray-800 mb-2">
+                  <h3 className="text-lg font-bold text-foreground mb-3">
                     كلكلات ومواصفات مختلفة
                   </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     تجد ما يناسبك من أسعار ومواصفات مختلفة لجميع الأجهزة
                   </p>
                 </div>
@@ -317,11 +311,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Category Icons Section */}
-      <section className="py-12 px-4 bg-gray-50">
+      {/* Category Icons Section - Swiss Design */}
+      <section className="py-16 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className={cn(
-            'text-2xl font-bold mb-12 text-center',
+            'text-3xl font-bold mb-12 text-center text-foreground',
             isRTL && 'text-right'
           )}>
             {isRTL ? 'تصفح حسب الفئة' : 'Catégories'}
@@ -332,7 +326,7 @@ export default function HomePage() {
             {loading ? (
               [...Array(4)].map((_, i) => (
                 <div key={i} className="text-center">
-                  <Skeleton className="h-24 w-24 rounded-full mx-auto mb-4" />
+                  <Skeleton className="h-24 w-24 mx-auto mb-4" />
                   <Skeleton className="h-4 w-20 mx-auto" />
                 </div>
               ))
@@ -340,17 +334,17 @@ export default function HomePage() {
               <>
                 {/* Phone Category */}
                 <Link to="/categories/telephones" className="text-center group">
-                  <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-blue-100 group-hover:bg-blue-200 transition-colors mb-4">
-                    <Phone className="h-12 w-12 text-blue-600" />
+                  <div className="inline-flex items-center justify-center w-24 h-24 border-2 border-border group-hover:border-primary transition-colors mb-4">
+                    <Phone className="h-12 w-12 text-foreground group-hover:text-primary transition-colors" />
                   </div>
                   <p className={cn(
-                    'font-semibold text-gray-800 mb-1',
+                    'font-bold text-foreground mb-1',
                     isRTL && 'text-right'
                   )}>
                     {isRTL ? 'الهواتف' : 'Téléphones'}
                   </p>
                   <p className={cn(
-                    'text-xs text-gray-500',
+                    'text-xs text-muted-foreground',
                     isRTL && 'text-right'
                   )}>
                     {isRTL ? 'أجهزة وإكسسوارات' : 'Appareils & Accessoires'}
@@ -359,17 +353,17 @@ export default function HomePage() {
 
                 {/* Accessories Category */}
                 <Link to="/categories/accessoires" className="text-center group">
-                  <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-purple-100 group-hover:bg-purple-200 transition-colors mb-4">
-                    <Headphones className="h-12 w-12 text-purple-600" />
+                  <div className="inline-flex items-center justify-center w-24 h-24 border-2 border-border group-hover:border-primary transition-colors mb-4">
+                    <Headphones className="h-12 w-12 text-foreground group-hover:text-primary transition-colors" />
                   </div>
                   <p className={cn(
-                    'font-semibold text-gray-800 mb-1',
+                    'font-bold text-foreground mb-1',
                     isRTL && 'text-right'
                   )}>
                     {isRTL ? 'الإكسسوارات' : 'Accessoires'}
                   </p>
                   <p className={cn(
-                    'text-xs text-gray-500',
+                    'text-xs text-muted-foreground',
                     isRTL && 'text-right'
                   )}>
                     {isRTL ? 'سماعات وملحقات' : 'Casques & Accessoires'}
@@ -378,17 +372,17 @@ export default function HomePage() {
 
                 {/* Spare Parts Category */}
                 <Link to="/categories/pieces-detachees" className="text-center group">
-                  <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-green-100 group-hover:bg-green-200 transition-colors mb-4">
-                    <Settings className="h-12 w-12 text-green-600" />
+                  <div className="inline-flex items-center justify-center w-24 h-24 border-2 border-border group-hover:border-primary transition-colors mb-4">
+                    <Settings className="h-12 w-12 text-foreground group-hover:text-primary transition-colors" />
                   </div>
                   <p className={cn(
-                    'font-semibold text-gray-800 mb-1',
+                    'font-bold text-foreground mb-1',
                     isRTL && 'text-right'
                   )}>
                     {isRTL ? 'قطع غيار' : 'Pièces Détachées'}
                   </p>
                   <p className={cn(
-                    'text-xs text-gray-500',
+                    'text-xs text-muted-foreground',
                     isRTL && 'text-right'
                   )}>
                     {isRTL ? 'شاشات وبطاريات' : 'Écrans & Batteries'}
@@ -397,17 +391,17 @@ export default function HomePage() {
 
                 {/* Services Category */}
                 <Link to="/repair-shops" className="text-center group">
-                  <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-orange-100 group-hover:bg-orange-200 transition-colors mb-4">
-                    <Wrench className="h-12 w-12 text-orange-600" />
+                  <div className="inline-flex items-center justify-center w-24 h-24 border-2 border-border group-hover:border-primary transition-colors mb-4">
+                    <Wrench className="h-12 w-12 text-foreground group-hover:text-primary transition-colors" />
                   </div>
                   <p className={cn(
-                    'font-semibold text-gray-800 mb-1',
+                    'font-bold text-foreground mb-1',
                     isRTL && 'text-right'
                   )}>
                     {isRTL ? 'الخدمات' : 'Services'}
                   </p>
                   <p className={cn(
-                    'text-xs text-gray-500',
+                    'text-xs text-muted-foreground',
                     isRTL && 'text-right'
                   )}>
                     {isRTL ? 'إصلاح واستشارة' : 'Réparation & Consultation'}
@@ -420,7 +414,7 @@ export default function HomePage() {
           {/* Subcategory Details */}
           {!loading && (
             <div className={cn(
-              'grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t',
+              'grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 border-t border-border',
               isRTL && 'text-right'
             )}>
               {/* Phones Subcategories */}
