@@ -20,8 +20,8 @@ module.exports = {
       sans: ["Inter", "sans-serif"],
       arabic: ["Tajawal", "sans-serif"],
       french: ["Inter", "sans-serif"],
-      syne: ['Syne', 'sans-serif'],
-      grotesk: ['Space Grotesk', 'sans-serif'],
+      syne: ['Syne', 'system-ui', 'sans-serif'],
+      grotesk: ['Space Grotesk', 'system-ui', 'sans-serif'],
       mono: ['JetBrains Mono', 'monospace'],
     },
     extend: {
@@ -107,8 +107,8 @@ module.exports = {
         "slide-in-right": "slide-in-right 0.3s ease-in-out",
       },
       boxShadow: {
-        'brutal': '8px 8px 0px 0px #000000',
-        'brutal-hover': '12px 12px 0px 0px #000000',
+        'brutal': '8px 8px 0px 0px var(--charcoal, #1A1A1A)',
+        'brutal-hover': '12px 12px 0px 0px var(--charcoal, #1A1A1A)',
       },
     },
   },

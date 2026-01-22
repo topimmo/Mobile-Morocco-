@@ -23,7 +23,7 @@ export function LoadingSpinner({
       <div
         className={cn(
           "relative animate-spin rounded-full border-2 border-gray-200",
-          "border-t-blue-500",
+          "border-t-orange",
           sizeClasses[size],
           className
         )}
@@ -51,7 +51,7 @@ export function LoadingScreen({ text, fullScreen = false }: LoadingScreenProps) 
       <div className="relative">
         <div className="h-16 w-16 rounded-full border-4 border-gray-100 border-t-transparent animate-spin" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-8 w-8 rounded-full bg-blue-500/20 animate-pulse" />
+          <div className="h-8 w-8 rounded-full bg-orange/20 animate-pulse" />
         </div>
       </div>
       {text && (
@@ -77,7 +77,7 @@ export function LoadingPulse({ className }: { className?: string }) {
       <div className={cn("relative", className)}>
         <div className="h-12 w-12 rounded-full border-2 border-gray-200" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-6 w-6 rounded-full bg-blue-500 animate-ping opacity-75" />
+          <div className="h-6 w-6 rounded-full bg-orange animate-ping opacity-75" />
         </div>
       </div>
     </div>
