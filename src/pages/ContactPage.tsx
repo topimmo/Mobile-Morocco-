@@ -39,7 +39,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-background">
       <SEO
         title="Nous Contacter"
         description="Contactez l'équipe de Mobile Maroc pour toute question ou assistance. Nous sommes là pour vous aider."

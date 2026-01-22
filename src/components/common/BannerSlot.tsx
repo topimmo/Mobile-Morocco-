@@ -10,25 +10,25 @@ interface BannerSlotProps {
   showPlaceholder?: boolean;
 }
 
-// Sample banners for demo/placeholder (like "Maroc Telecom" style)
+// Sample banners for demo/placeholder - Swiss minimal design
 const PLACEHOLDER_BANNERS = {
   top: {
-    gradient: 'from-orange-500 via-orange-600 to-red-600',
+    gradient: 'from-primary to-primary',
     text: 'إعلان هنا • Votre publicité ici',
     subtext: 'تواصل معنا للإعلان • Contactez-nous pour annoncer',
   },
   middle: {
-    gradient: 'from-secondary via-secondary to-secondary',
+    gradient: 'from-secondary to-secondary',
     text: 'عروض حصرية • Offres Exclusives',
     subtext: 'احجز مساحتك الإعلانية الآن • Réservez votre espace publicitaire',
   },
   bottom: {
-    gradient: 'from-green-500 via-emerald-600 to-teal-600',
+    gradient: 'from-muted to-muted',
     text: 'شريكك الموثوق • Votre Partenaire de Confiance',
     subtext: 'Mobile Maroc - منصة الهواتف المغربية',
   },
   sidebar: {
-    gradient: 'from-purple-500 via-purple-600 to-pink-600',
+    gradient: 'from-primary to-primary',
     text: 'إعلان',
     subtext: 'Publicité',
   },

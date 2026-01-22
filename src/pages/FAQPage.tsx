@@ -97,7 +97,7 @@ export default function FAQPage() {
     : faqItems;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-background">
       <SEO
         title="Questions Fréquemment Posées"
         description="Trouvez les réponses aux questions courantes sur Mobile Maroc, nos services et comment utiliser la plateforme."

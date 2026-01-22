@@ -10,7 +10,7 @@ export default function PrivacyPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-background">
       <SEO
         title="Politique de Confidentialité"
         description="Politique de confidentialité de Mobile Maroc. Découvrez comment nous protégeons vos données personnelles."

@@ -11,7 +11,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-background">
       <SEO
         title="À Propos de Mobile Maroc"
         description="Découvrez Mobile Maroc, la plateforme de confiance pour acheter, vendre et réparer des téléphones au Maroc."
