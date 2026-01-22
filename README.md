@@ -119,3 +119,21 @@ This is a SPA routing issue. Ensure:
 1. Check browser console for JavaScript errors
 2. Verify the build completed without errors (`npm run build`)
 3. Check that environment variables are set in production
+
+## Security
+
+This platform implements comprehensive security measures to protect user data:
+
+- **✅ Row Level Security (RLS)**: All database tables are protected with RLS policies
+- **✅ Rate Limiting**: Database-level rate limits prevent spam and abuse
+- **✅ Storage Security**: User-specific folder access prevents unauthorized file operations
+- **✅ Data Validation**: CHECK constraints prevent empty/invalid content
+- **✅ Authentication**: Secure auth via Supabase with email/password and OTP verification
+- **✅ Role-Based Access**: Admin, seller, repair shop, advertiser, and user roles
+- **✅ Content Moderation**: Admin approval required for public content
+
+**📖 For detailed security documentation, see [SECURITY.md](./SECURITY.md)**
+
+### Security Statement
+
+**With Row Level Security enabled on all tables, no unauthorized user can read or write protected data.** All database access is enforced at the PostgreSQL level, ensuring security even if client-side code is bypassed.
