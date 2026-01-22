@@ -16,6 +16,8 @@ export interface RepairShopWithRelations extends RepairShop {
   images: ShopImage[];
   city?: Tables<'cities'> | null;
   neighborhood?: Tables<'neighborhoods'> | null;
+  rating_avg?: number | null;
+  rating_count?: number | null;
 }
 
 export interface ShopFilters {

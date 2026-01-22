@@ -231,17 +231,12 @@ export default function CreateCampaignPage() {
       // Create campaign (without actual file upload for now - UI only)
       const campaignData = {
         advertiser_id: user?.id,
-        name: campaignName,
-        business_name: businessName,
-        destination_url: destinationUrl,
-        contact_phone: contactPhone,
-        placement_id: selectedPlacement,
-        page: placement.pages[0],
+        title: campaignName,
+        target_url: destinationUrl,
         slot: placement.position,
         start_date: startDate.toISOString().split('T')[0],
         end_date: endDate.toISOString().split('T')[0],
         duration_days: parseInt(duration),
-        total_price: getPrice(),
         status: 'pending_review',
         payment_status: 'pending',
       };
