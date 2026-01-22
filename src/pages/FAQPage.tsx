@@ -8,6 +8,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Container } from '@/components/ui/container';
+import { SectionHeader } from '@/components/ui/section-header';
+import { PageLayout, PageMain } from '@/components/layout/PageLayout';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Search } from 'lucide-react';
 
 interface FAQItem {
   id: string;
@@ -97,7 +103,7 @@ export default function FAQPage() {
     : faqItems;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <PageLayout>
       <SEO
         title="Questions Fréquemment Posées"
         description="Trouvez les réponses aux questions courantes sur Mobile Maroc, nos services et comment utiliser la plateforme."
@@ -105,89 +111,94 @@ export default function FAQPage() {
       />
       <Navigation />
 
-      {/* Hero Section */}
-      <section className="pt-20 pb-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Questions Fréquemment Posées
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Trouvez des réponses aux questions courantes sur notre plateforme
-          </p>
-          
-          {/* Search */}
-          <input
-            type="text"
-            placeholder="Rechercher une question..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+      <PageMain>
+        <Container className="py-16" size="sm">
+          <SectionHeader
+            as="h1"
+            title="Questions Fréquemment Posées"
+            description="Trouvez des réponses aux questions courantes sur notre plateforme"
+            align="center"
           />
-        </div>
-      </section>
 
-      {/* FAQ Content */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          {searchQuery ? (
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Résultats de recherche ({filteredItems.length})
-              </h2>
-              <Accordion type="single" collapsible className="w-full">
-                {filteredItems.map((item) => (
-                  <AccordionItem key={item.id} value={item.id} className="border rounded-lg mb-4 px-4">
-                    <AccordionTrigger className="text-left hover:text-blue-600 py-4">
-                      <span className="font-semibold">{item.question}</span>
-                    </AccordionTrigger>
-                    <AccordionContent className="pb-4 text-gray-700">
-                      {item.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-          ) : (
-            categories.map((category) => (
-              <div key={category} className="mb-12">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-4 border-b-2 border-blue-600">
-                  {category}
+          {/* Search */}
+          <div className="mt-8 relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Rechercher une question..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          {/* FAQ Content */}
+          <div className="mt-12 space-y-12">
+            {searchQuery ? (
+              <div>
+                <h2 className="text-xl font-semibold mb-6">
+                  Résultats de recherche ({filteredItems.length})
                 </h2>
-                <Accordion type="single" collapsible className="w-full">
-                  {faqItems
-                    .filter(item => item.category === category)
-                    .map((item) => (
-                      <AccordionItem key={item.id} value={item.id} className="border rounded-lg mb-4 px-4">
-                        <AccordionTrigger className="text-left hover:text-blue-600 py-4">
-                          <span className="font-semibold">{item.question}</span>
-                        </AccordionTrigger>
-                        <AccordionContent className="pb-4 text-gray-700">
-                          {item.answer}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
+                <Accordion type="single" collapsible className="space-y-3">
+                  {filteredItems.map((item) => (
+                    <AccordionItem key={item.id} value={item.id} className="border rounded-lg px-6">
+                      <AccordionTrigger className="text-left py-4 hover:no-underline">
+                        <span className="font-medium">{item.question}</span>
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-4 text-muted-foreground">
+                        {item.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
                 </Accordion>
               </div>
-            ))
-          )}
-        </div>
-      </section>
+            ) : (
+              categories.map((category) => (
+                <div key={category}>
+                  <h2 className="text-xl font-semibold mb-6 pb-3 border-b">
+                    {category}
+                  </h2>
+                  <Accordion type="single" collapsible className="space-y-3">
+                    {faqItems
+                      .filter(item => item.category === category)
+                      .map((item) => (
+                        <AccordionItem key={item.id} value={item.id} className="border rounded-lg px-6">
+                          <AccordionTrigger className="text-left py-4 hover:no-underline">
+                            <span className="font-medium">{item.question}</span>
+                          </AccordionTrigger>
+                          <AccordionContent className="pb-4 text-muted-foreground">
+                            {item.answer}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                  </Accordion>
+                </div>
+              ))
+            )}
+          </div>
+        </Container>
 
-      {/* Contact Support Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-50">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Vous n'avez pas trouvé votre réponse ?</h2>
-          <p className="text-gray-600 mb-6">Notre équipe de support est là pour vous aider</p>
-          <a
-            href="/contact"
-            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
-          >
-            Nous Contacter
-          </a>
+        {/* Contact Support Section */}
+        <div className="bg-muted/30 py-16 mt-16">
+          <Container size="sm">
+            <Card>
+              <CardContent className="p-8 text-center">
+                <h2 className="text-2xl font-semibold mb-3">
+                  Vous n'avez pas trouvé votre réponse ?
+                </h2>
+                <p className="text-muted-foreground mb-6">
+                  Notre équipe de support est là pour vous aider
+                </p>
+                <Button asChild size="lg">
+                  <a href="/contact">Nous Contacter</a>
+                </Button>
+              </CardContent>
+            </Card>
+          </Container>
         </div>
-      </section>
+      </PageMain>
 
       <Footer />
-    </div>
+    </PageLayout>
   );
 }
