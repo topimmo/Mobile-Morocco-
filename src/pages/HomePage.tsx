@@ -165,10 +165,10 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1: Phones & Accessories */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
+            <Card className="hover:border-primary/50 transition-all border border-border bg-card">
               <CardContent className="p-8 text-center">
                 <div className="mb-6 flex justify-center">
-                  <Smartphone className="h-12 w-12 text-foreground" />
+                  <Smartphone className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className={cn(
                   'text-xl font-bold mb-3 text-foreground',
@@ -187,7 +187,7 @@ export default function HomePage() {
                     : 'neufs et d\'occasion, accessoires et pièces détachées'}
                 </p>
                 <Link to="/listings">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-medium">
+                  <Button className="w-full font-medium">
                     {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
                   </Button>
                 </Link>
@@ -195,10 +195,10 @@ export default function HomePage() {
             </Card>
 
             {/* Card 2: Repair Services */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
+            <Card className="hover:border-primary/50 transition-all border border-border bg-card">
               <CardContent className="p-8 text-center">
                 <div className="mb-6 flex justify-center">
-                  <Wrench className="h-12 w-12 text-foreground" />
+                  <Wrench className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className={cn(
                   'text-xl font-bold mb-3 text-foreground',
@@ -217,7 +217,7 @@ export default function HomePage() {
                     : 'pour réparer vos appareils'}
                 </p>
                 <Link to="/repair-shops">
-                  <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground w-full font-medium">
+                  <Button variant="secondary" className="w-full font-medium">
                     {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
                   </Button>
                 </Link>
@@ -225,10 +225,10 @@ export default function HomePage() {
             </Card>
 
             {/* Card 3: Community */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
+            <Card className="hover:border-primary/50 transition-all border border-border bg-card">
               <CardContent className="p-8 text-center">
                 <div className="mb-6 flex justify-center">
-                  <Users className="h-12 w-12 text-foreground" />
+                  <Users className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className={cn(
                   'text-xl font-bold mb-3 text-foreground',
@@ -247,7 +247,7 @@ export default function HomePage() {
                     : 'd\'importateurs, techniciens et clients'}
                 </p>
                 <Link to="/auth/register">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-medium">
+                  <Button className="w-full font-medium">
                     {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
                   </Button>
                 </Link>

@@ -147,26 +147,26 @@ export default function PhonesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
       <Navigation />
 
       <BannerSlot page="phones" slot="top" />
 
-      {/* Header */}
-      <section className="py-8 px-4 bg-white border-b">
+      {/* Header - Dark Swiss Design */}
+      <section className="py-8 px-4 bg-card border-b border-border">
         <div className="max-w-6xl mx-auto">
           <div className={cn('flex items-center gap-3 mb-4', isRTL && 'flex-row-reverse')}>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <Smartphone className="h-8 w-8 text-blue-600" />
+            <div className="p-3 bg-primary/10 rounded-sm">
+              <Smartphone className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <h1 className={cn('text-3xl font-bold', isRTL && 'text-right')}>{labels.title}</h1>
-              <p className={cn('text-gray-600', isRTL && 'text-right')}>{labels.subtitle}</p>
+              <h1 className={cn('text-3xl font-bold text-foreground', isRTL && 'text-right')}>{labels.title}</h1>
+              <p className={cn('text-muted-foreground', isRTL && 'text-right')}>{labels.subtitle}</p>
             </div>
             {/* CTA Buttons */}
             <div className={cn('flex gap-3 ml-auto', isRTL && 'mr-auto ml-0')}>
               <Link to="/publish-phone">
-                <Button className="bg-sky-600 hover:bg-sky-700">
+                <Button>
                   <Plus className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
                   {labels.publishPhone}
                 </Button>

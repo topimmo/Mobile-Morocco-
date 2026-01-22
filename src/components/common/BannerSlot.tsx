@@ -10,25 +10,25 @@ interface BannerSlotProps {
   showPlaceholder?: boolean;
 }
 
-// Sample banners for demo/placeholder (like "Maroc Telecom" style)
+// Sample banners for demo/placeholder - Dark Swiss Design
 const PLACEHOLDER_BANNERS = {
   top: {
-    gradient: 'from-orange-500 via-orange-600 to-red-600',
+    bgClass: 'bg-secondary border border-border',
     text: 'إعلان هنا • Votre publicité ici',
     subtext: 'تواصل معنا للإعلان • Contactez-nous pour annoncer',
   },
   middle: {
-    gradient: 'from-blue-600 via-blue-700 to-indigo-700',
+    bgClass: 'bg-muted border border-border',
     text: 'عروض حصرية • Offres Exclusives',
     subtext: 'احجز مساحتك الإعلانية الآن • Réservez votre espace publicitaire',
   },
   bottom: {
-    gradient: 'from-green-500 via-emerald-600 to-teal-600',
+    bgClass: 'bg-secondary border border-border',
     text: 'شريكك الموثوق • Votre Partenaire de Confiance',
     subtext: 'Mobile Maroc - منصة الهواتف المغربية',
   },
   sidebar: {
-    gradient: 'from-purple-500 via-purple-600 to-pink-600',
+    bgClass: 'bg-muted border border-border',
     text: 'إعلان',
     subtext: 'Publicité',
   },
@@ -126,28 +126,28 @@ export function BannerSlot({ page, slot, showPlaceholder = true }: BannerSlotPro
     );
   }
 
-  // Show styled placeholder (like Maroc Telecom banner style)
+  // Show styled placeholder - Dark Swiss Design
   if (showPlaceholder) {
     return (
       <div className={cn(
-        'banner-slot w-full overflow-hidden rounded-lg',
+        'banner-slot w-full overflow-hidden',
         slot === 'sidebar' ? 'h-64' : 'py-4 md:py-6'
       )}>
         <div className={cn(
-          'w-full h-full bg-gradient-to-r flex items-center justify-center px-4 py-3 md:py-4 rounded-lg',
-          placeholderConfig.gradient
+          'w-full h-full flex items-center justify-center px-4 py-3 md:py-4 rounded-sm',
+          placeholderConfig.bgClass
         )}>
           <div className="flex items-center gap-3 md:gap-4">
-            <Megaphone className="h-6 w-6 md:h-8 md:w-8 text-white/90" />
+            <Megaphone className="h-6 w-6 md:h-8 md:w-8 text-primary" />
             <div className="text-center">
-              <p className="text-white font-bold text-sm md:text-lg">
+              <p className="text-foreground font-bold text-sm md:text-lg">
                 {placeholderConfig.text}
               </p>
-              <p className="text-white/80 text-xs md:text-sm">
+              <p className="text-muted-foreground text-xs md:text-sm">
                 {placeholderConfig.subtext}
               </p>
             </div>
-            <Megaphone className="h-6 w-6 md:h-8 md:w-8 text-white/90 hidden md:block" />
+            <Megaphone className="h-6 w-6 md:h-8 md:w-8 text-primary hidden md:block" />
           </div>
         </div>
       </div>
