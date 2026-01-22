@@ -74,11 +74,11 @@ function Navigation() {
   };
 
   return (
-    <nav className={cn('bg-white border-b border-border sticky top-0 z-50 shadow-sm')} dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="max-w-6xl mx-auto px-4 py-4">
-        <div className={cn('flex justify-between items-center', isRTL && 'flex-row-reverse')}>
+    <nav className={cn('bg-white border-b border-border sticky top-0 z-50 h-16')} dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="max-w-7xl mx-auto px-4 h-full">
+        <div className={cn('flex justify-between items-center h-full', isRTL && 'flex-row-reverse')}>
           {/* Logo - Swiss Design */}
-          <Link to="/" className="text-xl md:text-2xl font-bold text-gray-900">
+          <Link to="/" className="text-xl font-bold text-foreground hover:text-primary transition-colors">
             Mobile Morocco
           </Link>
 
@@ -103,10 +103,10 @@ function Navigation() {
           </div>
 
           {/* Desktop Right Section */}
-          <div className={cn('hidden md:flex items-center gap-3', isRTL && 'flex-row-reverse')}>
+          <div className={cn('hidden md:flex items-center gap-2', isRTL && 'flex-row-reverse')}>
             {/* Publish Phone CTA - Swiss Design */}
             <Link to="/publish-phone">
-              <Button size="sm" className={cn('bg-primary hover:bg-primary/90 font-medium whitespace-nowrap', isRTL && 'flex-row-reverse')}>
+              <Button size="sm" className={cn('whitespace-nowrap', isRTL && 'flex-row-reverse')}>
                 <Plus className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
                 {isRTL ? 'نشر تلفوني' : 'Publier'}
               </Button>
@@ -116,12 +116,12 @@ function Navigation() {
             <button
               onClick={() => setLanguage(language === 'ar' ? 'fr' : 'ar')}
               className={cn(
-                'flex items-center gap-2 px-3 py-2 hover:bg-muted transition-colors font-medium',
+                'flex items-center gap-2 px-3 py-2 rounded hover:bg-muted transition-colors text-sm font-medium',
                 isRTL && 'flex-row-reverse'
               )}
             >
               <Globe className="h-4 w-4" />
-              <span className="text-sm">{language === 'ar' ? 'FR' : 'AR'}</span>
+              <span>{language === 'ar' ? 'FR' : 'AR'}</span>
             </button>
 
             {/* Auth Links */}
@@ -129,7 +129,7 @@ function Navigation() {
               <>
                 {isAdmin && (
                   <Link to="/admin">
-                    <Button variant="default" size="sm" className={cn('bg-red-600 hover:bg-red-700', isRTL && 'flex-row-reverse')}>
+                    <Button variant="destructive" size="sm" className={cn(isRTL && 'flex-row-reverse')}>
                       <Shield className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
                       {labels.admin}
                     </Button>
@@ -142,7 +142,7 @@ function Navigation() {
                   </Button>
                 </Link>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
                   onClick={async () => {
                     await signOut();
@@ -156,7 +156,7 @@ function Navigation() {
             ) : (
               <>
                 <Link to="/auth/login">
-                  <Button variant="outline" size="sm" className={cn(isRTL && 'flex-row-reverse')}>
+                  <Button variant="ghost" size="sm" className={cn(isRTL && 'flex-row-reverse')}>
                     <LogIn className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
                     {labels.login}
                   </Button>
@@ -171,10 +171,10 @@ function Navigation() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-1">
             <button
               onClick={() => setLanguage(language === 'ar' ? 'fr' : 'ar')}
-              className="p-2 rounded-lg hover:bg-muted transition-colors"
+              className="p-2 rounded hover:bg-muted transition-colors"
               aria-label={language === 'ar' ? 'Switch to French' : 'Switch to Arabic'}
             >
               <Globe className="h-5 w-5" />
@@ -183,7 +183,7 @@ function Navigation() {
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <button 
-                  className="p-2 rounded-lg hover:bg-muted transition-colors"
+                  className="p-2 rounded hover:bg-muted transition-colors"
                   aria-label="Open menu"
                 >
                   <Menu className="h-6 w-6" />
@@ -191,7 +191,7 @@ function Navigation() {
               </SheetTrigger>
               <SheetContent side={isRTL ? 'right' : 'left'} className="w-[280px]">
                 <SheetHeader>
-                  <SheetTitle className={cn(isRTL && 'text-right')}>
+                  <SheetTitle className={cn('font-bold', isRTL && 'text-right')}>
                     Mobile Morocco
                   </SheetTitle>
                 </SheetHeader>
@@ -203,7 +203,7 @@ function Navigation() {
                       to={link.to}
                       onClick={() => setMobileMenuOpen(false)}
                       className={cn(
-                        'px-4 py-3 rounded-lg text-base font-medium transition-colors flex items-center gap-3',
+                        'px-4 py-3 rounded text-base font-medium transition-colors flex items-center gap-3',
                         isActive(link.to)
                           ? 'bg-primary text-primary-foreground'
                           : 'hover:bg-muted',
@@ -220,7 +220,7 @@ function Navigation() {
                     to="/publish-phone"
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      'px-4 py-3 rounded-lg text-base font-medium transition-colors flex items-center gap-3 bg-sky-600 text-white hover:bg-sky-700',
+                      'px-4 py-3 rounded text-base font-medium transition-colors flex items-center gap-3 bg-primary text-primary-foreground hover:bg-primary/90',
                       isRTL && 'flex-row-reverse text-right'
                     )}
                   >
@@ -237,7 +237,7 @@ function Navigation() {
                           to="/admin"
                           onClick={() => setMobileMenuOpen(false)}
                           className={cn(
-                            'px-4 py-3 rounded-lg text-base font-medium transition-colors flex items-center gap-3 bg-red-600 text-white',
+                            'px-4 py-3 rounded text-base font-medium transition-colors flex items-center gap-3 bg-destructive text-destructive-foreground',
                             isRTL && 'flex-row-reverse text-right'
                           )}
                         >
@@ -249,7 +249,7 @@ function Navigation() {
                         to="/advertiser/dashboard"
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
-                          'px-4 py-3 rounded-lg text-base font-medium transition-colors flex items-center gap-3 hover:bg-muted',
+                          'px-4 py-3 rounded text-base font-medium transition-colors flex items-center gap-3 hover:bg-muted',
                           isRTL && 'flex-row-reverse text-right'
                         )}
                       >
@@ -262,7 +262,7 @@ function Navigation() {
                           setMobileMenuOpen(false);
                         }}
                         className={cn(
-                          'px-4 py-3 rounded-lg text-base font-medium transition-colors flex items-center gap-3 hover:bg-muted text-destructive w-full',
+                          'px-4 py-3 rounded text-base font-medium transition-colors flex items-center gap-3 hover:bg-muted text-destructive w-full',
                           isRTL && 'flex-row-reverse text-right'
                         )}
                       >
@@ -276,7 +276,7 @@ function Navigation() {
                         to="/auth/login"
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
-                          'px-4 py-3 rounded-lg text-base font-medium transition-colors flex items-center gap-3 hover:bg-muted',
+                          'px-4 py-3 rounded text-base font-medium transition-colors flex items-center gap-3 hover:bg-muted',
                           isRTL && 'flex-row-reverse text-right'
                         )}
                       >
@@ -287,7 +287,7 @@ function Navigation() {
                         to="/auth/register"
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
-                          'px-4 py-3 rounded-lg text-base font-medium transition-colors flex items-center gap-3 bg-primary text-primary-foreground',
+                          'px-4 py-3 rounded text-base font-medium transition-colors flex items-center gap-3 bg-primary text-primary-foreground hover:bg-primary/90',
                           isRTL && 'flex-row-reverse text-right'
                         )}
                       >

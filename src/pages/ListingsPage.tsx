@@ -7,6 +7,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Container } from '@/components/ui/container';
+import { SectionHeader } from '@/components/ui/section-header';
+import { PageLayout, PageMain } from '@/components/layout/PageLayout';
 import { SEO } from '@/components/SEO';
 import { getListings, ListingWithRelations } from '@/lib/supabase/listings';
 import { getCityName, City } from '@/lib/supabase/cities';
@@ -127,7 +130,7 @@ export default function ListingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
+    <PageLayout dir={isRTL ? 'rtl' : 'ltr'}>
       <SEO
         title={isRTL ? 'إعلانات - هواتف وإكسسوارات' : 'Annonces - Téléphones et accessoires'}
         description={isRTL 
@@ -138,23 +141,24 @@ export default function ListingsPage() {
         locale={isRTL ? 'ar_MA' : 'fr_MA'}
       />
       <Navigation />
-      <BannerSlot page="listings" slot="top" />
+      
+      <PageMain>
+        <BannerSlot page="listings" slot="top" />
 
-      <section className="py-8 px-4">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="mb-6">
-            <h1 className={cn('text-3xl font-bold mb-4', isRTL && 'text-right')}>
-              {labels.title}
-            </h1>
-            
+        <Container className="py-12">
+          <SectionHeader
+            as="h1"
+            title={labels.title}
+            align={isRTL ? 'right' : 'left'}
+          />
+
+          <div className="mt-8 space-y-6">
             {/* Search Bar */}
             <SearchBar
               value={keyword}
               onChange={setKeyword}
               onSearch={handleSearch}
               language={language}
-              className="mb-4"
             />
 
             {/* Results count and view toggle */}
@@ -162,7 +166,7 @@ export default function ListingsPage() {
               'flex items-center justify-between gap-4 flex-wrap',
               isRTL && 'flex-row-reverse'
             )}>
-              <span className="text-muted-foreground">
+              <span className="text-sm text-muted-foreground">
                 {totalCount} {labels.results}
               </span>
               
@@ -199,194 +203,194 @@ export default function ListingsPage() {
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex gap-6">
-            {/* Desktop Filters Sidebar */}
-            <aside className="hidden lg:block w-72 shrink-0">
-              <Card>
-                <CardContent className="p-4">
+            <div className="flex gap-6">
+              {/* Desktop Filters Sidebar */}
+              <aside className="hidden lg:block w-72 shrink-0">
+                <Card>
+                  <CardContent className="p-6">
+                    <FiltersPanel
+                      values={filters}
+                      onChange={handleFiltersChange}
+                      language={language}
+                      showCondition
+                      showPrice
+                    />
+                  </CardContent>
+                </Card>
+              </aside>
+
+              {/* Mobile Filters */}
+              {showMobileFilters && (
+                <div className="lg:hidden fixed inset-0 z-50 bg-background p-4 overflow-auto">
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold">{labels.filters}</h2>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowMobileFilters(false)}
+                    >
+                      ✕
+                    </Button>
+                  </div>
                   <FiltersPanel
                     values={filters}
-                    onChange={handleFiltersChange}
+                    onChange={(v) => {
+                      handleFiltersChange(v);
+                      setShowMobileFilters(false);
+                    }}
                     language={language}
                     showCondition
                     showPrice
                   />
-                </CardContent>
-              </Card>
-            </aside>
+                </div>
+              )}
 
-            {/* Mobile Filters */}
-            {showMobileFilters && (
-              <div className="lg:hidden fixed inset-0 z-50 bg-background p-4 overflow-auto">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold">{labels.filters}</h2>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowMobileFilters(false)}
-                  >
-                    ✕
-                  </Button>
-                </div>
-                <FiltersPanel
-                  values={filters}
-                  onChange={(v) => {
-                    handleFiltersChange(v);
-                    setShowMobileFilters(false);
-                  }}
-                  language={language}
-                  showCondition
-                  showPrice
-                />
-              </div>
-            )}
-
-            {/* Listings Grid */}
-            <main className="flex-1">
-              {loading ? (
-                <div className={cn(
-                  'grid gap-4',
-                  viewMode === 'grid' 
-                    ? 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'
-                    : 'grid-cols-1'
-                )}>
-                  {[...Array(6)].map((_, i) => (
-                    <Card key={i}>
-                      <CardContent className="p-0">
-                        <Skeleton className="h-48 w-full" />
-                        <div className="p-4 space-y-2">
-                          <Skeleton className="h-4 w-3/4" />
-                          <Skeleton className="h-4 w-1/2" />
-                          <Skeleton className="h-6 w-1/3" />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : listings.length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground text-lg">{labels.noResults}</p>
-                </div>
-              ) : (
-                <>
+              {/* Listings Grid */}
+              <div className="flex-1">
+                {loading ? (
                   <div className={cn(
                     'grid gap-4',
                     viewMode === 'grid' 
                       ? 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'
                       : 'grid-cols-1'
                   )}>
-                    {listings.map((listing) => (
-                      <Link key={listing.id} to={`/listings/${listing.slug}`}>
-                        <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
-                          <CardContent className={cn(
-                            'p-0',
-                            viewMode === 'list' && 'flex'
-                          )}>
-                            {/* Image */}
-                            <div className={cn(
-                              'relative bg-muted',
-                              viewMode === 'grid' ? 'h-48' : 'w-40 h-32 shrink-0'
-                            )}>
-                              {listing.images && listing.images[0] ? (
-                                <img
-                                  src={listing.images[0].image_url}
-                                  alt={isRTL ? listing.title_ar : listing.title_fr}
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                                  📱
-                                </div>
-                              )}
-                              {listing.condition && (
-                                <Badge className="absolute top-2 right-2" variant="secondary">
-                                  {conditionLabels[listing.condition]}
-                                </Badge>
-                              )}
-                            </div>
-
-                            {/* Content */}
-                            <div className="p-4 flex-1">
-                              <h3 className={cn(
-                                'font-semibold line-clamp-2 mb-1',
-                                isRTL && 'text-right'
-                              )}>
-                                {isRTL ? listing.title_ar : listing.title_fr}
-                              </h3>
-
-                              {listing.city && (
-                                <p className={cn(
-                                  'text-sm text-muted-foreground flex items-center gap-1 mb-2',
-                                  isRTL && 'flex-row-reverse justify-end'
-                                )}>
-                                  <MapPin className="h-3 w-3" />
-                                  {getCityName(listing.city as City, language)}
-                                  {listing.neighborhood && ` - ${listing.neighborhood.name}`}
-                                </p>
-                              )}
-
-                              <p className={cn(
-                                'text-lg font-bold text-primary',
-                                isRTL && 'text-right'
-                              )}>
-                                {formatPrice(listing.price)}
-                              </p>
-
-                              {viewMode === 'list' && (
-                                <div className={cn(
-                                  'flex items-center gap-4 mt-2 text-sm text-muted-foreground',
-                                  isRTL && 'flex-row-reverse'
-                                )}>
-                                  <span className="flex items-center gap-1">
-                                    <Eye className="h-3 w-3" />
-                                    {listing.view_count || 0}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </Link>
+                    {[...Array(6)].map((_, i) => (
+                      <Card key={i}>
+                        <CardContent className="p-0">
+                          <Skeleton className="h-48 w-full" />
+                          <div className="p-4 space-y-2">
+                            <Skeleton className="h-4 w-3/4" />
+                            <Skeleton className="h-4 w-1/2" />
+                            <Skeleton className="h-6 w-1/3" />
+                          </div>
+                        </CardContent>
+                      </Card>
                     ))}
                   </div>
-
-                  {/* Pagination */}
-                  {totalPages > 1 && (
+                ) : listings.length === 0 ? (
+                  <div className="text-center py-16">
+                    <p className="text-muted-foreground">{labels.noResults}</p>
+                  </div>
+                ) : (
+                  <>
                     <div className={cn(
-                      'flex items-center justify-center gap-2 mt-8',
-                      isRTL && 'flex-row-reverse'
+                      'grid gap-4',
+                      viewMode === 'grid' 
+                        ? 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'
+                        : 'grid-cols-1'
                     )}>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                      >
-                        {isRTL ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-                      </Button>
-                      <span className="text-sm">
-                        {labels.page} {currentPage} {labels.of} {totalPages}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                        disabled={currentPage === totalPages}
-                      >
-                        {isRTL ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                      </Button>
-                    </div>
-                  )}
-                </>
-              )}
-            </main>
-          </div>
-        </div>
-      </section>
+                      {listings.map((listing) => (
+                        <Link key={listing.id} to={`/listings/${listing.slug}`}>
+                          <Card className="overflow-hidden hover:shadow-md transition-shadow h-full">
+                            <CardContent className={cn(
+                              'p-0',
+                              viewMode === 'list' && 'flex'
+                            )}>
+                              {/* Image */}
+                              <div className={cn(
+                                'relative bg-muted',
+                                viewMode === 'grid' ? 'h-48' : 'w-40 h-32 shrink-0'
+                              )}>
+                                {listing.images && listing.images[0] ? (
+                                  <img
+                                    src={listing.images[0].image_url}
+                                    alt={isRTL ? listing.title_ar : listing.title_fr}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                                    📱
+                                  </div>
+                                )}
+                                {listing.condition && (
+                                  <Badge className="absolute top-2 right-2" variant="secondary">
+                                    {conditionLabels[listing.condition]}
+                                  </Badge>
+                                )}
+                              </div>
 
-      <BannerSlot page="listings" slot="bottom" />
-    </div>
+                              {/* Content */}
+                              <div className="p-4 flex-1">
+                                <h3 className={cn(
+                                  'font-semibold line-clamp-2 mb-1',
+                                  isRTL && 'text-right'
+                                )}>
+                                  {isRTL ? listing.title_ar : listing.title_fr}
+                                </h3>
+
+                                {listing.city && (
+                                  <p className={cn(
+                                    'text-sm text-muted-foreground flex items-center gap-1 mb-2',
+                                    isRTL && 'flex-row-reverse justify-end'
+                                  )}>
+                                    <MapPin className="h-3 w-3" />
+                                    {getCityName(listing.city as City, language)}
+                                    {listing.neighborhood && ` - ${listing.neighborhood.name}`}
+                                  </p>
+                                )}
+
+                                <p className={cn(
+                                  'text-lg font-bold text-primary',
+                                  isRTL && 'text-right'
+                                )}>
+                                  {formatPrice(listing.price)}
+                                </p>
+
+                                {viewMode === 'list' && (
+                                  <div className={cn(
+                                    'flex items-center gap-4 mt-2 text-sm text-muted-foreground',
+                                    isRTL && 'flex-row-reverse'
+                                  )}>
+                                    <span className="flex items-center gap-1">
+                                      <Eye className="h-3 w-3" />
+                                      {listing.view_count || 0}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      ))}
+                    </div>
+
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                      <div className={cn(
+                        'flex items-center justify-center gap-2 mt-8',
+                        isRTL && 'flex-row-reverse'
+                      )}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                          disabled={currentPage === 1}
+                        >
+                          {isRTL ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                        </Button>
+                        <span className="text-sm">
+                          {labels.page} {currentPage} {labels.of} {totalPages}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                          disabled={currentPage === totalPages}
+                        >
+                          {isRTL ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                        </Button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </Container>
+
+        <BannerSlot page="listings" slot="bottom" />
+      </PageMain>
+    </PageLayout>
   );
 }

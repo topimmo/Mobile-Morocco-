@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import Navigation from './Navigation';
+import { PageLayout, PageMain } from './layout/PageLayout';
+import { Container } from './ui/container';
+import { SectionHeader } from './ui/section-header';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -81,173 +84,175 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <PageLayout>
       <Navigation />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Contactez-nous</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Notre équipe est là pour vous aider. N'hésitez pas à nous contacter pour toute question ou assistance.
-          </p>
-        </div>
+      <PageMain>
+        <Container className="py-12">
+          <SectionHeader
+            as="h1"
+            align="center"
+            title="Contactez-nous"
+            description="Notre équipe est là pour vous aider. N'hésitez pas à nous contacter pour toute question ou assistance."
+            className="mb-12"
+          />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <MessageCircle className="h-6 w-6 mr-2 text-blue-600" />
-                  Envoyez-nous un message
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                        Nom complet *
-                      </label>
-                      <Input
-                        id="name"
-                        name="name"
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="Votre nom complet"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                        Email *
-                      </label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="votre@email.com"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                        Téléphone
-                      </label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder="+212 6 12 34 56 78"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                        Sujet *
-                      </label>
-                      <Input
-                        id="subject"
-                        name="subject"
-                        type="text"
-                        required
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                        placeholder="Sujet de votre message"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                      Message *
-                    </label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={6}
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      placeholder="Décrivez votre demande en détail..."
-                    />
-                  </div>
-
-                  <Button type="submit" className="w-full">
-                    <Send className="h-4 w-4 mr-2" />
-                    Envoyer le message
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Contact Info */}
-          <div className="space-y-6">
-            {contactInfo.map((info, index) => (
-              <Card key={index}>
-                <CardContent className="pt-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-blue-100 p-3 rounded-lg">
-                      <info.icon className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 mb-2">{info.title}</h3>
-                      {info.details.map((detail, idx) => (
-                        <p key={idx} className="text-gray-600 mb-1">{detail}</p>
-                      ))}
-                      <p className="text-sm text-gray-500 mt-2">{info.description}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* FAQ Section */}
-        <div className="mt-16">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Questions Fréquentes</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {faqItems.map((item, index) => (
-              <Card key={index}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">{item.question}</CardTitle>
+                  <CardTitle className="flex items-center">
+                    <MessageCircle className="h-6 w-6 ltr:mr-2 rtl:ml-2 text-primary" />
+                    Envoyez-nous un message
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{item.answer}</p>
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+                          Nom complet *
+                        </label>
+                        <Input
+                          id="name"
+                          name="name"
+                          type="text"
+                          required
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          placeholder="Votre nom complet"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+                          Email *
+                        </label>
+                        <Input
+                          id="email"
+                          name="email"
+                          type="email"
+                          required
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder="votre@email.com"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
+                          Téléphone
+                        </label>
+                        <Input
+                          id="phone"
+                          name="phone"
+                          type="tel"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          placeholder="+212 6 12 34 56 78"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
+                          Sujet *
+                        </label>
+                        <Input
+                          id="subject"
+                          name="subject"
+                          type="text"
+                          required
+                          value={formData.subject}
+                          onChange={handleInputChange}
+                          placeholder="Sujet de votre message"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
+                        Message *
+                      </label>
+                      <Textarea
+                        id="message"
+                        name="message"
+                        required
+                        rows={6}
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        placeholder="Décrivez votre demande en détail..."
+                      />
+                    </div>
+
+                    <Button type="submit" className="w-full" dir="auto">
+                      <Send className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
+                      Envoyer le message
+                    </Button>
+                  </form>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Map Section */}
-        <div className="mt-16">
-          <Card>
-            <CardHeader>
-              <CardTitle>Notre Localisation</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
-                <div className="text-center text-gray-500">
-                  <MapPin className="h-12 w-12 mx-auto mb-4" />
-                  <p>Carte interactive à venir</p>
-                  <p className="text-sm">123 Avenue Mohammed V, Casablanca</p>
+            <div className="space-y-6">
+              {contactInfo.map((info, index) => (
+                <Card key={index}>
+                  <CardContent className="pt-6">
+                    <div className="flex items-start gap-4">
+                      <div className="bg-primary/10 p-3 rounded-lg">
+                        <info.icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-foreground mb-2">{info.title}</h3>
+                        {info.details.map((detail, idx) => (
+                          <p key={idx} className="text-muted-foreground mb-1">{detail}</p>
+                        ))}
+                        <p className="text-sm text-muted-foreground mt-2">{info.description}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          <section className="py-16">
+            <SectionHeader
+              align="center"
+              title="Questions Fréquentes"
+              className="mb-12"
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {faqItems.map((item, index) => (
+                <Card key={index}>
+                  <CardHeader>
+                    <CardTitle className="text-lg">{item.question}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">{item.answer}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          <section className="py-12">
+            <Card>
+              <CardHeader>
+                <CardTitle>Notre Localisation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-muted h-64 rounded-lg flex items-center justify-center">
+                  <div className="text-center text-muted-foreground">
+                    <MapPin className="h-12 w-12 mx-auto mb-4" />
+                    <p>Carte interactive à venir</p>
+                    <p className="text-sm">123 Avenue Mohammed V, Casablanca</p>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
+              </CardContent>
+            </Card>
+          </section>
+        </Container>
+      </PageMain>
+    </PageLayout>
   );
 }

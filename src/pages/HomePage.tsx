@@ -7,6 +7,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Container } from '@/components/ui/container';
+import { SectionHeader } from '@/components/ui/section-header';
+import { PageLayout, PageMain } from '@/components/layout/PageLayout';
 import { SEO, generateWebsiteSchema } from '@/components/SEO';
 import { getListings, ListingWithRelations } from '@/lib/supabase/listings';
 import { getRepairShops, RepairShopWithRelations } from '@/lib/supabase/repairShops';
@@ -144,7 +147,7 @@ export default function HomePage() {
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
 
   return (
-    <div className="min-h-screen bg-gray-50" dir={isRTL ? 'rtl' : 'ltr'}>
+    <PageLayout>
       <SEO
         title={isRTL ? 'الصفحة الرئيسية' : 'Accueil'}
         description={isRTL 
@@ -157,16 +160,17 @@ export default function HomePage() {
       />
       <Navigation />
 
-      {/* Top Banner */}
-      <BannerSlot page="home" slot="top" />
+      <PageMain dir={isRTL ? 'rtl' : 'ltr'}>
+        {/* Top Banner */}
+        <BannerSlot page="home" slot="top" />
 
-      {/* Hero Section with Feature Cards - Swiss Design */}
-      <section className="py-12 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1: Phones & Accessories */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
-              <CardContent className="p-8 text-center">
+        {/* Hero Section - Swiss Design */}
+        <section className="bg-background py-16 min-h-[400px] flex items-center">
+          <Container>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Card 1: Phones & Accessories */}
+              <Card className="hover:shadow-md transition-shadow">
+                <CardContent className="p-8 text-center">
                 <div className="mb-6 flex justify-center">
                   <Smartphone className="h-12 w-12 text-foreground" />
                 </div>
@@ -186,16 +190,16 @@ export default function HomePage() {
                     ? 'هواتف جديدة ومستعملة، إكسسوارات وقطع غيار أصلية'
                     : 'neufs et d\'occasion, accessoires et pièces détachées'}
                 </p>
-                <Link to="/listings">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-medium">
-                    {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                  <Link to="/listings">
+                    <Button className="w-full font-medium">
+                      {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
 
-            {/* Card 2: Repair Services */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
+              {/* Card 2: Repair Services */}
+              <Card className="hover:shadow-md transition-shadow">
               <CardContent className="p-8 text-center">
                 <div className="mb-6 flex justify-center">
                   <Wrench className="h-12 w-12 text-foreground" />
@@ -216,16 +220,16 @@ export default function HomePage() {
                     ? 'لإصلاح أجهزتك بكفاءة وسرعة'
                     : 'pour réparer vos appareils'}
                 </p>
-                <Link to="/repair-shops">
-                  <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground w-full font-medium">
-                    {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                  <Link to="/repair-shops">
+                    <Button variant="secondary" className="w-full font-medium">
+                      {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
 
-            {/* Card 3: Community */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
+              {/* Card 3: Community */}
+              <Card className="hover:shadow-md transition-shadow">
               <CardContent className="p-8 text-center">
                 <div className="mb-6 flex justify-center">
                   <Users className="h-12 w-12 text-foreground" />
@@ -246,39 +250,38 @@ export default function HomePage() {
                     ? 'من المستوردين والفنيين والعملاء'
                     : 'd\'importateurs, techniciens et clients'}
                 </p>
-                <Link to="/auth/register">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-medium">
-                    {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
+                  <Link to="/auth/register">
+                    <Button className="w-full font-medium">
+                      {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
 
-          {/* Publish Phone CTA - Swiss Design */}
-          <div className="mt-12 text-center">
-            <Link to="/publish-phone">
-              <Button 
-                size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold shadow-sm hover:shadow-md transition-shadow"
-              >
-                <Smartphone className={cn("h-5 w-5", isRTL ? "ml-2" : "mr-2")} />
-                {isRTL ? 'نشر تلفوني' : 'Publier mon téléphone'}
-                <ArrowIcon className={cn("h-5 w-5", isRTL ? "mr-2" : "ml-2")} />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+            {/* Publish Phone CTA */}
+            <div className="mt-12 text-center">
+              <Link to="/publish-phone">
+                <Button 
+                  size="lg" 
+                  className="px-8 py-6 text-lg font-semibold shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <Smartphone className={cn("h-5 w-5", isRTL ? "ml-2" : "mr-2")} />
+                  {isRTL ? 'نشر تلفوني' : 'Publier mon téléphone'}
+                  <ArrowIcon className={cn("h-5 w-5", isRTL ? "mr-2" : "ml-2")} />
+                </Button>
+              </Link>
+            </div>
+          </Container>
+        </section>
 
-      {/* Arabic Content Section - Swiss Design */}
-      <section className="py-12 px-4 bg-muted">
-        <div className="max-w-6xl mx-auto">
-          {/* Arabic titles and descriptions */}
-          <div className={cn(
-            'grid grid-cols-1 md:grid-cols-3 gap-8',
-            isRTL && 'text-right'
-          )}>
+        {/* Arabic Content Section */}
+        <section className="bg-muted py-12">
+          <Container>
+            <div className={cn(
+              'grid grid-cols-1 md:grid-cols-3 gap-8',
+              isRTL && 'text-right'
+            )}>
             {isRTL && (
               <>
                 <div className="text-center">
@@ -306,35 +309,34 @@ export default function HomePage() {
                   </p>
                 </div>
               </>
-            )}
-          </div>
-        </div>
-      </section>
+              )}
+            </div>
+          </Container>
+        </section>
 
-      {/* Category Icons Section - Swiss Design */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className={cn(
-            'text-3xl font-bold mb-12 text-center text-foreground',
-            isRTL && 'text-right'
-          )}>
-            {isRTL ? 'تصفح حسب الفئة' : 'Catégories'}
-          </h2>
+        {/* Categories Section */}
+        <section className="bg-background py-16">
+          <Container>
+            <SectionHeader
+              title={isRTL ? 'تصفح حسب الفئة' : 'Catégories'}
+              as="h2"
+              align="center"
+              className="mb-12"
+            />
 
-          {/* Main Category Icons */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-            {loading ? (
-              [...Array(4)].map((_, i) => (
-                <div key={i} className="text-center">
-                  <Skeleton className="h-24 w-24 mx-auto mb-4" />
-                  <Skeleton className="h-4 w-20 mx-auto" />
-                </div>
-              ))
-            ) : (
-              <>
-                {/* Phone Category */}
-                <Link to="/categories/telephones" className="text-center group">
-                  <div className="inline-flex items-center justify-center w-24 h-24 border-2 border-border group-hover:border-primary transition-colors mb-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+              {loading ? (
+                [...Array(4)].map((_, i) => (
+                  <div key={i} className="text-center">
+                    <Skeleton className="h-24 w-24 mx-auto mb-4" />
+                    <Skeleton className="h-4 w-20 mx-auto" />
+                  </div>
+                ))
+              ) : (
+                <>
+                  {/* Phone Category */}
+                  <Link to="/categories/telephones" className="text-center group">
+                    <div className="inline-flex items-center justify-center w-24 h-24 border border-border group-hover:border-primary transition-colors mb-4">
                     <Phone className="h-12 w-12 text-foreground group-hover:text-primary transition-colors" />
                   </div>
                   <p className={cn(
@@ -351,9 +353,9 @@ export default function HomePage() {
                   </p>
                 </Link>
 
-                {/* Accessories Category */}
-                <Link to="/categories/accessoires" className="text-center group">
-                  <div className="inline-flex items-center justify-center w-24 h-24 border-2 border-border group-hover:border-primary transition-colors mb-4">
+                  {/* Accessories Category */}
+                  <Link to="/categories/accessoires" className="text-center group">
+                    <div className="inline-flex items-center justify-center w-24 h-24 border border-border group-hover:border-primary transition-colors mb-4">
                     <Headphones className="h-12 w-12 text-foreground group-hover:text-primary transition-colors" />
                   </div>
                   <p className={cn(
@@ -370,9 +372,9 @@ export default function HomePage() {
                   </p>
                 </Link>
 
-                {/* Spare Parts Category */}
-                <Link to="/categories/pieces-detachees" className="text-center group">
-                  <div className="inline-flex items-center justify-center w-24 h-24 border-2 border-border group-hover:border-primary transition-colors mb-4">
+                  {/* Spare Parts Category */}
+                  <Link to="/categories/pieces-detachees" className="text-center group">
+                    <div className="inline-flex items-center justify-center w-24 h-24 border border-border group-hover:border-primary transition-colors mb-4">
                     <Settings className="h-12 w-12 text-foreground group-hover:text-primary transition-colors" />
                   </div>
                   <p className={cn(
@@ -389,9 +391,9 @@ export default function HomePage() {
                   </p>
                 </Link>
 
-                {/* Services Category */}
-                <Link to="/repair-shops" className="text-center group">
-                  <div className="inline-flex items-center justify-center w-24 h-24 border-2 border-border group-hover:border-primary transition-colors mb-4">
+                  {/* Services Category */}
+                  <Link to="/repair-shops" className="text-center group">
+                    <div className="inline-flex items-center justify-center w-24 h-24 border border-border group-hover:border-primary transition-colors mb-4">
                     <Wrench className="h-12 w-12 text-foreground group-hover:text-primary transition-colors" />
                   </div>
                   <p className={cn(
@@ -407,16 +409,16 @@ export default function HomePage() {
                     {isRTL ? 'إصلاح واستشارة' : 'Réparation & Consultation'}
                   </p>
                 </Link>
-              </>
-            )}
-          </div>
+                </>
+              )}
+            </div>
 
-          {/* Subcategory Details */}
-          {!loading && (
-            <div className={cn(
-              'grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 border-t border-border',
-              isRTL && 'text-right'
-            )}>
+            {/* Subcategory Details */}
+            {!loading && (
+              <div className={cn(
+                'grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 border-t border-border',
+                isRTL && 'text-right'
+              )}>
               {/* Phones Subcategories */}
               <div>
                 <h3 className="font-semibold text-gray-800 mb-3">{isRTL ? 'الهواتف' : 'Téléphones'}</h3>
@@ -456,29 +458,33 @@ export default function HomePage() {
                   <li className="hover:text-gray-900">{isRTL ? '▪ استشارات فنية' : '▪ Consultations tech'}</li>
                 </ul>
               </div>
+              </div>
+            )}
+          </Container>
+        </section>
+
+        {/* Featured Listings Section */}
+        <section className="bg-background py-16">
+          <Container>
+            <div className={cn(
+              'flex items-center justify-between mb-8',
+              isRTL && 'flex-row-reverse'
+            )}>
+              <SectionHeader
+                title={labels.featured}
+                as="h2"
+                className="mb-0"
+              />
+              <Link to="/listings">
+                <Button variant="outline" className={cn(isRTL && 'flex-row-reverse')}>
+                  {labels.viewAll}
+                  <ArrowIcon className={cn('h-4 w-4', isRTL ? 'mr-2' : 'ml-2')} />
+                </Button>
+              </Link>
             </div>
-          )}
-        </div>
-      </section>
 
-      {/* Featured Listings Section */}
-      <section className="py-8 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className={cn(
-            'flex items-center justify-between mb-6',
-            isRTL && 'flex-row-reverse'
-          )}>
-            <h2 className="text-2xl font-bold">{labels.featured}</h2>
-            <Link to="/listings">
-              <Button variant="outline" className={cn(isRTL && 'flex-row-reverse')}>
-                {labels.viewAll}
-                <ArrowIcon className={cn('h-4 w-4', isRTL ? 'mr-2' : 'ml-2')} />
-              </Button>
-            </Link>
-          </div>
-
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[...Array(4)].map((_, i) => (
                 <Card key={i}>
                   <Skeleton className="h-40 w-full" />
@@ -490,12 +496,12 @@ export default function HomePage() {
                 </Card>
               ))}
             </div>
-          ) : featuredListings.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-600">{labels.noListings}</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            ) : featuredListings.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">{labels.noListings}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredListings.map((listing) => (
                 <Link key={listing.id} to={`/listings/${listing.slug}`}>
                   <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
@@ -547,34 +553,34 @@ export default function HomePage() {
               ))}
             </div>
           )}
-        </div>
-      </section>
+          </Container>
+        </section>
 
-      {/* Middle Banner */}
-      <section className="py-4 px-4">
-        <div className="max-w-6xl mx-auto">
-          <BannerSlot page="home" slot="middle" />
-        </div>
-      </section>
+        {/* Middle Banner */}
+        <BannerSlot page="home" slot="middle" />
 
-      {/* Repair Shops Section */}
-      <section className="py-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className={cn(
-            'flex items-center justify-between mb-6',
-            isRTL && 'flex-row-reverse'
-          )}>
-            <h2 className="text-2xl font-bold">{labels.repairShops}</h2>
-            <Link to="/repair-shops">
-              <Button variant="outline" className={cn(isRTL && 'flex-row-reverse')}>
-                {labels.viewAll}
-                <ArrowIcon className={cn('h-4 w-4', isRTL ? 'mr-2' : 'ml-2')} />
-              </Button>
-            </Link>
-          </div>
+        {/* Repair Shops Section */}
+        <section className="bg-muted py-16">
+          <Container>
+            <div className={cn(
+              'flex items-center justify-between mb-8',
+              isRTL && 'flex-row-reverse'
+            )}>
+              <SectionHeader
+                title={labels.repairShops}
+                as="h2"
+                className="mb-0"
+              />
+              <Link to="/repair-shops">
+                <Button variant="outline" className={cn(isRTL && 'flex-row-reverse')}>
+                  {labels.viewAll}
+                  <ArrowIcon className={cn('h-4 w-4', isRTL ? 'mr-2' : 'ml-2')} />
+                </Button>
+              </Link>
+            </div>
 
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(3)].map((_, i) => (
                 <Card key={i}>
                   <Skeleton className="h-40 w-full" />
@@ -589,8 +595,8 @@ export default function HomePage() {
             <div className="text-center py-12">
               <p className="text-muted-foreground">{labels.noShops}</p>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {repairShops.map((shop) => (
                 <Link key={shop.id} to={`/repair-shops/${shop.slug}`}>
                   <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
@@ -638,48 +644,46 @@ export default function HomePage() {
                     </CardContent>
                   </Card>
                 </Link>
-              ))}
+                            ))}
             </div>
           )}
-        </div>
-      </section>
+          </Container>
+        </section>
 
-      {/* Call to Action Section */}
-      <section className="py-12 px-4 bg-primary text-primary-foreground">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            {isRTL ? 'انضم إلينا اليوم' : 'Rejoignez-nous Aujourd\'hui'}
-          </h2>
-          <p className="text-lg mb-6 opacity-90">
-            {isRTL 
-              ? 'سجل الآن واستفد من خدماتنا المميزة'
-              : 'Inscrivez-vous maintenant et profitez de nos services exclusifs'}
-          </p>
-          <div className={cn('flex gap-4 justify-center', isRTL && 'flex-row-reverse')}>
-            <Link to="/auth/register">
-              <Button size="lg" variant="secondary">
-                {isRTL ? 'إنشاء حساب' : 'Créer un compte'}
-              </Button>
-            </Link>
-            <Link to="/listings">
-              <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
-                {isRTL ? 'تصفح الإعلانات' : 'Parcourir les annonces'}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+        {/* Call to Action Section */}
+        <section className="bg-primary text-primary-foreground py-16">
+          <Container>
+            <div className="text-center">
+              <h2 className="text-3xl font-bold mb-4">
+                {isRTL ? 'انضم إلينا اليوم' : 'Rejoignez-nous Aujourd\'hui'}
+              </h2>
+              <p className="text-lg mb-6 opacity-90">
+                {isRTL 
+                  ? 'سجل الآن واستفد من خدماتنا المميزة'
+                  : 'Inscrivez-vous maintenant et profitez de nos services exclusifs'}
+              </p>
+              <div className={cn('flex gap-4 justify-center', isRTL && 'flex-row-reverse')}>
+                <Link to="/auth/register">
+                  <Button size="lg" variant="secondary">
+                    {isRTL ? 'إنشاء حساب' : 'Créer un compte'}
+                  </Button>
+                </Link>
+                <Link to="/listings">
+                  <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+                    {isRTL ? 'تصفح الإعلانات' : 'Parcourir les annonces'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </Container>
+        </section>
 
-      {/* Bottom Banner */}
-      <section className="py-4 px-4">
-        <div className="max-w-6xl mx-auto">
-          <BannerSlot page="home" slot="bottom" />
-        </div>
-      </section>
+        {/* Bottom Banner */}
+        <BannerSlot page="home" slot="bottom" />
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12 px-4">
-        <div className="max-w-6xl mx-auto">
+        {/* Footer */}
+        <footer className="bg-gray-900 text-gray-300 py-12">
+          <Container>
           <div className={cn(
             'grid grid-cols-1 md:grid-cols-4 gap-8',
             isRTL && 'text-right'
@@ -741,8 +745,9 @@ export default function HomePage() {
               <p className="text-sm">© 2025 Mobile Maroc. {isRTL ? 'جميع الحقوق محفوظة.' : 'Tous droits réservés.'}</p>
             </div>
           </div>
-        </div>
-      </footer>
-    </div>
+          </Container>
+        </footer>
+      </PageMain>
+    </PageLayout>
   );
 }

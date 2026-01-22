@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Container } from '@/components/ui/container';
+import { PageLayout, PageMain } from '@/components/layout/PageLayout';
 import { SEO } from '@/components/SEO';
 import { 
   Mail, 
@@ -245,7 +247,7 @@ export default function RegisterPage() {
   const selectedRoleData = ROLE_OPTIONS.find(r => r.id === selectedRole);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center px-4 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
+    <PageLayout dir={isRTL ? 'rtl' : 'ltr'}>
       <SEO
         title={labels.pageTitle}
         description="Créez votre compte Mobile Maroc pour publier vos annonces et accéder à toutes les fonctionnalités de la plateforme."
@@ -253,29 +255,30 @@ export default function RegisterPage() {
         noindex={true}
       />
 
-      <div className="w-full max-w-4xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-block mb-4">
-            <img src="/favicon.svg" alt="Mobile Maroc" className="h-12 w-12 mx-auto" />
-          </Link>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{labels.pageTitle}</h1>
-        </div>
+      <PageMain className="bg-gradient-to-b from-background to-muted/20 flex items-center py-12">
+        <Container size="sm">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <Link to="/" className="inline-block mb-4">
+              <img src="/favicon.svg" alt="Mobile Maroc" className="h-12 w-12 mx-auto" />
+            </Link>
+            <h1 className="text-2xl md:text-3xl font-bold">{labels.pageTitle}</h1>
+          </div>
 
         {step === 'role' ? (
           // Step 1: Role Selection
           <div className="space-y-6">
             {/* Warning for visitors */}
-            <Card className="border-amber-200 bg-amber-50">
+            <Card className="border-amber-200 bg-amber-50/50">
               <CardContent className="p-4">
                 <p className="font-medium text-amber-800 mb-1">{labels.notForVisitors}</p>
                 <p className="text-sm text-amber-700">{labels.visitorNote}</p>
               </CardContent>
             </Card>
 
-            <div className="text-center">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">{labels.selectRole}</h2>
-              <p className="text-gray-600">{labels.selectRoleSubtitle}</p>
+            <div className="text-center mb-6">
+              <h2 className="text-xl font-semibold mb-2">{labels.selectRole}</h2>
+              <p className="text-muted-foreground">{labels.selectRoleSubtitle}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -283,16 +286,16 @@ export default function RegisterPage() {
                 <Card 
                   key={role.id}
                   className={cn(
-                    "cursor-pointer transition-all duration-200 hover:shadow-lg border-2",
+                    "cursor-pointer transition-all duration-200 hover:shadow-md border-2",
                     selectedRole === role.id 
-                      ? "border-primary shadow-lg" 
-                      : "border-transparent hover:border-gray-200"
+                      ? "border-primary shadow-md" 
+                      : "border-transparent hover:border-border"
                   )}
                   onClick={() => handleRoleSelect(role.id)}
                 >
                   <CardHeader className="pb-3">
                     <div className={cn(
-                      "w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center mb-3",
+                      "w-12 h-12 rounded-lg bg-gradient-to-br flex items-center justify-center mb-3",
                       role.color
                     )}>
                       <role.icon className="h-6 w-6 text-white" />
@@ -305,16 +308,16 @@ export default function RegisterPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <ul className="space-y-2">
+                    <ul className="space-y-2 mb-4">
                       {(isRTL ? role.features.ar : role.features.fr).map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-sm text-gray-600">
+                        <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
                           <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
                           <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
                     <Button 
-                      className="w-full mt-4"
+                      className="w-full"
                       variant={selectedRole === role.id ? "default" : "outline"}
                     >
                       {labels.continueWith} {isRTL ? role.title.ar : role.title.fr}
@@ -325,8 +328,8 @@ export default function RegisterPage() {
               ))}
             </div>
 
-            <div className="text-center">
-              <p className="text-sm text-gray-600">
+            <div className="text-center pt-4">
+              <p className="text-sm text-muted-foreground">
                 {labels.alreadyHaveAccount}{' '}
                 <Link to="/auth/login" className="text-primary hover:underline font-medium">
                   {labels.login}
@@ -336,183 +339,186 @@ export default function RegisterPage() {
           </div>
         ) : (
           // Step 2: Account Details
-          <Card className="max-w-md mx-auto">
-            <CardHeader>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleBack}
-                className={cn("w-fit mb-2", isRTL ? "mr-auto" : "ml-0")}
-              >
-                <BackArrowIcon className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
-                {labels.back}
-              </Button>
-              
-              {selectedRoleData && (
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={cn(
-                    "w-10 h-10 rounded-lg bg-gradient-to-br flex items-center justify-center",
-                    selectedRoleData.color
-                  )}>
-                    <selectedRoleData.icon className="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">{labels.continueWith}</p>
-                    <p className="font-medium">
-                      {isRTL ? selectedRoleData.title.ar : selectedRoleData.title.fr}
-                    </p>
-                  </div>
-                </div>
-              )}
-              
-              <CardTitle>{labels.accountDetails}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {error && (
-                <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">
-                  {error}
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Label htmlFor="fullName">{labels.fullName}</Label>
-                  <div className="relative mt-1">
-                    <User className={cn(
-                      "absolute top-3 text-muted-foreground h-5 w-5",
-                      isRTL ? "right-3" : "left-3"
-                    )} />
-                    <Input
-                      id="fullName"
-                      type="text"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      required
-                      className={cn(isRTL ? "pr-10" : "pl-10")}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="email">{labels.email}</Label>
-                  <div className="relative mt-1">
-                    <Mail className={cn(
-                      "absolute top-3 text-muted-foreground h-5 w-5",
-                      isRTL ? "right-3" : "left-3"
-                    )} />
-                    <Input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className={cn(isRTL ? "pr-10" : "pl-10")}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label htmlFor="phone">{labels.phone}</Label>
-                    <div className="relative mt-1">
-                      <Phone className={cn(
-                        "absolute top-3 text-muted-foreground h-5 w-5",
-                        isRTL ? "right-3" : "left-3"
-                      )} />
-                      <Input
-                        id="phone"
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+212..."
-                        className={cn(isRTL ? "pr-10" : "pl-10")}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <Label htmlFor="city">{labels.city}</Label>
-                    <div className="relative mt-1">
-                      <MapPin className={cn(
-                        "absolute top-3 text-muted-foreground h-5 w-5",
-                        isRTL ? "right-3" : "left-3"
-                      )} />
-                      <Input
-                        id="city"
-                        type="text"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        placeholder={isRTL ? "كازابلانكا" : "Casablanca"}
-                        className={cn(isRTL ? "pr-10" : "pl-10")}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="password">{labels.password}</Label>
-                  <div className="relative mt-1">
-                    <Lock className={cn(
-                      "absolute top-3 text-muted-foreground h-5 w-5",
-                      isRTL ? "right-3" : "left-3"
-                    )} />
-                    <Input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      minLength={6}
-                      className={cn(isRTL ? "pr-10" : "pl-10")}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="confirmPassword">{labels.confirmPassword}</Label>
-                  <div className="relative mt-1">
-                    <Lock className={cn(
-                      "absolute top-3 text-muted-foreground h-5 w-5",
-                      isRTL ? "right-3" : "left-3"
-                    )} />
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                      minLength={6}
-                      className={cn(isRTL ? "pr-10" : "pl-10")}
-                    />
-                  </div>
-                </div>
-
-                <Button type="submit" disabled={loading} className="w-full" size="lg">
-                  {loading ? (
-                    <>
-                      <Loader className={cn("h-4 w-4 animate-spin", isRTL ? "ml-2" : "mr-2")} />
-                      {t('common.loading')}
-                    </>
-                  ) : (
-                    <>
-                      {labels.createAccount}
-                      <ArrowIcon className={cn("h-4 w-4", isRTL ? "mr-2" : "ml-2")} />
-                    </>
-                  )}
+          <div className="max-w-md mx-auto">
+            <Card>
+              <CardHeader>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handleBack}
+                  className={cn("w-fit mb-4 -ml-2", isRTL && "mr-auto")}
+                >
+                  <BackArrowIcon className={cn("h-4 w-4", isRTL ? "ml-2" : "mr-2")} />
+                  {labels.back}
                 </Button>
-              </form>
+                
+                {selectedRoleData && (
+                  <div className="flex items-center gap-3 mb-4 p-3 bg-muted/50 rounded-lg">
+                    <div className={cn(
+                      "w-10 h-10 rounded-lg bg-gradient-to-br flex items-center justify-center flex-shrink-0",
+                      selectedRoleData.color
+                    )}>
+                      <selectedRoleData.icon className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">{labels.continueWith}</p>
+                      <p className="font-medium">
+                        {isRTL ? selectedRoleData.title.ar : selectedRoleData.title.fr}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                <CardTitle>{labels.accountDetails}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {error && (
+                  <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
 
-              <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground">
-                  {labels.alreadyHaveAccount}{' '}
-                  <Link to="/auth/login" className="text-primary hover:underline font-medium">
-                    {labels.login}
-                  </Link>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <Label htmlFor="fullName">{labels.fullName}</Label>
+                    <div className="relative mt-1.5">
+                      <User className={cn(
+                        "absolute top-2.5 text-muted-foreground h-5 w-5",
+                        isRTL ? "right-3" : "left-3"
+                      )} />
+                      <Input
+                        id="fullName"
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        required
+                        className={cn(isRTL ? "pr-10" : "pl-10")}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="email">{labels.email}</Label>
+                    <div className="relative mt-1.5">
+                      <Mail className={cn(
+                        "absolute top-2.5 text-muted-foreground h-5 w-5",
+                        isRTL ? "right-3" : "left-3"
+                      )} />
+                      <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className={cn(isRTL ? "pr-10" : "pl-10")}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label htmlFor="phone">{labels.phone}</Label>
+                      <div className="relative mt-1.5">
+                        <Phone className={cn(
+                          "absolute top-2.5 text-muted-foreground h-5 w-5",
+                          isRTL ? "right-3" : "left-3"
+                        )} />
+                        <Input
+                          id="phone"
+                          type="tel"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          placeholder="+212..."
+                          className={cn(isRTL ? "pr-10" : "pl-10")}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="city">{labels.city}</Label>
+                      <div className="relative mt-1.5">
+                        <MapPin className={cn(
+                          "absolute top-2.5 text-muted-foreground h-5 w-5",
+                          isRTL ? "right-3" : "left-3"
+                        )} />
+                        <Input
+                          id="city"
+                          type="text"
+                          value={city}
+                          onChange={(e) => setCity(e.target.value)}
+                          placeholder={isRTL ? "كازابلانكا" : "Casablanca"}
+                          className={cn(isRTL ? "pr-10" : "pl-10")}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="password">{labels.password}</Label>
+                    <div className="relative mt-1.5">
+                      <Lock className={cn(
+                        "absolute top-2.5 text-muted-foreground h-5 w-5",
+                        isRTL ? "right-3" : "left-3"
+                      )} />
+                      <Input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        minLength={6}
+                        className={cn(isRTL ? "pr-10" : "pl-10")}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="confirmPassword">{labels.confirmPassword}</Label>
+                    <div className="relative mt-1.5">
+                      <Lock className={cn(
+                        "absolute top-2.5 text-muted-foreground h-5 w-5",
+                        isRTL ? "right-3" : "left-3"
+                      )} />
+                      <Input
+                        id="confirmPassword"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        minLength={6}
+                        className={cn(isRTL ? "pr-10" : "pl-10")}
+                      />
+                    </div>
+                  </div>
+
+                  <Button type="submit" disabled={loading} className="w-full" size="lg">
+                    {loading ? (
+                      <>
+                        <Loader className={cn("h-4 w-4 animate-spin", isRTL ? "ml-2" : "mr-2")} />
+                        {t('common.loading')}
+                      </>
+                    ) : (
+                      <>
+                        {labels.createAccount}
+                        <ArrowIcon className={cn("h-4 w-4", isRTL ? "mr-2" : "ml-2")} />
+                      </>
+                    )}
+                  </Button>
+                </form>
+
+                <div className="mt-6 text-center">
+                  <p className="text-sm text-muted-foreground">
+                    {labels.alreadyHaveAccount}{' '}
+                    <Link to="/auth/login" className="text-primary hover:underline font-medium">
+                      {labels.login}
+                    </Link>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
-      </div>
-    </div>
+        </Container>
+      </PageMain>
+    </PageLayout>
   );
 }
