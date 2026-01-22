@@ -101,7 +101,7 @@ export default function ContactPage() {
             <div className="lg:col-span-2">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center" dir="auto">
+                  <CardTitle className="flex items-center">
                     <MessageCircle className="h-6 w-6 ltr:mr-2 rtl:ml-2 text-primary" />
                     Envoyez-nous un message
                   </CardTitle>
@@ -197,7 +197,7 @@ export default function ContactPage() {
               {contactInfo.map((info, index) => (
                 <Card key={index}>
                   <CardContent className="pt-6">
-                    <div className="flex items-start gap-4" dir="auto">
+                    <div className="flex items-start gap-4">
                       <div className="bg-primary/10 p-3 rounded-lg">
                         <info.icon className="h-6 w-6 text-primary" />
                       </div>
