@@ -102,15 +102,39 @@ All optional fields default to `null` if not provided:
 - Proper typing for all state variables
 - Type-safe category detection
 
+#### Category-Specific Fields Storage
+**Implementation Note:** Category-specific technical fields (storage, battery health, compatibility, part type) are appended to the description field on submission. This approach:
+- ✅ Works with existing database schema (no migration needed)
+- ✅ Preserves the information for users
+- ✅ Can be easily migrated to dedicated fields later
+- ✅ Displays nicely in the description
+
+Example of saved description:
+```
+User's description text here...
+
+Stockage: 256GB
+Santé batterie: 90%
+```
+
+**Future Enhancement:** Consider adding a `metadata` JSONB column to the listings table for structured storage of category-specific attributes.
+
 #### Maintainability
 - Helper function `getCategoryType()` for easy extension
-- Clear separation of required vs optional fields
+- Clear comments explaining implementation decisions
 - Easy to add new categories or fields
 
 #### No Breaking Changes
 - All changes are backward compatible
 - Existing listings continue to work
 - Database schema unchanged (uses existing nullable fields)
+
+### 6. Security
+
+✅ **CodeQL Security Scan: Passed**
+- No security vulnerabilities detected
+- Safe handling of user input
+- Proper data sanitization
 
 ## Testing the Changes
 
@@ -183,25 +207,48 @@ Navigate to `/test-listing-form` (requires login) to see the improved form in ac
 
 Potential improvements for future iterations:
 
-1. **Dynamic Field Configuration**
-   - Store category fields in database
-   - Admin panel to configure fields per category
+1. **Structured Metadata Storage**
+   - Add `metadata` JSONB column to listings table
+   - Store category-specific fields in structured format
+   - Enable better filtering and search capabilities
 
-2. **Field Validation Rules**
+2. **Dynamic Field Configuration**
+   - Store category fields configuration in database
+   - Admin panel to configure fields per category
+   - More flexible than hardcoded category detection
+
+3. **Field Validation Rules**
    - Add format validation for technical fields
    - Phone number format validation
+   - Price range validation per category
 
-3. **Auto-suggestions**
+4. **Auto-suggestions**
    - Brand auto-complete
    - Model suggestions based on brand
+   - Popular values suggestions
 
-4. **Image Optimization**
+5. **Image Optimization**
    - Auto-resize/compress images
    - Image cropping tool
+   - Multiple image sizes for different views
 
-5. **Draft Saving**
+6. **Draft Saving**
    - Auto-save draft as user types
    - Resume incomplete listings
+   - Prevent data loss
+
+## Code Review Results
+
+✅ **All feedback addressed:**
+1. Fixed condition field to be truly optional (empty string default)
+2. Added comments explaining category detection approach
+3. Fixed category-specific fields - now saved to description field
+4. Added documentation for future metadata field enhancement
+
+✅ **Security Scan: Passed**
+- CodeQL scan found 0 vulnerabilities
+- All user inputs properly sanitized
+- No security issues detected
 
 ## Migration Notes
 
