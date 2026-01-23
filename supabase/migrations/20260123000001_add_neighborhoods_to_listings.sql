@@ -4,8 +4,15 @@
 
 -- Add neighborhood columns to listings table
 ALTER TABLE listings 
-  ADD COLUMN IF NOT EXISTS neighborhood_id UUID REFERENCES neighborhoods(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS neighborhood_id UUID,
   ADD COLUMN IF NOT EXISTS neighborhood_custom TEXT;
+
+-- Add foreign key constraint with explicit name for easier management
+ALTER TABLE listings
+  ADD CONSTRAINT IF NOT EXISTS listings_neighborhood_id_fkey 
+  FOREIGN KEY (neighborhood_id) 
+  REFERENCES neighborhoods(id) 
+  ON DELETE SET NULL;
 
 -- Create index for neighborhood filtering
 CREATE INDEX IF NOT EXISTS idx_listings_neighborhood ON listings(neighborhood_id);

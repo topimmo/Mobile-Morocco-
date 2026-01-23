@@ -125,7 +125,7 @@ export function NeighborhoodList({
                 <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
                   <h3 className="font-medium">{neighborhood.name}</h3>
                   <Badge variant="outline" className="text-xs">
-                    <Clock className="h-3 w-3 mr-1" />
+                    <Clock className={cn('h-3 w-3', isRTL ? 'ml-1' : 'mr-1')} />
                     {isRTL ? 'جديد' : 'nouveau'}
                   </Badge>
                 </div>
