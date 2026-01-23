@@ -39,3 +39,6 @@ core
 
 **/tempobook/**
 .env
+
+# Screenshots directory
+screenshots/
