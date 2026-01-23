@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  requiredRole?: 'admin' | 'advertiser' | 'technician' | 'importer' | 'customer';
+  requiredRole?: 'admin' | 'technician' | 'importer' | 'customer';
   fallbackPath?: string;
 }
 
@@ -69,8 +69,6 @@ function getRedirectPath(role?: string): string {
   switch (role) {
     case 'admin':
       return '/admin';
-    case 'advertiser':
-      return '/advertiser/dashboard';
     case 'technician':
       return '/dashboard';
     case 'importer':
@@ -86,17 +84,6 @@ function getRedirectPath(role?: string): string {
 export function AdminRoute({ children }: { children: ReactNode }) {
   return (
     <ProtectedRoute requiredRole="admin" fallbackPath="/auth/login">
-      {children}
-    </ProtectedRoute>
-  );
-}
-
-/**
- * AdvertiserRoute - Shortcut for advertiser routes
- */
-export function AdvertiserRoute({ children }: { children: ReactNode }) {
-  return (
-    <ProtectedRoute requiredRole="advertiser" fallbackPath="/auth/login">
       {children}
     </ProtectedRoute>
   );

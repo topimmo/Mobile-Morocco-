@@ -64,7 +64,7 @@ function Navigation() {
     { to: '/equipment', label: isRTL ? 'المعدات' : 'Équipements', icon: Wrench },
     { to: '/services', label: isRTL ? 'الإصلاح' : 'Réparation', icon: Users },
     { to: '/stores', label: isRTL ? 'المتاجر' : 'Boutiques', icon: Store },
-    { to: '/advertise', label: isRTL ? 'أعلن معنا' : 'Publicité', icon: Megaphone },
+    { to: '/ads/request', label: isRTL ? 'طلب إعلان' : 'Demande pub', icon: Megaphone },
     { to: '/compare', label: isRTL ? 'مقارنة' : 'Comparer', icon: BarChart2 },
   ];
 
@@ -135,12 +135,6 @@ function Navigation() {
                     </Button>
                   </Link>
                 )}
-                <Link to="/advertiser/dashboard">
-                  <Button variant="outline" size="sm" className={cn(isRTL && 'flex-row-reverse')}>
-                    <LayoutDashboard className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
-                    {labels.dashboard}
-                  </Button>
-                </Link>
                 <Button
                   variant="outline"
                   size="sm"
@@ -245,17 +239,6 @@ function Navigation() {
                           {labels.admin}
                         </Link>
                       )}
-                      <Link
-                        to="/advertiser/dashboard"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={cn(
-                          'px-4 py-3 rounded-lg text-base font-medium transition-colors flex items-center gap-3 hover:bg-muted',
-                          isRTL && 'flex-row-reverse text-right'
-                        )}
-                      >
-                        <LayoutDashboard className="h-5 w-5" />
-                        {labels.dashboard}
-                      </Link>
                       <button
                         onClick={async () => {
                           await signOut();
