@@ -187,6 +187,7 @@
     height: 32px; /* Mobile */
     width: auto;
     display: block;
+    object-fit: contain;
   }
 
   @media (min-width: 768px) {

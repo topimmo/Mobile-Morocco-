@@ -82,7 +82,12 @@ function Navigation() {
             <img 
               src="/assets/logo/logo.png" 
               alt="Mobile Morocco" 
-              className="logo-header"
+              style={{
+                height: '32px',
+                width: 'auto',
+                objectFit: 'contain'
+              }}
+              className="md:h-9 lg:h-10"
             />
           </Link>
 
