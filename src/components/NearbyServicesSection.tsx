@@ -92,18 +92,18 @@ const NearbyServicesSection = ({
       ];
 
   return (
-    <section className="w-full py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-br from-sky-50 to-blue-50">
+    <section className="w-full py-4 md:py-10 lg:py-12 bg-gradient-to-br from-sky-50 to-blue-50">
       <div className="containerPage">
-        <div className={cn(isRTL ? "text-right" : "text-center", "mb-6 sm:mb-8")}>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-3">
+        <div className={cn(isRTL ? "text-right" : "text-center", "mb-4 md:mb-8")}>
+          <h2 className="text-[14px] md:text-4xl font-bold text-primary mb-2 md:mb-3">
             {title}
           </h2>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-[12px] md:text-lg text-muted-foreground max-w-3xl mx-auto">
             {subtitle}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mb-4 md:mb-8">
           {cards.map((card, index) => (
             <motion.div
               key={card.id}
@@ -114,12 +114,12 @@ const NearbyServicesSection = ({
               whileHover={{ y: -4 }}
             >
               <Card className="h-full hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/50">
-                <CardContent className="flex items-center gap-3 p-4 md:p-5">
-                  <div className="text-3xl md:text-4xl flex-shrink-0">
+                <CardContent className="flex items-center gap-3 p-3 md:p-5">
+                  <div className="text-2xl md:text-4xl flex-shrink-0">
                     {card.emoji}
                   </div>
                   <p className={cn(
-                    "text-sm sm:text-base md:text-lg font-medium text-foreground flex-1",
+                    "text-xs md:text-lg font-medium text-foreground flex-1",
                     isRTL ? "text-right" : "text-left"
                   )}>
                     {card.text}
@@ -134,7 +134,7 @@ const NearbyServicesSection = ({
           <Link to="/auth/register">
             <Button
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-semibold shadow-md hover:shadow-lg transition-all"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 md:px-8 h-[46px] md:h-auto md:py-6 text-[15px] md:text-lg font-semibold shadow-md hover:shadow-lg transition-all"
             >
               {ctaText}
             </Button>
