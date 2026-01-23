@@ -162,15 +162,15 @@ export default function HomePage() {
       {/* Top Banner */}
       <BannerSlot page="home" slot="top" />
 
-      {/* Hero CTA Section - Above the Fold */}
-      <section className="py-4 md:py-10 lg:py-12 bg-gradient-to-br from-primary/90 via-primary to-primary/95 border-b border-border">
-        <div className="containerPage text-center">
-          <h2 className="text-[18px] md:text-[34px] font-bold mb-2 md:mb-3 text-white leading-[1.3] md:leading-[1.3]">
+      {/* Hero CTA Section - Above the Fold - Enhanced Mobile Visibility */}
+      <section className="py-6 md:py-10 lg:py-12 bg-gradient-to-br from-primary/90 via-primary to-primary/95 border-b border-border">
+        <div className="containerPage text-center px-4 md:px-0">
+          <h2 className="text-[20px] sm:text-[24px] md:text-[34px] font-bold mb-3 md:mb-4 text-white leading-[1.2] md:leading-[1.3]">
             {isRTL 
               ? 'انضم الآن وابدأ في نشر إعلاناتك'
               : 'Rejoignez-nous et commencez à publier vos annonces'}
           </h2>
-          <p className="text-[11px] md:text-base text-white/90 mb-3 md:mb-6 px-4 md:px-0 md:max-w-[600px] mx-auto leading-[1.3]">
+          <p className="text-[13px] sm:text-[15px] md:text-base text-white/95 mb-4 md:mb-6 md:max-w-[600px] mx-auto leading-[1.4] md:leading-[1.5]">
             {isRTL
               ? 'أنشئ حسابك مجانًا واستفد من جميع ميزات المنصة'
               : 'Créez votre compte gratuitement et profitez de toutes les fonctionnalités'}
@@ -179,7 +179,7 @@ export default function HomePage() {
             <Button 
               size="lg" 
               className={cn(
-                'bg-white hover:bg-white/90 text-primary px-6 md:px-8 h-[46px] md:h-auto md:py-6 text-[14px] md:text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow',
+                'bg-white hover:bg-white/95 text-primary px-8 md:px-10 h-[50px] md:h-auto md:py-6 text-[15px] sm:text-[16px] md:text-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]',
                 isRTL && 'flex-row-reverse'
               )}
             >
@@ -273,12 +273,12 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Publish Phone CTA - Swiss Design */}
-          <div className="mt-12 text-center">
+          {/* Publish Phone CTA - Enhanced Mobile Design */}
+          <div className="mt-10 md:mt-12 text-center">
             <Link to="/publish-phone">
               <Button 
                 size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold shadow-sm hover:shadow-md transition-shadow"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 md:px-10 py-5 md:py-6 text-[15px] sm:text-[16px] md:text-lg font-semibold shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
               >
                 <Smartphone className={cn("h-5 w-5", isRTL ? "ml-2" : "mr-2")} />
                 {isRTL ? 'نشر تلفوني' : 'Publier mon téléphone'}
@@ -515,25 +515,33 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Call to Action Section */}
-      <section className="py-6 sm:py-8 md:py-12 lg:py-14 bg-primary text-primary-foreground">
-        <div className="containerPage text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">
+      {/* Call to Action Section - Enhanced Mobile Visibility */}
+      <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-primary text-primary-foreground">
+        <div className="containerPage text-center px-4 md:px-0">
+          <h2 className="text-[22px] sm:text-[26px] md:text-3xl font-bold mb-3 md:mb-4">
             {isRTL ? 'انضم إلينا اليوم' : 'Rejoignez-nous Aujourd\'hui'}
           </h2>
-          <p className="text-base md:text-lg mb-4 md:mb-6 opacity-90">
+          <p className="text-[14px] sm:text-[16px] md:text-lg mb-5 md:mb-6 opacity-95">
             {isRTL 
               ? 'سجل الآن واستفد من خدماتنا المميزة'
               : 'Inscrivez-vous maintenant et profitez de nos services exclusifs'}
           </p>
-          <div className={cn('flex gap-4 justify-center', isRTL && 'flex-row-reverse')}>
-            <Link to="/auth/register">
-              <Button size="lg" variant="secondary">
+          <div className={cn('flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0', isRTL && 'sm:flex-row-reverse')}>
+            <Link to="/auth/register" className="w-full sm:w-auto">
+              <Button 
+                size="lg" 
+                variant="secondary"
+                className="w-full sm:w-auto h-[50px] md:h-auto text-[15px] sm:text-[16px] md:text-base px-8 md:px-10 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              >
                 {isRTL ? 'إنشاء حساب' : 'Créer un compte'}
               </Button>
             </Link>
-            <Link to="/listings">
-              <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+            <Link to="/listings" className="w-full sm:w-auto">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="w-full sm:w-auto h-[50px] md:h-auto text-[15px] sm:text-[16px] md:text-base px-8 md:px-10 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary hover:scale-[1.02] active:scale-[0.98] transition-all"
+              >
                 {isRTL ? 'تصفح الإعلانات' : 'Parcourir les annonces'}
               </Button>
             </Link>
