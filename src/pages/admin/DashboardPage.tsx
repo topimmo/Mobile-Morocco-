@@ -34,6 +34,7 @@ import {
   getPendingListings,
   getPendingRepairShops,
   getPendingCampaigns,
+  getPendingNeighborhoods,
   approveListing,
   rejectListing,
   approveRepairShop,
@@ -45,8 +46,10 @@ import {
   type PendingListing,
   type PendingRepairShop,
   type PendingCampaign,
+  type PendingNeighborhood,
 } from '@/lib/supabase/admin';
 import { useToast } from '@/components/ui/use-toast';
+import { NeighborhoodList } from '@/components/admin/NeighborhoodList';
 
 export default function AdminDashboard() {
   const { t, isRTL } = useLanguage();
@@ -58,6 +61,7 @@ export default function AdminDashboard() {
   const [pendingListings, setPendingListings] = useState<PendingListing[]>([]);
   const [pendingShops, setPendingShops] = useState<PendingRepairShop[]>([]);
   const [pendingCampaigns, setPendingCampaigns] = useState<PendingCampaign[]>([]);
+  const [pendingNeighborhoods, setPendingNeighborhoods] = useState<PendingNeighborhood[]>([]);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -66,11 +70,12 @@ export default function AdminDashboard() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [statsData, listingsResult, shopsResult, campaignsResult, activity] = await Promise.all([
+      const [statsData, listingsResult, shopsResult, campaignsResult, neighborhoodsResult, activity] = await Promise.all([
         getAdminStats(),
         getPendingListings(),
         getPendingRepairShops(),
         getPendingCampaigns(),
+        getPendingNeighborhoods(),
         getRecentActivity(),
       ]);
       setStats(statsData);
@@ -78,6 +83,7 @@ export default function AdminDashboard() {
       setPendingListings(listingsResult.data || []);
       setPendingShops(shopsResult || []);
       setPendingCampaigns(campaignsResult || []);
+      setPendingNeighborhoods(neighborhoodsResult || []);
       setRecentActivity(activity);
     } catch (error) {
       console.error('Error fetching admin data:', error);

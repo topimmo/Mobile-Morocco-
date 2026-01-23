@@ -12,6 +12,7 @@ export interface AdminStats {
   pendingListings: number;
   pendingRepairShops: number;
   pendingCampaigns: number;
+  pendingNeighborhoods: number;
   approvedListings: number;
   approvedRepairShops: number;
   activeCampaigns: number;
@@ -81,6 +82,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
       campaignsResult,
       pendingCampaignsResult,
       activeCampaignsResult,
+      pendingNeighborhoodsResult,
     ] = await Promise.all([
       // Total users (profiles)
       supabase.from('profiles').select('id', { count: 'exact', head: true }),
@@ -102,6 +104,8 @@ export const getAdminStats = async (): Promise<AdminStats> => {
       supabase.from('ad_campaigns').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
       // Active campaigns
       supabase.from('ad_campaigns').select('id', { count: 'exact', head: true }).eq('status', 'approved'),
+      // Pending neighborhoods
+      supabase.from('neighborhoods').select('id', { count: 'exact', head: true }).eq('is_verified', false),
     ]);
 
     return {
@@ -112,6 +116,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
       pendingListings: pendingListingsResult.count ?? 0,
       pendingRepairShops: pendingShopsResult.count ?? 0,
       pendingCampaigns: pendingCampaignsResult.count ?? 0,
+      pendingNeighborhoods: pendingNeighborhoodsResult.count ?? 0,
       approvedListings: approvedListingsResult.count ?? 0,
       approvedRepairShops: approvedShopsResult.count ?? 0,
       activeCampaigns: activeCampaignsResult.count ?? 0,
@@ -126,6 +131,7 @@ export const getAdminStats = async (): Promise<AdminStats> => {
       pendingListings: 0,
       pendingRepairShops: 0,
       pendingCampaigns: 0,
+      pendingNeighborhoods: 0,
       approvedListings: 0,
       approvedRepairShops: 0,
       activeCampaigns: 0,
@@ -516,5 +522,83 @@ export const getRecentActivity = async (limit = 10) => {
   } catch (error) {
     console.error('Error fetching recent activity:', error);
     return [];
+  }
+};
+
+// Neighborhood Management Functions
+
+export interface PendingNeighborhood {
+  id: string;
+  name: string;
+  slug: string;
+  city_id: string;
+  city_name_fr?: string;
+  city_name_ar?: string;
+  is_verified: boolean;
+  created_by: string | null;
+  created_at: string;
+  creator_email?: string;
+}
+
+// Get pending neighborhoods (not yet verified)
+export const getPendingNeighborhoods = async (): Promise<PendingNeighborhood[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('neighborhoods')
+      .select(`
+        *,
+        city:cities(name_fr, name_ar)
+      `)
+      .eq('is_verified', false)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    return (data || []).map((n: any) => ({
+      id: n.id,
+      name: n.name,
+      slug: n.slug,
+      city_id: n.city_id,
+      city_name_fr: n.city?.name_fr,
+      city_name_ar: n.city?.name_ar,
+      is_verified: n.is_verified,
+      created_by: n.created_by,
+      created_at: n.created_at,
+    }));
+  } catch (error) {
+    console.error('Error fetching pending neighborhoods:', error);
+    return [];
+  }
+};
+
+// Approve a neighborhood
+export const approveNeighborhood = async (neighborhoodId: string): Promise<{ success: boolean; error?: string }> => {
+  try {
+    const { error } = await supabase
+      .from('neighborhoods')
+      .update({ is_verified: true })
+      .eq('id', neighborhoodId);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error approving neighborhood:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+// Reject a neighborhood (delete it)
+export const rejectNeighborhood = async (neighborhoodId: string): Promise<{ success: boolean; error?: string }> => {
+  try {
+    const { error } = await supabase
+      .from('neighborhoods')
+      .delete()
+      .eq('id', neighborhoodId);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error rejecting neighborhood:', error);
+    return { success: false, error: error.message };
   }
 };
