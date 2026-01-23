@@ -102,8 +102,8 @@ export default function SparePartsPage() {
       <Navigation />
       <BannerSlot page="spare_parts" slot="top" />
 
-      <section className="py-8 px-4 bg-white border-b">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-8 md:py-12 px-4 md:px-6 lg:px-8 bg-white border-b">
+        <div className="max-w-7xl mx-auto">
           <div className={cn('flex items-center gap-3 mb-4', isRTL && 'flex-row-reverse')}>
             <div className="p-3 bg-green-100 rounded-lg">
               <Settings className="h-8 w-8 text-green-600" />
@@ -114,7 +114,8 @@ export default function SparePartsPage() {
             </div>
           </div>
 
-          <div className={cn('flex flex-wrap gap-4 mt-6', isRTL && 'flex-row-reverse')}>
+          <div className="max-w-5xl mx-auto">
+            <div className={cn('flex flex-wrap gap-4 mt-6', isRTL && 'flex-row-reverse')}>
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
                 <Search className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
@@ -162,13 +163,14 @@ export default function SparePartsPage() {
           <div className={cn('mt-4 text-sm text-gray-600', isRTL && 'text-right')}>
             {totalCount} {labels.results}
           </div>
+          </div>
         </div>
       </section>
 
-      <section className="py-8 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-8 md:py-12 px-4 md:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           {loading && page === 1 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {[...Array(8)].map((_, i) => (
                 <Card key={i}>
                   <Skeleton className="h-48 w-full" />
@@ -188,7 +190,7 @@ export default function SparePartsPage() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 {items.map((item) => (
                   <Link key={item.id} to={`/items/${item.slug}`}>
                     <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full group">

@@ -140,7 +140,7 @@ export default function ListingsPage() {
       <Navigation />
       <BannerSlot page="listings" slot="top" />
 
-      <section className="py-8 px-4">
+      <section className="py-8 md:py-12 px-4 md:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-6">

@@ -103,10 +103,10 @@ export default function CategoryPage() {
       <div className={cn('min-h-screen bg-background', isRTL && 'rtl')}>
         <Navigation />
         <BannerSlot page="categories" slot="top" />
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
           <Skeleton className="h-8 w-48 mb-2" />
           <Skeleton className="h-12 w-64 mb-8" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {[...Array(8)].map((_, i) => (
               <Skeleton key={i} className="h-64 rounded-lg" />
             ))}
@@ -136,7 +136,7 @@ export default function CategoryPage() {
       <Navigation />
       <BannerSlot page="categories" slot="top" />
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
         {/* Back Button */}
         <Link 
           to="/" 
@@ -174,7 +174,7 @@ export default function CategoryPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {listings.map((listing) => (
               <Link key={listing.id} to={`/listings/${listing.slug}`}>
                 <Card className="h-full hover:shadow-lg transition-shadow overflow-hidden">
