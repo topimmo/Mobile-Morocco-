@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 
-export type Language = 'fr' | 'ar';
+export type Language = 'fr' | 'ar' | 'en';
 
 interface LanguageContextType {
   language: Language;
@@ -127,6 +127,35 @@ const translations: Record<string, Record<string, string>> = {
     'home.popular_cities': 'المدن الشائعة',
     'home.latest_listings': 'أحدث الإعلانات',
     'home.featured_shops': 'محلات الإصلاح المميزة',
+
+    // Footer
+    'footer.brand_name': 'موبايل المغرب',
+    'footer.brand_description': 'منصتك الأولى للهواتف والإكسسوارات وخدمات الإصلاح في المغرب',
+    'footer.quick_links': 'روابط سريعة',
+    'footer.home': 'الرئيسية',
+    'footer.listings': 'الإعلانات',
+    'footer.phones': 'الهواتف',
+    'footer.spare_parts': 'قطع الغيار',
+    'footer.equipment': 'المعدات',
+    'footer.services': 'خدمات الإصلاح',
+    'footer.stores': 'المحلات',
+    'footer.technicians': 'الفنيين',
+    'footer.compare': 'المقارنة',
+    'footer.information': 'معلومات',
+    'footer.about': 'من نحن',
+    'footer.faq': 'الأسئلة الشائعة',
+    'footer.contact': 'اتصل بنا',
+    'footer.advertise': 'الإعلان',
+    'footer.contact_us': 'تواصل معنا',
+    'footer.email': 'البريد الإلكتروني',
+    'footer.phone': 'الهاتف',
+    'footer.location': 'الموقع',
+    'footer.casablanca_morocco': 'الدار البيضاء، المغرب',
+    'footer.legal': 'قانوني',
+    'footer.terms': 'شروط الاستخدام',
+    'footer.privacy': 'سياسة الخصوصية',
+    'footer.copyright': 'جميع الحقوق محفوظة',
+    'footer.follow_us': 'تابعنا',
   },
   fr: {
     // Navigation
@@ -245,6 +274,182 @@ const translations: Record<string, Record<string, string>> = {
     'home.popular_cities': 'Villes populaires',
     'home.latest_listings': 'Dernières annonces',
     'home.featured_shops': 'Boutiques en vedette',
+
+    // Footer
+    'footer.brand_name': 'Mobile Maroc',
+    'footer.brand_description': 'Votre première plateforme pour les téléphones, accessoires et services de réparation au Maroc',
+    'footer.quick_links': 'Accès Rapide',
+    'footer.home': 'Accueil',
+    'footer.listings': 'Annonces',
+    'footer.phones': 'Téléphones',
+    'footer.spare_parts': 'Pièces Détachées',
+    'footer.equipment': 'Équipements',
+    'footer.services': 'Services de Réparation',
+    'footer.stores': 'Boutiques',
+    'footer.technicians': 'Techniciens',
+    'footer.compare': 'Comparer',
+    'footer.information': 'Information',
+    'footer.about': 'À Propos',
+    'footer.faq': 'FAQ',
+    'footer.contact': 'Nous Contacter',
+    'footer.advertise': 'Publicité',
+    'footer.contact_us': 'Nous Contacter',
+    'footer.email': 'Email',
+    'footer.phone': 'Téléphone',
+    'footer.location': 'Localisation',
+    'footer.casablanca_morocco': 'Casablanca, Maroc',
+    'footer.legal': 'Légal',
+    'footer.terms': 'Conditions d\'Utilisation',
+    'footer.privacy': 'Politique de Confidentialité',
+    'footer.copyright': 'Tous les droits réservés',
+    'footer.follow_us': 'Suivez-nous',
+  },
+  en: {
+    // Navigation
+    'nav.home': 'Home',
+    'nav.categories': 'Categories',
+    'nav.listings': 'Listings',
+    'nav.repair_shops': 'Repair Shops',
+    'nav.login': 'Login',
+    'nav.register': 'Register',
+    'nav.dashboard': 'Dashboard',
+    'nav.admin': 'Admin Panel',
+    'nav.advertiser': 'Advertiser Panel',
+    
+    // Common
+    'common.search': 'Search',
+    'common.filter': 'Filter',
+    'common.price': 'Price',
+    'common.location': 'Location',
+    'common.city': 'City',
+    'common.neighborhood': 'Neighborhood',
+    'common.condition': 'Condition',
+    'common.brand': 'Brand',
+    'common.model': 'Model',
+    'common.new': 'New',
+    'common.used': 'Used',
+    'common.refurbished': 'Refurbished',
+    'common.contact_whatsapp': 'Contact via WhatsApp',
+    'common.contact_phone': 'Call',
+    'common.share': 'Share',
+    'common.save': 'Save',
+    'common.cancel': 'Cancel',
+    'common.submit': 'Submit',
+    'common.loading': 'Loading...',
+    'common.error': 'Error',
+    'common.success': 'Success',
+    'common.view_all': 'View All',
+    'common.load_more': 'Load More',
+    'common.no_results': 'No Results',
+    'common.free': 'Free',
+    'common.mad': 'MAD',
+    
+    // Categories
+    'category.phones': 'Phones',
+    'category.accessories': 'Accessories',
+    'category.spare_parts': 'Spare Parts',
+    'category.repair_equipment': 'Repair Equipment',
+    
+    // Repair Shops
+    'repair.title': 'Repair Shops',
+    'repair.specialties': 'Specialties',
+    'repair.working_hours': 'Working Hours',
+    'repair.address': 'Address',
+    'repair.view_on_map': 'View on Map',
+    
+    // Auth
+    'auth.email': 'Email',
+    'auth.password': 'Password',
+    'auth.phone': 'Phone',
+    'auth.full_name': 'Full Name',
+    'auth.login': 'Login',
+    'auth.register': 'Register',
+    'auth.forgot_password': 'Forgot Password?',
+    'auth.reset_password': 'Reset Password',
+    'auth.verify_otp': 'Verify Code',
+    'auth.send_otp': 'Send Code',
+    'auth.whatsapp_otp': 'WhatsApp Verification',
+    'auth.email_otp': 'Email Verification',
+    
+    // Banners & Ads
+    'ads.create_campaign': 'Create Campaign',
+    'ads.my_campaigns': 'My Campaigns',
+    'ads.banner_top': 'Top Banner',
+    'ads.banner_bottom': 'Bottom Banner',
+    'ads.duration': 'Duration',
+    'ads.days': 'days',
+    'ads.start_date': 'Start Date',
+    'ads.end_date': 'End Date',
+    'ads.select_pages': 'Select Pages',
+    'ads.all_pages': 'All Pages',
+    'ads.check_availability': 'Check Availability',
+    'ads.upload_banner': 'Upload Banner',
+    'ads.banner_sizes': 'Required Banner Sizes',
+    'ads.status_pending': 'Pending',
+    'ads.status_approved': 'Approved',
+    'ads.status_rejected': 'Rejected',
+    'ads.status_paused': 'Paused',
+    
+    // Admin
+    'admin.dashboard': 'Admin Dashboard',
+    'admin.manage_listings': 'Manage Listings',
+    'admin.manage_shops': 'Manage Shops',
+    'admin.manage_campaigns': 'Manage Campaigns',
+    'admin.manage_users': 'Manage Users',
+    'admin.statistics': 'Statistics',
+    'admin.approve': 'Approve',
+    'admin.reject': 'Reject',
+    'admin.pause': 'Pause',
+    
+    // Cities
+    'city.casablanca': 'Casablanca',
+    'city.rabat': 'Rabat',
+    'city.marrakech': 'Marrakech',
+    'city.fes': 'Fes',
+    'city.tanger': 'Tangier',
+    'city.agadir': 'Agadir',
+    'city.meknes': 'Meknes',
+    'city.oujda': 'Oujda',
+    'city.kenitra': 'Kenitra',
+    'city.tetouan': 'Tetouan',
+
+    // Homepage
+    'home.hero_title': 'Your Mobile Guide in Morocco',
+    'home.hero_subtitle': 'Find the best phones, accessories, spare parts and repair shops',
+    'home.search_placeholder': 'Search for phones, accessories...',
+    'home.popular_categories': 'Popular Categories',
+    'home.popular_cities': 'Popular Cities',
+    'home.latest_listings': 'Latest Listings',
+    'home.featured_shops': 'Featured Shops',
+
+    // Footer
+    'footer.brand_name': 'Mobile Morocco',
+    'footer.brand_description': 'Your premier platform for phones, accessories, and repair services in Morocco',
+    'footer.quick_links': 'Quick Links',
+    'footer.home': 'Home',
+    'footer.listings': 'Listings',
+    'footer.phones': 'Phones',
+    'footer.spare_parts': 'Spare Parts',
+    'footer.equipment': 'Equipment',
+    'footer.services': 'Repair Services',
+    'footer.stores': 'Stores',
+    'footer.technicians': 'Technicians',
+    'footer.compare': 'Compare',
+    'footer.information': 'Information',
+    'footer.about': 'About',
+    'footer.faq': 'FAQ',
+    'footer.contact': 'Contact Us',
+    'footer.advertise': 'Advertise',
+    'footer.contact_us': 'Contact Us',
+    'footer.email': 'Email',
+    'footer.phone': 'Phone',
+    'footer.location': 'Location',
+    'footer.casablanca_morocco': 'Casablanca, Morocco',
+    'footer.legal': 'Legal',
+    'footer.terms': 'Terms of Service',
+    'footer.privacy': 'Privacy Policy',
+    'footer.copyright': 'All rights reserved',
+    'footer.follow_us': 'Follow Us',
   },
 };
 
@@ -253,7 +458,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem('language');
-    return (saved === 'fr' || saved === 'ar') ? saved : 'ar'; // Default to Arabic
+    return (saved === 'fr' || saved === 'ar' || saved === 'en') ? saved : 'ar'; // Default to Arabic
   });
 
   const isRTL = language === 'ar';
