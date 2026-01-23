@@ -93,8 +93,8 @@ const NearbyServicesSection = ({
 
   return (
     <section className="w-full py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-br from-sky-50 to-blue-50">
-      <div className="containerPage max-w-[1280px] mx-auto">
-        <div className={cn("text-center mb-6 sm:mb-8", isRTL && "text-right")}>
+      <div className="containerPage">
+        <div className={cn(isRTL ? "text-right" : "text-center", "mb-6 sm:mb-8")}>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-3">
             {title}
           </h2>
@@ -120,7 +120,7 @@ const NearbyServicesSection = ({
                   </div>
                   <p className={cn(
                     "text-sm sm:text-base md:text-lg font-medium text-foreground flex-1",
-                    isRTL && "text-right"
+                    isRTL ? "text-right" : "text-left"
                   )}>
                     {card.text}
                   </p>
