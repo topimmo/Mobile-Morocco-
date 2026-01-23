@@ -163,7 +163,7 @@ export default function HomePage() {
       <BannerSlot page="home" slot="top" />
 
       {/* Hero CTA Section - Above the Fold */}
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-br from-primary/5 to-primary/10 border-b border-border">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-br from-primary/10 to-primary/20 border-b border-border">
         <div className="containerPage text-center">
           <h2 className="text-2xl md:text-[34px] font-bold mb-3 text-foreground md:leading-[1.3] leading-[1.4]">
             {isRTL 
@@ -533,7 +533,7 @@ export default function HomePage() {
               </Button>
             </Link>
             <Link to="/listings">
-              <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+              <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90">
                 {isRTL ? 'تصفح الإعلانات' : 'Parcourir les annonces'}
               </Button>
             </Link>
