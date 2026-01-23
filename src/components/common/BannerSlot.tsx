@@ -138,16 +138,16 @@ export function BannerSlot({ page, slot, showPlaceholder = true }: BannerSlotPro
           placeholderConfig.gradient
         )}>
           <div className="flex items-center gap-3 md:gap-4">
-            <Megaphone className="h-6 w-6 md:h-8 md:w-8 text-white/90" />
+            <Megaphone className="h-6 w-6 md:h-8 md:w-8 text-white" />
             <div className="text-center">
-              <p className="text-white font-bold text-sm md:text-lg">
+              <p className="text-white font-bold text-sm md:text-lg opacity-100 bg-white/70 px-[10px] py-[6px] rounded-lg text-[#6B7280]">
                 {placeholderConfig.text}
               </p>
-              <p className="text-white/80 text-xs md:text-sm">
+              <p className="text-white text-xs md:text-sm opacity-100 mt-2">
                 {placeholderConfig.subtext}
               </p>
             </div>
-            <Megaphone className="h-6 w-6 md:h-8 md:w-8 text-white/90 hidden md:block" />
+            <Megaphone className="h-6 w-6 md:h-8 md:w-8 text-white hidden md:block" />
           </div>
         </div>
       </div>
