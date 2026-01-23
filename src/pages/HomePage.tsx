@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Navigation from '@/components/Navigation';
+import NearbyServicesSection from '@/components/NearbyServicesSection';
 import { BannerSlot } from '@/components/common/BannerSlot';
 import { SearchBar, CitySelector } from '@/components/search';
 import { Card, CardContent } from '@/components/ui/card';
@@ -303,6 +304,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Nearby Products & Services Section - NEW */}
+      <NearbyServicesSection language={language} />
 
       {/* Arabic Content Section - Swiss Design */}
       <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-muted">
