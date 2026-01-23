@@ -28,12 +28,14 @@ import {
   MessageCircle,
   UserPlus,
   PlusCircle,
+  MapPin,
 } from 'lucide-react';
 import {
   getAdminStats,
   getPendingListings,
   getPendingRepairShops,
   getPendingCampaigns,
+  getPendingNeighborhoods,
   approveListing,
   rejectListing,
   approveRepairShop,
@@ -45,8 +47,10 @@ import {
   type PendingListing,
   type PendingRepairShop,
   type PendingCampaign,
+  type PendingNeighborhood,
 } from '@/lib/supabase/admin';
 import { useToast } from '@/components/ui/use-toast';
+import { NeighborhoodList } from '@/components/admin/NeighborhoodList';
 
 export default function AdminDashboard() {
   const { t, isRTL } = useLanguage();
@@ -58,6 +62,7 @@ export default function AdminDashboard() {
   const [pendingListings, setPendingListings] = useState<PendingListing[]>([]);
   const [pendingShops, setPendingShops] = useState<PendingRepairShop[]>([]);
   const [pendingCampaigns, setPendingCampaigns] = useState<PendingCampaign[]>([]);
+  const [pendingNeighborhoods, setPendingNeighborhoods] = useState<PendingNeighborhood[]>([]);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -66,11 +71,12 @@ export default function AdminDashboard() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [statsData, listingsResult, shopsResult, campaignsResult, activity] = await Promise.all([
+      const [statsData, listingsResult, shopsResult, campaignsResult, neighborhoodsResult, activity] = await Promise.all([
         getAdminStats(),
         getPendingListings(),
         getPendingRepairShops(),
         getPendingCampaigns(),
+        getPendingNeighborhoods(),
         getRecentActivity(),
       ]);
       setStats(statsData);
@@ -78,6 +84,7 @@ export default function AdminDashboard() {
       setPendingListings(listingsResult.data || []);
       setPendingShops(shopsResult || []);
       setPendingCampaigns(campaignsResult || []);
+      setPendingNeighborhoods(neighborhoodsResult || []);
       setRecentActivity(activity);
     } catch (error) {
       console.error('Error fetching admin data:', error);
@@ -335,7 +342,7 @@ export default function AdminDashboard() {
 
         {/* Moderation Tabs */}
         <Tabs defaultValue="listings" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="listings" className="flex items-center gap-2">
               <ShoppingBag className="h-4 w-4" />
               <span className="hidden sm:inline">{isRTL ? 'الإعلانات' : 'Annonces'}</span>
@@ -348,6 +355,13 @@ export default function AdminDashboard() {
               <span className="hidden sm:inline">{isRTL ? 'المحلات' : 'Magasins'}</span>
               {stats?.pendingRepairShops ? (
                 <Badge variant="destructive" className="ml-1">{stats.pendingRepairShops}</Badge>
+              ) : null}
+            </TabsTrigger>
+            <TabsTrigger value="neighborhoods" className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              <span className="hidden sm:inline">{isRTL ? 'الأحياء' : 'Quartiers'}</span>
+              {stats?.pendingNeighborhoods ? (
+                <Badge variant="destructive" className="ml-1">{stats.pendingNeighborhoods}</Badge>
               ) : null}
             </TabsTrigger>
             <TabsTrigger value="campaigns" className="flex items-center gap-2">
@@ -617,6 +631,15 @@ export default function AdminDashboard() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Neighborhoods Tab */}
+          <TabsContent value="neighborhoods" className="space-y-4">
+            <NeighborhoodList
+              neighborhoods={pendingNeighborhoods}
+              onUpdate={fetchData}
+              language={isRTL ? 'ar' : 'fr'}
+            />
           </TabsContent>
 
           {/* Activity Tab */}
