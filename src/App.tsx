@@ -10,7 +10,7 @@ import ComparisonFloatingButton from "@/components/ComparisonFloatingButton";
 import ErrorBoundary, { GlobalErrorBoundary, PageErrorBoundary } from "@/components/ErrorBoundary";
 import { NetworkErrorBanner } from "@/components/common/InlineError";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
-import { ProtectedRoute, AdminRoute, AdvertiserRoute, TechnicianRoute, ImporterRoute } from "@/components/ProtectedRoute";
+import { ProtectedRoute, AdminRoute, TechnicianRoute, ImporterRoute } from "@/components/ProtectedRoute";
 import { isEnvValid } from "@/config/env";
 import EnvErrorFallback from "@/components/EnvErrorFallback";
 
@@ -33,6 +33,7 @@ const StoresPage = lazy(() => import("@/pages/StoresPage"));
 const StoreProfilePage = lazy(() => import("@/pages/StoreProfilePage"));
 const ItemDetailsPage = lazy(() => import("@/pages/ItemDetailsPage"));
 const AdvertisePage = lazy(() => import("@/pages/AdvertisePage"));
+const AdRequestPage = lazy(() => import("@/pages/AdRequestPage"));
 const PublishPhonePage = lazy(() => import("@/pages/PublishPhonePage"));
 const ComparePage = lazy(() => import("@/pages/ComparePage"));
 const FavoritesPage = lazy(() => import("@/components/FavoritesPage"));
@@ -48,10 +49,6 @@ const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
 const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
 const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
 const ResetPasswordPage = lazy(() => import("@/pages/auth/ResetPasswordPage"));
-
-// Advertiser dashboard
-const AdvertiserDashboard = lazy(() => import("@/pages/advertiser/DashboardPage"));
-const CreateCampaignPage = lazy(() => import("@/pages/advertiser/CreateCampaignPage"));
 
 // Admin dashboard
 const AdminDashboard = lazy(() => import("@/pages/admin/DashboardPage"));
@@ -102,6 +99,7 @@ function AppContent() {
           <Route path="/stores/:slug" element={<PageErrorBoundary><StoreProfilePage /></PageErrorBoundary>} />
           <Route path="/items/:slug" element={<PageErrorBoundary><ItemDetailsPage /></PageErrorBoundary>} />
           <Route path="/advertise" element={<PageErrorBoundary><AdvertisePage /></PageErrorBoundary>} />
+          <Route path="/ads/request" element={<PageErrorBoundary><AdRequestPage /></PageErrorBoundary>} />
           <Route path="/publish-phone" element={
             <ProtectedRoute>
               <PageErrorBoundary><PublishPhonePage /></PageErrorBoundary>
@@ -125,18 +123,6 @@ function AppContent() {
           <Route path="/auth/login" element={<PageErrorBoundary><LoginPage /></PageErrorBoundary>} />
           <Route path="/auth/register" element={<PageErrorBoundary><RegisterPage /></PageErrorBoundary>} />
           <Route path="/auth/reset-password" element={<PageErrorBoundary><ResetPasswordPage /></PageErrorBoundary>} />
-
-          {/* Advertiser Dashboard - Protected */}
-          <Route path="/advertiser/dashboard" element={
-            <AdvertiserRoute>
-              <PageErrorBoundary><AdvertiserDashboard /></PageErrorBoundary>
-            </AdvertiserRoute>
-          } />
-          <Route path="/advertiser/create-campaign" element={
-            <AdvertiserRoute>
-              <PageErrorBoundary><CreateCampaignPage /></PageErrorBoundary>
-            </AdvertiserRoute>
-          } />
 
           {/* Admin Dashboard - Protected */}
           <Route path="/admin" element={

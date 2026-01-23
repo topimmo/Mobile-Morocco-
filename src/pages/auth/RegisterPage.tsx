@@ -25,7 +25,7 @@ import {
 import { trackRegistration } from '@/services/analyticsService';
 import { cn } from '@/lib/utils';
 
-type UserRole = 'advertiser' | 'shop' | 'technician' | 'individual';
+type UserRole = 'shop' | 'technician' | 'individual';
 
 interface RoleOption {
   id: UserRole;
@@ -37,30 +37,6 @@ interface RoleOption {
 }
 
 const ROLE_OPTIONS: RoleOption[] = [
-  {
-    id: 'advertiser',
-    icon: Megaphone,
-    title: { ar: 'معلن (بانرات)', fr: 'Annonceur (Bannières)' },
-    description: { 
-      ar: 'أريد شراء مساحات إعلانية على المنصة',
-      fr: 'Je veux acheter des espaces publicitaires sur la plateforme'
-    },
-    features: {
-      ar: [
-        'نشر بانرات إعلانية',
-        'إحصائيات مفصلة',
-        'اختيار مواقع الإعلان',
-        'حملات مخصصة'
-      ],
-      fr: [
-        'Publier des bannières',
-        'Statistiques détaillées',
-        'Choix des emplacements',
-        'Campagnes personnalisées'
-      ]
-    },
-    color: 'from-purple-500 to-indigo-600'
-  },
   {
     id: 'shop',
     icon: Store,
@@ -221,7 +197,6 @@ export default function RegisterPage() {
     try {
       // Map role to user type for backend
       const userTypeMap: Record<UserRole, string> = {
-        advertiser: 'advertiser',
         shop: 'importer',
         technician: 'technician',
         individual: 'customer'

@@ -1,7 +1,7 @@
 import { supabase } from './client';
 import type { Tables } from '@/types/supabase';
 
-export type UserRole = 'admin' | 'advertiser' | 'user';
+export type UserRole = 'admin' | 'user';
 export type Profile = Tables<'profiles'>;
 
 export interface AuthUser {
@@ -22,7 +22,7 @@ export const signUpWithEmail = async (
   email: string,
   password: string,
   fullName?: string,
-  role: UserRole = 'advertiser'
+  role: UserRole = 'user'
 ) => {
   const { data, error } = await supabase.auth.signUp({
     email,

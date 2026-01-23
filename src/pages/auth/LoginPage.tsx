@@ -25,7 +25,7 @@ export default function LoginPage() {
     try {
       await signIn(email, password);
       trackLogin(); // Track successful login
-      navigate('/advertiser/dashboard');
+      navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
