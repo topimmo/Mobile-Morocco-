@@ -162,8 +162,8 @@ export default function HomePage() {
       <BannerSlot page="home" slot="top" />
 
       {/* Hero CTA Section - Above the Fold */}
-      <section className="py-8 md:py-12 lg:py-16 px-4 md:px-6 lg:px-8 bg-gradient-to-br from-primary/5 to-primary/10 border-b border-border">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-6 sm:py-8 md:py-12 lg:py-16 bg-gradient-to-br from-primary/5 to-primary/10 border-b border-border">
+        <div className="containerPage text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">
             {isRTL 
               ? 'انضم الآن وابدأ في نشر إعلاناتك'
@@ -190,8 +190,8 @@ export default function HomePage() {
       </section>
 
       {/* Hero Section with Feature Cards - Swiss Design */}
-      <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-white">
+        <div className="containerPage">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {/* Card 1: Phones & Accessories */}
             <Card className="hover:shadow-md transition-shadow border border-border bg-white">
@@ -305,8 +305,8 @@ export default function HomePage() {
       </section>
 
       {/* Arabic Content Section - Swiss Design */}
-      <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8 bg-muted">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-muted">
+        <div className="containerPage">
           {/* Arabic titles and descriptions */}
           <div className={cn(
             'grid grid-cols-1 md:grid-cols-3 gap-8',
@@ -345,8 +345,8 @@ export default function HomePage() {
       </section>
 
       {/* Category Icons Section - Swiss Design */}
-      <section className="py-16 md:py-20 lg:py-24 px-4 md:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-white">
+        <div className="containerPage">
           <h2 className={cn(
             'text-3xl font-bold mb-12 text-center text-foreground',
             isRTL && 'text-right'
@@ -495,8 +495,8 @@ export default function HomePage() {
       </section>
 
       {/* Featured Listings Section */}
-      <section className="py-8 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-6 sm:py-8 md:py-12 lg:py-16 bg-white">
+        <div className="containerPage">
           <div className={cn(
             'flex items-center justify-between mb-6',
             isRTL && 'flex-row-reverse'
@@ -584,15 +584,15 @@ export default function HomePage() {
       </section>
 
       {/* Middle Banner */}
-      <section className="py-4 md:py-6 px-4 md:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-4 sm:py-6 md:py-8">
+        <div className="containerPage">
           <BannerSlot page="home" slot="middle" />
         </div>
       </section>
 
       {/* Repair Shops Section */}
-      <section className="py-8 md:py-12 lg:py-16 px-4 md:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-6 sm:py-8 md:py-12 lg:py-16">
+        <div className="containerPage">
           <div className={cn(
             'flex items-center justify-between mb-6',
             isRTL && 'flex-row-reverse'
@@ -678,8 +678,8 @@ export default function HomePage() {
       </section>
 
       {/* Call to Action Section */}
-      <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8 bg-primary text-primary-foreground">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-primary text-primary-foreground">
+        <div className="containerPage text-center">
           <h2 className="text-3xl font-bold mb-4">
             {isRTL ? 'انضم إلينا اليوم' : 'Rejoignez-nous Aujourd\'hui'}
           </h2>
@@ -704,15 +704,15 @@ export default function HomePage() {
       </section>
 
       {/* Bottom Banner */}
-      <section className="py-4 md:py-6 px-4 md:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-4 sm:py-6 md:py-8">
+        <div className="containerPage">
           <BannerSlot page="home" slot="bottom" />
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12 md:py-16 px-4 md:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <footer className="bg-gray-900 text-gray-300 py-8 sm:py-12 md:py-16">
+        <div className="containerPage">
           <div className={cn(
             'grid grid-cols-1 md:grid-cols-4 gap-8',
             isRTL && 'text-right'
