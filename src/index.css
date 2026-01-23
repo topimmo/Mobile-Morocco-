@@ -158,4 +158,27 @@
   .noise-texture {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
   }
+
+  /* Global container utility for consistent page width and spacing */
+  .containerPage {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem; /* 16px mobile */
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .containerPage {
+      padding-left: 1.5rem; /* 24px tablet */
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .containerPage {
+      padding-left: 2rem; /* 32px desktop */
+      padding-right: 2rem;
+    }
+  }
 }

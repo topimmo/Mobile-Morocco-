@@ -75,7 +75,7 @@ function Navigation() {
 
   return (
     <nav className={cn('bg-white border-b border-border sticky top-0 z-50 shadow-sm')} dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="max-w-6xl mx-auto px-4 py-4">
+      <div className="containerPage py-4">
         <div className={cn('flex justify-between items-center', isRTL && 'flex-row-reverse')}>
           {/* Logo - Swiss Design */}
           <Link to="/" className="text-xl md:text-2xl font-bold text-gray-900">

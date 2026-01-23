@@ -221,12 +221,12 @@ const CategorySection = ({
   };
 
   return (
-    <section className="w-full py-8 sm:py-10 md:py-12 bg-background">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl sm:text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-8 text-primary">
+    <section className="w-full py-6 sm:py-8 md:py-12 lg:py-16 bg-background">
+      <div className="containerPage">
+        <h2 className="text-2xl sm:text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-8 md:mb-10 text-primary">
           {title}
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {categories.map((category) => (
             <motion.div
               key={category.id}
@@ -239,45 +239,24 @@ const CategorySection = ({
                   onOpenChange={() => handlePopoverOpen(category.id)}
                 >
                   <PopoverTrigger asChild>
-                    <div className="block h-full">
+                    <div className="block h-full min-h-[120px]">
                       <Card className="h-full cursor-pointer hover:border-primary hover:shadow-md transition-all duration-300">
-                        <CardContent className="flex flex-col items-center justify-center p-3 sm:p-4 md:p-6 text-center h-full">
-                          <div className="rounded-full bg-primary/10 p-3 sm:p-4 mb-3 sm:mb-5">
+                        <CardContent className="flex flex-col items-center justify-center p-4 md:p-5 text-center h-full min-h-[120px]">
+                          <div className="rounded-full bg-primary/10 p-3 mb-3">
                             {React.cloneElement(
                               category.icon as React.ReactElement,
                               {
                                 className:
-                                  "h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10",
+                                  "h-8 w-8 md:h-10 md:w-10",
                               },
                             )}
                           </div>
-                          <h3 className="font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3 flex items-center gap-1">
+                          <h3 className="font-semibold text-base md:text-lg mb-1 flex items-center justify-center gap-1">
                             {category.name}
                             <ChevronDown className="h-4 w-4 inline-block ml-1" />
                           </h3>
-                          <p className="text-muted-foreground text-xs sm:text-sm mb-2">
+                          <p className="text-muted-foreground text-xs sm:text-sm line-clamp-2">
                             {category.description}
-                          </p>
-                          <p className="text-primary/70 text-xs italic">
-                            {language === "ar"
-                              ? category.id === "phones"
-                                ? "عرض جميع الهواتف الجديدة والمستعملة"
-                                : category.id === "accessories"
-                                  ? "اكتشف مجموعة متنوعة من الإكسسوارات"
-                                  : category.id === "spare-parts"
-                                    ? "اكتشف قطع غيار جديدة ومستعملة"
-                                    : category.id === "repair-equipment"
-                                      ? "أدوات يدوية وإلكترونية للصيانة"
-                                      : "فنيون يبحثون عن عمل أو يقدمون خدمات"
-                              : category.id === "phones"
-                                ? "Voir tous les téléphones neufs et d'occasion"
-                                : category.id === "accessories"
-                                  ? "Découvrez une variété d'accessoires"
-                                  : category.id === "spare-parts"
-                                    ? "Découvrez des pièces détachées neuves et d'occasion"
-                                    : category.id === "repair-equipment"
-                                      ? "Outils manuels et électroniques pour la maintenance"
-                                      : "Techniciens cherchant du travail ou offrant des services"}
                           </p>
                         </CardContent>
                       </Card>
@@ -305,44 +284,23 @@ const CategorySection = ({
               ) : (
                 <Link
                   to={category.link || `/products?category=${category.id}`}
-                  className="block h-full"
+                  className="block h-full min-h-[120px]"
                 >
                   <Card className="h-full cursor-pointer hover:border-primary hover:shadow-md transition-all duration-300">
-                    <CardContent className="flex flex-col items-center justify-center p-3 sm:p-4 md:p-6 text-center h-full">
-                      <div className="rounded-full bg-primary/10 p-3 sm:p-4 mb-3 sm:mb-5">
+                    <CardContent className="flex flex-col items-center justify-center p-4 md:p-5 text-center h-full min-h-[120px]">
+                      <div className="rounded-full bg-primary/10 p-3 mb-3">
                         {React.cloneElement(
                           category.icon as React.ReactElement,
                           {
-                            className: "h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10",
+                            className: "h-8 w-8 md:h-10 md:w-10",
                           },
                         )}
                       </div>
-                      <h3 className="font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">
+                      <h3 className="font-semibold text-base md:text-lg mb-1">
                         {category.name}
                       </h3>
-                      <p className="text-muted-foreground text-xs sm:text-sm mb-2">
+                      <p className="text-muted-foreground text-xs sm:text-sm line-clamp-2">
                         {category.description}
-                      </p>
-                      <p className="text-primary/70 text-xs italic">
-                        {language === "ar"
-                          ? category.id === "phones"
-                            ? "عرض جميع الهواتف الجديدة والمستعملة"
-                            : category.id === "accessories"
-                              ? "اكتشف مجموعة متنوعة من الإكسسوارات"
-                              : category.id === "spare-parts"
-                                ? "اكتشف قطع غيار جديدة ومستعملة"
-                                : category.id === "repair-equipment"
-                                  ? "أدوات يدوية وإلكترونية للصيانة"
-                                  : "فنيون يبحثون عن عمل أو يقدمون خدمات"
-                          : category.id === "phones"
-                            ? "Voir tous les téléphones neufs et d'occasion"
-                            : category.id === "accessories"
-                              ? "Découvrez une variété d'accessoires"
-                              : category.id === "spare-parts"
-                                ? "Découvrez des pièces détachées neuves et d'occasion"
-                                : category.id === "repair-equipment"
-                                  ? "Outils manuels et électroniques pour la maintenance"
-                                  : "Techniciens cherchant du travail ou offrant des services"}
                       </p>
                     </CardContent>
                   </Card>
