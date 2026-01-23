@@ -13,42 +13,83 @@ const NearbyServicesSection = ({
 }: NearbyServicesSectionProps) => {
   const isRTL = language === "ar";
 
-  const title = "منتوجات وخدمات قريبة منك";
-  const subtitle = "اكتشف هواتف، إكسسوارات وخدمات إصلاح متوفرة قريب ليك";
-  const ctaText = "سجّل باش تشوف العروض القريبة منك";
+  const title = language === "ar" 
+    ? "منتوجات وخدمات قريبة منك"
+    : "Produits et services près de chez vous";
+  
+  const subtitle = language === "ar"
+    ? "اكتشف هواتف، إكسسوارات وخدمات إصلاح متوفرة قريب ليك"
+    : "Découvrez des téléphones, accessoires et services de réparation disponibles près de chez vous";
+  
+  const ctaText = language === "ar"
+    ? "سجّل باش تشوف العروض القريبة منك"
+    : "Inscrivez-vous pour voir les offres près de chez vous";
 
-  const cards = [
-    {
-      id: "card-1",
-      emoji: "📱",
-      text: "iPhone مستعمل – حي السلام",
-    },
-    {
-      id: "card-2",
-      emoji: "🔧",
-      text: "تصليح هواتف – حي النخيل",
-    },
-    {
-      id: "card-3",
-      emoji: "🎧",
-      text: "سماعات أصلية – وسط المدينة",
-    },
-    {
-      id: "card-4",
-      emoji: "🔋",
-      text: "بطاريات وشواحن – قريب ليك",
-    },
-    {
-      id: "card-5",
-      emoji: "📲",
-      text: "Samsung جديد – الحي المحمدي",
-    },
-    {
-      id: "card-6",
-      emoji: "💼",
-      text: "قطع غيار – الدار البيضاء",
-    },
-  ];
+  const cards = language === "ar" 
+    ? [
+        {
+          id: "card-1",
+          emoji: "📱",
+          text: "iPhone مستعمل – حي السلام",
+        },
+        {
+          id: "card-2",
+          emoji: "🔧",
+          text: "تصليح هواتف – حي النخيل",
+        },
+        {
+          id: "card-3",
+          emoji: "🎧",
+          text: "سماعات أصلية – وسط المدينة",
+        },
+        {
+          id: "card-4",
+          emoji: "🔋",
+          text: "بطاريات وشواحن – قريب ليك",
+        },
+        {
+          id: "card-5",
+          emoji: "📲",
+          text: "Samsung جديد – الحي المحمدي",
+        },
+        {
+          id: "card-6",
+          emoji: "💼",
+          text: "قطع غيار – الدار البيضاء",
+        },
+      ]
+    : [
+        {
+          id: "card-1",
+          emoji: "📱",
+          text: "iPhone d'occasion – Quartier Salam",
+        },
+        {
+          id: "card-2",
+          emoji: "🔧",
+          text: "Réparation téléphones – Quartier Nakhil",
+        },
+        {
+          id: "card-3",
+          emoji: "🎧",
+          text: "Écouteurs originaux – Centre-ville",
+        },
+        {
+          id: "card-4",
+          emoji: "🔋",
+          text: "Batteries et chargeurs – Près de vous",
+        },
+        {
+          id: "card-5",
+          emoji: "📲",
+          text: "Samsung neuf – Hay Mohammadi",
+        },
+        {
+          id: "card-6",
+          emoji: "💼",
+          text: "Pièces détachées – Casablanca",
+        },
+      ];
 
   return (
     <section className="w-full py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-br from-sky-50 to-blue-50">
