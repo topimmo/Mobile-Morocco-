@@ -33,6 +33,9 @@ interface CreateListingFormProps {
 type CategoryType = 'phone' | 'accessory' | 'spare-part' | 'other';
 
 // Helper to determine category type from category slug
+// NOTE: This is a temporary approach that works with existing database schema.
+// In the future, consider adding a 'category_type' field to the categories table
+// for more robust and maintainable category detection.
 function getCategoryType(categorySlug: string): CategoryType {
   if (categorySlug.includes('telephone') || categorySlug.includes('phone')) {
     return 'phone';
@@ -67,12 +70,14 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
   const [descriptionAr, setDescriptionAr] = useState('');
   const [descriptionFr, setDescriptionFr] = useState('');
   const [neighborhoodId, setNeighborhoodId] = useState('');
-  const [condition, setCondition] = useState<'new' | 'used' | 'refurbished'>('used');
+  const [condition, setCondition] = useState<'new' | 'used' | 'refurbished' | ''>('');
   const [brand, setBrand] = useState('');
   const [model, setModel] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   
-  // Optional technical fields (category-specific)
+  // Category-specific technical fields
+  // These are appended to the description field on submission since there's
+  // no dedicated schema fields for them yet
   const [storage, setStorage] = useState('');
   const [batteryHealth, setBatteryHealth] = useState('');
   const [compatibility, setCompatibility] = useState('');
@@ -214,12 +219,28 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
     setLoading(true);
 
     try {
+      // Build technical details text for category-specific fields
+      let technicalDetails = '';
+      if (categoryType === 'phone') {
+        if (storage) technicalDetails += `\n${isRTL ? 'السعة: ' : 'Stockage: '}${storage}`;
+        if (batteryHealth) technicalDetails += `\n${isRTL ? 'صحة البطارية: ' : 'Santé batterie: '}${batteryHealth}`;
+      } else if (categoryType === 'accessory' && compatibility) {
+        technicalDetails += `\n${isRTL ? 'التوافق: ' : 'Compatibilité: '}${compatibility}`;
+      } else if (categoryType === 'spare-part') {
+        if (partType) technicalDetails += `\n${isRTL ? 'نوع القطعة: ' : 'Type: '}${partType}`;
+        if (compatibility) technicalDetails += `\n${isRTL ? 'التوافق: ' : 'Compatibilité: '}${compatibility}`;
+      }
+
+      // Append technical details to description
+      const finalDescriptionAr = descriptionAr.trim() + (technicalDetails && isRTL ? technicalDetails : '');
+      const finalDescriptionFr = descriptionFr.trim() + (technicalDetails && !isRTL ? technicalDetails : '');
+
       const { data: listing, error } = await createListing({
         user_id: user.id,
         title_ar: titleAr.trim(),
         title_fr: titleFr.trim() || titleAr.trim(),
-        description_ar: descriptionAr.trim() || null,
-        description_fr: descriptionFr.trim() || null,
+        description_ar: finalDescriptionAr || null,
+        description_fr: finalDescriptionFr || null,
         price: parseFloat(price),
         currency: 'MAD',
         category_id: categoryId,
@@ -380,7 +401,7 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
                 <Label className={isRTL ? 'text-right block' : ''}>{labels.condition}</Label>
                 <Select value={condition} onValueChange={(v) => setCondition(v as typeof condition)}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder={isRTL ? 'اختر الحالة (اختياري)' : 'Sélectionner l\'état (optionnel)'} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="new">{labels.new}</SelectItem>
