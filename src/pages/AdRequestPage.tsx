@@ -102,6 +102,7 @@ export default function AdRequestPage() {
       // Try Resend API if key is available
       if (RESEND_API_KEY && ADMIN_EMAIL) {
         try {
+          const FROM_EMAIL = import.meta.env.VITE_FROM_EMAIL || 'noreply@mobilemorocco.com';
           const response = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {
@@ -109,7 +110,7 @@ export default function AdRequestPage() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              from: 'noreply@mobilemorocco.com',
+              from: FROM_EMAIL,
               to: ADMIN_EMAIL,
               subject: `طلب إعلان جديد من ${formData.fullName}`,
               html: `
@@ -157,7 +158,7 @@ export default function AdRequestPage() {
       });
     } catch (error) {
       console.error('Error sending ad request:', error);
-      // Still show success since we at least opened mailto
+      // Show success anyway since we at least attempted mailto
       setIsSuccess(true);
     } finally {
       setIsSubmitting(false);
