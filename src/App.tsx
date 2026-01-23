@@ -52,6 +52,7 @@ const ResetPasswordPage = lazy(() => import("@/pages/auth/ResetPasswordPage"));
 
 // Admin dashboard
 const AdminDashboard = lazy(() => import("@/pages/admin/DashboardPage"));
+const AdminNeighborhoods = lazy(() => import("@/pages/admin/NeighborhoodsPage"));
 
 // User dashboard pages
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
@@ -133,6 +134,11 @@ function AppContent() {
           <Route path="/admin/dashboard" element={
             <AdminRoute>
               <PageErrorBoundary><AdminDashboard /></PageErrorBoundary>
+            </AdminRoute>
+          } />
+          <Route path="/admin/neighborhoods" element={
+            <AdminRoute>
+              <PageErrorBoundary><AdminNeighborhoods /></PageErrorBoundary>
             </AdminRoute>
           } />
 

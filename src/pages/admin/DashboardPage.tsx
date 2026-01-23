@@ -28,6 +28,7 @@ import {
   MessageCircle,
   UserPlus,
   PlusCircle,
+  MapPin,
 } from 'lucide-react';
 import {
   getAdminStats,
@@ -230,6 +231,12 @@ export default function AdminDashboard() {
             <Button variant="ghost" size="icon" onClick={fetchData} disabled={loading}>
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             </Button>
+            <Link to="/admin/neighborhoods">
+              <Button variant="outline" size="sm">
+                <MapPin className="h-4 w-4 mr-2" />
+                {isRTL ? 'الأحياء' : 'Quartiers'}
+              </Button>
+            </Link>
             <Link to="/">
               <Button variant="outline" size="sm">
                 <ExternalLink className="h-4 w-4 mr-2" />

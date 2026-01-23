@@ -138,3 +138,78 @@ export async function addOrGetNeighborhood(
   // Add new
   return addNeighborhood(cityId, name, userId);
 }
+
+// Admin functions
+export async function getPendingNeighborhoods(): Promise<Neighborhood[]> {
+  const { data, error } = await supabase
+    .from('neighborhoods')
+    .select('*, city:cities(*)')
+    .eq('is_verified', false)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching pending neighborhoods:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+export async function getAllNeighborhoods(): Promise<Neighborhood[]> {
+  const { data, error } = await supabase
+    .from('neighborhoods')
+    .select('*, city:cities(*)')
+    .order('is_verified', { ascending: true })
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching all neighborhoods:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+export async function approveNeighborhood(id: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('neighborhoods')
+    .update({ is_verified: true })
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error approving neighborhood:', error);
+    return false;
+  }
+
+  return true;
+}
+
+export async function rejectNeighborhood(id: string): Promise<boolean> {
+  // For now, we'll just delete rejected neighborhoods
+  // In production, you might want to keep them with a 'rejected' status
+  const { error } = await supabase
+    .from('neighborhoods')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error rejecting neighborhood:', error);
+    return false;
+  }
+
+  return true;
+}
+
+export async function deleteNeighborhood(id: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('neighborhoods')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error deleting neighborhood:', error);
+    return false;
+  }
+
+  return true;
+}
