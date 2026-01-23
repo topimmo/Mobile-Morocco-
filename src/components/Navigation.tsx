@@ -82,7 +82,7 @@ function Navigation() {
             <img 
               src="/assets/logo/logo.png" 
               alt="Mobile Morocco Logo" 
-              className="h-[50px] md:h-[56px] w-auto max-w-[140px]"
+              className="h-[60px] md:h-[56px] w-auto max-w-[180px]"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.insertAdjacentHTML('afterend', '<span class="text-xl md:text-2xl font-bold text-gray-900">Mobile Morocco</span>');
