@@ -170,7 +170,7 @@ export default function HomePage() {
               ? 'انضم الآن وابدأ في نشر إعلاناتك'
               : 'Rejoignez-nous et commencez à publier vos annonces'}
           </h2>
-          <p className="text-[12px] md:text-base text-muted-foreground mb-[14px] px-4 md:px-0 md:max-w-[600px] mx-auto leading-[1.5]">
+          <p className="text-xs md:text-base text-muted-foreground mb-3.5 px-4 md:px-0 md:max-w-[600px] mx-auto leading-[1.5]">
             {isRTL
               ? 'أنشئ حسابك مجانًا واستفد من جميع ميزات المنصة'
               : 'Créez votre compte gratuitement et profitez de toutes les fonctionnalités'}
