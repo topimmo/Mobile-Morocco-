@@ -746,7 +746,7 @@ export default function HomePage() {
                 <li><Link to="/about" className="hover:text-blue-400 transition">{isRTL ? 'من نحن' : 'À Propos'}</Link></li>
                 <li><Link to="/faq" className="hover:text-blue-400 transition">{isRTL ? 'الأسئلة الشائعة' : 'FAQ'}</Link></li>
                 <li><Link to="/contact" className="hover:text-blue-400 transition">{isRTL ? 'اتصل بنا' : 'Nous Contacter'}</Link></li>
-                <li><Link to="/advertiser/dashboard" className="hover:text-blue-400 transition">{isRTL ? 'كن بائعا' : 'Devenir Vendeur'}</Link></li>
+                <li><Link to="/ads/request" className="hover:text-blue-400 transition">{isRTL ? 'طلب إعلان' : 'Demande de publicité'}</Link></li>
               </ul>
             </div>
             <div>

@@ -1,12 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useAuth } from '@/contexts/AuthContext';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { BannerSlot } from '@/components/common/BannerSlot';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import {
   Monitor,
@@ -103,7 +101,6 @@ const BANNER_PLACEMENTS: BannerPlacement[] = [
 
 export default function AdvertisePage() {
   const { language } = useLanguage();
-  const { user } = useAuth();
   const isRTL = language === 'ar';
   const ArrowIcon = isRTL ? ArrowLeft : ArrowRight;
 
@@ -239,28 +236,12 @@ export default function AdvertisePage() {
             {labels.subtitle}
           </p>
           
-          {user ? (
-            <Link to="/advertiser/dashboard">
-              <Button size="lg" variant="secondary" className="text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-lg hover:shadow-xl transition-all">
-                {labels.goToDashboard}
-                <ArrowIcon className={cn('h-5 w-5', isRTL ? 'mr-2' : 'ml-2')} />
-              </Button>
-            </Link>
-          ) : (
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
-              <Link to="/auth/register?role=advertiser">
-                <Button size="lg" variant="secondary" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-lg hover:shadow-xl transition-all">
-                  {labels.createAccount}
-                  <ArrowIcon className={cn('h-5 w-5', isRTL ? 'mr-2' : 'ml-2')} />
-                </Button>
-              </Link>
-              <Link to="/auth/login">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 h-12 md:h-14 text-white border-white/50 hover:bg-white/10 transition-all">
-                  {labels.loginToStart}
-                </Button>
-              </Link>
-            </div>
-          )}
+          <Link to="/ads/request">
+            <Button size="lg" variant="secondary" className="text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-lg hover:shadow-xl transition-all">
+              {isRTL ? 'طلب إعلان' : 'Demander une publicité'}
+              <ArrowIcon className={cn('h-5 w-5', isRTL ? 'mr-2' : 'ml-2')} />
+            </Button>
+          </Link>
         </div>
       </section>
 
@@ -298,125 +279,58 @@ export default function AdvertisePage() {
         </div>
       </section>
 
-      {/* Placements Section - Only show details to logged in users */}
+      {/* Placements Section - Show info and redirect to ad request */}
       <section className="py-12 md:py-16 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">{labels.placements}</h2>
           
-          {user ? (
-            // Logged in: Show full pricing details
-            <>
-              <p className="text-center text-gray-600 mb-8 md:mb-12 max-w-2xl mx-auto">
-                {isRTL 
-                  ? 'اختر المساحة الإعلانية المناسبة لحملتك'
-                  : 'Choisissez l\'emplacement idéal pour votre campagne'}
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {BANNER_PLACEMENTS.map((placement) => (
-                  <Card key={placement.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                    <CardHeader className="bg-gradient-to-br from-gray-100 to-gray-50 p-4 md:p-6">
-                      <CardTitle className={cn('text-base md:text-lg', isRTL && 'text-right')}>
+          {/* Show locked state with ad request CTA */}
+          <div className="max-w-2xl mx-auto">
+            <Card className="border-2 border-dashed border-gray-300 bg-gray-50/50">
+              <CardContent className="py-12 md:py-16 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary/10 mb-4 md:mb-6">
+                  <Lock className="h-8 w-8 md:h-10 md:w-10 text-primary" />
+                </div>
+                <h3 className="text-xl md:text-2xl font-semibold mb-3">
+                  {isRTL ? 'اطلب عرض أسعار مخصص' : 'Demandez un devis personnalisé'}
+                </h3>
+                <p className="text-gray-600 mb-6 max-w-md mx-auto px-4">
+                  {isRTL 
+                    ? 'أكمل نموذج طلب الإعلان وسنتواصل معك مع عرض أسعار مخصص'
+                    : 'Remplissez le formulaire de demande et nous vous contacterons avec un devis personnalisé'}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center px-4">
+                  <Link to="/ads/request">
+                    <Button size="lg" className="w-full sm:w-auto">
+                      {isRTL ? 'طلب إعلان' : 'Demander une publicité'}
+                      <ArrowIcon className={cn('h-4 w-4', isRTL ? 'mr-2' : 'ml-2')} />
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Preview of placements without pricing */}
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {BANNER_PLACEMENTS.slice(0, 4).map((placement) => (
+                <Card key={placement.id} className="bg-white/50 backdrop-blur">
+                  <CardContent className="p-4 flex items-center gap-3">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <Monitor className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-sm truncate">
                         {isRTL ? placement.name.ar : placement.name.fr}
-                      </CardTitle>
-                      <CardDescription className={cn('text-sm', isRTL && 'text-right')}>
-                        {isRTL ? placement.description.ar : placement.description.fr}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-4 p-4 md:p-6">
-                      <div className="space-y-4">
-                        {/* Sizes */}
-                        <div className={cn('flex flex-wrap gap-3', isRTL && 'flex-row-reverse')}>
-                          <div className={cn('flex items-center gap-2 text-sm', isRTL && 'flex-row-reverse')}>
-                            <Monitor className="h-4 w-4 text-gray-400" />
-                            <span>{placement.desktopSize}</span>
-                          </div>
-                          <div className={cn('flex items-center gap-2 text-sm', isRTL && 'flex-row-reverse')}>
-                            <Smartphone className="h-4 w-4 text-gray-400" />
-                            <span>{placement.mobileSize}</span>
-                          </div>
-                        </div>
-
-                        {/* Position Badge */}
-                        <Badge variant="outline">
-                          {placement.position === 'top' ? labels.top : labels.bottom}
-                        </Badge>
-
-                        {/* Pricing */}
-                        <div className="border-t pt-4">
-                          <div className={cn('grid grid-cols-3 gap-2 text-center')}>
-                            <div className="bg-gray-50 rounded-lg p-2">
-                              <div className="text-xs text-gray-500">{labels.perWeek}</div>
-                              <div className="font-bold text-primary text-sm md:text-base">{placement.price7Days}</div>
-                              <div className="text-xs text-gray-400">{labels.mad}</div>
-                            </div>
-                            <div className="bg-gray-50 rounded-lg p-2">
-                              <div className="text-xs text-gray-500">{labels.per15Days}</div>
-                              <div className="font-bold text-primary text-sm md:text-base">{placement.price15Days}</div>
-                              <div className="text-xs text-gray-400">{labels.mad}</div>
-                            </div>
-                            <div className="bg-primary/10 rounded-lg p-2">
-                              <div className="text-xs text-primary">{labels.perMonth}</div>
-                              <div className="font-bold text-primary text-sm md:text-base">{placement.price30Days}</div>
-                              <div className="text-xs text-gray-400">{labels.mad}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </>
-          ) : (
-            // Not logged in: Show locked state
-            <div className="max-w-2xl mx-auto">
-              <Card className="border-2 border-dashed border-gray-300 bg-gray-50/50">
-                <CardContent className="py-12 md:py-16 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary/10 mb-4 md:mb-6">
-                    <Lock className="h-8 w-8 md:h-10 md:w-10 text-primary" />
-                  </div>
-                  <h3 className="text-xl md:text-2xl font-semibold mb-3">{labels.exclusiveAccess}</h3>
-                  <p className="text-gray-600 mb-6 max-w-md mx-auto px-4">
-                    {labels.loginRequired}
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center px-4">
-                    <Link to="/auth/register?role=advertiser">
-                      <Button size="lg" className="w-full sm:w-auto">
-                        {labels.createAccount}
-                        <ArrowIcon className={cn('h-4 w-4', isRTL ? 'mr-2' : 'ml-2')} />
-                      </Button>
-                    </Link>
-                    <Link to="/auth/login">
-                      <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                        {labels.loginToStart}
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              {/* Preview of placements without pricing */}
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {BANNER_PLACEMENTS.slice(0, 4).map((placement) => (
-                  <Card key={placement.id} className="bg-white/50 backdrop-blur">
-                    <CardContent className="p-4 flex items-center gap-3">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <Monitor className="h-5 w-5 text-primary" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-sm truncate">
-                          {isRTL ? placement.name.ar : placement.name.fr}
-                        </h4>
-                        <p className="text-xs text-gray-500">
-                          {placement.desktopSize} / {placement.mobileSize}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                      </h4>
+                      <p className="text-xs text-gray-500">
+                        {placement.desktopSize} / {placement.mobileSize}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-          )}
+          </div>
         </div>
       </section>
 
@@ -457,21 +371,12 @@ export default function AdvertisePage() {
               ? 'ابدأ الآن واستفد من عروضنا المميزة'
               : 'Commencez maintenant et profitez de nos offres exclusives'}
           </p>
-          {user ? (
-            <Link to="/advertiser/create-campaign">
-              <Button size="lg" variant="secondary" className="text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-lg">
-                {isRTL ? 'إنشاء حملة جديدة' : 'Créer une nouvelle campagne'}
-                <ArrowIcon className={cn('h-5 w-5', isRTL ? 'mr-2' : 'ml-2')} />
-              </Button>
-            </Link>
-          ) : (
-            <Link to="/auth/register?role=advertiser">
-              <Button size="lg" variant="secondary" className="text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-lg">
-                {labels.createAccount}
-                <ArrowIcon className={cn('h-5 w-5', isRTL ? 'mr-2' : 'ml-2')} />
-              </Button>
-            </Link>
-          )}
+          <Link to="/ads/request">
+            <Button size="lg" variant="secondary" className="text-base md:text-lg px-6 md:px-8 h-12 md:h-14 shadow-lg">
+              {isRTL ? 'طلب إعلان' : 'Demander une publicité'}
+              <ArrowIcon className={cn('h-5 w-5', isRTL ? 'mr-2' : 'ml-2')} />
+            </Button>
+          </Link>
         </div>
       </section>
 

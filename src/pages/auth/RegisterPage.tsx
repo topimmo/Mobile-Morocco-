@@ -25,7 +25,7 @@ import {
 import { trackRegistration } from '@/services/analyticsService';
 import { cn } from '@/lib/utils';
 
-type UserRole = 'advertiser' | 'shop' | 'technician' | 'individual';
+type UserRole = 'shop' | 'technician' | 'individual';
 
 interface RoleOption {
   id: UserRole;
@@ -197,7 +197,6 @@ export default function RegisterPage() {
     try {
       // Map role to user type for backend
       const userTypeMap: Record<UserRole, string> = {
-        advertiser: 'advertiser',
         shop: 'importer',
         technician: 'technician',
         individual: 'customer'
