@@ -37,6 +37,7 @@ const AdRequestPage = lazy(() => import("@/pages/AdRequestPage"));
 const PublishPhonePage = lazy(() => import("@/pages/PublishPhonePage"));
 const ComparePage = lazy(() => import("@/pages/ComparePage"));
 const FavoritesPage = lazy(() => import("@/components/FavoritesPage"));
+const TestCreateListingPage = lazy(() => import("@/pages/TestCreateListingPage"));
 
 // Legal pages
 const AboutPage = lazy(() => import("@/pages/AboutPage"));
@@ -109,6 +110,13 @@ function AppContent() {
           <Route path="/favorites" element={
             <ProtectedRoute>
               <PageErrorBoundary><FavoritesPage /></PageErrorBoundary>
+            </ProtectedRoute>
+          } />
+          
+          {/* Test page for improved listing form */}
+          <Route path="/test-listing-form" element={
+            <ProtectedRoute>
+              <PageErrorBoundary><TestCreateListingPage /></PageErrorBoundary>
             </ProtectedRoute>
           } />
 
