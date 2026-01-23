@@ -165,12 +165,12 @@ export default function HomePage() {
       {/* Hero CTA Section - Above the Fold */}
       <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-br from-primary/5 to-primary/10 border-b border-border">
         <div className="containerPage text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">
+          <h2 className="text-2xl md:text-[34px] font-bold mb-3 text-foreground md:leading-[1.3] leading-[1.4]">
             {isRTL 
               ? 'انضم الآن وابدأ في نشر إعلاناتك'
               : 'Rejoignez-nous et commencez à publier vos annonces'}
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground mb-6">
+          <p className="text-sm md:text-base text-muted-foreground mb-6 px-4 md:px-0 md:max-w-[600px] mx-auto">
             {isRTL
               ? 'أنشئ حسابك مجانًا واستفد من جميع ميزات المنصة'
               : 'Créez votre compte gratuitement et profitez de toutes les fonctionnalités'}
@@ -190,104 +190,88 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Hero Section with Feature Cards - Swiss Design */}
+      {/* Hero Section with Featured Listings from Selected Categories - Swiss Design */}
       <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-white">
         <div className="containerPage">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {/* Card 1: Phones & Accessories */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="mb-6 flex justify-center">
-                  <Smartphone className="h-12 w-12 text-foreground" />
-                </div>
-                <h3 className={cn(
-                  'text-xl font-bold mb-3 text-foreground',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL 
-                    ? 'اختيار كبير من الهواتف'
-                    : 'Large sélection de téléphones'}
-                </h3>
-                <p className={cn(
-                  'text-sm text-muted-foreground mb-6 leading-relaxed',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL
-                    ? 'هواتف جديدة ومستعملة، إكسسوارات وقطع غيار أصلية'
-                    : 'neufs et d\'occasion, accessoires et pièces détachées'}
-                </p>
-                <Link to="/listings">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full font-medium">
-                    {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
-                  </Button>
+          <h2 className={cn(
+            'text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground',
+            isRTL && 'text-right'
+          )}>
+            {isRTL ? 'الإعلانات المميزة' : 'Annonces en vedette'}
+          </h2>
+          
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="border border-border bg-white min-h-[260px]">
+                  <Skeleton className="h-48 w-full" />
+                  <CardContent className="p-4">
+                    <Skeleton className="h-4 w-3/4 mb-2" />
+                    <Skeleton className="h-4 w-1/2 mb-2" />
+                    <Skeleton className="h-6 w-1/3" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : featuredListings.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">{labels.noListings}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {featuredListings.slice(0, 3).map((listing) => (
+                <Link key={listing.id} to={`/listings/${listing.slug}`}>
+                  <Card className="overflow-hidden hover:shadow-lg transition-shadow border border-border bg-white min-h-[260px] flex flex-col">
+                    <div className="relative h-48 bg-gray-200 flex-shrink-0">
+                      {listing.images && listing.images[0] ? (
+                        <img
+                          src={listing.images[0].image_url}
+                          alt={isRTL ? listing.title_ar : listing.title_fr}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Smartphone className="h-12 w-12 text-gray-400" />
+                        </div>
+                      )}
+                      {listing.condition && (
+                        <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground" variant="secondary">
+                          {listing.condition === 'new' ? (isRTL ? 'جديد' : 'Neuf') 
+                            : listing.condition === 'used' ? (isRTL ? 'مستعمل' : 'Occasion')
+                            : (isRTL ? 'مجدد' : 'Reconditionné')}
+                        </Badge>
+                      )}
+                    </div>
+                    <CardContent className="p-6 flex-grow flex flex-col justify-between">
+                      <div>
+                        <h3 className={cn(
+                          'font-bold text-lg line-clamp-2 mb-2 text-foreground',
+                          isRTL && 'text-right'
+                        )}>
+                          {isRTL ? listing.title_ar : listing.title_fr}
+                        </h3>
+                        {listing.city && (
+                          <p className={cn(
+                            'text-sm text-muted-foreground flex items-center gap-1 mb-3',
+                            isRTL && 'flex-row-reverse justify-end'
+                          )}>
+                            <MapPin className="h-3.5 w-3.5" />
+                            {getCityName(listing.city as City, language)}
+                          </p>
+                        )}
+                      </div>
+                      <p className={cn(
+                        'font-bold text-xl text-primary',
+                        isRTL && 'text-right'
+                      )}>
+                        {formatPrice(listing.price)}
+                      </p>
+                    </CardContent>
+                  </Card>
                 </Link>
-              </CardContent>
-            </Card>
-
-            {/* Card 2: Repair Services */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="mb-6 flex justify-center">
-                  <Wrench className="h-12 w-12 text-foreground" />
-                </div>
-                <h3 className={cn(
-                  'text-xl font-bold mb-3 text-foreground',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL 
-                    ? 'تقنيون مؤهلون'
-                    : 'Trouvez des techniciens qualifiés'}
-                </h3>
-                <p className={cn(
-                  'text-sm text-muted-foreground mb-6 leading-relaxed',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL
-                    ? 'لإصلاح أجهزتك بكفاءة وسرعة'
-                    : 'pour réparer vos appareils'}
-                </p>
-                <Link to="/repair-shops">
-                  <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground w-full font-medium">
-                    {isRTL ? 'المزيد من المعلومات' : 'En Savoir Plus'}
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* Card 3: Community */}
-            <Card className="hover:shadow-md transition-shadow border border-border bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="mb-6 flex justify-center">
-                  <Users className="h-12 w-12 text-foreground" />
-                </div>
-                <h3 className={cn(
-                  'text-xl font-bold mb-3 text-foreground',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL 
-                    ? 'انضم إلى مجتمعنا'
-                    : 'Rejoignez notre communauté'}
-                </h3>
-                <p className={cn(
-                  'text-sm text-muted-foreground mb-6 leading-relaxed',
-                  isRTL && 'text-right'
-                )}>
-                  {isRTL
-                    ? 'من المستوردين والفنيين والعملاء'
-                    : 'd\'importateurs, techniciens et clients'}
-                </p>
-                <Link to="/auth/register">
-                  <Button className={cn(
-                    'bg-primary hover:bg-primary/90 text-primary-foreground w-full font-medium',
-                    isRTL && 'flex-row-reverse'
-                  )}>
-                    <UserPlus className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
-                    {isRTL ? 'إنشاء حساب' : 'Créer un compte'}
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Publish Phone CTA - Swiss Design */}
           <div className="mt-12 text-center">
