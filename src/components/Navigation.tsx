@@ -75,11 +75,19 @@ function Navigation() {
 
   return (
     <nav className={cn('bg-white border-b border-border sticky top-0 z-50 shadow-sm')} dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="containerPage py-4">
+      <div className="containerPage py-3">
         <div className={cn('flex justify-between items-center', isRTL && 'flex-row-reverse')}>
-          {/* Logo - Swiss Design */}
-          <Link to="/" className="text-xl md:text-2xl font-bold text-gray-900">
-            Mobile Morocco
+          {/* Logo */}
+          <Link to="/" className="flex items-center">
+            <img 
+              src="/assets/logo/logo.png" 
+              alt="Mobile Morocco Logo" 
+              className="h-8 md:h-9 lg:h-10 w-auto"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.insertAdjacentHTML('afterend', '<span class="text-xl md:text-2xl font-bold text-gray-900">Mobile Morocco</span>');
+              }}
+            />
           </Link>
 
           {/* Desktop Navigation Links */}
@@ -185,8 +193,12 @@ function Navigation() {
               </SheetTrigger>
               <SheetContent side={isRTL ? 'right' : 'left'} className="w-[280px]">
                 <SheetHeader>
-                  <SheetTitle className={cn(isRTL && 'text-right')}>
-                    Mobile Morocco
+                  <SheetTitle className={cn('flex justify-center', isRTL && 'text-right')}>
+                    <img 
+                      src="/assets/logo/logo.png" 
+                      alt="Mobile Morocco Logo"
+                      className="h-8 w-auto"
+                    />
                   </SheetTitle>
                 </SheetHeader>
                 
