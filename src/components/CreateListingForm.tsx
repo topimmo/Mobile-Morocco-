@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -20,13 +20,30 @@ import { City } from '@/lib/supabase/cities';
 import { Neighborhood } from '@/lib/supabase/neighborhoods';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
-import { Loader2, X, Upload } from 'lucide-react';
+import { Loader2, X, Upload, Info } from 'lucide-react';
 import { trackListingCreated } from '@/services/analyticsService';
 import { uploadImages, deleteImage } from '@/lib/supabase/storage';
 
 interface CreateListingFormProps {
   onSuccess?: (listingId: string) => void;
   onCancel?: () => void;
+}
+
+// Category types for discriminated unions
+type CategoryType = 'phone' | 'accessory' | 'spare-part' | 'other';
+
+// Helper to determine category type from category slug
+function getCategoryType(categorySlug: string): CategoryType {
+  if (categorySlug.includes('telephone') || categorySlug.includes('phone')) {
+    return 'phone';
+  }
+  if (categorySlug.includes('accessoire')) {
+    return 'accessory';
+  }
+  if (categorySlug.includes('piece') || categorySlug.includes('detach')) {
+    return 'spare-part';
+  }
+  return 'other';
 }
 
 export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProps) {
@@ -38,22 +55,35 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
 
-  // Form state
+  // Form state - Required fields
   const [titleAr, setTitleAr] = useState('');
   const [titleFr, setTitleFr] = useState('');
-  const [descriptionAr, setDescriptionAr] = useState('');
-  const [descriptionFr, setDescriptionFr] = useState('');
   const [price, setPrice] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [cityId, setCityId] = useState('');
+  const [phone, setPhone] = useState('');
+  
+  // Optional fields
+  const [descriptionAr, setDescriptionAr] = useState('');
+  const [descriptionFr, setDescriptionFr] = useState('');
   const [neighborhoodId, setNeighborhoodId] = useState('');
   const [condition, setCondition] = useState<'new' | 'used' | 'refurbished'>('used');
   const [brand, setBrand] = useState('');
   const [model, setModel] = useState('');
-  const [phone, setPhone] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
+  
+  // Optional technical fields (category-specific)
+  const [storage, setStorage] = useState('');
+  const [batteryHealth, setBatteryHealth] = useState('');
+  const [compatibility, setCompatibility] = useState('');
+  const [partType, setPartType] = useState('');
+  
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [uploadingImages, setUploadingImages] = useState(false);
+  
+  // Derived state - get current category type
+  const selectedCategory = categories.find(cat => cat.id === categoryId);
+  const categoryType = selectedCategory ? getCategoryType(selectedCategory.slug) : 'other';
 
   const labels = {
     title: isRTL ? 'إنشاء إعلان جديد' : 'Créer une nouvelle annonce',
@@ -65,7 +95,7 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
     price: isRTL ? 'السعر (درهم) *' : 'Prix (MAD) *',
     category: isRTL ? 'الفئة *' : 'Catégorie *',
     selectCategory: isRTL ? 'اختر الفئة' : 'Sélectionner une catégorie',
-    condition: isRTL ? 'الحالة *' : 'État *',
+    condition: isRTL ? 'الحالة' : 'État',
     new: isRTL ? 'جديد' : 'Neuf',
     used: isRTL ? 'مستعمل' : 'Occasion',
     refurbished: isRTL ? 'مجدد' : 'Reconditionné',
@@ -87,6 +117,16 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
     success: isRTL ? 'تم إنشاء الإعلان بنجاح' : 'Annonce créée avec succès',
     error: isRTL ? 'حدث خطأ' : 'Une erreur s\'est produite',
     required: isRTL ? 'يرجى ملء جميع الحقول المطلوبة' : 'Veuillez remplir tous les champs obligatoires',
+    // Category-specific fields
+    technicalDetails: isRTL ? 'التفاصيل التقنية (اختيارية)' : 'Détails techniques (optionnels)',
+    storage: isRTL ? 'السعة التخزينية' : 'Stockage',
+    batteryHealth: isRTL ? 'صحة البطارية' : 'Santé de la batterie',
+    compatibility: isRTL ? 'التوافق' : 'Compatibilité',
+    partType: isRTL ? 'نوع القطعة' : 'Type de pièce',
+    helperText: isRTL 
+      ? 'الحقول الاختيارية تساعد إعلانك على الحصول على مزيد من الظهور' 
+      : 'Les champs optionnels aident votre annonce à obtenir plus de visibilité',
+    requiredFieldsOnly: isRTL ? '* الحقول المطلوبة فقط' : '* Champs requis uniquement',
   };
 
   useEffect(() => {
@@ -161,6 +201,7 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
       return;
     }
 
+    // Only validate required fields: title, price, category, city, phone
     if (!titleAr.trim() || !price || !categoryId || !cityId || !phone.trim()) {
       toast({
         title: labels.error,
@@ -177,14 +218,14 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
         user_id: user.id,
         title_ar: titleAr.trim(),
         title_fr: titleFr.trim() || titleAr.trim(),
-        description_ar: descriptionAr.trim(),
-        description_fr: descriptionFr.trim(),
+        description_ar: descriptionAr.trim() || null,
+        description_fr: descriptionFr.trim() || null,
         price: parseFloat(price),
         currency: 'MAD',
         category_id: categoryId,
         city_id: cityId,
         neighborhood_id: neighborhoodId || null,
-        condition,
+        condition: condition || null,
         brand: brand.trim() || null,
         model: model.trim() || null,
         phone: phone.trim(),
@@ -224,9 +265,27 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
+      {/* Helper Banner */}
+      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex items-start gap-3">
+        <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+        <div className="flex-1">
+          <p className="text-sm text-blue-900 dark:text-blue-100 font-medium">
+            {labels.helperText}
+          </p>
+          <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
+            {labels.requiredFieldsOnly}
+          </p>
+        </div>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle className={isRTL ? 'text-right' : ''}>{labels.basicInfo}</CardTitle>
+          <CardDescription className={isRTL ? 'text-right' : ''}>
+            {isRTL 
+              ? 'املأ المعلومات الأساسية لإعلانك' 
+              : 'Remplissez les informations de base de votre annonce'}
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -245,7 +304,7 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
               <Input
                 value={titleFr}
                 onChange={(e) => setTitleFr(e.target.value)}
-                placeholder={isRTL ? 'أدخل العنوان بالفرنسية' : 'Entrez le titre en français'}
+                placeholder={isRTL ? 'أدخل العنوان بالفرنسية (اختياري)' : 'Entrez le titre en français (optionnel)'}
                 dir="ltr"
               />
             </div>
@@ -257,7 +316,7 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
               <Textarea
                 value={descriptionAr}
                 onChange={(e) => setDescriptionAr(e.target.value)}
-                placeholder={isRTL ? 'وصف المنتج بالعربية' : 'Description en arabe'}
+                placeholder={isRTL ? 'وصف المنتج بالعربية (اختياري)' : 'Description en arabe (optionnel)'}
                 dir="rtl"
                 rows={4}
               />
@@ -267,14 +326,14 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
               <Textarea
                 value={descriptionFr}
                 onChange={(e) => setDescriptionFr(e.target.value)}
-                placeholder={isRTL ? 'وصف المنتج بالفرنسية' : 'Description en français'}
+                placeholder={isRTL ? 'وصف المنتج بالفرنسية (اختياري)' : 'Description en français (optionnel)'}
                 dir="ltr"
                 rows={4}
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className={isRTL ? 'text-right block' : ''}>{labels.price}</Label>
               <Input
@@ -301,41 +360,111 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <Label className={isRTL ? 'text-right block' : ''}>{labels.condition}</Label>
-              <Select value={condition} onValueChange={(v) => setCondition(v as typeof condition)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="new">{labels.new}</SelectItem>
-                  <SelectItem value="used">{labels.used}</SelectItem>
-                  <SelectItem value="refurbished">{labels.refurbished}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className={isRTL ? 'text-right block' : ''}>{labels.brand}</Label>
-              <Input
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-                placeholder="Apple, Samsung, Xiaomi..."
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className={isRTL ? 'text-right block' : ''}>{labels.model}</Label>
-              <Input
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-                placeholder="iPhone 14, Galaxy S23..."
-              />
-            </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Category-specific technical details - Only show when category is selected */}
+      {categoryId && (
+        <Card>
+          <CardHeader>
+            <CardTitle className={isRTL ? 'text-right' : ''}>{labels.technicalDetails}</CardTitle>
+            <CardDescription className={isRTL ? 'text-right' : ''}>
+              {labels.helperText}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Common optional fields for all categories */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label className={isRTL ? 'text-right block' : ''}>{labels.condition}</Label>
+                <Select value={condition} onValueChange={(v) => setCondition(v as typeof condition)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="new">{labels.new}</SelectItem>
+                    <SelectItem value="used">{labels.used}</SelectItem>
+                    <SelectItem value="refurbished">{labels.refurbished}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className={isRTL ? 'text-right block' : ''}>{labels.brand}</Label>
+                <Input
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                  placeholder="Apple, Samsung, Xiaomi..."
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className={isRTL ? 'text-right block' : ''}>{labels.model}</Label>
+                <Input
+                  value={model}
+                  onChange={(e) => setModel(e.target.value)}
+                  placeholder="iPhone 14, Galaxy S23..."
+                />
+              </div>
+            </div>
+
+            {/* Phone-specific fields */}
+            {categoryType === 'phone' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className={isRTL ? 'text-right block' : ''}>{labels.storage}</Label>
+                  <Input
+                    value={storage}
+                    onChange={(e) => setStorage(e.target.value)}
+                    placeholder={isRTL ? 'مثال: 128GB, 256GB' : 'ex: 128GB, 256GB'}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className={isRTL ? 'text-right block' : ''}>{labels.batteryHealth}</Label>
+                  <Input
+                    value={batteryHealth}
+                    onChange={(e) => setBatteryHealth(e.target.value)}
+                    placeholder={isRTL ? 'مثال: 85%, 90%' : 'ex: 85%, 90%'}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Accessory-specific fields */}
+            {categoryType === 'accessory' && (
+              <div className="space-y-2">
+                <Label className={isRTL ? 'text-right block' : ''}>{labels.compatibility}</Label>
+                <Input
+                  value={compatibility}
+                  onChange={(e) => setCompatibility(e.target.value)}
+                  placeholder={isRTL ? 'مثال: iPhone 14, Samsung Galaxy S23' : 'ex: iPhone 14, Samsung Galaxy S23'}
+                />
+              </div>
+            )}
+
+            {/* Spare part-specific fields */}
+            {categoryType === 'spare-part' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className={isRTL ? 'text-right block' : ''}>{labels.partType}</Label>
+                  <Input
+                    value={partType}
+                    onChange={(e) => setPartType(e.target.value)}
+                    placeholder={isRTL ? 'مثال: شاشة، بطارية، كاميرا' : 'ex: Écran, Batterie, Caméra'}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className={isRTL ? 'text-right block' : ''}>{labels.compatibility}</Label>
+                  <Input
+                    value={compatibility}
+                    onChange={(e) => setCompatibility(e.target.value)}
+                    placeholder={isRTL ? 'مثال: iPhone 12, iPhone 13' : 'ex: iPhone 12, iPhone 13'}
+                  />
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>
