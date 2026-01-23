@@ -164,18 +164,12 @@ export default function HomePage() {
       {/* Hero CTA Section - Above the Fold */}
       <section className="py-8 px-4 bg-gradient-to-br from-primary/5 to-primary/10 border-b border-border">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className={cn(
-            'text-2xl md:text-3xl font-bold mb-3 text-foreground',
-            isRTL && 'text-right'
-          )}>
+          <h2 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">
             {isRTL 
               ? 'انضم الآن وابدأ في نشر إعلاناتك'
               : 'Rejoignez-nous et commencez à publier vos annonces'}
           </h2>
-          <p className={cn(
-            'text-base md:text-lg text-muted-foreground mb-6',
-            isRTL && 'text-right'
-          )}>
+          <p className="text-base md:text-lg text-muted-foreground mb-6">
             {isRTL
               ? 'أنشئ حسابك مجانًا واستفد من جميع ميزات المنصة'
               : 'Créez votre compte gratuitement et profitez de toutes les fonctionnalités'}
