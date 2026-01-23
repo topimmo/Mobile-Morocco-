@@ -140,10 +140,10 @@ export function BannerSlot({ page, slot, showPlaceholder = true }: BannerSlotPro
           <div className="flex items-center gap-3 md:gap-4">
             <Megaphone className="h-6 w-6 md:h-8 md:w-8 text-white/90" />
             <div className="text-center">
-              <p className="text-white font-bold text-sm md:text-lg">
+              <p className="font-bold text-sm md:text-lg bg-white/95 md:bg-transparent text-[#222] md:text-white px-[10px] md:px-0 py-[6px] md:py-0 rounded-lg md:rounded-none">
                 {placeholderConfig.text}
               </p>
-              <p className="text-white/80 text-xs md:text-sm">
+              <p className="text-white/80 text-xs md:text-sm mt-1 md:mt-0">
                 {placeholderConfig.subtext}
               </p>
             </div>

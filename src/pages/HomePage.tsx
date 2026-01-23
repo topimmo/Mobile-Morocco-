@@ -163,14 +163,14 @@ export default function HomePage() {
       <BannerSlot page="home" slot="top" />
 
       {/* Hero CTA Section - Above the Fold */}
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-br from-primary/5 to-primary/10 border-b border-border">
+      <section className="py-5 md:py-10 lg:py-12 bg-gradient-to-br from-primary/5 to-primary/10 border-b border-border">
         <div className="containerPage text-center">
-          <h2 className="text-2xl md:text-[34px] font-bold mb-3 text-foreground md:leading-[1.3] leading-[1.4]">
+          <h2 className="text-[20px] md:text-[34px] font-bold mb-2 md:mb-3 text-foreground leading-[1.4] md:leading-[1.3]">
             {isRTL 
               ? 'انضم الآن وابدأ في نشر إعلاناتك'
               : 'Rejoignez-nous et commencez à publier vos annonces'}
           </h2>
-          <p className="text-sm md:text-base text-muted-foreground mb-6 px-4 md:px-0 md:max-w-[600px] mx-auto">
+          <p className="text-[12px] md:text-base text-muted-foreground mb-4 md:mb-6 px-4 md:px-0 md:max-w-[600px] mx-auto leading-[1.4]">
             {isRTL
               ? 'أنشئ حسابك مجانًا واستفد من جميع ميزات المنصة'
               : 'Créez votre compte gratuitement et profitez de toutes les fonctionnalités'}
@@ -179,7 +179,7 @@ export default function HomePage() {
             <Button 
               size="lg" 
               className={cn(
-                'bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold shadow-sm hover:shadow-md transition-shadow',
+                'bg-primary hover:bg-primary/90 text-primary-foreground px-6 md:px-8 h-[46px] md:h-auto md:py-6 text-[15px] md:text-lg font-semibold shadow-sm hover:shadow-md transition-shadow',
                 isRTL && 'flex-row-reverse'
               )}
             >
