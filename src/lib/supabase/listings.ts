@@ -120,7 +120,7 @@ export const getListings = async (
     }
 
     const result = {
-      data: data as ListingWithRelations[] | null,
+      data: data as unknown as ListingWithRelations[] | null,
       error,
       count,
       totalPages: count ? Math.ceil(count / limit) : 0,
@@ -193,7 +193,7 @@ export const getUserListings = async (userId: string, status?: ListingStatus) =>
   }
 
   const { data, error } = await query;
-  return { data: data as ListingWithRelations[] | null, error };
+  return { data: data as unknown as ListingWithRelations[] | null, error };
 };
 
 // Helper to generate slug
@@ -322,7 +322,7 @@ export const getListingsForAdmin = async (status?: ListingStatus) => {
   }
 
   const { data, error } = await query;
-  return { data: data as ListingWithRelations[] | null, error };
+  return { data: data as unknown as ListingWithRelations[] | null, error };
 };
 
 export const approveListing = async (id: string) => {

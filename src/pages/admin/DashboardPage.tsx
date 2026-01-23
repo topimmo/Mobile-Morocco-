@@ -28,6 +28,7 @@ import {
   MessageCircle,
   UserPlus,
   PlusCircle,
+  MapPin,
 } from 'lucide-react';
 import {
   getAdminStats,
@@ -341,7 +342,7 @@ export default function AdminDashboard() {
 
         {/* Moderation Tabs */}
         <Tabs defaultValue="listings" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="listings" className="flex items-center gap-2">
               <ShoppingBag className="h-4 w-4" />
               <span className="hidden sm:inline">{isRTL ? 'الإعلانات' : 'Annonces'}</span>
@@ -354,6 +355,13 @@ export default function AdminDashboard() {
               <span className="hidden sm:inline">{isRTL ? 'المحلات' : 'Magasins'}</span>
               {stats?.pendingRepairShops ? (
                 <Badge variant="destructive" className="ml-1">{stats.pendingRepairShops}</Badge>
+              ) : null}
+            </TabsTrigger>
+            <TabsTrigger value="neighborhoods" className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              <span className="hidden sm:inline">{isRTL ? 'الأحياء' : 'Quartiers'}</span>
+              {stats?.pendingNeighborhoods ? (
+                <Badge variant="destructive" className="ml-1">{stats.pendingNeighborhoods}</Badge>
               ) : null}
             </TabsTrigger>
             <TabsTrigger value="campaigns" className="flex items-center gap-2">
@@ -623,6 +631,15 @@ export default function AdminDashboard() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Neighborhoods Tab */}
+          <TabsContent value="neighborhoods" className="space-y-4">
+            <NeighborhoodList
+              neighborhoods={pendingNeighborhoods}
+              onUpdate={fetchData}
+              language={isRTL ? 'ar' : 'fr'}
+            />
           </TabsContent>
 
           {/* Activity Tab */}
