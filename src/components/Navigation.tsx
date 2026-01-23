@@ -79,7 +79,7 @@ function Navigation() {
         <div className={cn('flex justify-between items-center w-full', isRTL && 'flex-row-reverse')}>
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <div className="h-[56px] flex items-center bg-white p-[6px] border border-[#eee] rounded-lg">
+            <div className="h-[56px] flex items-center bg-white p-[6px] border border-gray-200 rounded-lg">
               <img 
                 src="/assets/logo/logo.png" 
                 alt="Mobile Morocco Logo" 
