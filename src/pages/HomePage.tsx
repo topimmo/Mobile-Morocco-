@@ -162,7 +162,7 @@ export default function HomePage() {
       <BannerSlot page="home" slot="top" />
 
       {/* Hero CTA Section - Above the Fold */}
-      <section className="py-8 px-4 bg-gradient-to-br from-primary/5 to-primary/10 border-b border-border">
+      <section className="py-8 md:py-12 lg:py-16 px-4 md:px-6 lg:px-8 bg-gradient-to-br from-primary/5 to-primary/10 border-b border-border">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">
             {isRTL 
@@ -190,9 +190,9 @@ export default function HomePage() {
       </section>
 
       {/* Hero Section with Feature Cards - Swiss Design */}
-      <section className="py-12 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {/* Card 1: Phones & Accessories */}
             <Card className="hover:shadow-md transition-shadow border border-border bg-white">
               <CardContent className="p-8 text-center">
@@ -305,8 +305,8 @@ export default function HomePage() {
       </section>
 
       {/* Arabic Content Section - Swiss Design */}
-      <section className="py-12 px-4 bg-muted">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8 bg-muted">
+        <div className="max-w-7xl mx-auto">
           {/* Arabic titles and descriptions */}
           <div className={cn(
             'grid grid-cols-1 md:grid-cols-3 gap-8',
@@ -345,8 +345,8 @@ export default function HomePage() {
       </section>
 
       {/* Category Icons Section - Swiss Design */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-16 md:py-20 lg:py-24 px-4 md:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
           <h2 className={cn(
             'text-3xl font-bold mb-12 text-center text-foreground',
             isRTL && 'text-right'
@@ -355,7 +355,7 @@ export default function HomePage() {
           </h2>
 
           {/* Main Category Icons */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 mb-12">
             {loading ? (
               [...Array(4)].map((_, i) => (
                 <div key={i} className="text-center">
@@ -447,7 +447,7 @@ export default function HomePage() {
           {/* Subcategory Details */}
           {!loading && (
             <div className={cn(
-              'grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 border-t border-border',
+              'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 pt-12 border-t border-border',
               isRTL && 'text-right'
             )}>
               {/* Phones Subcategories */}
@@ -528,7 +528,7 @@ export default function HomePage() {
               <p className="text-gray-600">{labels.noListings}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {featuredListings.map((listing) => (
                 <Link key={listing.id} to={`/listings/${listing.slug}`}>
                   <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
@@ -584,15 +584,15 @@ export default function HomePage() {
       </section>
 
       {/* Middle Banner */}
-      <section className="py-4 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-4 md:py-6 px-4 md:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <BannerSlot page="home" slot="middle" />
         </div>
       </section>
 
       {/* Repair Shops Section */}
-      <section className="py-8 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-8 md:py-12 lg:py-16 px-4 md:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <div className={cn(
             'flex items-center justify-between mb-6',
             isRTL && 'flex-row-reverse'
@@ -607,7 +607,7 @@ export default function HomePage() {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {[...Array(3)].map((_, i) => (
                 <Card key={i}>
                   <Skeleton className="h-40 w-full" />
@@ -623,7 +623,7 @@ export default function HomePage() {
               <p className="text-muted-foreground">{labels.noShops}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {repairShops.map((shop) => (
                 <Link key={shop.id} to={`/repair-shops/${shop.slug}`}>
                   <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
@@ -678,8 +678,8 @@ export default function HomePage() {
       </section>
 
       {/* Call to Action Section */}
-      <section className="py-12 px-4 bg-primary text-primary-foreground">
-        <div className="max-w-6xl mx-auto text-center">
+      <section className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8 bg-primary text-primary-foreground">
+        <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">
             {isRTL ? 'انضم إلينا اليوم' : 'Rejoignez-nous Aujourd\'hui'}
           </h2>
@@ -704,15 +704,15 @@ export default function HomePage() {
       </section>
 
       {/* Bottom Banner */}
-      <section className="py-4 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-4 md:py-6 px-4 md:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <BannerSlot page="home" slot="bottom" />
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12 px-4">
-        <div className="max-w-6xl mx-auto">
+      <footer className="bg-gray-900 text-gray-300 py-12 md:py-16 px-4 md:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <div className={cn(
             'grid grid-cols-1 md:grid-cols-4 gap-8',
             isRTL && 'text-right'
