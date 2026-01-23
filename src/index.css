@@ -181,24 +181,4 @@
       padding-right: 2rem;
     }
   }
-
-  /* Logo sizing - responsive with preserved aspect ratio */
-  .logo-header {
-    height: 32px; /* Mobile */
-    width: auto;
-    display: block;
-    object-fit: contain;
-  }
-
-  @media (min-width: 768px) {
-    .logo-header {
-      height: 36px; /* Tablet */
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .logo-header {
-      height: 40px; /* Desktop */
-    }
-  }
 }

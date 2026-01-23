@@ -81,13 +81,12 @@ function Navigation() {
           <Link to="/" className="flex items-center">
             <img 
               src="/assets/logo/logo.png" 
-              alt="Mobile Morocco" 
-              style={{
-                height: '32px',
-                width: 'auto',
-                objectFit: 'contain'
+              alt="Mobile Morocco Logo" 
+              className="h-8 md:h-9 lg:h-10 w-auto"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.insertAdjacentHTML('afterend', '<span class="text-xl md:text-2xl font-bold text-gray-900">Mobile Morocco</span>');
               }}
-              className="md:h-9 lg:h-10"
             />
           </Link>
 
@@ -197,7 +196,7 @@ function Navigation() {
                   <SheetTitle className={cn('flex justify-center', isRTL && 'text-right')}>
                     <img 
                       src="/assets/logo/logo.png" 
-                      alt="Mobile Morocco"
+                      alt="Mobile Morocco Logo"
                       className="h-8 w-auto"
                     />
                   </SheetTitle>
