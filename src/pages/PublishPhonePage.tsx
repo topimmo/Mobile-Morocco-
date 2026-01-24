@@ -16,7 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getCities, City } from "@/lib/supabase/cities";
 import { createItem } from "@/lib/supabase/stores";
 import { uploadImages } from "@/lib/supabase/storage";
-import { getNeighborhoodsByCity } from "@/lib/supabase/neighborhoods";
+import { getNeighborhoodsByCity, Neighborhood } from "@/lib/supabase/neighborhoods";
 import { NeighborhoodAutocomplete } from "@/components/search/NeighborhoodAutocomplete";
 import { 
   Smartphone, 
@@ -315,7 +315,7 @@ export default function PublishPhonePage() {
   const isRTL = language === "ar";
 
   const [cities, setCities] = useState<City[]>([]);
-  const [neighborhoods, setNeighborhoods] = useState<any[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [newItemSlug, setNewItemSlug] = useState<string | null>(null);
