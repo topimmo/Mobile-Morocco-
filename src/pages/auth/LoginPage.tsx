@@ -27,30 +27,24 @@ export default function LoginPage() {
       await signIn(email, password);
       trackLogin(); // Track successful login
       
-      // Get user profile to check account type
+      // Get user session to check account type from metadata
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('user_type')
-          .eq('id', user.id)
-          .single();
+        const accountType = user.user_metadata?.account_type;
 
         // If user doesn't have an account type set, redirect to selection page
-        if (!profile?.user_type) {
+        if (!accountType) {
           navigate('/auth/select-account-type');
           return;
         }
 
-        // Redirect to appropriate dashboard based on user type
-        switch (profile.user_type) {
-          case 'importer':
-            navigate('/importer/dashboard');
+        // Redirect to appropriate dashboard based on account type
+        switch (accountType) {
+          case 'shop':
+            navigate('/dashboard/my-store');
             break;
           case 'technician':
-            navigate('/technician/dashboard');
-            break;
-          case 'customer':
+          case 'individual':
           default:
             navigate('/dashboard');
             break;

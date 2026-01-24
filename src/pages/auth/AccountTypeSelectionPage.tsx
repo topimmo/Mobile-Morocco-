@@ -18,7 +18,7 @@ interface RoleOption {
   description: { ar: string; fr: string };
   features: { ar: string[]; fr: string[] };
   color: string;
-  userType: string;
+  dashboardRoute: string;
 }
 
 const ROLE_OPTIONS: RoleOption[] = [
@@ -45,7 +45,7 @@ const ROLE_OPTIONS: RoleOption[] = [
       ]
     },
     color: 'from-blue-500 to-cyan-600',
-    userType: 'importer'
+    dashboardRoute: '/dashboard/my-store'
   },
   {
     id: 'technician',
@@ -70,7 +70,7 @@ const ROLE_OPTIONS: RoleOption[] = [
       ]
     },
     color: 'from-orange-500 to-red-600',
-    userType: 'technician'
+    dashboardRoute: '/dashboard'
   },
   {
     id: 'individual',
@@ -95,7 +95,7 @@ const ROLE_OPTIONS: RoleOption[] = [
       ]
     },
     color: 'from-green-500 to-emerald-600',
-    userType: 'customer'
+    dashboardRoute: '/dashboard'
   }
 ];
 
@@ -134,29 +134,18 @@ export default function AccountTypeSelectionPage() {
         throw new Error('Invalid role selected');
       }
 
-      // Update user profile with selected account type
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({ user_type: roleData.userType })
-        .eq('id', user.id);
+      // Store the selected account type in user metadata for future reference
+      // This will be used to determine which dashboard to show
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: { account_type: role }
+      });
 
       if (updateError) throw updateError;
 
-      // Redirect to appropriate dashboard based on role
-      switch (roleData.userType) {
-        case 'importer':
-          navigate('/importer/dashboard');
-          break;
-        case 'technician':
-          navigate('/technician/dashboard');
-          break;
-        case 'customer':
-        default:
-          navigate('/dashboard');
-          break;
-      }
+      // Redirect to appropriate dashboard
+      navigate(roleData.dashboardRoute);
     } catch (err: any) {
-      console.error('Error updating account type:', err);
+      console.error('Error selecting account type:', err);
       setError(err.message || labels.error);
       setSelectedRole(null);
     } finally {
