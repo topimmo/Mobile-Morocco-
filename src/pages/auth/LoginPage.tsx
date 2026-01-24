@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
 import { Mail, Lock, Loader } from 'lucide-react';
 import { trackLogin } from '@/services/analyticsService';
+import { supabase } from '@/lib/supabase/client';
 
 export default function LoginPage() {
   const { t } = useLanguage();
@@ -25,7 +26,32 @@ export default function LoginPage() {
     try {
       await signIn(email, password);
       trackLogin(); // Track successful login
-      navigate('/dashboard');
+      
+      // Get user session to check account type from metadata
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const accountType = user.user_metadata?.account_type;
+
+        // If user doesn't have an account type set, redirect to selection page
+        if (!accountType) {
+          navigate('/auth/select-account-type');
+          return;
+        }
+
+        // Redirect to appropriate dashboard based on account type
+        switch (accountType) {
+          case 'shop':
+            navigate('/dashboard/my-store');
+            break;
+          case 'technician':
+          case 'individual':
+          default:
+            navigate('/dashboard');
+            break;
+        }
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
@@ -61,7 +87,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full pl-10 pr-4 py-2 bg-secondary rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full pl-10 pr-4 py-2 bg-background text-foreground rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -75,7 +101,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full pl-10 pr-4 py-2 bg-secondary rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full pl-10 pr-4 py-2 bg-background text-foreground rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
