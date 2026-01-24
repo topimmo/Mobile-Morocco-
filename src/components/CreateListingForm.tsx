@@ -275,6 +275,18 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
       const finalDescriptionAr = descriptionAr.trim() + (technicalDetails && isRTL ? technicalDetails : '');
       const finalDescriptionFr = descriptionFr.trim() + (technicalDetails && !isRTL ? technicalDetails : '');
 
+      // Build phone_details JSON for phones
+      const phoneDetails = categoryType === 'phone' ? {
+        color: color.trim() || undefined,
+        storage: storage.trim() || undefined,
+        ram: ram.trim() || undefined,
+        battery_health: batteryHealth.trim() || undefined,
+        warranty: warranty || undefined,
+        accessories: accessories.length > 0 ? accessories : undefined,
+        sim_type: simType.trim() || undefined,
+        network: network || undefined,
+      } : undefined;
+
       const { data: listing, error } = await createListing({
         user_id: user.id,
         title_ar: titleAr.trim(),
@@ -292,7 +304,8 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
         phone: phone.trim(),
         whatsapp: whatsapp.trim() || null,
         status: 'pending',
-      });
+        phone_details: phoneDetails || null,
+      } as any);
 
       if (error) throw error;
 
