@@ -313,6 +313,21 @@ export default function PhonesPage() {
                           {formatPrice(item.price, item.price_text)}
                         </p>
                         
+                        {/* Phone Details Summary */}
+                        {item.item_type === 'phone' && item.phone_details && (
+                          <div className={cn('flex flex-wrap gap-1 mt-2', isRTL && 'flex-row-reverse')}>
+                            {item.phone_details.storage && (
+                              <Badge variant="outline" className="text-xs">{item.phone_details.storage}</Badge>
+                            )}
+                            {item.phone_details.color && (
+                              <Badge variant="outline" className="text-xs">{item.phone_details.color}</Badge>
+                            )}
+                            {item.phone_details.battery_health && (
+                              <Badge variant="outline" className="text-xs">{item.phone_details.battery_health}%</Badge>
+                            )}
+                          </div>
+                        )}
+                        
                         {/* Contact buttons */}
                         <div className={cn('flex gap-2 mt-3', isRTL && 'flex-row-reverse')}>
                           {item.whatsapp && (

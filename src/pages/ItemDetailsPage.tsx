@@ -65,6 +65,22 @@ export default function ItemDetailsPage() {
     brand: isRTL ? 'العلامة التجارية' : 'Marque',
     model: isRTL ? 'الموديل' : 'Modèle',
     description: isRTL ? 'الوصف' : 'Description',
+    // Phone details labels
+    phoneDetails: isRTL ? 'مواصفات الهاتف' : 'Spécifications',
+    color: isRTL ? 'اللون' : 'Couleur',
+    storage: isRTL ? 'السعة' : 'Stockage',
+    ram: isRTL ? 'الرام' : 'RAM',
+    batteryHealth: isRTL ? 'صحة البطارية' : 'Santé batterie',
+    warranty: isRTL ? 'الضمان' : 'Garantie',
+    yes: isRTL ? 'نعم' : 'Oui',
+    no: isRTL ? 'لا' : 'Non',
+    accessories: isRTL ? 'الملحقات' : 'Accessoires',
+    box: isRTL ? 'العلبة' : 'Boîte',
+    charger: isRTL ? 'الشاحن' : 'Chargeur',
+    cable: isRTL ? 'الكابل' : 'Câble',
+    earphones: isRTL ? 'السماعات' : 'Écouteurs',
+    simType: isRTL ? 'نوع الشريحة' : 'Type SIM',
+    network: isRTL ? 'الشبكة' : 'Réseau',
   };
 
   const getItemIcon = (type: string) => {
@@ -282,6 +298,76 @@ export default function ItemDetailsPage() {
                   </div>
                 )}
               </div>
+            )}
+
+            {/* Phone Details */}
+            {item.item_type === 'phone' && item.phone_details && Object.keys(item.phone_details).length > 0 && (
+              <Card className="mb-4">
+                <CardContent className="p-4">
+                  <h3 className={cn('font-semibold mb-3 text-lg', isRTL && 'text-right')}>{labels.phoneDetails}</h3>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    {item.phone_details.color && (
+                      <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
+                        <span className="text-gray-500">{labels.color}:</span>
+                        <Badge variant="secondary">{item.phone_details.color}</Badge>
+                      </div>
+                    )}
+                    {item.phone_details.storage && (
+                      <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
+                        <span className="text-gray-500">{labels.storage}:</span>
+                        <Badge variant="secondary">{item.phone_details.storage}</Badge>
+                      </div>
+                    )}
+                    {item.phone_details.ram && (
+                      <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
+                        <span className="text-gray-500">{labels.ram}:</span>
+                        <Badge variant="secondary">{item.phone_details.ram}</Badge>
+                      </div>
+                    )}
+                    {item.phone_details.battery_health && (
+                      <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
+                        <span className="text-gray-500">{labels.batteryHealth}:</span>
+                        <Badge variant="secondary">{item.phone_details.battery_health}%</Badge>
+                      </div>
+                    )}
+                    {item.phone_details.warranty !== undefined && (
+                      <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
+                        <span className="text-gray-500">{labels.warranty}:</span>
+                        <Badge variant={item.phone_details.warranty ? "default" : "secondary"}>
+                          {item.phone_details.warranty ? labels.yes : labels.no}
+                        </Badge>
+                      </div>
+                    )}
+                    {item.phone_details.sim_type && (
+                      <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
+                        <span className="text-gray-500">{labels.simType}:</span>
+                        <Badge variant="secondary">{item.phone_details.sim_type}</Badge>
+                      </div>
+                    )}
+                    {item.phone_details.network && (
+                      <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
+                        <span className="text-gray-500">{labels.network}:</span>
+                        <Badge variant="secondary">{item.phone_details.network}</Badge>
+                      </div>
+                    )}
+                    {item.phone_details.accessories && item.phone_details.accessories.length > 0 && (
+                      <div className={cn('col-span-2 flex items-center gap-2', isRTL && 'flex-row-reverse')}>
+                        <span className="text-gray-500">{labels.accessories}:</span>
+                        <div className={cn('flex flex-wrap gap-1', isRTL && 'flex-row-reverse')}>
+                          {item.phone_details.accessories.map((acc: string) => {
+                            const accLabel = labels[acc as keyof typeof labels] || acc;
+                            return (
+                              <Badge key={acc} variant="outline" className="text-xs">
+                                {accLabel}
+                              </Badge>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
             )}
 
             {/* Location */}
