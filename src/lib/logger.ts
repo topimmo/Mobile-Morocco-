@@ -7,9 +7,7 @@
 
 import env from '@/config/env';
 
-type LogLevel = 'log' | 'warn' | 'error' | 'debug' | 'info';
-
-const isDevelopment = env.IS_DEVELOPMENT;
+type LogValue = string | number | boolean | null | undefined | Error | Record<string, unknown> | unknown[];
 
 /**
  * Production-safe logger
@@ -17,34 +15,36 @@ const isDevelopment = env.IS_DEVELOPMENT;
  * - In production: only logs errors and warnings
  */
 export const logger = {
-  log: (...args: any[]) => {
+  log: (...args: LogValue[]) => {
     if (isDevelopment) {
       console.log(...args);
     }
   },
   
-  info: (...args: any[]) => {
+  info: (...args: LogValue[]) => {
     if (isDevelopment) {
       console.info(...args);
     }
   },
   
-  debug: (...args: any[]) => {
+  debug: (...args: LogValue[]) => {
     if (isDevelopment) {
       console.debug(...args);
     }
   },
   
-  warn: (...args: any[]) => {
+  warn: (...args: LogValue[]) => {
     // Always log warnings, even in production
     console.warn(...args);
   },
   
-  error: (...args: any[]) => {
+  error: (...args: LogValue[]) => {
     // Always log errors, even in production
     console.error(...args);
   },
 };
+
+const isDevelopment = env.IS_DEVELOPMENT;
 
 /**
  * Performance measurement utility (dev-only)

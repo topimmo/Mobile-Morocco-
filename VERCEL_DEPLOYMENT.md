@@ -69,6 +69,12 @@ The following security headers are automatically configured in `vercel.json`:
 - ✅ **Referrer-Policy**: Controls referrer information
 - ✅ **Permissions-Policy**: Restricts browser features
 
+**Note on CSP**: The Content-Security-Policy includes `unsafe-inline` and `unsafe-eval` directives which are required by Vite's development mode and React's runtime. While these reduce security strictness, they are necessary for the application to function. The CSP still provides protection by restricting:
+- Default sources to same-origin only
+- Image sources to self, data URLs, and HTTPS
+- Connection sources to self and Supabase domains
+- Frame ancestors to self only
+
 ### Environment Variable Security
 
 - ✅ All `VITE_*` variables are exposed to the client (safe for public keys)

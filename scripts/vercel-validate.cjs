@@ -9,7 +9,7 @@
  * - No critical security issues
  * - Bundle sizes are acceptable
  * 
- * Run with: node scripts/vercel-validate.js
+ * Run with: node scripts/vercel-validate.cjs
  */
 
 const fs = require('fs');
