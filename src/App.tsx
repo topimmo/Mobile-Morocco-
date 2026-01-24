@@ -50,6 +50,7 @@ const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
 const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
 const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
 const ResetPasswordPage = lazy(() => import("@/pages/auth/ResetPasswordPage"));
+const AccountTypeSelectionPage = lazy(() => import("@/pages/auth/AccountTypeSelectionPage"));
 
 // Admin dashboard
 const AdminDashboard = lazy(() => import("@/pages/admin/DashboardPage"));
@@ -137,6 +138,11 @@ function AppContent() {
           <Route path="/auth/login" element={<PageErrorBoundary><LoginPage /></PageErrorBoundary>} />
           <Route path="/auth/register" element={<PageErrorBoundary><RegisterPage /></PageErrorBoundary>} />
           <Route path="/auth/reset-password" element={<PageErrorBoundary><ResetPasswordPage /></PageErrorBoundary>} />
+          <Route path="/auth/select-account-type" element={
+            <ProtectedRoute>
+              <PageErrorBoundary><AccountTypeSelectionPage /></PageErrorBoundary>
+            </ProtectedRoute>
+          } />
 
           {/* Admin Dashboard - Protected */}
           <Route path="/admin" element={
