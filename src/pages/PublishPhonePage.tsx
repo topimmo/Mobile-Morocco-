@@ -333,7 +333,7 @@ export default function PublishPhonePage() {
     network: ""
   });
 
-  const handleNeighborhoodChange = (id: string) => {
+  const handleNeighborhoodChange = (id: string, _neighborhood?: any) => {
     setFormData(prev => ({ ...prev, neighborhoodId: id }));
   };
 
