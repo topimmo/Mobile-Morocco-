@@ -552,7 +552,7 @@ export default function HomePage() {
       {/* Bottom Banner */}
       <section className="py-4 sm:py-6 md:py-8">
         <div className="containerPage">
-          <BannerSlot page="home" slot="bottom" />
+          <BannerSlot page="home" slot="bottom" showPlaceholder={false} />
         </div>
       </section>
 
