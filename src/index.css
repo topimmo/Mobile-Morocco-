@@ -164,23 +164,19 @@
   /* Global container utility for consistent page width and spacing */
   .containerPage {
     max-width: 1280px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem; /* 16px mobile */
-    padding-right: 1rem;
+    margin-inline: auto;
+    padding-inline: 1rem; /* 16px mobile */
   }
 
   @media (min-width: 768px) {
     .containerPage {
-      padding-left: 1.5rem; /* 24px tablet */
-      padding-right: 1.5rem;
+      padding-inline: 1.5rem; /* 24px tablet */
     }
   }
 
   @media (min-width: 1024px) {
     .containerPage {
-      padding-left: 2rem; /* 32px desktop */
-      padding-right: 2rem;
+      padding-inline: 2rem; /* 32px desktop */
     }
   }
 }
