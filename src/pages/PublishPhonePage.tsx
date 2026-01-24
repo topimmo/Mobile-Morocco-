@@ -17,7 +17,6 @@ import { getCities, City } from "@/lib/supabase/cities";
 import { createItem } from "@/lib/supabase/stores";
 import { uploadImages } from "@/lib/supabase/storage";
 import { NeighborhoodAutocomplete } from "@/components/search/NeighborhoodAutocomplete";
-import { Neighborhood } from "@/lib/supabase/neighborhoods";
 import { 
   Smartphone, 
   Upload, 
@@ -333,6 +332,10 @@ export default function PublishPhonePage() {
     simType: "",
     network: ""
   });
+
+  const handleNeighborhoodChange = (id: string) => {
+    setFormData(prev => ({ ...prev, neighborhoodId: id }));
+  };
 
   useEffect(() => {
     async function loadCities() {
@@ -704,7 +707,7 @@ export default function PublishPhonePage() {
                       <NeighborhoodAutocomplete
                         cityId={formData.cityId}
                         value={formData.neighborhoodId}
-                        onChange={(neighborhoodId: string) => setFormData(prev => ({ ...prev, neighborhoodId }))}
+                        onChange={handleNeighborhoodChange}
                         language={language}
                         placeholder={t.neighborhoodPlaceholder}
                         userId={user?.id}
