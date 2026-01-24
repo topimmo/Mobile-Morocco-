@@ -112,9 +112,9 @@ const SubscriptionComparison: React.FC = () => {
         </div>
       </header>
 
-      <main className="container py-10">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 text-center">
+      <main className="container py-6 sm:py-10">
+        <div className="max-w-4xl mx-auto px-4">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
             {isRTL
               ? "اختر الخطة المناسبة لعملك"
               : "Choisissez le plan adapté à votre entreprise"}

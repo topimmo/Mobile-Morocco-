@@ -66,12 +66,12 @@ export default function CustomerDashboard() {
   const effectiveProfile = profile || demoProfile;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Tableau Client</h1>
-            <p className="text-gray-500">
+            <h1 className="text-2xl sm:text-3xl font-bold">Tableau Client</h1>
+            <p className="text-gray-500 text-sm sm:text-base">
               {isDemo ? "Mode démo (lecture seule)" : `Bienvenue, ${effectiveProfile.firstName || "Utilisateur"}`}
             </p>
           </div>
