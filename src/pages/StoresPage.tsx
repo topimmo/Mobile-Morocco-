@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { getStores, StoreWithRelations, getStoreName } from '@/lib/supabase/stores';
 import { getCities, City, getCityName } from '@/lib/supabase/cities';
+import { getNeighborhoodsByCity, Neighborhood } from '@/lib/supabase/neighborhoods';
 import { apiCache, SimpleCache } from '@/lib/cache';
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
@@ -34,11 +35,13 @@ export default function StoresPage() {
 
   const [stores, setStores] = useState<StoreWithRelations[]>([]);
   const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
 
   const [keyword, setKeyword] = useState(searchParams.get('q') || '');
   const [cityId, setCityId] = useState(searchParams.get('city') || '');
+  const [neighborhoodId, setNeighborhoodId] = useState(searchParams.get('neighborhood') || '');
   const [storeType, setStoreType] = useState<'all' | 'shop' | 'individual'>(
     (searchParams.get('type') as 'all' | 'shop' | 'individual') || 'all'
   );
@@ -55,6 +58,7 @@ export default function StoresPage() {
     subtitle: isRTL ? 'تصفح جميع المتاجر والبائعين المعتمدين' : 'Parcourez toutes les boutiques et vendeurs vérifiés',
     search: isRTL ? 'ابحث عن متجر...' : 'Rechercher une boutique...',
     allCities: isRTL ? 'جميع المدن' : 'Toutes les villes',
+    allNeighborhoods: isRTL ? 'جميع الأحياء' : 'Tous les quartiers',
     allTypes: isRTL ? 'جميع الأنواع' : 'Tous les types',
     shop: isRTL ? 'متجر' : 'Boutique',
     individual: isRTL ? 'فرد' : 'Particulier',
@@ -73,6 +77,20 @@ export default function StoresPage() {
     loadCities();
   }, []);
 
+  // Load neighborhoods when city changes
+  useEffect(() => {
+    const loadNeighborhoods = async () => {
+      if (!cityId) {
+        setNeighborhoods([]);
+        setNeighborhoodId('');
+        return;
+      }
+      const neighborhoodsData = await getNeighborhoodsByCity(cityId);
+      setNeighborhoods(neighborhoodsData);
+    };
+    loadNeighborhoods();
+  }, [cityId]);
+
   const loadStores = useCallback(async () => {
     if (loadingRef.current) return;
     loadingRef.current = true;
@@ -81,6 +99,7 @@ export default function StoresPage() {
     const filters: any = {};
     if (debouncedKeyword) filters.keyword = debouncedKeyword;
     if (cityId) filters.cityId = cityId;
+    if (neighborhoodId) filters.neighborhoodId = neighborhoodId;
     if (storeType !== 'all') filters.storeType = storeType;
 
     // Generate cache key
@@ -112,7 +131,7 @@ export default function StoresPage() {
       setLoading(false);
       loadingRef.current = false;
     }
-  }, [debouncedKeyword, cityId, storeType, page]);
+  }, [debouncedKeyword, cityId, neighborhoodId, storeType, page]);
 
   useEffect(() => {
     loadStores();
@@ -123,6 +142,7 @@ export default function StoresPage() {
     const params = new URLSearchParams();
     if (keyword) params.set('q', keyword);
     if (cityId) params.set('city', cityId);
+    if (neighborhoodId) params.set('neighborhood', neighborhoodId);
     if (storeType !== 'all') params.set('type', storeType);
     setSearchParams(params);
   };
@@ -145,8 +165,8 @@ export default function StoresPage() {
           </div>
 
           <div className="max-w-5xl mx-auto">
-            <div className={cn('flex flex-wrap gap-4 mt-6', isRTL && 'flex-row-reverse')}>
-            <div className="flex-1 min-w-[200px]">
+            <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto_auto_auto] gap-3', isRTL && 'lg:grid-flow-dense')}>
+            <div className="sm:col-span-2 lg:col-span-1">
               <div className="relative">
                 <Search className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
                 <Input
@@ -160,7 +180,7 @@ export default function StoresPage() {
             </div>
 
             <Select value={cityId || 'all'} onValueChange={(v) => { setCityId(v === 'all' ? '' : v); setPage(1); }}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full">
                 <MapPin className="h-4 w-4 mr-2" />
                 <SelectValue placeholder={labels.allCities} />
               </SelectTrigger>
@@ -172,8 +192,26 @@ export default function StoresPage() {
               </SelectContent>
             </Select>
 
+            {/* Neighborhood filter - only show when city is selected */}
+            {cityId && (
+              <Select value={neighborhoodId || 'all'} onValueChange={(v) => { setNeighborhoodId(v === 'all' ? '' : v); setPage(1); }}>
+                <SelectTrigger className="w-full">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder={labels.allNeighborhoods} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{labels.allNeighborhoods}</SelectItem>
+                  {neighborhoods.map((neighborhood) => (
+                    <SelectItem key={neighborhood.id} value={neighborhood.id}>
+                      {neighborhood.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+
             <Select value={storeType} onValueChange={(v) => { setStoreType(v as any); setPage(1); }}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue />
               </SelectTrigger>
@@ -184,7 +222,7 @@ export default function StoresPage() {
               </SelectContent>
             </Select>
 
-            <Button onClick={handleSearch}>
+            <Button onClick={handleSearch} className="w-full lg:w-auto">
               <Search className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
               {isRTL ? 'بحث' : 'Rechercher'}
             </Button>
@@ -266,6 +304,12 @@ export default function StoresPage() {
                           <p className="text-sm text-gray-600 text-center mb-4 flex items-center justify-center gap-1">
                             <MapPin className="h-3 w-3" />
                             {getCityName(store.city as City, language)}
+                            {(store.neighborhood || store.neighborhood_custom) && (
+                              <>
+                                <span className="mx-1">•</span>
+                                <span>{store.neighborhood ? store.neighborhood.name : store.neighborhood_custom}</span>
+                              </>
+                            )}
                           </p>
                         )}
 
