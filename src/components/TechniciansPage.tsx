@@ -38,20 +38,20 @@ interface DBTechnician {
 
 // Convert DB technician to UI format
 function convertDBTechnicianToUI(dbTech: DBTechnician, language: 'fr' | 'ar' | 'en'): Technician {
-  // Fall back to French for English
-  const useFr = language !== 'ar';
+  // Fall back to French for English - use Arabic only if language is Arabic
+  const useAr = language === 'ar';
   return {
     id: dbTech.id,
-    name: language === 'ar' ? dbTech.name_ar : dbTech.name_fr,
+    name: useAr ? dbTech.name_ar : dbTech.name_fr,
     avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${dbTech.id}`,
     rating: dbTech.rating_avg || 4.5,
     reviewCount: dbTech.rating_count || 0,
     location: dbTech.city ? getCityName(dbTech.city, language) : (dbTech.neighborhood_custom || ''),
     phoneNumber: dbTech.phone,
     whatsappNumber: dbTech.whatsapp || dbTech.phone,
-    specialties: [(useFr ? dbTech.specialty_fr : dbTech.specialty_ar)],
+    specialties: [useAr ? dbTech.specialty_ar : dbTech.specialty_fr],
     experience: '5+ ans',
-    description: language === 'ar' ? dbTech.specialty_ar : dbTech.specialty_fr,
+    description: useAr ? dbTech.specialty_ar : dbTech.specialty_fr,
     services: [],
     availability: { status: 'available' },
     certifications: [],
