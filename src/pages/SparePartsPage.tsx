@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { getItems, ItemWithRelations, getItemTitle } from '@/lib/supabase/stores';
 import { getCities, City, getCityName } from '@/lib/supabase/cities';
+import { getNeighborhoodsByCity, Neighborhood } from '@/lib/supabase/neighborhoods';
 import { cn } from '@/lib/utils';
 import {
   Settings,
@@ -30,11 +31,13 @@ export default function SparePartsPage() {
 
   const [items, setItems] = useState<ItemWithRelations[]>([]);
   const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
 
   const [keyword, setKeyword] = useState(searchParams.get('q') || '');
   const [cityId, setCityId] = useState(searchParams.get('city') || '');
+  const [neighborhoodId, setNeighborhoodId] = useState(searchParams.get('neighborhood') || '');
   const [condition, setCondition] = useState<'all' | 'new' | 'used'>(
     (searchParams.get('condition') as 'all' | 'new' | 'used') || 'all'
   );
@@ -45,6 +48,7 @@ export default function SparePartsPage() {
     subtitle: isRTL ? 'شاشات، بطاريات، وقطع غيار أصلية' : 'Écrans, batteries et pièces de rechange',
     search: isRTL ? 'ابحث عن قطعة غيار...' : 'Rechercher une pièce...',
     allCities: isRTL ? 'جميع المدن' : 'Toutes les villes',
+    allNeighborhoods: isRTL ? 'جميع الأحياء' : 'Tous les quartiers',
     allConditions: isRTL ? 'جميع الحالات' : 'Toutes conditions',
     new: isRTL ? 'جديد' : 'Neuf',
     used: isRTL ? 'مستعمل' : 'Occasion',
@@ -64,12 +68,32 @@ export default function SparePartsPage() {
     loadCities();
   }, []);
 
+  // Load neighborhoods when city changes
+  useEffect(() => {
+    const loadNeighborhoods = async () => {
+      if (!cityId) {
+        setNeighborhoods([]);
+        setNeighborhoodId('');
+        return;
+      }
+      try {
+        const neighborhoodsData = await getNeighborhoodsByCity(cityId);
+        setNeighborhoods(neighborhoodsData);
+      } catch (error) {
+        console.error('Error loading neighborhoods:', error);
+        setNeighborhoods([]);
+      }
+    };
+    loadNeighborhoods();
+  }, [cityId]);
+
   useEffect(() => {
     const loadItems = async () => {
       setLoading(true);
       const filters: any = { itemType: 'spare_part' };
       if (keyword) filters.keyword = keyword;
       if (cityId) filters.cityId = cityId;
+      if (neighborhoodId) filters.neighborhoodId = neighborhoodId;
       if (condition !== 'all') filters.condition = condition;
 
       const { data, count } = await getItems(filters, { page, limit: 12 });
@@ -78,13 +102,14 @@ export default function SparePartsPage() {
       setLoading(false);
     };
     loadItems();
-  }, [keyword, cityId, condition, page]);
+  }, [keyword, cityId, neighborhoodId, condition, page]);
 
   const handleSearch = () => {
     setPage(1);
     const params = new URLSearchParams();
     if (keyword) params.set('q', keyword);
     if (cityId) params.set('city', cityId);
+    if (neighborhoodId) params.set('neighborhood', neighborhoodId);
     if (condition !== 'all') params.set('condition', condition);
     setSearchParams(params);
   };
@@ -115,7 +140,7 @@ export default function SparePartsPage() {
           </div>
 
           <div className="max-w-5xl mx-auto">
-            <div className={cn('flex flex-wrap gap-4 mt-6', isRTL && 'flex-row-reverse')}>
+            <div className={cn('flex flex-wrap gap-3', isRTL && 'flex-row-reverse')}>
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
                 <Search className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
@@ -130,7 +155,7 @@ export default function SparePartsPage() {
             </div>
 
             <Select value={cityId || 'all'} onValueChange={(v) => { setCityId(v === 'all' ? '' : v); setPage(1); }}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <MapPin className="h-4 w-4 mr-2" />
                 <SelectValue placeholder={labels.allCities} />
               </SelectTrigger>
@@ -142,8 +167,26 @@ export default function SparePartsPage() {
               </SelectContent>
             </Select>
 
+            {/* Neighborhood filter - only show when city is selected */}
+            {cityId && (
+              <Select value={neighborhoodId || 'all'} onValueChange={(v) => { setNeighborhoodId(v === 'all' ? '' : v); setPage(1); }}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder={labels.allNeighborhoods} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{labels.allNeighborhoods}</SelectItem>
+                  {neighborhoods.map((neighborhood) => (
+                    <SelectItem key={neighborhood.id} value={neighborhood.id}>
+                      {neighborhood.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+
             <Select value={condition} onValueChange={(v) => { setCondition(v as any); setPage(1); }}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue />
               </SelectTrigger>
@@ -154,7 +197,7 @@ export default function SparePartsPage() {
               </SelectContent>
             </Select>
 
-            <Button onClick={handleSearch}>
+            <Button onClick={handleSearch} className="w-full sm:w-auto">
               <Search className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
               {isRTL ? 'بحث' : 'Rechercher'}
             </Button>
@@ -217,6 +260,12 @@ export default function SparePartsPage() {
                           <p className={cn('text-sm text-gray-600 flex items-center gap-1 mb-2', isRTL && 'flex-row-reverse justify-end')}>
                             <MapPin className="h-3 w-3" />
                             {getCityName(item.city as City, language)}
+                            {(item.neighborhood || item.neighborhood_custom) && (
+                              <>
+                                <span className="mx-1">•</span>
+                                <span>{item.neighborhood ? item.neighborhood.name : item.neighborhood_custom}</span>
+                              </>
+                            )}
                           </p>
                         )}
                         <p className={cn('font-bold text-lg text-green-600', isRTL && 'text-right')}>{formatPrice(item.price, item.price_text)}</p>
