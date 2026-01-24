@@ -31,14 +31,29 @@ export default function LoginPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         // Fetch user profile to check role
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', user.id)
           .single();
 
+        // Handle profile query errors
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
+          // Profile doesn't exist or query failed - redirect to account setup
+          navigate('/auth/select-account-type');
+          return;
+        }
+
+        // Ensure profile exists before checking role
+        if (!profile) {
+          console.error('No profile found for user');
+          navigate('/auth/select-account-type');
+          return;
+        }
+
         // Admin users go to admin dashboard
-        if (profile?.role === 'admin') {
+        if (profile.role === 'admin') {
           navigate('/admin');
           return;
         }
