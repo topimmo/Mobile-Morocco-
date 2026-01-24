@@ -14,6 +14,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { getCities, City } from "@/lib/supabase/cities";
+import { getNeighborhoodsByCity, addOrGetNeighborhood, Neighborhood } from "@/lib/supabase/neighborhoods";
 import { createItem } from "@/lib/supabase/stores";
 import { uploadImages } from "@/lib/supabase/storage";
 import { 
@@ -35,6 +36,8 @@ interface PhoneFormData {
   condition: "new" | "used";
   price: string;
   cityId: string;
+  neighborhoodId: string;
+  neighborhoodCustom: string;
   description: string;
   contactPhone: string;
   contactMethod: "whatsapp" | "phone" | "both";
@@ -68,6 +71,10 @@ const translations = {
     pricePlaceholder: "0",
     city: "المدينة",
     selectCity: "اختر المدينة",
+    neighborhood: "الحي / المنطقة",
+    selectNeighborhood: "اختر الحي...",
+    neighborhoodOther: "حي آخر",
+    neighborhoodCustomPlaceholder: "اسم الحي...",
     description: "الوصف",
     descriptionPlaceholder: "أضف تفاصيل إضافية عن الهاتف...",
     contactPhone: "رقم الهاتف",
@@ -141,6 +148,10 @@ const translations = {
     pricePlaceholder: "0",
     city: "Ville",
     selectCity: "Sélectionner la ville",
+    neighborhood: "Quartier / Zone",
+    selectNeighborhood: "Sélectionner le quartier...",
+    neighborhoodOther: "Autre quartier",
+    neighborhoodCustomPlaceholder: "Nom du quartier...",
     description: "Description",
     descriptionPlaceholder: "Ajoutez des détails sur le téléphone...",
     contactPhone: "Numéro de téléphone",
@@ -214,6 +225,10 @@ const translations = {
     pricePlaceholder: "0",
     city: "City",
     selectCity: "Select city",
+    neighborhood: "Neighborhood / Area",
+    selectNeighborhood: "Select neighborhood...",
+    neighborhoodOther: "Other neighborhood",
+    neighborhoodCustomPlaceholder: "Neighborhood name...",
     description: "Description",
     descriptionPlaceholder: "Add details about the phone...",
     contactPhone: "Phone Number",
@@ -296,6 +311,7 @@ export default function PublishPhonePage() {
   const isRTL = language === "ar";
 
   const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [newItemSlug, setNewItemSlug] = useState<string | null>(null);
@@ -308,6 +324,8 @@ export default function PublishPhonePage() {
     condition: "used",
     price: "",
     cityId: "",
+    neighborhoodId: "",
+    neighborhoodCustom: "",
     description: "",
     contactPhone: "",
     contactMethod: "whatsapp",
@@ -331,6 +349,19 @@ export default function PublishPhonePage() {
     }
     loadCities();
   }, [language]);
+
+  useEffect(() => {
+    async function loadNeighborhoods() {
+      if (formData.cityId) {
+        const neighborhoodsData = await getNeighborhoodsByCity(formData.cityId);
+        setNeighborhoods(neighborhoodsData);
+      } else {
+        setNeighborhoods([]);
+        setFormData(prev => ({ ...prev, neighborhoodId: '', neighborhoodCustom: '' }));
+      }
+    }
+    loadNeighborhoods();
+  }, [formData.cityId]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -417,6 +448,19 @@ export default function PublishPhonePage() {
 
     const slug = generateSlug(formData.title);
     
+    // Handle neighborhood: add custom if "other" is selected, or use existing
+    let finalNeighborhoodId = formData.neighborhoodId;
+    if (formData.neighborhoodId === 'other' && formData.neighborhoodCustom.trim() && formData.cityId) {
+      const newNeighborhood = await addOrGetNeighborhood(
+        formData.cityId,
+        formData.neighborhoodCustom.trim(),
+        user?.id
+      );
+      if (newNeighborhood) {
+        finalNeighborhoodId = newNeighborhood.id;
+      }
+    }
+    
     // Build phone_details object with proper typing
     const phoneDetails: {
       color?: string;
@@ -450,6 +494,7 @@ export default function PublishPhonePage() {
       description_ar: formData.description,
       description_fr: formData.description,
       city_id: formData.cityId,
+      neighborhood_id: finalNeighborhoodId && finalNeighborhoodId !== 'other' ? finalNeighborhoodId : null,
       whatsapp: formData.contactMethod === 'whatsapp' || formData.contactMethod === 'both' ? formData.contactPhone : null,
       phone: formData.contactMethod === 'phone' || formData.contactMethod === 'both' ? formData.contactPhone : null,
       user_id: user?.id || null,
@@ -685,6 +730,43 @@ export default function PublishPhonePage() {
                     </Select>
                     {errors.cityId && <p className="text-sm text-red-500">{errors.cityId}</p>}
                   </div>
+
+                  {/* Neighborhood */}
+                  {formData.cityId && neighborhoods.length > 0 && (
+                    <div className="space-y-2">
+                      <Label htmlFor="neighborhood">{t.neighborhood}</Label>
+                      <Select
+                        value={formData.neighborhoodId}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, neighborhoodId: value, neighborhoodCustom: '' }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t.selectNeighborhood} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {neighborhoods.map(neighborhood => (
+                            <SelectItem key={neighborhood.id} value={neighborhood.id}>
+                              {neighborhood.name}
+                            </SelectItem>
+                          ))}
+                          <SelectItem value="other">{t.neighborhoodOther}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+
+                  {/* Custom Neighborhood Input */}
+                  {formData.neighborhoodId === 'other' && (
+                    <div className="space-y-2">
+                      <Label htmlFor="neighborhoodCustom">{t.neighborhood}</Label>
+                      <Input
+                        id="neighborhoodCustom"
+                        value={formData.neighborhoodCustom}
+                        onChange={(e) => setFormData(prev => ({ ...prev, neighborhoodCustom: e.target.value }))}
+                        placeholder={t.neighborhoodCustomPlaceholder}
+                        dir={isRTL ? "rtl" : "ltr"}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {/* Description */}
