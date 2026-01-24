@@ -28,6 +28,8 @@ export default function LoginPage() {
       trackLogin(); // Track successful login
       
       // Get user session and profile to determine redirect
+      // We need to fetch fresh data after signIn as the AuthContext
+      // state might not have updated yet
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         // Fetch user profile to check role
@@ -39,21 +41,19 @@ export default function LoginPage() {
 
         // Handle profile query errors
         if (profileError) {
+          // Check if it's a "profile not found" error vs database error
+          if (profileError.code === 'PGRST116') {
+            // Profile doesn't exist - redirect to account setup
+            console.warn('No profile found for user, redirecting to account setup');
+            navigate('/auth/select-account-type');
+            return;
+          }
+          // Other database errors - log and try to continue
           console.error('Error fetching profile:', profileError);
-          // Profile doesn't exist or query failed - redirect to account setup
-          navigate('/auth/select-account-type');
-          return;
         }
 
-        // Ensure profile exists before checking role
-        if (!profile) {
-          console.error('No profile found for user');
-          navigate('/auth/select-account-type');
-          return;
-        }
-
-        // Admin users go to admin dashboard
-        if (profile.role === 'admin') {
+        // Admin users go to admin dashboard (only if profile exists and role is admin)
+        if (profile && profile.role === 'admin') {
           navigate('/admin');
           return;
         }
