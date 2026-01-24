@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/select';
 import { CitySelector, NeighborhoodAutocomplete } from '@/components/search';
 import { getCategories, Category } from '@/lib/supabase/categories';
-import { createListing, addListingImage } from '@/lib/supabase/listings';
+import { createListing, addListingImage, PhoneDetails } from '@/lib/supabase/listings';
 import { City } from '@/lib/supabase/cities';
 import { Neighborhood } from '@/lib/supabase/neighborhoods';
 import { toast } from '@/components/ui/use-toast';
@@ -276,15 +276,15 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
       const finalDescriptionFr = descriptionFr.trim() + (technicalDetails && !isRTL ? technicalDetails : '');
 
       // Build phone_details JSON for phones
-      const phoneDetails = categoryType === 'phone' ? {
-        color: color.trim() || undefined,
-        storage: storage.trim() || undefined,
-        ram: ram.trim() || undefined,
-        battery_health: batteryHealth.trim() || undefined,
-        warranty: warranty || undefined,
-        accessories: accessories.length > 0 ? accessories : undefined,
-        sim_type: simType.trim() || undefined,
-        network: network || undefined,
+      const phoneDetails: PhoneDetails | undefined = categoryType === 'phone' ? {
+        ...(color.trim() && { color: color.trim() }),
+        ...(storage.trim() && { storage: storage.trim() }),
+        ...(ram.trim() && { ram: ram.trim() }),
+        ...(batteryHealth.trim() && { battery_health: batteryHealth.trim() }),
+        ...(warranty && { warranty }),
+        ...(accessories.length > 0 && { accessories }),
+        ...(simType.trim() && { sim_type: simType.trim() }),
+        ...(network && { network: network as '4G' | '5G' | '4G/5G' }),
       } : undefined;
 
       const { data: listing, error } = await createListing({
@@ -305,7 +305,7 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
         whatsapp: whatsapp.trim() || null,
         status: 'pending',
         phone_details: phoneDetails || null,
-      } as any);
+      });
 
       if (error) throw error;
 

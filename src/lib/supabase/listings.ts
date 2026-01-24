@@ -12,6 +12,23 @@ export type ListingImage = Tables<'listing_images'>;
 export type ListingInsert = TablesInsert<'listings'>;
 export type ListingUpdate = TablesUpdate<'listings'>;
 
+// Phone details structure
+export interface PhoneDetails {
+  color?: string;
+  storage?: string;
+  ram?: string;
+  battery_health?: string;
+  warranty?: 'yes' | 'no';
+  accessories?: string[];
+  sim_type?: string;
+  network?: '4G' | '5G' | '4G/5G';
+}
+
+// Extended listing insert with phone_details
+export interface ListingInsertWithPhoneDetails extends ListingInsert {
+  phone_details?: PhoneDetails | null;
+}
+
 export interface ListingWithRelations extends Listing {
   images?: ListingImage[];
   category?: Tables<'categories'> | null;
@@ -209,12 +226,12 @@ const generateSlug = (text: string): string => {
   return `${baseSlug || 'listing'}-${timestamp}`;
 };
 
-export const createListing = async (listing: Omit<ListingInsert, 'slug'> & { slug?: string }) => {
+export const createListing = async (listing: Omit<ListingInsertWithPhoneDetails, 'slug'> & { slug?: string }) => {
   const slug = listing.slug || generateSlug(listing.title_ar || listing.title_fr || 'listing');
   
   const { data, error } = await supabase
     .from('listings')
-    .insert({ ...listing, slug })
+    .insert({ ...listing, slug } as any)
     .select()
     .single();
 
