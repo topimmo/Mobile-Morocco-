@@ -30,6 +30,16 @@ export interface ItemWithRelations extends Item {
   store?: Store | null;
   city?: City | null;
   neighborhood?: Neighborhood | null;
+  phone_details?: {
+    color?: string;
+    storage?: string;
+    ram?: string;
+    battery_health?: number;
+    warranty?: boolean;
+    accessories?: string[];
+    sim_type?: string;
+    network?: string;
+  };
 }
 
 export interface ServiceWithRelations extends RepairService {

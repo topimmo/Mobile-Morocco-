@@ -62,9 +62,11 @@
     @apply border-border;
   }
 
-  body {
+  html, body {
     @apply bg-background text-foreground;
     font-family: 'Inter', 'Tajawal', sans-serif;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   [dir="rtl"] body {

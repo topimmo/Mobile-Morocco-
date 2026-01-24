@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -39,6 +40,15 @@ interface PhoneFormData {
   contactMethod: "whatsapp" | "phone" | "both";
   sellerType: "individual" | "shop";
   images: string[];
+  // Phone-specific details
+  color: string;
+  storage: string;
+  ram: string;
+  batteryHealth: string;
+  warranty: boolean;
+  accessories: string[];
+  simType: string;
+  network: string;
 }
 
 const translations = {
@@ -86,7 +96,34 @@ const translations = {
     rule2: "يُرجى التأكد من صحة المعلومات",
     rule3: "سيتم مراجعة الإعلان قبل النشر",
     loginRequired: "يجب تسجيل الدخول لنشر إعلان",
-    login: "تسجيل الدخول"
+    login: "تسجيل الدخول",
+    // Phone-specific fields
+    phoneDetails: "تفاصيل الهاتف",
+    color: "اللون",
+    selectColor: "اختر اللون",
+    storage: "السعة التخزينية",
+    selectStorage: "اختر السعة",
+    ram: "الرام",
+    selectRam: "اختر الرام",
+    batteryHealth: "صحة البطارية (%)",
+    batteryPlaceholder: "مثال: 92",
+    warranty: "الضمان",
+    warrantyYes: "نعم",
+    warrantyNo: "لا",
+    accessories: "الملحقات المتوفرة",
+    box: "العلبة الأصلية",
+    charger: "الشاحن",
+    cable: "الكابل",
+    earphones: "السماعات",
+    simType: "نوع الشريحة (اختياري)",
+    selectSimType: "اختر نوع الشريحة",
+    simSingle: "شريحة واحدة",
+    simDual: "شريحتين",
+    simESIM: "eSIM",
+    network: "الشبكة (اختياري)",
+    selectNetwork: "اختر نوع الشبكة",
+    network4G: "4G",
+    network5G: "5G"
   },
   fr: {
     pageTitle: "Publier mon téléphone",
@@ -132,7 +169,107 @@ const translations = {
     rule2: "Veuillez vérifier l'exactitude des informations",
     rule3: "L'annonce sera examinée avant publication",
     loginRequired: "Connexion requise pour publier une annonce",
-    login: "Se connecter"
+    login: "Se connecter",
+    // Phone-specific fields
+    phoneDetails: "Détails du téléphone",
+    color: "Couleur",
+    selectColor: "Sélectionner la couleur",
+    storage: "Stockage",
+    selectStorage: "Sélectionner le stockage",
+    ram: "RAM",
+    selectRam: "Sélectionner la RAM",
+    batteryHealth: "Santé de la batterie (%)",
+    batteryPlaceholder: "Ex: 92",
+    warranty: "Garantie",
+    warrantyYes: "Oui",
+    warrantyNo: "Non",
+    accessories: "Accessoires inclus",
+    box: "Boîte d'origine",
+    charger: "Chargeur",
+    cable: "Câble",
+    earphones: "Écouteurs",
+    simType: "Type de SIM (optionnel)",
+    selectSimType: "Sélectionner le type de SIM",
+    simSingle: "Simple SIM",
+    simDual: "Double SIM",
+    simESIM: "eSIM",
+    network: "Réseau (optionnel)",
+    selectNetwork: "Sélectionner le réseau",
+    network4G: "4G",
+    network5G: "5G"
+  },
+  en: {
+    pageTitle: "Publish Phone",
+    pageDescription: "Publish your phone listing quickly and easily",
+    title: "Listing Title",
+    titlePlaceholder: "Ex: iPhone 15 Pro Max 256GB",
+    brand: "Brand",
+    selectBrand: "Select brand",
+    model: "Model",
+    modelPlaceholder: "Ex: 15 Pro Max",
+    condition: "Condition",
+    conditionNew: "New",
+    conditionUsed: "Used",
+    price: "Price (MAD)",
+    pricePlaceholder: "0",
+    city: "City",
+    selectCity: "Select city",
+    description: "Description",
+    descriptionPlaceholder: "Add details about the phone...",
+    contactPhone: "Phone Number",
+    contactPhonePlaceholder: "0612345678",
+    contactMethod: "Contact Method",
+    whatsapp: "WhatsApp",
+    phone: "Call",
+    both: "Both",
+    sellerType: "Seller Type",
+    individual: "Individual",
+    shop: "Shop",
+    images: "Images (up to 6)",
+    uploadImages: "Upload Images",
+    dragDrop: "Drag & drop or click to upload",
+    publish: "Publish Listing",
+    publishing: "Publishing...",
+    successTitle: "Listing published successfully!",
+    successMessage: "Your listing will be reviewed soon",
+    viewListing: "View Listing",
+    requiredField: "This field is required",
+    invalidPhone: "Invalid phone number",
+    minPrice: "Price must be greater than 0",
+    imageLimit: "You can upload up to 6 images",
+    rules: "Publishing Rules",
+    rule1: "Listings are for display only (no direct sales)",
+    rule2: "Please ensure information accuracy",
+    rule3: "Listings will be reviewed before publishing",
+    loginRequired: "Login required to publish a listing",
+    login: "Login",
+    // Phone-specific fields
+    phoneDetails: "Phone Details",
+    color: "Color",
+    selectColor: "Select color",
+    storage: "Storage",
+    selectStorage: "Select storage",
+    ram: "RAM",
+    selectRam: "Select RAM",
+    batteryHealth: "Battery Health (%)",
+    batteryPlaceholder: "Ex: 92",
+    warranty: "Warranty",
+    warrantyYes: "Yes",
+    warrantyNo: "No",
+    accessories: "Included Accessories",
+    box: "Original Box",
+    charger: "Charger",
+    cable: "Cable",
+    earphones: "Earphones",
+    simType: "SIM Type (optional)",
+    selectSimType: "Select SIM type",
+    simSingle: "Single SIM",
+    simDual: "Dual SIM",
+    simESIM: "eSIM",
+    network: "Network (optional)",
+    selectNetwork: "Select network",
+    network4G: "4G",
+    network5G: "5G"
   }
 };
 
@@ -140,6 +277,15 @@ const phoneBrands = [
   "Apple", "Samsung", "Xiaomi", "Huawei", "Oppo", "Vivo", "Realme", 
   "OnePlus", "Google", "Honor", "Tecno", "Infinix", "Nokia", "Motorola", "Other"
 ];
+
+const phoneColors = [
+  "Black", "White", "Silver", "Gold", "Blue", "Green", "Red", 
+  "Purple", "Pink", "Gray", "Orange", "Yellow", "Other"
+];
+
+const storageOptions = ["64GB", "128GB", "256GB", "512GB", "1TB"];
+
+const ramOptions = ["4GB", "6GB", "8GB", "12GB", "16GB"];
 
 export default function PublishPhonePage() {
   const { language } = useLanguage();
@@ -166,7 +312,16 @@ export default function PublishPhonePage() {
     contactPhone: "",
     contactMethod: "whatsapp",
     sellerType: "individual",
-    images: []
+    images: [],
+    // Phone-specific details
+    color: "",
+    storage: "",
+    ram: "",
+    batteryHealth: "",
+    warranty: false,
+    accessories: [],
+    simType: "",
+    network: ""
   });
 
   useEffect(() => {
@@ -187,6 +342,10 @@ export default function PublishPhonePage() {
     if (!formData.contactPhone || !/^0[5-7]\d{8}$/.test(formData.contactPhone)) {
       newErrors.contactPhone = t.invalidPhone;
     }
+    
+    // Phone-specific required fields
+    if (!formData.color) newErrors.color = t.requiredField;
+    if (!formData.storage) newErrors.storage = t.requiredField;
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -257,6 +416,27 @@ export default function PublishPhonePage() {
     setLoading(true);
 
     const slug = generateSlug(formData.title);
+    
+    // Build phone_details object with proper typing
+    const phoneDetails: {
+      color?: string;
+      storage?: string;
+      ram?: string;
+      battery_health?: number;
+      warranty?: boolean;
+      accessories?: string[];
+      sim_type?: string;
+      network?: string;
+    } = {};
+    if (formData.color) phoneDetails.color = formData.color;
+    if (formData.storage) phoneDetails.storage = formData.storage;
+    if (formData.ram) phoneDetails.ram = formData.ram;
+    if (formData.batteryHealth) phoneDetails.battery_health = parseInt(formData.batteryHealth);
+    phoneDetails.warranty = formData.warranty;
+    if (formData.accessories.length > 0) phoneDetails.accessories = formData.accessories;
+    if (formData.simType) phoneDetails.sim_type = formData.simType;
+    if (formData.network) phoneDetails.network = formData.network;
+    
     const itemData = {
       title_ar: formData.title,
       title_fr: formData.title,
@@ -276,7 +456,8 @@ export default function PublishPhonePage() {
       status: 'pending' as const,
       is_featured: false,
       is_premium: false,
-      store_id: null
+      store_id: null,
+      phone_details: phoneDetails
     };
 
     try {
@@ -516,6 +697,169 @@ export default function PublishPhonePage() {
                     placeholder={t.descriptionPlaceholder}
                     rows={4}
                   />
+                </div>
+
+                {/* Phone-Specific Details Section */}
+                <div className="border-t pt-6 space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-900">{t.phoneDetails}</h3>
+                  
+                  {/* Color & Storage */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="color">{t.color} *</Label>
+                      <Select
+                        value={formData.color}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, color: value }))}
+                      >
+                        <SelectTrigger className={errors.color ? "border-red-500" : ""}>
+                          <SelectValue placeholder={t.selectColor} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {phoneColors.map(color => (
+                            <SelectItem key={color} value={color}>{color}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {errors.color && <p className="text-sm text-red-500">{errors.color}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="storage">{t.storage} *</Label>
+                      <Select
+                        value={formData.storage}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, storage: value }))}
+                      >
+                        <SelectTrigger className={errors.storage ? "border-red-500" : ""}>
+                          <SelectValue placeholder={t.selectStorage} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {storageOptions.map(storage => (
+                            <SelectItem key={storage} value={storage}>{storage}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {errors.storage && <p className="text-sm text-red-500">{errors.storage}</p>}
+                    </div>
+                  </div>
+
+                  {/* RAM & Battery Health */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="ram">{t.ram}</Label>
+                      <Select
+                        value={formData.ram}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, ram: value }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t.selectRam} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ramOptions.map(ram => (
+                            <SelectItem key={ram} value={ram}>{ram}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="batteryHealth">{t.batteryHealth}</Label>
+                      <Input
+                        id="batteryHealth"
+                        type="number"
+                        min="1"
+                        max="100"
+                        value={formData.batteryHealth}
+                        onChange={(e) => setFormData(prev => ({ ...prev, batteryHealth: e.target.value }))}
+                        placeholder={t.batteryPlaceholder}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Warranty */}
+                  <div className="space-y-2">
+                    <Label>{t.warranty}</Label>
+                    <RadioGroup
+                      value={formData.warranty ? "yes" : "no"}
+                      onValueChange={(value) => setFormData(prev => ({ ...prev, warranty: value === "yes" }))}
+                      className="flex gap-4"
+                    >
+                      <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                        <RadioGroupItem value="yes" id="warranty-yes" />
+                        <Label htmlFor="warranty-yes" className="cursor-pointer">{t.warrantyYes}</Label>
+                      </div>
+                      <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                        <RadioGroupItem value="no" id="warranty-no" />
+                        <Label htmlFor="warranty-no" className="cursor-pointer">{t.warrantyNo}</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  {/* Accessories */}
+                  <div className="space-y-3">
+                    <Label>{t.accessories}</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { id: "box", label: t.box },
+                        { id: "charger", label: t.charger },
+                        { id: "cable", label: t.cable },
+                        { id: "earphones", label: t.earphones }
+                      ].map(accessory => (
+                        <div key={accessory.id} className="flex items-center space-x-2 rtl:space-x-reverse">
+                          <Checkbox
+                            id={accessory.id}
+                            checked={formData.accessories.includes(accessory.id)}
+                            onCheckedChange={(checked) => {
+                              setFormData(prev => ({
+                                ...prev,
+                                accessories: checked
+                                  ? [...prev.accessories, accessory.id]
+                                  : prev.accessories.filter(a => a !== accessory.id)
+                              }));
+                            }}
+                          />
+                          <Label htmlFor={accessory.id} className="cursor-pointer text-sm">
+                            {accessory.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* SIM Type & Network (Optional) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="simType">{t.simType}</Label>
+                      <Select
+                        value={formData.simType}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, simType: value }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t.selectSimType} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="single">{t.simSingle}</SelectItem>
+                          <SelectItem value="dual">{t.simDual}</SelectItem>
+                          <SelectItem value="esim">{t.simESIM}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="network">{t.network}</Label>
+                      <Select
+                        value={formData.network}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, network: value }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t.selectNetwork} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="4G">{t.network4G}</SelectItem>
+                          <SelectItem value="5G">{t.network5G}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Contact Info */}
