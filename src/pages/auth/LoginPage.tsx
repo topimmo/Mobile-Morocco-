@@ -27,9 +27,38 @@ export default function LoginPage() {
       await signIn(email, password);
       trackLogin(); // Track successful login
       
-      // Get user session to check account type from metadata
+      // Get user session and profile to determine redirect
+      // We need to fetch fresh data after signIn as the AuthContext
+      // state might not have updated yet
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
+        // Fetch user profile to check role
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+
+        // Handle profile query errors
+        if (profileError) {
+          // Check if it's a "profile not found" error vs database error
+          if (profileError.code === 'PGRST116') {
+            // Profile doesn't exist - redirect to account setup
+            console.warn('No profile found for user, redirecting to account setup');
+            navigate('/auth/select-account-type');
+            return;
+          }
+          // Other database errors - log and try to continue
+          console.error('Error fetching profile:', profileError);
+        }
+
+        // Admin users go to admin dashboard (only if profile exists and role is admin)
+        if (profile && profile.role === 'admin') {
+          navigate('/admin');
+          return;
+        }
+
+        // Regular users: check account type
         const accountType = user.user_metadata?.account_type;
 
         // If user doesn't have an account type set, redirect to selection page
