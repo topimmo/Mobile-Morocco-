@@ -384,6 +384,16 @@ const ProductCard = ({
         <p className="text-lg sm:text-xl font-bold text-sky-600 mb-1 sm:mb-2">
           {price.toLocaleString()} {currency}
         </p>
+        
+        {/* Phone specs - show key details if available */}
+        {specs && (specs.storage || specs.color || specs.battery) && (
+          <div className="flex flex-wrap gap-1 mb-2 text-xs text-gray-600">
+            {specs.storage && <span className="bg-muted px-2 py-0.5 rounded">{specs.storage}</span>}
+            {specs.color && <span className="bg-muted px-2 py-0.5 rounded">{specs.color}</span>}
+            {specs.battery && <span className="bg-muted px-2 py-0.5 rounded">{specs.battery}</span>}
+          </div>
+        )}
+        
         <div className="flex items-center justify-between text-xs sm:text-sm text-gray-600">
           <div className="flex items-center gap-1">
             <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-amber-400 text-amber-400" />
