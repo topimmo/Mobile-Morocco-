@@ -27,9 +27,23 @@ export default function LoginPage() {
       await signIn(email, password);
       trackLogin(); // Track successful login
       
-      // Get user session to check account type from metadata
+      // Get user session and profile to determine redirect
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
+        // Fetch user profile to check role
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+
+        // Admin users go to admin dashboard
+        if (profile?.role === 'admin') {
+          navigate('/admin');
+          return;
+        }
+
+        // Regular users: check account type
         const accountType = user.user_metadata?.account_type;
 
         // If user doesn't have an account type set, redirect to selection page
