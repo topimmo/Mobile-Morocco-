@@ -355,7 +355,14 @@ export default function ItemDetailsPage() {
                         <span className="text-gray-500">{labels.accessories}:</span>
                         <div className={cn('flex flex-wrap gap-1', isRTL && 'flex-row-reverse')}>
                           {item.phone_details.accessories.map((acc: string) => {
-                            const accLabel = labels[acc as keyof typeof labels] || acc;
+                            // Map accessories to their labels
+                            const accessoryLabels: Record<string, string> = {
+                              box: labels.box,
+                              charger: labels.charger,
+                              cable: labels.cable,
+                              earphones: labels.earphones,
+                            };
+                            const accLabel = accessoryLabels[acc] || acc;
                             return (
                               <Badge key={acc} variant="outline" className="text-xs">
                                 {accLabel}

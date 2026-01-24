@@ -417,8 +417,17 @@ export default function PublishPhonePage() {
 
     const slug = generateSlug(formData.title);
     
-    // Build phone_details object
-    const phoneDetails: Record<string, any> = {};
+    // Build phone_details object with proper typing
+    const phoneDetails: {
+      color?: string;
+      storage?: string;
+      ram?: string;
+      battery_health?: number;
+      warranty?: boolean;
+      accessories?: string[];
+      sim_type?: string;
+      network?: string;
+    } = {};
     if (formData.color) phoneDetails.color = formData.color;
     if (formData.storage) phoneDetails.storage = formData.storage;
     if (formData.ram) phoneDetails.ram = formData.ram;
