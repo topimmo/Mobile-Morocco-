@@ -135,8 +135,8 @@ export default function SparePartsPage() {
           </div>
 
           <div className="max-w-5xl mx-auto">
-            <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto_auto] gap-3', isRTL && 'lg:grid-flow-dense')}>
-            <div className="sm:col-span-2 lg:col-span-1">
+            <div className={cn('flex flex-wrap gap-3', isRTL && 'flex-row-reverse')}>
+            <div className="flex-1 min-w-[200px]">
               <div className="relative">
                 <Search className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
                 <Input
@@ -150,7 +150,7 @@ export default function SparePartsPage() {
             </div>
 
             <Select value={cityId || 'all'} onValueChange={(v) => { setCityId(v === 'all' ? '' : v); setPage(1); }}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <MapPin className="h-4 w-4 mr-2" />
                 <SelectValue placeholder={labels.allCities} />
               </SelectTrigger>
@@ -165,7 +165,7 @@ export default function SparePartsPage() {
             {/* Neighborhood filter - only show when city is selected */}
             {cityId && (
               <Select value={neighborhoodId || 'all'} onValueChange={(v) => { setNeighborhoodId(v === 'all' ? '' : v); setPage(1); }}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <MapPin className="h-4 w-4 mr-2" />
                   <SelectValue placeholder={labels.allNeighborhoods} />
                 </SelectTrigger>
@@ -181,7 +181,7 @@ export default function SparePartsPage() {
             )}
 
             <Select value={condition} onValueChange={(v) => { setCondition(v as any); setPage(1); }}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue />
               </SelectTrigger>
@@ -192,7 +192,7 @@ export default function SparePartsPage() {
               </SelectContent>
             </Select>
 
-            <Button onClick={handleSearch} className="w-full lg:w-auto">
+            <Button onClick={handleSearch} className="w-full sm:w-auto">
               <Search className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
               {isRTL ? 'بحث' : 'Rechercher'}
             </Button>
