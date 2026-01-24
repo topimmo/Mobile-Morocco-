@@ -16,6 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getCities, City } from "@/lib/supabase/cities";
 import { createItem } from "@/lib/supabase/stores";
 import { uploadImages } from "@/lib/supabase/storage";
+import { getNeighborhoodsByCity } from "@/lib/supabase/neighborhoods";
 import { NeighborhoodAutocomplete } from "@/components/search/NeighborhoodAutocomplete";
 import { 
   Smartphone, 
@@ -37,6 +38,7 @@ interface PhoneFormData {
   price: string;
   cityId: string;
   neighborhoodId: string;
+  neighborhoodCustom: string;
   description: string;
   contactPhone: string;
   contactMethod: "whatsapp" | "phone" | "both";
@@ -72,6 +74,9 @@ const translations = {
     selectCity: "اختر المدينة",
     neighborhood: "الحي",
     neighborhoodPlaceholder: "اختر أو أضف حي...",
+    selectNeighborhood: "اختر الحي",
+    neighborhoodOther: "آخر (أدخل اسم الحي يدوياً)",
+    customNeighborhoodPlaceholder: "أدخل اسم الحي...",
     description: "الوصف",
     descriptionPlaceholder: "أضف تفاصيل إضافية عن الهاتف...",
     contactPhone: "رقم الهاتف",
@@ -147,6 +152,9 @@ const translations = {
     selectCity: "Sélectionner la ville",
     neighborhood: "Quartier",
     neighborhoodPlaceholder: "Sélectionner ou ajouter un quartier...",
+    selectNeighborhood: "Sélectionner le quartier",
+    neighborhoodOther: "Autre (saisir manuellement)",
+    customNeighborhoodPlaceholder: "Entrer le nom du quartier...",
     description: "Description",
     descriptionPlaceholder: "Ajoutez des détails sur le téléphone...",
     contactPhone: "Numéro de téléphone",
@@ -222,6 +230,9 @@ const translations = {
     selectCity: "Select city",
     neighborhood: "Neighborhood",
     neighborhoodPlaceholder: "Select or add neighborhood...",
+    selectNeighborhood: "Select neighborhood",
+    neighborhoodOther: "Other (enter manually)",
+    customNeighborhoodPlaceholder: "Enter neighborhood name...",
     description: "Description",
     descriptionPlaceholder: "Add details about the phone...",
     contactPhone: "Phone Number",
@@ -304,6 +315,7 @@ export default function PublishPhonePage() {
   const isRTL = language === "ar";
 
   const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [newItemSlug, setNewItemSlug] = useState<string | null>(null);
@@ -317,6 +329,7 @@ export default function PublishPhonePage() {
     price: "",
     cityId: "",
     neighborhoodId: "",
+    neighborhoodCustom: "",
     description: "",
     contactPhone: "",
     contactMethod: "whatsapp",
@@ -344,6 +357,19 @@ export default function PublishPhonePage() {
     }
     loadCities();
   }, [language]);
+
+  // Load neighborhoods when city changes
+  useEffect(() => {
+    async function loadNeighborhoods() {
+      if (!formData.cityId) {
+        setNeighborhoods([]);
+        return;
+      }
+      const neighborhoodsData = await getNeighborhoodsByCity(formData.cityId);
+      setNeighborhoods(neighborhoodsData);
+    }
+    loadNeighborhoods();
+  }, [formData.cityId]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -463,7 +489,8 @@ export default function PublishPhonePage() {
       description_ar: formData.description,
       description_fr: formData.description,
       city_id: formData.cityId,
-      neighborhood_id: formData.neighborhoodId || null,
+      neighborhood_id: formData.neighborhoodId === 'other' ? null : (formData.neighborhoodId || null),
+      neighborhood_custom: formData.neighborhoodId === 'other' ? formData.neighborhoodCustom : null,
       whatsapp: formData.contactMethod === 'whatsapp' || formData.contactMethod === 'both' ? formData.contactPhone : null,
       phone: formData.contactMethod === 'phone' || formData.contactMethod === 'both' ? formData.contactPhone : null,
       user_id: user?.id || null,
@@ -704,14 +731,36 @@ export default function PublishPhonePage() {
                   {formData.cityId && (
                     <div className="space-y-2">
                       <Label htmlFor="neighborhood">{t.neighborhood}</Label>
-                      <NeighborhoodAutocomplete
-                        cityId={formData.cityId}
-                        value={formData.neighborhoodId}
-                        onChange={handleNeighborhoodChange}
-                        language={language}
-                        placeholder={t.neighborhoodPlaceholder}
-                        userId={user?.id}
-                      />
+                      <Select
+                        value={formData.neighborhoodId || ''}
+                        onValueChange={(value) => setFormData(prev => ({ 
+                          ...prev, 
+                          neighborhoodId: value,
+                          neighborhoodCustom: value === 'other' ? prev.neighborhoodCustom : ''
+                        }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t.selectNeighborhood} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {neighborhoods.map(neighborhood => (
+                            <SelectItem key={neighborhood.id} value={neighborhood.id}>
+                              {neighborhood.name}
+                            </SelectItem>
+                          ))}
+                          <SelectItem value="other">{t.neighborhoodOther}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      
+                      {/* Custom neighborhood input - only shown when "Other" is selected */}
+                      {formData.neighborhoodId === 'other' && (
+                        <Input
+                          placeholder={t.customNeighborhoodPlaceholder}
+                          value={formData.neighborhoodCustom}
+                          onChange={(e) => setFormData(prev => ({ ...prev, neighborhoodCustom: e.target.value }))}
+                          className="mt-2"
+                        />
+                      )}
                     </div>
                   )}
                 </div>
