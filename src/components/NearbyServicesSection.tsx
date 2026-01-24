@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { Language } from '@/contexts/LanguageContext';
 
 interface NearbyServicesSectionProps {
-  language?: "ar" | "fr";
+  language?: Language;
 }
 
 const NearbyServicesSection = ({

@@ -4,12 +4,13 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { trackSearch } from '@/services/analyticsService';
+import { Language } from '@/contexts/LanguageContext';
 
 interface SearchBarProps {
   value?: string;
   onChange: (value: string) => void;
   onSearch?: (value: string) => void;
-  language?: 'ar' | 'fr';
+  language?: Language;
   placeholder?: string;
   className?: string;
 }

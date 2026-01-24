@@ -11,7 +11,7 @@ import { mockTechnicians, Technician } from '../data/mockTechnicians';
 import { SEO } from './SEO';
 import { supabase } from '@/lib/supabase/client';
 import { getCities, City, getCityName } from '@/lib/supabase/cities';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, Language } from '@/contexts/LanguageContext';
 import { useDebounce } from '@/hooks/useDebounce';
 import { apiCache, SimpleCache } from '@/lib/cache';
 import { cn } from '@/lib/utils';
@@ -37,7 +37,9 @@ interface DBTechnician {
 }
 
 // Convert DB technician to UI format
-function convertDBTechnicianToUI(dbTech: DBTechnician, language: 'fr' | 'ar'): Technician {
+function convertDBTechnicianToUI(dbTech: DBTechnician, language: 'fr' | 'ar' | 'en'): Technician {
+  // Fall back to French for English
+  const useFr = language !== 'ar';
   return {
     id: dbTech.id,
     name: language === 'ar' ? dbTech.name_ar : dbTech.name_fr,
@@ -47,7 +49,7 @@ function convertDBTechnicianToUI(dbTech: DBTechnician, language: 'fr' | 'ar'): T
     location: dbTech.city ? getCityName(dbTech.city, language) : (dbTech.neighborhood_custom || ''),
     phoneNumber: dbTech.phone,
     whatsappNumber: dbTech.whatsapp || dbTech.phone,
-    specialties: [(language === 'ar' ? dbTech.specialty_ar : dbTech.specialty_fr)],
+    specialties: [(useFr ? dbTech.specialty_fr : dbTech.specialty_ar)],
     experience: '5+ ans',
     description: language === 'ar' ? dbTech.specialty_ar : dbTech.specialty_fr,
     services: [],
@@ -223,7 +225,7 @@ export default function TechniciansPage() {
 
         if (!error && dbTechnicians && dbTechnicians.length > 0) {
           // Convert DB technicians to UI format
-          const convertedTechnicians = dbTechnicians.map((t: any) => convertDBTechnicianToUI(t, language as 'fr' | 'ar'));
+          const convertedTechnicians = dbTechnicians.map((t: any) => convertDBTechnicianToUI(t, language));
           setTechnicians(convertedTechnicians);
           setFilteredTechnicians(convertedTechnicians);
           setUsingMockData(false);

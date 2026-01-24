@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, Language } from '@/contexts/LanguageContext';
 import Navigation from '@/components/Navigation';
 import { BannerSlot } from '@/components/common/BannerSlot';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,7 +18,7 @@ import { trackListingView, trackPhoneClick, trackWhatsAppClick } from '@/service
 export default function ListingDetailsPage() {
   const { slug } = useParams<{ slug: string }>();
   
-  let language = 'ar';
+  let language: Language = 'ar';
   try {
     const langContext = useLanguage();
     language = langContext.language;
@@ -269,7 +269,7 @@ export default function ListingDetailsPage() {
               <MapPin className="h-4 w-4" />
               <span>
                 {listing.neighborhood?.name && `${listing.neighborhood.name}, `}
-                {listing.city && getCityName(listing.city, language as 'fr' | 'ar')}
+                {listing.city && getCityName(listing.city, language)}
               </span>
             </div>
 
@@ -277,7 +277,7 @@ export default function ListingDetailsPage() {
             {listing.category && (
               <div className={cn('flex items-center gap-2', isRTL && 'flex-row-reverse')}>
                 <span className="text-muted-foreground">{labels.category}:</span>
-                <Badge variant="outline">{getCategoryName(listing.category, language as 'fr' | 'ar')}</Badge>
+                <Badge variant="outline">{getCategoryName(listing.category, language)}</Badge>
               </div>
             )}
 

@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, Language } from '@/contexts/LanguageContext';
 import Navigation from '@/components/Navigation';
 import { BannerSlot } from '@/components/common/BannerSlot';
 import { Card, CardContent } from '@/components/ui/card';
@@ -17,7 +17,7 @@ import { trackRepairShopView, trackPhoneClick, trackWhatsAppClick } from '@/serv
 export default function RepairShopDetailsPage() {
   const { slug } = useParams<{ slug: string }>();
   
-  let language = 'ar';
+  let language: Language = 'ar';
   try {
     const langContext = useLanguage();
     language = langContext.language;
@@ -124,7 +124,7 @@ export default function RepairShopDetailsPage() {
 
   const coverImage = typeof shop.images?.[0] === 'string' ? shop.images[0] : (shop.images?.[0] as any)?.image_url || 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80';
   
-  const cityName = shop.city ? getCityName(shop.city, language as 'fr' | 'ar') : '';
+  const cityName = shop.city ? getCityName(shop.city, language) : '';
   const shopName = isRTL ? shop.name_ar : shop.name_fr;
   const shopDescription = isRTL ? shop.description_ar : shop.description_fr;
   const shopAddress = isRTL ? shop.address_ar : shop.address_fr;
@@ -203,7 +203,7 @@ export default function RepairShopDetailsPage() {
                 <MapPin className="h-4 w-4" />
                 <span>
                   {shop.neighborhood?.name && `${shop.neighborhood.name}, `}
-                  {shop.city && getCityName(shop.city, language as 'fr' | 'ar')}
+                  {shop.city && getCityName(shop.city, language)}
                 </span>
               </div>
             </div>

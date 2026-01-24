@@ -14,9 +14,10 @@ import { Button } from "@/components/ui/button";
 import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { Technician } from "@/types/technician";
 import { useDebounce } from "@/hooks/useDebounce";
+import { Language } from '@/contexts/LanguageContext';
 
 interface TechnicianListingProps {
-  language?: "ar" | "fr";
+  language?: Language;
 }
 
 const TechnicianListing: React.FC<TechnicianListingProps> = ({

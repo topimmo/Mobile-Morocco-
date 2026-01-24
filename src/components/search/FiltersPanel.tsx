@@ -20,6 +20,7 @@ import { NeighborhoodAutocomplete } from './NeighborhoodAutocomplete';
 import { getCategories, Category } from '@/lib/supabase/categories';
 import { City } from '@/lib/supabase/cities';
 import { Neighborhood } from '@/lib/supabase/neighborhoods';
+import { Language } from '@/contexts/LanguageContext';
 
 export interface FilterValues {
   keyword?: string;
@@ -34,7 +35,7 @@ interface FiltersPanelProps {
   values: FilterValues;
   onChange: (values: FilterValues) => void;
   onReset?: () => void;
-  language?: 'ar' | 'fr';
+  language?: Language;
   showCondition?: boolean;
   showPrice?: boolean;
   className?: string;

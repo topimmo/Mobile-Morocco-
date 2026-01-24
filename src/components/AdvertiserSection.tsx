@@ -19,9 +19,10 @@ import {
   Award,
   CheckCircle,
 } from "lucide-react";
+import { Language } from '@/contexts/LanguageContext';
 
 interface AdvertiserSectionProps {
-  language?: "ar" | "fr";
+  language?: Language;
 }
 
 const AdvertiserSection: React.FC<AdvertiserSectionProps> = ({

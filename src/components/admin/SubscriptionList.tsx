@@ -16,9 +16,10 @@ import {
   Subscription,
   renewSubscription,
 } from "@/services/subscriptionService";
+import { Language } from '@/contexts/LanguageContext';
 
 interface SubscriptionListProps {
-  language: "ar" | "fr";
+  language?: Language;
 }
 
 const SubscriptionList: React.FC<SubscriptionListProps> = ({ language }) => {

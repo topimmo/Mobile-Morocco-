@@ -7,9 +7,10 @@ import { Globe, Languages } from 'lucide-react';
 const LanguageSelector: React.FC = () => {
   const { language, setLanguage, t } = useLanguage();
 
-  const languages: Array<{ code: 'fr' | 'ar'; name: string; flag: string }> = [
+  const languages: Array<{ code: 'fr' | 'ar' | 'en'; name: string; flag: string }> = [
     { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'ar', name: 'العربية', flag: '🇲🇦' }
+    { code: 'ar', name: 'العربية', flag: '🇲🇦' },
+    { code: 'en', name: 'English', flag: '🇬🇧' }
   ];
 
   const currentLang = languages.find(lang => lang.code === language);
@@ -31,7 +32,7 @@ const LanguageSelector: React.FC = () => {
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
-            onClick={() => setLanguage(lang.code as 'fr' | 'ar')}
+            onClick={() => setLanguage(lang.code)}
             className={`flex items-center gap-3 cursor-pointer ${
               language === lang.code ? 'bg-accent' : ''
             }`}

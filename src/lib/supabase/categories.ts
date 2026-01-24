@@ -121,6 +121,7 @@ export async function getChildCategories(parentId: string): Promise<Category[]> 
   return data || [];
 }
 
-export function getCategoryName(category: Category, language: 'ar' | 'fr' = 'ar'): string {
+export function getCategoryName(category: Category, language: 'ar' | 'fr' | 'en' = 'ar'): string {
+  // Fall back to French for English
   return language === 'ar' ? category.name_ar : category.name_fr;
 }

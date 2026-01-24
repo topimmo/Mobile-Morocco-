@@ -16,10 +16,11 @@ import {
   markNotificationAsRead,
   markAllNotificationsAsRead,
 } from "@/services/notificationService";
+import { Language } from '@/contexts/LanguageContext';
 
 interface InAppNotificationsProps {
   userId: string;
-  language?: "ar" | "fr";
+  language?: Language;
 }
 
 const InAppNotifications: React.FC<InAppNotificationsProps> = ({
