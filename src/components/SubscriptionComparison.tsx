@@ -12,20 +12,20 @@ interface FeatureProps {
 
 const Feature: React.FC<FeatureProps> = ({ title, free, premium }) => {
   return (
-    <div className="grid grid-cols-3 py-4 border-b last:border-0">
-      <div className="font-medium">{title}</div>
+    <div className="grid grid-cols-[2fr_1fr_1fr] sm:grid-cols-3 py-4 border-b last:border-0 gap-2">
+      <div className="font-medium text-sm sm:text-base">{title}</div>
       <div className="text-center">
         {free ? (
-          <Check className="h-5 w-5 mx-auto text-green-500" />
+          <Check className="h-4 w-4 sm:h-5 sm:w-5 mx-auto text-green-500" />
         ) : (
-          <X className="h-5 w-5 mx-auto text-red-500" />
+          <X className="h-4 w-4 sm:h-5 sm:w-5 mx-auto text-red-500" />
         )}
       </div>
       <div className="text-center">
         {premium ? (
-          <Check className="h-5 w-5 mx-auto text-green-500" />
+          <Check className="h-4 w-4 sm:h-5 sm:w-5 mx-auto text-green-500" />
         ) : (
-          <X className="h-5 w-5 mx-auto text-red-500" />
+          <X className="h-4 w-4 sm:h-5 sm:w-5 mx-auto text-red-500" />
         )}
       </div>
     </div>
@@ -112,9 +112,9 @@ const SubscriptionComparison: React.FC = () => {
         </div>
       </header>
 
-      <main className="container py-10">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 text-center">
+      <main className="container py-6 sm:py-10">
+        <div className="max-w-4xl mx-auto px-4">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
             {isRTL
               ? "اختر الخطة المناسبة لعملك"
               : "Choisissez le plan adapté à votre entreprise"}
@@ -214,10 +214,10 @@ const SubscriptionComparison: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 font-bold border-b pb-2">
-                <div>{isRTL ? "الميزة" : "Fonctionnalité"}</div>
-                <div className="text-center">{isRTL ? "مجاني" : "Gratuit"}</div>
-                <div className="text-center">{isRTL ? "مميز" : "Premium"}</div>
+              <div className="grid grid-cols-[2fr_1fr_1fr] sm:grid-cols-3 font-bold border-b pb-2 gap-2">
+                <div className="text-sm sm:text-base">{isRTL ? "الميزة" : "Fonctionnalité"}</div>
+                <div className="text-center text-sm sm:text-base">{isRTL ? "مجاني" : "Gratuit"}</div>
+                <div className="text-center text-sm sm:text-base">{isRTL ? "مميز" : "Premium"}</div>
               </div>
               {features.map((feature, index) => (
                 <Feature

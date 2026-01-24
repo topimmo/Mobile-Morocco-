@@ -92,12 +92,12 @@ export default function TechnicianDashboard() {
   const uniqueCustomers = [...new Set(serviceRequests.map(req => req.customerName))].length;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Tableau Technicien</h1>
-            <p className="text-gray-500">
+            <h1 className="text-2xl sm:text-3xl font-bold">Tableau Technicien</h1>
+            <p className="text-gray-500 text-sm sm:text-base">
               {isDemo ? "Mode démo (lecture seule)" : `Bienvenue, ${effectiveProfile.firstName || "Utilisateur"}`} 
             </p>
           </div>
@@ -177,10 +177,10 @@ export default function TechnicianDashboard() {
         </div>
 
         <Tabs defaultValue="jobs" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="jobs">Demandes</TabsTrigger>
-            <TabsTrigger value="services">Mes services</TabsTrigger>
-            <TabsTrigger value="schedule">Planning</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-1">
+            <TabsTrigger value="jobs" className="text-xs sm:text-sm">Demandes</TabsTrigger>
+            <TabsTrigger value="services" className="text-xs sm:text-sm">Mes services</TabsTrigger>
+            <TabsTrigger value="schedule" className="text-xs sm:text-sm">Planning</TabsTrigger>
           </TabsList>
           <TabsContent value="jobs" className="mt-6">
             <Card>
@@ -295,19 +295,20 @@ export default function TechnicianDashboard() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-7 gap-2 text-center">
-                  {[
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                    "Sunday",
-                  ].map((day, index) => {
-                    const dayKey = day.toLowerCase() as keyof NonNullable<
-                      typeof effectiveProfile
-                    >["availability"];
+                <div className="overflow-x-auto">
+                  <div className="grid grid-cols-7 gap-2 text-center min-w-[600px]">
+                    {[
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                      "Sunday",
+                    ].map((day, index) => {
+                      const dayKey = day.toLowerCase() as keyof NonNullable<
+                        typeof effectiveProfile
+                      >["availability"];
                     const isAvailable = effectiveProfile?.availability?.[dayKey];
 
                     return (
@@ -322,6 +323,7 @@ export default function TechnicianDashboard() {
                       </div>
                     );
                   })}
+                  </div>
                 </div>
                 <div className="mt-6 flex justify-center">
                   <Button disabled={isDemo}>Mettre à jour</Button>

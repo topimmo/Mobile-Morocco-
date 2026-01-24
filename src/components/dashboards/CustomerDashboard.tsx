@@ -66,12 +66,12 @@ export default function CustomerDashboard() {
   const effectiveProfile = profile || demoProfile;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Tableau Client</h1>
-            <p className="text-gray-500">
+            <h1 className="text-2xl sm:text-3xl font-bold">Tableau Client</h1>
+            <p className="text-gray-500 text-sm sm:text-base">
               {isDemo ? "Mode démo (lecture seule)" : `Bienvenue, ${effectiveProfile.firstName || "Utilisateur"}`}
             </p>
           </div>
@@ -160,11 +160,11 @@ export default function CustomerDashboard() {
         </div>
 
         <Tabs defaultValue="orders" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="orders">Mes commandes</TabsTrigger>
-            <TabsTrigger value="favorites">Favoris</TabsTrigger>
-            <TabsTrigger value="tickets">Support</TabsTrigger>
-            <TabsTrigger value="profile">Profil</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1">
+            <TabsTrigger value="orders" className="text-xs sm:text-sm">Mes commandes</TabsTrigger>
+            <TabsTrigger value="favorites" className="text-xs sm:text-sm">Favoris</TabsTrigger>
+            <TabsTrigger value="tickets" className="text-xs sm:text-sm">Support</TabsTrigger>
+            <TabsTrigger value="profile" className="text-xs sm:text-sm">Profil</TabsTrigger>
           </TabsList>
           <TabsContent value="orders" className="mt-6">
             <Card>

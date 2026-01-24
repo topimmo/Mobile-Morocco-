@@ -123,12 +123,12 @@ export default function AdvertiserDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Tableau de Bord Publicitaire</h1>
-            <p className="text-gray-500">Gérez vos campagnes publicitaires</p>
+            <h1 className="text-2xl sm:text-3xl font-bold">Tableau de Bord Publicitaire</h1>
+            <p className="text-gray-500 text-sm sm:text-base">Gérez vos campagnes publicitaires</p>
           </div>
           <div className="flex gap-2">
             <Button onClick={() => navigate("/")} variant="outline">
@@ -202,10 +202,10 @@ export default function AdvertiserDashboard() {
 
         {/* Ads List */}
         <Tabs defaultValue="all" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="all">Toutes</TabsTrigger>
-            <TabsTrigger value="active">Actives</TabsTrigger>
-            <TabsTrigger value="pending">En Attente</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-1">
+            <TabsTrigger value="all" className="text-xs sm:text-sm">Toutes</TabsTrigger>
+            <TabsTrigger value="active" className="text-xs sm:text-sm">Actives</TabsTrigger>
+            <TabsTrigger value="pending" className="text-xs sm:text-sm">En Attente</TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="mt-6">
@@ -247,7 +247,7 @@ export default function AdvertiserDashboard() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
                         <p className="text-sm text-gray-500">Impressions</p>
                         <p className="text-lg font-semibold">
@@ -301,7 +301,7 @@ export default function AdvertiserDashboard() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                           <p className="text-sm text-gray-500">Impressions</p>
                           <p className="text-lg font-semibold">
