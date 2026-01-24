@@ -173,26 +173,28 @@ export default function PhonesPage() {
       <BannerSlot page="phones" slot="top" />
 
       {/* Header */}
-      <section className="py-8 md:py-12 px-4 md:px-6 lg:px-8 bg-white border-b">
+      <section className="py-4 sm:py-6 md:py-8 px-4 md:px-6 lg:px-8 bg-white border-b">
         <div className="max-w-7xl mx-auto">
-          <div className={cn('flex items-center gap-3 mb-4', isRTL && 'flex-row-reverse')}>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <Smartphone className="h-8 w-8 text-blue-600" />
-            </div>
-            <div>
-              <h1 className={cn('text-3xl font-bold', isRTL && 'text-right')}>{labels.title}</h1>
-              <p className={cn('text-gray-600', isRTL && 'text-right')}>{labels.subtitle}</p>
+          <div className={cn('flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4', isRTL && 'sm:flex-row-reverse')}>
+            <div className={cn('flex items-center gap-3', isRTL && 'flex-row-reverse')}>
+              <div className="p-3 bg-blue-100 rounded-lg">
+                <Smartphone className="h-8 w-8 text-blue-600" />
+              </div>
+              <div>
+                <h1 className={cn('text-2xl sm:text-3xl font-bold', isRTL && 'text-right')}>{labels.title}</h1>
+                <p className={cn('text-sm sm:text-base text-gray-600', isRTL && 'text-right')}>{labels.subtitle}</p>
+              </div>
             </div>
             {/* CTA Buttons */}
-            <div className={cn('flex gap-3 ml-auto', isRTL && 'mr-auto ml-0')}>
-              <Link to="/publish-phone">
-                <Button className="bg-sky-600 hover:bg-sky-700">
+            <div className={cn('flex flex-col sm:flex-row gap-2 sm:gap-3 sm:ml-auto w-full sm:w-auto', isRTL && 'sm:mr-auto sm:ml-0')}>
+              <Link to="/publish-phone" className="w-full sm:w-auto">
+                <Button className="bg-sky-600 hover:bg-sky-700 w-full sm:w-auto">
                   <Plus className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
                   {labels.publishPhone}
                 </Button>
               </Link>
-              <Link to="/compare">
-                <Button variant="outline">
+              <Link to="/compare" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full sm:w-auto">
                   <BarChart2 className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
                   {labels.compare}
                 </Button>
@@ -202,8 +204,8 @@ export default function PhonesPage() {
 
           {/* Filters */}
           <div className="max-w-5xl mx-auto">
-            <div className={cn('flex flex-wrap gap-4 mt-6', isRTL && 'flex-row-reverse')}>
-            <div className="flex-1 min-w-[200px]">
+            <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto_auto] gap-3', isRTL && 'lg:grid-flow-dense')}>
+            <div className="sm:col-span-2 lg:col-span-1">
               <div className="relative">
                 <Search className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
                 <Input
@@ -217,7 +219,7 @@ export default function PhonesPage() {
             </div>
 
             <Select value={cityId || 'all'} onValueChange={(v) => { setCityId(v === 'all' ? '' : v); setPage(1); }}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full">
                 <MapPin className="h-4 w-4 mr-2" />
                 <SelectValue placeholder={labels.allCities} />
               </SelectTrigger>
@@ -234,7 +236,7 @@ export default function PhonesPage() {
             {/* Neighborhood filter - only show when city is selected */}
             {cityId && (
               <Select value={neighborhoodId || 'all'} onValueChange={(v) => { setNeighborhoodId(v === 'all' ? '' : v); setPage(1); }}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full">
                   <MapPin className="h-4 w-4 mr-2" />
                   <SelectValue placeholder={labels.allNeighborhoods} />
                 </SelectTrigger>
@@ -250,7 +252,7 @@ export default function PhonesPage() {
             )}
 
             <Select value={condition} onValueChange={(v) => { setCondition(v as any); setPage(1); }}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue />
               </SelectTrigger>
@@ -261,14 +263,14 @@ export default function PhonesPage() {
               </SelectContent>
             </Select>
 
-            <Button onClick={handleSearch}>
+            <Button onClick={handleSearch} className="w-full lg:w-auto">
               <Search className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
               {isRTL ? 'بحث' : 'Rechercher'}
             </Button>
           </div>
 
           {/* Results count */}
-          <div className={cn('mt-4 text-sm text-gray-600', isRTL && 'text-right')}>
+          <div className={cn('mt-3 text-sm text-gray-600', isRTL && 'text-right')}>
             {totalCount} {labels.results}
           </div>
           </div>
