@@ -334,3 +334,36 @@ See `supabase/migrations/20250211000001_create_test_accounts.sql` for test accou
 - **2026-01-24:** Initial documentation created from code audit
 - Identified inconsistencies in role-based routing
 - Documented current state and recommended improvements
+- **2026-01-24:** Fixed login redirect logic to check profile.role for admin users
+- Added proper error handling for profile queries
+- All changes passed TypeScript checks and build
+- CodeQL security scan: ✅ No vulnerabilities found
+
+---
+
+## Summary of Implementation
+
+### What Was Fixed
+
+1. **Admin Login Redirects** - Admin users now properly redirect to `/admin` after login
+2. **Error Handling** - Profile query errors are properly handled with specific error code checking
+3. **Security** - No security vulnerabilities introduced (verified by CodeQL)
+4. **Documentation** - Comprehensive guide created for understanding and managing admin access
+
+### What Works Now
+
+✅ Admin users log in and are redirected to `/admin`  
+✅ Regular users log in and follow account_type-based routing  
+✅ Users without profiles are redirected to account setup  
+✅ All routes are properly protected by authorization checks  
+✅ Error cases are handled gracefully  
+
+### Known Limitations (Not Fixed)
+
+⚠️ No self-service admin account creation (must use database)  
+⚠️ ProtectedRoute references unused role types (technician, importer)  
+⚠️ Multiple user type fields exist (role, user_type, account_type) but only role is used for authorization  
+⚠️ No UI for admin user management  
+
+These limitations are documented but were intentionally not addressed to maintain minimal changes to the codebase.
+
