@@ -162,15 +162,15 @@ export default function HomePage() {
       {/* Top Banner */}
       <BannerSlot page="home" slot="top" />
 
-      {/* Hero CTA Section - Above the Fold - Enhanced Mobile Visibility */}
-      <section className="py-6 md:py-10 lg:py-12 bg-gradient-to-br from-primary/90 via-primary to-primary/95 border-b border-border">
-        <div className="containerPage text-center px-4 md:px-0">
-          <h2 className="text-[20px] sm:text-[24px] md:text-[34px] font-bold mb-3 md:mb-4 text-white leading-[1.2] md:leading-[1.3]">
+      {/* Hero CTA Section - Above the Fold */}
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-br from-primary/5 to-primary/10 border-b border-border">
+        <div className="containerPage text-center">
+          <h2 className="text-xl md:text-[34px] font-bold mb-2 text-foreground md:leading-[1.3] leading-[1.4]">
             {isRTL 
               ? 'انضم الآن وابدأ في نشر إعلاناتك'
               : 'Rejoignez-nous et commencez à publier vos annonces'}
           </h2>
-          <p className="text-[13px] sm:text-[15px] md:text-base text-white/95 mb-4 md:mb-6 md:max-w-[600px] mx-auto leading-[1.4] md:leading-[1.5]">
+          <p className="text-xs md:text-base text-muted-foreground mb-4 px-4 md:px-0 md:max-w-[600px] mx-auto leading-[1.5]">
             {isRTL
               ? 'أنشئ حسابك مجانًا واستفد من جميع ميزات المنصة'
               : 'Créez votre compte gratuitement et profitez de toutes les fonctionnalités'}
@@ -179,7 +179,7 @@ export default function HomePage() {
             <Button 
               size="lg" 
               className={cn(
-                'bg-white hover:bg-white/95 text-primary px-8 md:px-10 h-[50px] md:h-auto md:py-6 text-[15px] sm:text-[16px] md:text-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]',
+                'bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold shadow-sm hover:shadow-md transition-shadow',
                 isRTL && 'flex-row-reverse'
               )}
             >
@@ -191,7 +191,7 @@ export default function HomePage() {
       </section>
 
       {/* Hero Section with Featured Listings from Selected Categories - Swiss Design */}
-      <section className="py-6 sm:py-8 md:py-12 lg:py-14 bg-white">
+      <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-white">
         <div className="containerPage">
           <h2 className={cn(
             'text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground',
@@ -273,12 +273,12 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Publish Phone CTA - Enhanced Mobile Design */}
-          <div className="mt-10 md:mt-12 text-center">
+          {/* Publish Phone CTA - Swiss Design */}
+          <div className="mt-12 text-center">
             <Link to="/publish-phone">
               <Button 
                 size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 md:px-10 py-5 md:py-6 text-[15px] sm:text-[16px] md:text-lg font-semibold shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold shadow-sm hover:shadow-md transition-shadow"
               >
                 <Smartphone className={cn("h-5 w-5", isRTL ? "ml-2" : "mr-2")} />
                 {isRTL ? 'نشر تلفوني' : 'Publier mon téléphone'}
@@ -293,7 +293,7 @@ export default function HomePage() {
       <NearbyServicesSection language={language} />
 
       {/* Arabic Content Section - Swiss Design */}
-      <section className="py-6 sm:py-8 md:py-12 lg:py-14 bg-muted">
+      <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-muted">
         <div className="containerPage">
           {/* Arabic titles and descriptions */}
           <div className={cn(
@@ -333,7 +333,7 @@ export default function HomePage() {
       </section>
 
       {/* Featured Listings Section */}
-      <section className="py-4 sm:py-6 md:py-12 lg:py-16 bg-white">
+      <section className="py-6 sm:py-8 md:py-12 lg:py-16 bg-white">
         <div className="containerPage">
           <div className={cn(
             'flex items-center justify-between mb-6',
@@ -422,14 +422,14 @@ export default function HomePage() {
       </section>
 
       {/* Middle Banner */}
-      <section className="py-2 sm:py-4 md:py-8">
+      <section className="py-4 sm:py-6 md:py-8">
         <div className="containerPage">
           <BannerSlot page="home" slot="middle" />
         </div>
       </section>
 
       {/* Repair Shops Section */}
-      <section className="py-4 sm:py-6 md:py-12 lg:py-16">
+      <section className="py-6 sm:py-8 md:py-12 lg:py-16">
         <div className="containerPage">
           <div className={cn(
             'flex items-center justify-between mb-6',
@@ -550,7 +550,7 @@ export default function HomePage() {
       </section>
 
       {/* Bottom Banner */}
-      <section className="py-2 sm:py-4 md:py-8">
+      <section className="py-4 sm:py-6 md:py-8">
         <div className="containerPage">
           <BannerSlot page="home" slot="bottom" />
         </div>
