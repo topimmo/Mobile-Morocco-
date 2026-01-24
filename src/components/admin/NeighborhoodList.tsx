@@ -10,11 +10,12 @@ import {
 } from '@/lib/supabase/admin';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
+import { Language } from '@/contexts/LanguageContext';
 
 interface NeighborhoodListProps {
   neighborhoods: PendingNeighborhood[];
   onUpdate: () => void;
-  language?: 'ar' | 'fr';
+  language?: Language;
 }
 
 export function NeighborhoodList({

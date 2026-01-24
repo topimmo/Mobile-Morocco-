@@ -9,12 +9,13 @@ import {
   addOrGetNeighborhood,
   Neighborhood,
 } from '@/lib/supabase/neighborhoods';
+import { Language } from '@/contexts/LanguageContext';
 
 interface NeighborhoodAutocompleteProps {
   cityId: string;
   value?: string;
   onChange: (neighborhoodId: string, neighborhood?: Neighborhood) => void;
-  language?: 'ar' | 'fr';
+  language?: Language;
   placeholder?: string;
   className?: string;
   disabled?: boolean;

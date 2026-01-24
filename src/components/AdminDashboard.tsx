@@ -28,9 +28,10 @@ import {
 } from "@/components/ui/table";
 import SubscriptionList from "@/components/admin/SubscriptionList";
 import RealTimeStats from "@/components/admin/RealTimeStats";
+import { Language } from '@/contexts/LanguageContext';
 
 const AdminDashboard = () => {
-  const [language, setLanguage] = useState<"ar" | "fr">("ar");
+  const [language, setLanguage] = useState<Language>("ar");
 
   // Statistics state
   const [stats, setStats] = useState({

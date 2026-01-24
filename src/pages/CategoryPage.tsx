@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, Language } from '@/contexts/LanguageContext';
 import Navigation from '@/components/Navigation';
 import { BannerSlot } from '@/components/common/BannerSlot';
 import { Card, CardContent } from '@/components/ui/card';
@@ -26,7 +26,7 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 export default function CategoryPage() {
   const { slug } = useParams<{ slug: string }>();
   
-  let language = 'ar';
+  let language: Language = 'ar';
   try {
     const langContext = useLanguage();
     language = langContext.language;
@@ -93,7 +93,7 @@ export default function CategoryPage() {
 
   // Get category display name
   const categoryName = category 
-    ? getCategoryName(category, language as 'fr' | 'ar')
+    ? getCategoryName(category, language)
     : slug?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || '';
 
   const categoryIcon = CATEGORY_ICONS[slug || ''] || <Grid3X3 className="h-6 w-6" />;
@@ -199,7 +199,7 @@ export default function CategoryPage() {
                     {listing.city && (
                       <div className={cn('flex items-center gap-1 text-sm text-muted-foreground mt-2', isRTL && 'flex-row-reverse')}>
                         <MapPin className="h-3 w-3" />
-                        <span>{getCityName(listing.city, language as 'fr' | 'ar')}</span>
+                        <span>{getCityName(listing.city, language)}</span>
                       </div>
                     )}
                   </CardContent>

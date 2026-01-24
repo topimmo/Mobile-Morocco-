@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, X } from "lucide-react";
+import { Language } from "@/contexts/LanguageContext";
 
 interface FeatureProps {
   title: string;
@@ -32,7 +33,7 @@ const Feature: React.FC<FeatureProps> = ({ title, free, premium }) => {
 };
 
 const SubscriptionComparison: React.FC = () => {
-  const [language, setLanguage] = useState<"ar" | "fr">("ar");
+  const [language, setLanguage] = useState<Language>("ar");
   const isRTL = language === "ar";
   const dir = isRTL ? "rtl" : "ltr";
 

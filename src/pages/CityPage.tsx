@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, Language } from '@/contexts/LanguageContext';
 import Navigation from '@/components/Navigation';
 import { BannerSlot } from '@/components/common/BannerSlot';
 import { Card, CardContent } from '@/components/ui/card';
@@ -17,7 +17,7 @@ import { getCategoryName } from '@/lib/supabase/categories';
 export default function CityPage() {
   const { slug } = useParams<{ slug: string }>();
   
-  let language = 'ar';
+  let language: Language = 'ar';
   try {
     const langContext = useLanguage();
     language = langContext.language;
@@ -81,7 +81,7 @@ export default function CityPage() {
 
   // Get city display name
   const cityName = city 
-    ? getCityName(city, language as 'fr' | 'ar')
+    ? getCityName(city, language)
     : slug?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || '';
 
   if (loading) {
@@ -184,7 +184,7 @@ export default function CityPage() {
                     </p>
                     {listing.category && (
                       <Badge variant="outline" className="mt-2">
-                        {getCategoryName(listing.category, language as 'fr' | 'ar')}
+                        {getCategoryName(listing.category, language)}
                       </Badge>
                     )}
                   </CardContent>

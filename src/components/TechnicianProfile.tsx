@@ -12,10 +12,11 @@ import {
 } from "@/components/ui/carousel";
 import { Phone, Mail, MessageSquare, Star } from "lucide-react";
 import { Technician } from "@/types/technician";
+import { Language } from "@/contexts/LanguageContext";
 
 interface TechnicianProfileProps {
   technician: Technician;
-  language?: "ar" | "fr";
+  language?: Language;
 }
 
 const TechnicianProfile: React.FC<TechnicianProfileProps> = ({

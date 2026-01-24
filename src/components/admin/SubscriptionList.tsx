@@ -16,12 +16,13 @@ import {
   Subscription,
   renewSubscription,
 } from "@/services/subscriptionService";
+import { Language } from '@/contexts/LanguageContext';
 
 interface SubscriptionListProps {
-  language: "ar" | "fr";
+  language?: Language;
 }
 
-const SubscriptionList: React.FC<SubscriptionListProps> = ({ language }) => {
+const SubscriptionList: React.FC<SubscriptionListProps> = ({ language = 'ar' }) => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);

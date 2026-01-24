@@ -15,6 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Language } from '@/contexts/LanguageContext';
 
 interface SubCategory {
   id: string;
@@ -33,7 +34,7 @@ interface CategoryProps {
     subCategories?: SubCategory[];
   }[];
   title?: string;
-  language?: "ar" | "fr";
+  language?: Language;
 }
 
 const CategorySection = ({

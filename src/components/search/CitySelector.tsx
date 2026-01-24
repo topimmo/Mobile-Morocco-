@@ -16,11 +16,12 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { getCities, getCitiesByRegion, City, getCityName, getRegionName } from '@/lib/supabase/cities';
+import { Language } from '@/contexts/LanguageContext';
 
 interface CitySelectorProps {
   value?: string;
   onChange: (cityId: string, city?: City) => void;
-  language?: 'ar' | 'fr';
+  language?: Language;
   placeholder?: string;
   className?: string;
   groupByRegion?: boolean;

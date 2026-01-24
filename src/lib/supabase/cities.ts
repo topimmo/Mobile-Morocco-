@@ -15,7 +15,7 @@ export interface City {
 const citiesCache: { data: City[] | null; timestamp: number } = { data: null, timestamp: 0 };
 const CITIES_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
-export async function getCities(language: 'ar' | 'fr' = 'ar'): Promise<City[]> {
+export async function getCities(language: 'ar' | 'fr' | 'en' = 'ar'): Promise<City[]> {
   // Check cache first - cities rarely change
   const now = Date.now();
   if (citiesCache.data && (now - citiesCache.timestamp) < CITIES_CACHE_TTL) {
@@ -23,6 +23,7 @@ export async function getCities(language: 'ar' | 'fr' = 'ar'): Promise<City[]> {
   }
   
   try {
+    // Fall back to French for English
     const orderColumn = language === 'ar' ? 'name_ar' : 'name_fr';
     
     const { data, error } = await supabase
@@ -63,8 +64,9 @@ function getDefaultCities(): City[] {
   ];
 }
 
-export async function getCitiesByRegion(language: 'ar' | 'fr' = 'ar'): Promise<Record<string, City[]>> {
+export async function getCitiesByRegion(language: 'ar' | 'fr' | 'en' = 'ar'): Promise<Record<string, City[]>> {
   const cities = await getCities(language);
+  // Fall back to French for English
   const regionKey = language === 'ar' ? 'region_ar' : 'region_fr';
   
   return cities.reduce((acc, city) => {
@@ -109,10 +111,12 @@ export async function getCityById(id: string): Promise<City | null> {
   return data;
 }
 
-export function getCityName(city: City, language: 'ar' | 'fr' = 'ar'): string {
+export function getCityName(city: City, language: 'ar' | 'fr' | 'en' = 'ar'): string {
+  // Fall back to French for English
   return language === 'ar' ? city.name_ar : city.name_fr;
 }
 
-export function getRegionName(city: City, language: 'ar' | 'fr' = 'ar'): string {
+export function getRegionName(city: City, language: 'ar' | 'fr' | 'en' = 'ar'): string {
+  // Fall back to French for English
   return language === 'ar' ? city.region_ar || '' : city.region_fr || '';
 }
