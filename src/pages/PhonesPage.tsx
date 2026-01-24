@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { getItems, ItemWithRelations, getItemTitle } from '@/lib/supabase/stores';
 import { getCities, City, getCityName } from '@/lib/supabase/cities';
+import { getNeighborhoodsByCity, Neighborhood } from '@/lib/supabase/neighborhoods';
 import { apiCache, SimpleCache } from '@/lib/cache';
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
@@ -34,12 +35,14 @@ export default function PhonesPage() {
 
   const [items, setItems] = useState<ItemWithRelations[]>([]);
   const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
 
   // Filters
   const [keyword, setKeyword] = useState(searchParams.get('q') || '');
   const [cityId, setCityId] = useState(searchParams.get('city') || '');
+  const [neighborhoodId, setNeighborhoodId] = useState(searchParams.get('neighborhood') || '');
   const [condition, setCondition] = useState<'all' | 'new' | 'used'>(
     (searchParams.get('condition') as 'all' | 'new' | 'used') || 'all'
   );
@@ -54,6 +57,7 @@ export default function PhonesPage() {
     subtitle: isRTL ? 'تصفح جميع الهواتف المتاحة' : 'Parcourez tous les téléphones disponibles',
     search: isRTL ? 'ابحث عن هاتف...' : 'Rechercher un téléphone...',
     allCities: isRTL ? 'جميع المدن' : 'Toutes les villes',
+    allNeighborhoods: isRTL ? 'جميع الأحياء' : 'Tous les quartiers',
     allConditions: isRTL ? 'جميع الحالات' : 'Toutes conditions',
     new: isRTL ? 'جديد' : 'Neuf',
     used: isRTL ? 'مستعمل' : 'Occasion',
@@ -77,6 +81,20 @@ export default function PhonesPage() {
     loadCities();
   }, []);
 
+  // Load neighborhoods when city changes
+  useEffect(() => {
+    const loadNeighborhoods = async () => {
+      if (!cityId) {
+        setNeighborhoods([]);
+        setNeighborhoodId('');
+        return;
+      }
+      const neighborhoodsData = await getNeighborhoodsByCity(cityId);
+      setNeighborhoods(neighborhoodsData);
+    };
+    loadNeighborhoods();
+  }, [cityId]);
+
   useEffect(() => {
     const loadItems = async () => {
       // Prevent duplicate requests
@@ -90,6 +108,7 @@ export default function PhonesPage() {
 
       if (debouncedKeyword) filters.keyword = debouncedKeyword;
       if (cityId) filters.cityId = cityId;
+      if (neighborhoodId) filters.neighborhoodId = neighborhoodId;
       if (condition !== 'all') filters.condition = condition;
 
       // Generate cache key
@@ -125,13 +144,14 @@ export default function PhonesPage() {
     };
 
     loadItems();
-  }, [debouncedKeyword, cityId, condition, page]);
+  }, [debouncedKeyword, cityId, neighborhoodId, condition, page]);
 
   const handleSearch = () => {
     setPage(1);
     const params = new URLSearchParams();
     if (keyword) params.set('q', keyword);
     if (cityId) params.set('city', cityId);
+    if (neighborhoodId) params.set('neighborhood', neighborhoodId);
     if (condition !== 'all') params.set('condition', condition);
     setSearchParams(params);
   };
@@ -210,6 +230,24 @@ export default function PhonesPage() {
                 ))}
               </SelectContent>
             </Select>
+
+            {/* Neighborhood filter - only show when city is selected */}
+            {cityId && (
+              <Select value={neighborhoodId || 'all'} onValueChange={(v) => { setNeighborhoodId(v === 'all' ? '' : v); setPage(1); }}>
+                <SelectTrigger className="w-[180px]">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder={labels.allNeighborhoods} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{labels.allNeighborhoods}</SelectItem>
+                  {neighborhoods.map((neighborhood) => (
+                    <SelectItem key={neighborhood.id} value={neighborhood.id}>
+                      {neighborhood.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
 
             <Select value={condition} onValueChange={(v) => { setCondition(v as any); setPage(1); }}>
               <SelectTrigger className="w-[180px]">
@@ -307,6 +345,12 @@ export default function PhonesPage() {
                           <p className={cn('text-sm text-gray-600 flex items-center gap-1 mb-2', isRTL && 'flex-row-reverse justify-end')}>
                             <MapPin className="h-3 w-3" />
                             {getCityName(item.city as City, language)}
+                            {(item.neighborhood || item.neighborhood_custom) && (
+                              <>
+                                <span className="mx-1">•</span>
+                                <span>{item.neighborhood ? item.neighborhood.name : item.neighborhood_custom}</span>
+                              </>
+                            )}
                           </p>
                         )}
                         <p className={cn('font-bold text-lg text-blue-600', isRTL && 'text-right')}>
