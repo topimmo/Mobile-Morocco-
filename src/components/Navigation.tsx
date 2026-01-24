@@ -79,15 +79,17 @@ function Navigation() {
         <div className={cn('flex justify-between items-center w-full', isRTL && 'flex-row-reverse')}>
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <img 
-              src="/assets/logo/logo.png" 
-              alt="Mobile Morocco Logo" 
-              className="h-[60px] md:h-[56px] w-auto max-w-[180px]"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.insertAdjacentHTML('afterend', '<span class="text-xl md:text-2xl font-bold text-gray-900">Mobile Morocco</span>');
-              }}
-            />
+            <div className="h-14 flex items-center bg-white p-1.5 border border-gray-200 rounded-lg">
+              <img 
+                src="/assets/logo/logo.png" 
+                alt="Mobile Morocco Logo" 
+                className="h-full w-auto object-contain"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.insertAdjacentHTML('afterend', '<span class="text-xl md:text-2xl font-bold text-gray-900">Mobile Morocco</span>');
+                }}
+              />
+            </div>
           </Link>
 
           {/* Desktop Navigation Links */}
