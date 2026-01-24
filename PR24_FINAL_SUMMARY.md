@@ -19,7 +19,7 @@ This work addresses the request to resolve merge conflicts in PR #24 and ensure 
 **Refinements in main that improve upon PR #24:**
 
 | Component | PR #24 | Main (Deployed) | Improvement |
-|-----------|--------|-----------------|-------------|
+|-----------|---------|-----------------|-------------|
 | Banner padding | `px-2.5 py-1.5` | `px-3 py-2` | Standard Tailwind spacing |
 | Banner text | `text-white` | `text-white/90` | Better visual contrast |
 | Hero title | `text-[22px]` | `text-xl` | Tailwind design token |

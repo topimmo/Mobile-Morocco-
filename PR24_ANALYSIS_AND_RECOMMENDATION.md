@@ -37,7 +37,7 @@
 ### What's Different?
 
 | Component | PR #24 Value | Main Value | Better? |
-|-----------|-------------|------------|---------|
+|-----------|--------------|------------|---------|
 | Banner padding | `px-2.5 py-1.5` | `px-3 py-2` | Main ✅ (standard Tailwind) |
 | Banner text opacity | `text-white` | `text-white/90` | Main ✅ (better contrast) |
 | Hero title size | `text-[22px]` | `text-xl` | Main ✅ (Tailwind token) |

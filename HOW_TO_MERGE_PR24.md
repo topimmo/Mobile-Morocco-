@@ -163,7 +163,7 @@ All should already be working since PR #32 deployed these changes.
 ## Summary
 
 | Action | Complexity | Value Added | Recommendation |
-|--------|-----------|-------------|----------------|
+|--------|------------|-------------|----------------|
 | Merge PR #24 | High | Zero | ❌ Not Recommended |
 | Close PR #24 | Low | Cleanup | ✅ **Recommended** |
 | Do Nothing | Zero | Zero | ❌ Leaves stale PR |
