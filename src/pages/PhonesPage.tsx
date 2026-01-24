@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { getItems, ItemWithRelations, getItemTitle } from '@/lib/supabase/stores';
 import { getCities, City, getCityName } from '@/lib/supabase/cities';
+import { getNeighborhoodsByCity, Neighborhood } from '@/lib/supabase/neighborhoods';
 import { apiCache, SimpleCache } from '@/lib/cache';
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
@@ -34,12 +35,14 @@ export default function PhonesPage() {
 
   const [items, setItems] = useState<ItemWithRelations[]>([]);
   const [cities, setCities] = useState<City[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
 
   // Filters
   const [keyword, setKeyword] = useState(searchParams.get('q') || '');
   const [cityId, setCityId] = useState(searchParams.get('city') || '');
+  const [neighborhoodId, setNeighborhoodId] = useState(searchParams.get('neighborhood') || '');
   const [condition, setCondition] = useState<'all' | 'new' | 'used'>(
     (searchParams.get('condition') as 'all' | 'new' | 'used') || 'all'
   );
@@ -54,6 +57,7 @@ export default function PhonesPage() {
     subtitle: isRTL ? 'تصفح جميع الهواتف المتاحة' : 'Parcourez tous les téléphones disponibles',
     search: isRTL ? 'ابحث عن هاتف...' : 'Rechercher un téléphone...',
     allCities: isRTL ? 'جميع المدن' : 'Toutes les villes',
+    allNeighborhoods: isRTL ? 'جميع الأحياء' : 'Tous les quartiers',
     allConditions: isRTL ? 'جميع الحالات' : 'Toutes conditions',
     new: isRTL ? 'جديد' : 'Neuf',
     used: isRTL ? 'مستعمل' : 'Occasion',
@@ -78,6 +82,19 @@ export default function PhonesPage() {
   }, []);
 
   useEffect(() => {
+    const loadNeighborhoods = async () => {
+      if (cityId) {
+        const neighborhoodsData = await getNeighborhoodsByCity(cityId);
+        setNeighborhoods(neighborhoodsData);
+      } else {
+        setNeighborhoods([]);
+        setNeighborhoodId('');
+      }
+    };
+    loadNeighborhoods();
+  }, [cityId]);
+
+  useEffect(() => {
     const loadItems = async () => {
       // Prevent duplicate requests
       if (loadingRef.current) return;
@@ -90,6 +107,7 @@ export default function PhonesPage() {
 
       if (debouncedKeyword) filters.keyword = debouncedKeyword;
       if (cityId) filters.cityId = cityId;
+      if (neighborhoodId) filters.neighborhoodId = neighborhoodId;
       if (condition !== 'all') filters.condition = condition;
 
       // Generate cache key
@@ -125,13 +143,14 @@ export default function PhonesPage() {
     };
 
     loadItems();
-  }, [debouncedKeyword, cityId, condition, page]);
+  }, [debouncedKeyword, cityId, neighborhoodId, condition, page]);
 
   const handleSearch = () => {
     setPage(1);
     const params = new URLSearchParams();
     if (keyword) params.set('q', keyword);
     if (cityId) params.set('city', cityId);
+    if (neighborhoodId) params.set('neighborhood', neighborhoodId);
     if (condition !== 'all') params.set('condition', condition);
     setSearchParams(params);
   };
@@ -153,28 +172,32 @@ export default function PhonesPage() {
       <BannerSlot page="phones" slot="top" />
 
       {/* Header */}
-      <section className="py-8 md:py-12 px-4 md:px-6 lg:px-8 bg-white border-b">
+      <section className="py-4 md:py-6 px-4 md:px-6 lg:px-8 bg-white border-b">
         <div className="max-w-7xl mx-auto">
-          <div className={cn('flex items-center gap-3 mb-4', isRTL && 'flex-row-reverse')}>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <Smartphone className="h-8 w-8 text-blue-600" />
-            </div>
-            <div>
-              <h1 className={cn('text-3xl font-bold', isRTL && 'text-right')}>{labels.title}</h1>
-              <p className={cn('text-gray-600', isRTL && 'text-right')}>{labels.subtitle}</p>
+          <div className={cn('flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4', isRTL && 'sm:flex-row-reverse')}>
+            <div className={cn('flex items-center gap-3', isRTL && 'flex-row-reverse')}>
+              <div className="p-2 md:p-3 bg-blue-100 rounded-lg">
+                <Smartphone className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
+              </div>
+              <div>
+                <h1 className={cn('text-2xl md:text-3xl font-bold', isRTL && 'text-right')}>{labels.title}</h1>
+                <p className={cn('text-sm md:text-base text-gray-600', isRTL && 'text-right')}>{labels.subtitle}</p>
+              </div>
             </div>
             {/* CTA Buttons */}
-            <div className={cn('flex gap-3 ml-auto', isRTL && 'mr-auto ml-0')}>
-              <Link to="/publish-phone">
-                <Button className="bg-sky-600 hover:bg-sky-700">
+            <div className={cn('flex gap-2 w-full sm:w-auto sm:ml-auto', isRTL && 'sm:mr-auto sm:ml-0')}>
+              <Link to="/publish-phone" className="flex-1 sm:flex-none">
+                <Button className="bg-sky-600 hover:bg-sky-700 w-full sm:w-auto" size="sm">
                   <Plus className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
-                  {labels.publishPhone}
+                  <span className="hidden sm:inline">{labels.publishPhone}</span>
+                  <span className="sm:hidden">{isRTL ? 'نشر' : 'Publier'}</span>
                 </Button>
               </Link>
-              <Link to="/compare">
-                <Button variant="outline">
+              <Link to="/compare" className="flex-1 sm:flex-none">
+                <Button variant="outline" className="w-full sm:w-auto" size="sm">
                   <BarChart2 className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
-                  {labels.compare}
+                  <span className="hidden sm:inline">{labels.compare}</span>
+                  <span className="sm:hidden">{isRTL ? 'مقارنة' : 'Comparer'}</span>
                 </Button>
               </Link>
             </div>
@@ -182,7 +205,7 @@ export default function PhonesPage() {
 
           {/* Filters */}
           <div className="max-w-5xl mx-auto">
-            <div className={cn('flex flex-wrap gap-4 mt-6', isRTL && 'flex-row-reverse')}>
+            <div className={cn('flex flex-col sm:flex-row flex-wrap gap-3 mt-4', isRTL && 'sm:flex-row-reverse')}>
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
                 <Search className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
@@ -196,8 +219,8 @@ export default function PhonesPage() {
               </div>
             </div>
 
-            <Select value={cityId || 'all'} onValueChange={(v) => { setCityId(v === 'all' ? '' : v); setPage(1); }}>
-              <SelectTrigger className="w-[180px]">
+            <Select value={cityId || 'all'} onValueChange={(v) => { setCityId(v === 'all' ? '' : v); setNeighborhoodId(''); setPage(1); }}>
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <MapPin className="h-4 w-4 mr-2" />
                 <SelectValue placeholder={labels.allCities} />
               </SelectTrigger>
@@ -211,8 +234,25 @@ export default function PhonesPage() {
               </SelectContent>
             </Select>
 
+            {cityId && neighborhoods.length > 0 && (
+              <Select value={neighborhoodId || 'all'} onValueChange={(v) => { setNeighborhoodId(v === 'all' ? '' : v); setPage(1); }}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder={labels.allNeighborhoods} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{labels.allNeighborhoods}</SelectItem>
+                  {neighborhoods.map((neighborhood) => (
+                    <SelectItem key={neighborhood.id} value={neighborhood.id}>
+                      {neighborhood.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+
             <Select value={condition} onValueChange={(v) => { setCondition(v as any); setPage(1); }}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue />
               </SelectTrigger>
@@ -223,14 +263,14 @@ export default function PhonesPage() {
               </SelectContent>
             </Select>
 
-            <Button onClick={handleSearch}>
+            <Button onClick={handleSearch} className="w-full sm:w-auto">
               <Search className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
               {isRTL ? 'بحث' : 'Rechercher'}
             </Button>
           </div>
 
           {/* Results count */}
-          <div className={cn('mt-4 text-sm text-gray-600', isRTL && 'text-right')}>
+          <div className={cn('mt-3 text-sm text-gray-600', isRTL && 'text-right')}>
             {totalCount} {labels.results}
           </div>
           </div>
@@ -306,7 +346,12 @@ export default function PhonesPage() {
                         {item.city && (
                           <p className={cn('text-sm text-gray-600 flex items-center gap-1 mb-2', isRTL && 'flex-row-reverse justify-end')}>
                             <MapPin className="h-3 w-3" />
-                            {getCityName(item.city as City, language)}
+                            <span>
+                              {getCityName(item.city as City, language)}
+                              {item.neighborhood && (
+                                <span className="text-gray-500"> • {(item.neighborhood as Neighborhood).name}</span>
+                              )}
+                            </span>
                           </p>
                         )}
                         <p className={cn('font-bold text-lg text-blue-600', isRTL && 'text-right')}>
