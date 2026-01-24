@@ -74,12 +74,12 @@ function Navigation() {
   };
 
   return (
-    <nav className={cn('bg-white border-b border-border sticky top-0 z-50 shadow-sm min-h-[60px] md:min-h-[72px]')} dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="containerPage px-4 md:px-6 py-0 flex items-center min-h-[60px] md:min-h-[72px]">
+    <nav className={cn('bg-white border-b border-border sticky top-0 z-50 shadow-sm')} dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="containerPage px-3 md:px-6 py-2 md:py-3 flex items-center">
         <div className={cn('flex justify-between items-center w-full', isRTL && 'flex-row-reverse')}>
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <div className="h-14 flex items-center bg-white p-1.5 border border-gray-200 rounded-lg">
+            <div className="h-10 md:h-12 flex items-center bg-white p-1 border border-gray-200 rounded-lg">
               <img 
                 src="/assets/logo/logo.png" 
                 alt="Mobile Morocco Logo" 
@@ -175,10 +175,10 @@ function Navigation() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-1.5">
             <button
               onClick={() => setLanguage(language === 'ar' ? 'fr' : 'ar')}
-              className="p-2 rounded-lg hover:bg-muted transition-colors"
+              className="p-1.5 rounded-lg hover:bg-muted transition-colors"
               aria-label={language === 'ar' ? 'Switch to French' : 'Switch to Arabic'}
             >
               <Globe className="h-5 w-5" />
@@ -187,10 +187,10 @@ function Navigation() {
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <button 
-                  className="p-2 rounded-lg hover:bg-muted transition-colors"
+                  className="p-1.5 rounded-lg hover:bg-muted transition-colors"
                   aria-label="Open menu"
                 >
-                  <Menu className="h-6 w-6" />
+                  <Menu className="h-5 w-5" />
                 </button>
               </SheetTrigger>
               <SheetContent side={isRTL ? 'right' : 'left'} className="w-[280px]">

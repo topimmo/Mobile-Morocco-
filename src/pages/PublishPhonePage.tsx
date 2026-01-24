@@ -16,6 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getCities, City } from "@/lib/supabase/cities";
 import { createItem } from "@/lib/supabase/stores";
 import { uploadImages } from "@/lib/supabase/storage";
+import { NeighborhoodAutocomplete } from "@/components/search/NeighborhoodAutocomplete";
 import { 
   Smartphone, 
   Upload, 
@@ -35,6 +36,7 @@ interface PhoneFormData {
   condition: "new" | "used";
   price: string;
   cityId: string;
+  neighborhoodId: string;
   description: string;
   contactPhone: string;
   contactMethod: "whatsapp" | "phone" | "both";
@@ -68,6 +70,8 @@ const translations = {
     pricePlaceholder: "0",
     city: "المدينة",
     selectCity: "اختر المدينة",
+    neighborhood: "الحي",
+    neighborhoodPlaceholder: "اختر أو أضف حي...",
     description: "الوصف",
     descriptionPlaceholder: "أضف تفاصيل إضافية عن الهاتف...",
     contactPhone: "رقم الهاتف",
@@ -141,6 +145,8 @@ const translations = {
     pricePlaceholder: "0",
     city: "Ville",
     selectCity: "Sélectionner la ville",
+    neighborhood: "Quartier",
+    neighborhoodPlaceholder: "Sélectionner ou ajouter un quartier...",
     description: "Description",
     descriptionPlaceholder: "Ajoutez des détails sur le téléphone...",
     contactPhone: "Numéro de téléphone",
@@ -214,6 +220,8 @@ const translations = {
     pricePlaceholder: "0",
     city: "City",
     selectCity: "Select city",
+    neighborhood: "Neighborhood",
+    neighborhoodPlaceholder: "Select or add neighborhood...",
     description: "Description",
     descriptionPlaceholder: "Add details about the phone...",
     contactPhone: "Phone Number",
@@ -308,6 +316,7 @@ export default function PublishPhonePage() {
     condition: "used",
     price: "",
     cityId: "",
+    neighborhoodId: "",
     description: "",
     contactPhone: "",
     contactMethod: "whatsapp",
@@ -323,6 +332,10 @@ export default function PublishPhonePage() {
     simType: "",
     network: ""
   });
+
+  const handleNeighborhoodChange = (id: string, _neighborhood?: any) => {
+    setFormData(prev => ({ ...prev, neighborhoodId: id }));
+  };
 
   useEffect(() => {
     async function loadCities() {
@@ -450,6 +463,7 @@ export default function PublishPhonePage() {
       description_ar: formData.description,
       description_fr: formData.description,
       city_id: formData.cityId,
+      neighborhood_id: formData.neighborhoodId || null,
       whatsapp: formData.contactMethod === 'whatsapp' || formData.contactMethod === 'both' ? formData.contactPhone : null,
       phone: formData.contactMethod === 'phone' || formData.contactMethod === 'both' ? formData.contactPhone : null,
       user_id: user?.id || null,
@@ -670,7 +684,7 @@ export default function PublishPhonePage() {
                     <Label htmlFor="city">{t.city} *</Label>
                     <Select
                       value={formData.cityId}
-                      onValueChange={(value) => setFormData(prev => ({ ...prev, cityId: value }))}
+                      onValueChange={(value) => setFormData(prev => ({ ...prev, cityId: value, neighborhoodId: "" }))}
                     >
                       <SelectTrigger className={errors.cityId ? "border-red-500" : ""}>
                         <SelectValue placeholder={t.selectCity} />
@@ -685,6 +699,21 @@ export default function PublishPhonePage() {
                     </Select>
                     {errors.cityId && <p className="text-sm text-red-500">{errors.cityId}</p>}
                   </div>
+
+                  {/* Neighborhood */}
+                  {formData.cityId && (
+                    <div className="space-y-2">
+                      <Label htmlFor="neighborhood">{t.neighborhood}</Label>
+                      <NeighborhoodAutocomplete
+                        cityId={formData.cityId}
+                        value={formData.neighborhoodId}
+                        onChange={handleNeighborhoodChange}
+                        language={language}
+                        placeholder={t.neighborhoodPlaceholder}
+                        userId={user?.id}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {/* Description */}
