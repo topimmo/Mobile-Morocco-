@@ -159,10 +159,10 @@ export default function ImporterDashboard() {
         </div>
 
         <Tabs defaultValue="stores" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="stores">Magasins</TabsTrigger>
-            <TabsTrigger value="products">Produits</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-1">
+            <TabsTrigger value="stores" className="text-xs sm:text-sm">Magasins</TabsTrigger>
+            <TabsTrigger value="products" className="text-xs sm:text-sm">Produits</TabsTrigger>
+            <TabsTrigger value="analytics" className="text-xs sm:text-sm">Analytics</TabsTrigger>
           </TabsList>
           <TabsContent value="stores" className="mt-6">
             <Card>

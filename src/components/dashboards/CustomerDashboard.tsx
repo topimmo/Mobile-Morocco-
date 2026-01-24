@@ -160,11 +160,11 @@ export default function CustomerDashboard() {
         </div>
 
         <Tabs defaultValue="orders" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="orders">Mes commandes</TabsTrigger>
-            <TabsTrigger value="favorites">Favoris</TabsTrigger>
-            <TabsTrigger value="tickets">Support</TabsTrigger>
-            <TabsTrigger value="profile">Profil</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1">
+            <TabsTrigger value="orders" className="text-xs sm:text-sm">Mes commandes</TabsTrigger>
+            <TabsTrigger value="favorites" className="text-xs sm:text-sm">Favoris</TabsTrigger>
+            <TabsTrigger value="tickets" className="text-xs sm:text-sm">Support</TabsTrigger>
+            <TabsTrigger value="profile" className="text-xs sm:text-sm">Profil</TabsTrigger>
           </TabsList>
           <TabsContent value="orders" className="mt-6">
             <Card>

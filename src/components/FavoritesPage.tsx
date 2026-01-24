@@ -158,7 +158,7 @@ const FavoritesPage = () => {
             <Filter className="h-4 w-4 text-gray-500" />
             <span className="text-sm font-medium">Filter:</span>
             <Select value={filterBy} onValueChange={setFilterBy}>
-              <SelectTrigger className="w-[140px]">
+              <SelectTrigger className="w-full sm:w-[140px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -173,7 +173,7 @@ const FavoritesPage = () => {
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Sort by:</span>
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[160px]">
+              <SelectTrigger className="w-full sm:w-[160px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

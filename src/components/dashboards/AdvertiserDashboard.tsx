@@ -202,10 +202,10 @@ export default function AdvertiserDashboard() {
 
         {/* Ads List */}
         <Tabs defaultValue="all" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="all">Toutes</TabsTrigger>
-            <TabsTrigger value="active">Actives</TabsTrigger>
-            <TabsTrigger value="pending">En Attente</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-1">
+            <TabsTrigger value="all" className="text-xs sm:text-sm">Toutes</TabsTrigger>
+            <TabsTrigger value="active" className="text-xs sm:text-sm">Actives</TabsTrigger>
+            <TabsTrigger value="pending" className="text-xs sm:text-sm">En Attente</TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="mt-6">

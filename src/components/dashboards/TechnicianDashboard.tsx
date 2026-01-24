@@ -177,10 +177,10 @@ export default function TechnicianDashboard() {
         </div>
 
         <Tabs defaultValue="jobs" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="jobs">Demandes</TabsTrigger>
-            <TabsTrigger value="services">Mes services</TabsTrigger>
-            <TabsTrigger value="schedule">Planning</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-1">
+            <TabsTrigger value="jobs" className="text-xs sm:text-sm">Demandes</TabsTrigger>
+            <TabsTrigger value="services" className="text-xs sm:text-sm">Mes services</TabsTrigger>
+            <TabsTrigger value="schedule" className="text-xs sm:text-sm">Planning</TabsTrigger>
           </TabsList>
           <TabsContent value="jobs" className="mt-6">
             <Card>

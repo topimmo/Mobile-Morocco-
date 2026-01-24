@@ -400,10 +400,10 @@ export default function ProductDetails() {
         <Card>
           <CardContent className="p-6">
             <Tabs defaultValue="specs" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="specs">Caractéristiques</TabsTrigger>
-                <TabsTrigger value="description">Description</TabsTrigger>
-                <TabsTrigger value="seller">Vendeur</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-1">
+                <TabsTrigger value="specs" className="text-xs sm:text-sm">Caractéristiques</TabsTrigger>
+                <TabsTrigger value="description" className="text-xs sm:text-sm">Description</TabsTrigger>
+                <TabsTrigger value="seller" className="text-xs sm:text-sm">Vendeur</TabsTrigger>
               </TabsList>
               
               <TabsContent value="specs" className="mt-6">
