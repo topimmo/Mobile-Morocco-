@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import {
   Select,
@@ -83,6 +84,14 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
   const [compatibility, setCompatibility] = useState('');
   const [partType, setPartType] = useState('');
   
+  // Phone-specific fields (as per requirements)
+  const [color, setColor] = useState('');
+  const [ram, setRam] = useState('');
+  const [warranty, setWarranty] = useState<'yes' | 'no' | ''>('');
+  const [accessories, setAccessories] = useState<string[]>([]);
+  const [simType, setSimType] = useState('');
+  const [network, setNetwork] = useState('');
+  
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [uploadingImages, setUploadingImages] = useState(false);
   
@@ -128,6 +137,18 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
     batteryHealth: isRTL ? 'صحة البطارية' : 'Santé de la batterie',
     compatibility: isRTL ? 'التوافق' : 'Compatibilité',
     partType: isRTL ? 'نوع القطعة' : 'Type de pièce',
+    color: isRTL ? 'اللون *' : 'Couleur *',
+    ram: isRTL ? 'الذاكرة العشوائية (RAM)' : 'RAM',
+    warranty: isRTL ? 'الضمان' : 'Garantie',
+    yes: isRTL ? 'نعم' : 'Oui',
+    no: isRTL ? 'لا' : 'Non',
+    accessories: isRTL ? 'الملحقات' : 'Accessoires',
+    box: isRTL ? 'العلبة' : 'Boîte',
+    charger: isRTL ? 'الشاحن' : 'Chargeur',
+    cable: isRTL ? 'الكابل' : 'Câble',
+    earphones: isRTL ? 'السماعات' : 'Écouteurs',
+    simType: isRTL ? 'نوع الشريحة' : 'Type de SIM',
+    network: isRTL ? 'الشبكة' : 'Réseau',
     helperText: isRTL 
       ? 'الحقول الاختيارية تساعد إعلانك على الحصول على مزيد من الظهور' 
       : 'Les champs optionnels aident votre annonce à obtenir plus de visibilité',
@@ -207,10 +228,23 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
     }
 
     // Only validate required fields: title, price, category, city, phone
+    // For phones, also validate color and storage (required per spec)
     if (!titleAr.trim() || !price || !categoryId || !cityId || !phone.trim()) {
       toast({
         title: labels.error,
         description: labels.required,
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Phone-specific required fields
+    if (categoryType === 'phone' && (!color.trim() || !storage.trim())) {
+      toast({
+        title: labels.error,
+        description: isRTL 
+          ? 'اللون والسعة التخزينية مطلوبان للهواتف' 
+          : 'La couleur et le stockage sont requis pour les téléphones',
         variant: 'destructive',
       });
       return;
@@ -222,8 +256,14 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
       // Build technical details text for category-specific fields
       let technicalDetails = '';
       if (categoryType === 'phone') {
+        if (color) technicalDetails += `\n${isRTL ? 'اللون: ' : 'Couleur: '}${color}`;
         if (storage) technicalDetails += `\n${isRTL ? 'السعة: ' : 'Stockage: '}${storage}`;
+        if (ram) technicalDetails += `\n${isRTL ? 'الذاكرة: ' : 'RAM: '}${ram}`;
         if (batteryHealth) technicalDetails += `\n${isRTL ? 'صحة البطارية: ' : 'Santé batterie: '}${batteryHealth}`;
+        if (warranty) technicalDetails += `\n${isRTL ? 'الضمان: ' : 'Garantie: '}${warranty === 'yes' ? (isRTL ? 'نعم' : 'Oui') : (isRTL ? 'لا' : 'Non')}`;
+        if (accessories.length > 0) technicalDetails += `\n${isRTL ? 'الملحقات: ' : 'Accessoires: '}${accessories.join(', ')}`;
+        if (simType) technicalDetails += `\n${isRTL ? 'نوع الشريحة: ' : 'Type SIM: '}${simType}`;
+        if (network) technicalDetails += `\n${isRTL ? 'الشبكة: ' : 'Réseau: '}${network}`;
       } else if (categoryType === 'accessory' && compatibility) {
         technicalDetails += `\n${isRTL ? 'التوافق: ' : 'Compatibilité: '}${compatibility}`;
       } else if (categoryType === 'spare-part') {
@@ -430,22 +470,116 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
 
             {/* Phone-specific fields */}
             {categoryType === 'phone' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className={isRTL ? 'text-right block' : ''}>{labels.storage}</Label>
-                  <Input
-                    value={storage}
-                    onChange={(e) => setStorage(e.target.value)}
-                    placeholder={isRTL ? 'مثال: 128GB, 256GB' : 'ex: 128GB, 256GB'}
-                  />
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className={isRTL ? 'text-right block' : ''}>{labels.color}</Label>
+                    <Input
+                      value={color}
+                      onChange={(e) => setColor(e.target.value)}
+                      placeholder={isRTL ? 'مثال: أسود، أبيض، أزرق' : 'ex: Noir, Blanc, Bleu'}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className={isRTL ? 'text-right block' : ''}>{labels.storage}</Label>
+                    <Select value={storage} onValueChange={setStorage} required>
+                      <SelectTrigger>
+                        <SelectValue placeholder={isRTL ? 'اختر السعة' : 'Sélectionner'} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="64GB">64GB</SelectItem>
+                        <SelectItem value="128GB">128GB</SelectItem>
+                        <SelectItem value="256GB">256GB</SelectItem>
+                        <SelectItem value="512GB">512GB</SelectItem>
+                        <SelectItem value="1TB">1TB</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label className={isRTL ? 'text-right block' : ''}>{labels.batteryHealth}</Label>
-                  <Input
-                    value={batteryHealth}
-                    onChange={(e) => setBatteryHealth(e.target.value)}
-                    placeholder={isRTL ? 'مثال: 85%, 90%' : 'ex: 85%, 90%'}
-                  />
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className={isRTL ? 'text-right block' : ''}>{labels.ram}</Label>
+                    <Input
+                      value={ram}
+                      onChange={(e) => setRam(e.target.value)}
+                      placeholder={isRTL ? 'مثال: 4GB, 6GB, 8GB' : 'ex: 4GB, 6GB, 8GB'}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className={isRTL ? 'text-right block' : ''}>{labels.batteryHealth}</Label>
+                    <Input
+                      value={batteryHealth}
+                      onChange={(e) => setBatteryHealth(e.target.value)}
+                      placeholder={isRTL ? 'مثال: 85%, 90%, ممتازة' : 'ex: 85%, 90%, Excellente'}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className={isRTL ? 'text-right block' : ''}>{labels.warranty}</Label>
+                    <Select value={warranty} onValueChange={(v) => setWarranty(v as typeof warranty)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={isRTL ? 'اختر' : 'Sélectionner'} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="yes">{labels.yes}</SelectItem>
+                        <SelectItem value="no">{labels.no}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className={isRTL ? 'text-right block' : ''}>{labels.simType}</Label>
+                    <Input
+                      value={simType}
+                      onChange={(e) => setSimType(e.target.value)}
+                      placeholder={isRTL ? 'مثال: نانو، eSIM' : 'ex: Nano, eSIM'}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className={isRTL ? 'text-right block' : ''}>{labels.network}</Label>
+                    <Select value={network} onValueChange={setNetwork}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={isRTL ? 'اختر' : 'Sélectionner'} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="4G">4G</SelectItem>
+                        <SelectItem value="5G">5G</SelectItem>
+                        <SelectItem value="4G/5G">4G/5G</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className={isRTL ? 'text-right block' : ''}>{labels.accessories}</Label>
+                    <div className="space-y-2 pt-2">
+                      {['box', 'charger', 'cable', 'earphones'].map((acc) => (
+                        <div key={acc} className="flex items-center space-x-2 rtl:space-x-reverse">
+                          <Checkbox
+                            id={acc}
+                            checked={accessories.includes(acc)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setAccessories([...accessories, acc]);
+                              } else {
+                                setAccessories(accessories.filter(a => a !== acc));
+                              }
+                            }}
+                          />
+                          <label
+                            htmlFor={acc}
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                          >
+                            {labels[acc as keyof typeof labels] || acc}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

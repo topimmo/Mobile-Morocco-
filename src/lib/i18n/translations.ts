@@ -131,6 +131,72 @@ const translations = {
       overview: 'Aperçu',
     },
   },
+  en: {
+    common: {
+      loading: 'Loading...',
+      error: 'An error occurred',
+      success: 'Success',
+    },
+    nav: {
+      dashboard: 'Dashboard',
+      login: 'Login',
+      register: 'Register',
+      logout: 'Logout',
+    },
+    auth: {
+      login: 'Login',
+      loginSubtitle: 'Enter your credentials to continue',
+      loginButton: 'Login',
+      register: 'Register',
+      registerSubtitle: 'Create a new account to get started',
+      registerButton: 'Register',
+      email: 'Email',
+      password: 'Password',
+      confirmPassword: 'Confirm Password',
+      fullName: 'Full Name',
+      resetPassword: 'Reset Password',
+      resetPasswordSubtitle: 'Enter your email to reset your password',
+      sendResetEmail: 'Send Reset Link',
+      resetEmailSent: 'A reset link has been sent to your email',
+      backToLogin: 'Back to Login',
+      noAccount: 'Don\'t have an account?',
+      haveAccount: 'Already have an account?',
+    },
+    home: {
+      title: 'Welcome to Mobile Morocco',
+      subtitle: 'Your favorite platform for smartphones, accessories and services',
+      featured: 'Featured Articles',
+      repairShops: 'Repair Shops',
+    },
+    search: {
+      placeholder: 'Search for a phone or accessory...',
+      button: 'Search',
+    },
+    listings: {
+      title: 'Listings',
+    },
+    repairShops: {
+      title: 'Repair Shops',
+    },
+    advertiser: {
+      dashboard: 'Advertiser Dashboard',
+      newCampaign: 'New Campaign',
+      activeCampaigns: 'Active Campaigns',
+      impressions: 'Impressions',
+      clicks: 'Clicks',
+      campaigns: 'Campaigns',
+      noCampaigns: 'No campaigns yet',
+      createCampaign: 'Create Advertising Campaign',
+    },
+    admin: {
+      dashboard: 'Admin Dashboard',
+      totalUsers: 'Total Users',
+      pendingListings: 'Pending Listings',
+      pendingShops: 'Pending Shops',
+      pendingCampaigns: 'Pending Campaigns',
+      overview: 'Overview',
+    },
+  },
 };
 
 export default translations;
