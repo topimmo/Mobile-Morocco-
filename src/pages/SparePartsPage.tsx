@@ -76,8 +76,13 @@ export default function SparePartsPage() {
         setNeighborhoodId('');
         return;
       }
-      const neighborhoodsData = await getNeighborhoodsByCity(cityId);
-      setNeighborhoods(neighborhoodsData);
+      try {
+        const neighborhoodsData = await getNeighborhoodsByCity(cityId);
+        setNeighborhoods(neighborhoodsData);
+      } catch (error) {
+        console.error('Error loading neighborhoods:', error);
+        setNeighborhoods([]);
+      }
     };
     loadNeighborhoods();
   }, [cityId]);
