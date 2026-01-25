@@ -101,6 +101,8 @@ const translations = {
     minPrice: "السعر يجب أن يكون أكبر من 0",
     imageLimit: "يمكنك رفع 6 صور كحد أقصى",
     uploadingImages: "جاري رفع الصور...",
+    imageCount: "صورة",
+    imagesCount: "صور",
     imageUploadSuccess: "تم رفع {count} صور بنجاح",
     imageUploadError: "فشل رفع الصور",
     imageUploadPartialSuccess: "تم رفع {success} من {total} صور",
@@ -184,6 +186,8 @@ const translations = {
     minPrice: "Le prix doit être supérieur à 0",
     imageLimit: "Vous pouvez télécharger jusqu'à 6 images",
     uploadingImages: "Téléchargement des images...",
+    imageCount: "image",
+    imagesCount: "images",
     imageUploadSuccess: "{count} images téléchargées avec succès",
     imageUploadError: "Échec du téléchargement",
     imageUploadPartialSuccess: "{success} sur {total} images téléchargées",
@@ -267,6 +271,8 @@ const translations = {
     minPrice: "Price must be greater than 0",
     imageLimit: "You can upload up to 6 images",
     uploadingImages: "Uploading images...",
+    imageCount: "image",
+    imagesCount: "images",
     imageUploadSuccess: "{count} images uploaded successfully",
     imageUploadError: "Upload failed",
     imageUploadPartialSuccess: "{success} of {total} images uploaded",
@@ -432,7 +438,7 @@ export default function PublishPhonePage() {
     // Show uploading toast
     toast({
       title: t.uploadingImages,
-      description: `${files.length} ${files.length === 1 ? 'image' : 'images'}...`
+      description: `${files.length} ${files.length === 1 ? t.imageCount : t.imagesCount}...`
     });
     
     // Upload to Supabase Storage

@@ -133,12 +133,19 @@ export async function uploadImage(
       // Provide specific error messages based on error type
       let errorMessage = 'Upload failed';
       
-      if (error.message.includes('policies') || error.message.includes('policy') || error.message.includes('permission')) {
+      // Check error code or message for specific issues
+      // Supabase storage errors have statusCode property
+      const statusCode = (error as any).statusCode;
+      const message = error.message.toLowerCase();
+      
+      if (statusCode === 403 || message.includes('policies') || message.includes('policy') || message.includes('permission') || message.includes('denied')) {
         errorMessage = 'Upload permission denied. Please log in to upload images.';
-      } else if (error.message.includes('size') || error.message.includes('too large')) {
+      } else if (statusCode === 413 || message.includes('size') || message.includes('too large') || message.includes('payload')) {
         errorMessage = 'File size exceeds the limit';
-      } else if (error.message.includes('type') || error.message.includes('mime')) {
+      } else if (statusCode === 415 || message.includes('type') || message.includes('mime') || message.includes('format')) {
         errorMessage = 'Invalid file type';
+      } else if (message.includes('bucket') || message.includes('not found')) {
+        errorMessage = 'Storage configuration error. Please contact support.';
       } else {
         errorMessage = `Upload failed: ${error.message}`;
       }
