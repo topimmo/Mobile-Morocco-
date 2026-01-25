@@ -15,6 +15,7 @@
     "deploy:check": "echo '🔍 Running production deploy checks...' && npm run typecheck && npm run build && npm run test:e2e && echo '✅ All checks passed! Ready for deployment.'",
     "deploy:preview": "npm run build && npm run preview",
     "deploy:safe": "npm run deploy:check && echo '🚀 Safe to deploy!'",
+    "deploy:vercel": "node scripts/vercel-validate.cjs",
     "types:supabase": "npx supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > src/types/supabase.ts"
   },
   "dependencies": {
