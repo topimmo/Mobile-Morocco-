@@ -1060,10 +1060,20 @@ export default function PublishPhonePage() {
                       onChange={handleImageUpload}
                       className="hidden"
                       id="image-upload"
+                      disabled={loading}
                     />
-                    <label htmlFor="image-upload" className="cursor-pointer">
-                      <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
-                      <p className="text-gray-600">{t.dragDrop}</p>
+                    <label htmlFor="image-upload" className={loading ? "cursor-not-allowed" : "cursor-pointer"}>
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-10 h-10 text-sky-600 mx-auto mb-2 animate-spin" />
+                          <p className="text-sky-600">{t.uploadingImages}</p>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+                          <p className="text-gray-600">{t.dragDrop}</p>
+                        </>
+                      )}
                     </label>
                   </div>
                   
