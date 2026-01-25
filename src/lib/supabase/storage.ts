@@ -129,9 +129,23 @@ export async function uploadImage(
 
     if (error) {
       console.error('Storage upload error:', error);
+      
+      // Provide specific error messages based on error type
+      let errorMessage = 'Upload failed';
+      
+      if (error.message.includes('policies') || error.message.includes('policy') || error.message.includes('permission')) {
+        errorMessage = 'Upload permission denied. Please log in to upload images.';
+      } else if (error.message.includes('size') || error.message.includes('too large')) {
+        errorMessage = 'File size exceeds the limit';
+      } else if (error.message.includes('type') || error.message.includes('mime')) {
+        errorMessage = 'Invalid file type';
+      } else {
+        errorMessage = `Upload failed: ${error.message}`;
+      }
+      
       return {
         url: null,
-        error: `Upload failed: ${error.message}`
+        error: errorMessage
       };
     }
 
