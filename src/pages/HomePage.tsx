@@ -521,7 +521,7 @@ export default function HomePage() {
           <h2 className="text-[22px] sm:text-[26px] md:text-3xl font-bold mb-3 md:mb-4">
             {isRTL ? 'انضم إلينا اليوم' : 'Rejoignez-nous Aujourd\'hui'}
           </h2>
-          <p className="text-[14px] sm:text-[16px] md:text-lg mb-5 md:mb-6 opacity-95">
+          <p className="text-[14px] sm:text-[16px] md:text-lg mb-5 md:mb-6">
             {isRTL 
               ? 'سجل الآن واستفد من خدماتنا المميزة'
               : 'Inscrivez-vous maintenant et profitez de nos services exclusifs'}
