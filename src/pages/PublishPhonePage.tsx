@@ -100,6 +100,13 @@ const translations = {
     invalidPhone: "رقم الهاتف غير صالح",
     minPrice: "السعر يجب أن يكون أكبر من 0",
     imageLimit: "يمكنك رفع 6 صور كحد أقصى",
+    uploadingImages: "جاري رفع الصور...",
+    imageCount: "صورة",
+    imagesCount: "صور",
+    imageUploadSuccess: "تم رفع {count} صور بنجاح",
+    imageUploadError: "فشل رفع الصور",
+    imageUploadPartialSuccess: "تم رفع {success} من {total} صور",
+    uploadPermissionDenied: "رفض الإذن. يرجى تسجيل الدخول للرفع.",
     rules: "قواعد النشر",
     rule1: "الإعلانات للعرض فقط (لا يوجد بيع مباشر عبر المنصة)",
     rule2: "يُرجى التأكد من صحة المعلومات",
@@ -178,6 +185,13 @@ const translations = {
     invalidPhone: "Numéro de téléphone invalide",
     minPrice: "Le prix doit être supérieur à 0",
     imageLimit: "Vous pouvez télécharger jusqu'à 6 images",
+    uploadingImages: "Téléchargement des images...",
+    imageCount: "image",
+    imagesCount: "images",
+    imageUploadSuccess: "{count} images téléchargées avec succès",
+    imageUploadError: "Échec du téléchargement",
+    imageUploadPartialSuccess: "{success} sur {total} images téléchargées",
+    uploadPermissionDenied: "Permission refusée. Veuillez vous connecter.",
     rules: "Règles de publication",
     rule1: "Les annonces sont à titre indicatif uniquement (pas de vente directe)",
     rule2: "Veuillez vérifier l'exactitude des informations",
@@ -256,6 +270,13 @@ const translations = {
     invalidPhone: "Invalid phone number",
     minPrice: "Price must be greater than 0",
     imageLimit: "You can upload up to 6 images",
+    uploadingImages: "Uploading images...",
+    imageCount: "image",
+    imagesCount: "images",
+    imageUploadSuccess: "{count} images uploaded successfully",
+    imageUploadError: "Upload failed",
+    imageUploadPartialSuccess: "{success} of {total} images uploaded",
+    uploadPermissionDenied: "Permission denied. Please log in to upload.",
     rules: "Publishing Rules",
     rule1: "Listings are for display only (no direct sales)",
     rule2: "Please ensure information accuracy",
@@ -394,6 +415,16 @@ export default function PublishPhonePage() {
     const files = e.target.files;
     if (!files) return;
 
+    // Check if user is authenticated
+    if (!user) {
+      toast({
+        title: t.uploadPermissionDenied,
+        description: t.loginRequired,
+        variant: "destructive"
+      });
+      return;
+    }
+
     if (formData.images.length + files.length > 6) {
       toast({
         title: t.imageLimit,
@@ -404,15 +435,22 @@ export default function PublishPhonePage() {
 
     setLoading(true);
     
+    // Show uploading toast
+    toast({
+      title: t.uploadingImages,
+      description: `${files.length} ${files.length === 1 ? t.imageCount : t.imagesCount}...`
+    });
+    
     // Upload to Supabase Storage
     const { urls, errors: uploadErrors } = await uploadImages(
       Array.from(files),
-      `phones/${user?.id || 'anonymous'}`,
+      `phones/${user.id}`,
       6 - formData.images.length
     );
 
     setLoading(false);
     
+    // Update form with successfully uploaded images
     if (urls.length > 0) {
       setFormData(prev => ({
         ...prev,
@@ -420,19 +458,34 @@ export default function PublishPhonePage() {
       }));
     }
 
-    if (uploadErrors.length > 0) {
+    // Show appropriate feedback based on results
+    if (urls.length > 0 && uploadErrors.length === 0) {
+      // All uploads succeeded
       toast({
-        title: uploadErrors[0],
+        title: t.imageUploadSuccess.replace('{count}', urls.length.toString()),
+        variant: "default"
+      });
+    } else if (urls.length > 0 && uploadErrors.length > 0) {
+      // Partial success
+      const totalFiles = urls.length + uploadErrors.length;
+      toast({
+        title: t.imageUploadPartialSuccess
+          .replace('{success}', urls.length.toString())
+          .replace('{total}', totalFiles.toString()),
+        description: uploadErrors.join(', '),
+        variant: "destructive"
+      });
+    } else if (urls.length === 0 && uploadErrors.length > 0) {
+      // All uploads failed
+      toast({
+        title: t.imageUploadError,
+        description: uploadErrors.join(' • '),
         variant: "destructive"
       });
     }
     
-    if (urls.length === 0 && uploadErrors.length > 0) {
-      toast({
-        title: "Image upload failed. Please try again.",
-        variant: "destructive"
-      });
-    }
+    // Reset the file input so the same file can be selected again
+    e.target.value = '';
   };
 
   const removeImage = (index: number) => {
@@ -1013,10 +1066,20 @@ export default function PublishPhonePage() {
                       onChange={handleImageUpload}
                       className="hidden"
                       id="image-upload"
+                      disabled={loading}
                     />
-                    <label htmlFor="image-upload" className="cursor-pointer">
-                      <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
-                      <p className="text-gray-600">{t.dragDrop}</p>
+                    <label htmlFor="image-upload" className={loading ? "cursor-not-allowed" : "cursor-pointer"}>
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-10 h-10 text-sky-600 mx-auto mb-2 animate-spin" />
+                          <p className="text-sky-600">{t.uploadingImages}</p>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+                          <p className="text-gray-600">{t.dragDrop}</p>
+                        </>
+                      )}
                     </label>
                   </div>
                   
