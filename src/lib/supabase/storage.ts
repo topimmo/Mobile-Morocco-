@@ -134,8 +134,8 @@ export async function uploadImage(
       let errorMessage = 'Upload failed';
       
       // Check error code or message for specific issues
-      // Supabase storage errors have statusCode property
-      const statusCode = (error as any).statusCode;
+      // Supabase storage errors may have statusCode property
+      const statusCode = (error as { statusCode?: number }).statusCode;
       const message = error.message.toLowerCase();
       
       if (statusCode === 403 || message.includes('policies') || message.includes('policy') || message.includes('permission') || message.includes('denied')) {
