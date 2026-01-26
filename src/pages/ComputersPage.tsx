@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerTrigger } from '@/components/ui/drawer';
+import { Separator } from '@/components/ui/separator';
 import { getComputers, ComputerWithRelations } from '@/lib/supabase/computers';
 import { getCities, City, getCityName } from '@/lib/supabase/cities';
 import { getNeighborhoodsByCity, Neighborhood } from '@/lib/supabase/neighborhoods';
@@ -29,6 +31,8 @@ import {
   Cpu,
   HardDrive,
   DollarSign,
+  X,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 export default function ComputersPage() {
@@ -55,6 +59,7 @@ export default function ComputersPage() {
   const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '');
   const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
   const [page, setPage] = useState(1);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   
   // Debounce search keyword for better performance
   const debouncedKeyword = useDebounce(keyword, 400);
@@ -74,8 +79,8 @@ export default function ComputersPage() {
     maxPrice: isRTL ? 'السعر الأقصى' : 'Prix max',
     new: isRTL ? 'جديد' : 'Neuf',
     used: isRTL ? 'مستعمل' : 'Occasion',
-    noResults: isRTL ? 'لا توجد حواسيب متاحة' : 'Aucun ordinateur disponible',
-    noResultsHint: isRTL ? 'حاول تغيير معايير البحث' : 'Essayez de modifier vos critères de recherche',
+    noResults: isRTL ? 'لا توجد نتائج' : 'Aucun résultat trouvé',
+    noResultsHint: isRTL ? 'جرب تعديل الفلاتر للحصول على نتائج أفضل' : 'Essayez d\'ajuster vos filtres pour de meilleurs résultats',
     loadMore: isRTL ? 'تحميل المزيد' : 'Charger plus',
     results: isRTL ? 'نتيجة' : 'résultats',
     shop: isRTL ? 'متجر' : 'Boutique',
@@ -85,6 +90,15 @@ export default function ComputersPage() {
     publishComputer: isRTL ? 'نشر حاسوبي' : 'Publier mon ordinateur',
     ram: isRTL ? 'ذاكرة RAM' : 'RAM',
     storage: isRTL ? 'التخزين' : 'Stockage',
+    filters: isRTL ? 'الفلاتر' : 'Filtres',
+    applyFilters: isRTL ? 'تطبيق الفلاتر' : 'Appliquer les filtres',
+    clearFilters: isRTL ? 'مسح الفلاتر' : 'Réinitialiser les filtres',
+    location: isRTL ? 'الموقع' : 'Localisation',
+    condition: isRTL ? 'الحالة' : 'État',
+    specifications: isRTL ? 'المواصفات' : 'Spécifications',
+    priceRange: isRTL ? 'نطاق السعر' : 'Fourchette de prix',
+    brand: isRTL ? 'الماركة' : 'Marque',
+    activeFilters: isRTL ? 'فلاتر نشطة' : 'filtres actifs',
   };
 
   useEffect(() => {
@@ -176,6 +190,35 @@ export default function ComputersPage() {
     if (minPrice) params.set('minPrice', minPrice);
     if (maxPrice) params.set('maxPrice', maxPrice);
     setSearchParams(params);
+    setIsFilterOpen(false);
+  };
+
+  const handleClearFilters = () => {
+    setKeyword('');
+    setCityId('');
+    setNeighborhoodId('');
+    setCondition('all');
+    setBrand('');
+    setMinRam('');
+    setStorageType('');
+    setMinPrice('');
+    setMaxPrice('');
+    setPage(1);
+    setSearchParams(new URLSearchParams());
+  };
+
+  const getActiveFiltersCount = () => {
+    let count = 0;
+    if (keyword) count++;
+    if (cityId) count++;
+    if (neighborhoodId) count++;
+    if (condition !== 'all') count++;
+    if (brand) count++;
+    if (minRam) count++;
+    if (storageType) count++;
+    if (minPrice) count++;
+    if (maxPrice) count++;
+    return count;
   };
 
   const formatPrice = (price: number | null, priceText?: string | null) => {
@@ -234,150 +277,246 @@ export default function ComputersPage() {
             </div>
           </div>
 
-          {/* Filters */}
+          {/* Mobile-friendly Filters */}
           <div className="max-w-5xl mx-auto">
-            <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto_auto] gap-3', isRTL && 'lg:grid-flow-dense')}>
-              <div className="sm:col-span-2 lg:col-span-1">
-                <div className="relative">
-                  <Search className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
-                  <Input
-                    placeholder={labels.search}
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                    className={cn(isRTL ? 'pr-10' : 'pl-10')}
-                  />
-                </div>
-              </div>
-
-              <Select value={cityId || 'all'} onValueChange={(v) => { setCityId(v === 'all' ? '' : v); setPage(1); }}>
-                <SelectTrigger className="w-full">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  <SelectValue placeholder={labels.allCities} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{labels.allCities}</SelectItem>
-                  {cities.map((city) => (
-                    <SelectItem key={city.id} value={city.id}>
-                      {getCityName(city, language)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {/* Neighborhood filter - only show when city is selected */}
-              {cityId && (
-                <Select value={neighborhoodId || 'all'} onValueChange={(v) => { setNeighborhoodId(v === 'all' ? '' : v); setPage(1); }}>
-                  <SelectTrigger className="w-full">
-                    <MapPin className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder={labels.allNeighborhoods} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">{labels.allNeighborhoods}</SelectItem>
-                    {neighborhoods.map((neighborhood) => (
-                      <SelectItem key={neighborhood.id} value={neighborhood.id}>
-                        {neighborhood.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-
-              <Select value={condition} onValueChange={(v) => { setCondition(v as any); setPage(1); }}>
-                <SelectTrigger className="w-full">
-                  <Filter className="h-4 w-4 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{labels.allConditions}</SelectItem>
-                  <SelectItem value="new">{labels.new}</SelectItem>
-                  <SelectItem value="used">{labels.used}</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Button onClick={handleSearch} className="w-full lg:w-auto">
-                <Search className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
-                {isRTL ? 'بحث' : 'Rechercher'}
-              </Button>
+            {/* Quick search bar - always visible */}
+            <div className="relative mb-4">
+              <Search className={cn('absolute top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400', isRTL ? 'right-4' : 'left-4')} />
+              <Input
+                placeholder={labels.search}
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                className={cn('h-12 text-base', isRTL ? 'pr-12' : 'pl-12')}
+              />
             </div>
 
-            {/* Additional Computer Filters */}
-            <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 mt-3', isRTL && 'lg:grid-flow-dense')}>
-              <Select value={brand || 'all'} onValueChange={(v) => { setBrand(v === 'all' ? '' : v); setPage(1); }}>
-                <SelectTrigger className="w-full">
-                  <Laptop className="h-4 w-4 mr-2" />
-                  <SelectValue placeholder={labels.allBrands} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{labels.allBrands}</SelectItem>
-                  <SelectItem value="Dell">Dell</SelectItem>
-                  <SelectItem value="HP">HP</SelectItem>
-                  <SelectItem value="Lenovo">Lenovo</SelectItem>
-                  <SelectItem value="Asus">Asus</SelectItem>
-                  <SelectItem value="Acer">Acer</SelectItem>
-                  <SelectItem value="Apple">Apple</SelectItem>
-                  <SelectItem value="MSI">MSI</SelectItem>
-                  <SelectItem value="Toshiba">Toshiba</SelectItem>
-                </SelectContent>
-              </Select>
+            {/* Filter Button and Active Count */}
+            <div className={cn('flex items-center gap-3', isRTL && 'flex-row-reverse')}>
+              <Drawer open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+                <DrawerTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className={cn(
+                      'flex-1 h-12 text-base font-medium border-2 relative',
+                      getActiveFiltersCount() > 0 && 'border-blue-500 bg-blue-50 text-blue-700'
+                    )}
+                  >
+                    <SlidersHorizontal className={cn('h-5 w-5', isRTL ? 'ml-2' : 'mr-2')} />
+                    {labels.filters}
+                    {getActiveFiltersCount() > 0 && (
+                      <Badge className={cn('ml-2 bg-blue-600', isRTL && 'mr-2 ml-0')}>
+                        {getActiveFiltersCount()}
+                      </Badge>
+                    )}
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent className="max-h-[85vh]">
+                  <DrawerHeader className={cn(isRTL && 'text-right')}>
+                    <DrawerTitle className="text-xl font-bold">{labels.filters}</DrawerTitle>
+                    {getActiveFiltersCount() > 0 && (
+                      <p className="text-sm text-gray-600 mt-1">
+                        {getActiveFiltersCount()} {labels.activeFilters}
+                      </p>
+                    )}
+                  </DrawerHeader>
+                  
+                  <div className="overflow-y-auto px-4 pb-4" dir={isRTL ? 'rtl' : 'ltr'}>
+                    {/* Location Section */}
+                    <div className="mb-6">
+                      <div className={cn('flex items-center gap-2 mb-3', isRTL && 'flex-row-reverse')}>
+                        <MapPin className="h-5 w-5 text-blue-600" />
+                        <h3 className="text-base font-semibold text-gray-900">{labels.location}</h3>
+                      </div>
+                      <div className="space-y-3">
+                        <Select value={cityId || 'all'} onValueChange={(v) => { setCityId(v === 'all' ? '' : v); setPage(1); }}>
+                          <SelectTrigger className="w-full h-12 text-base">
+                            <SelectValue placeholder={labels.allCities} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">{labels.allCities}</SelectItem>
+                            {cities.map((city) => (
+                              <SelectItem key={city.id} value={city.id}>
+                                {getCityName(city, language)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
 
-              <Select value={minRam || 'all'} onValueChange={(v) => { setMinRam(v === 'all' ? '' : v); setPage(1); }}>
-                <SelectTrigger className="w-full">
-                  <Cpu className="h-4 w-4 mr-2" />
-                  <SelectValue placeholder={labels.allRam} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{labels.allRam}</SelectItem>
-                  <SelectItem value="4">4GB+</SelectItem>
-                  <SelectItem value="8">8GB+</SelectItem>
-                  <SelectItem value="16">16GB+</SelectItem>
-                  <SelectItem value="32">32GB+</SelectItem>
-                  <SelectItem value="64">64GB+</SelectItem>
-                </SelectContent>
-              </Select>
+                        {cityId && (
+                          <Select value={neighborhoodId || 'all'} onValueChange={(v) => { setNeighborhoodId(v === 'all' ? '' : v); setPage(1); }}>
+                            <SelectTrigger className="w-full h-12 text-base">
+                              <SelectValue placeholder={labels.allNeighborhoods} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">{labels.allNeighborhoods}</SelectItem>
+                              {neighborhoods.map((neighborhood) => (
+                                <SelectItem key={neighborhood.id} value={neighborhood.id}>
+                                  {neighborhood.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      </div>
+                    </div>
 
-              <Select value={storageType || 'all'} onValueChange={(v) => { setStorageType(v === 'all' ? '' : v); setPage(1); }}>
-                <SelectTrigger className="w-full">
-                  <HardDrive className="h-4 w-4 mr-2" />
-                  <SelectValue placeholder={labels.allStorageTypes} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{labels.allStorageTypes}</SelectItem>
-                  <SelectItem value="SSD">SSD</SelectItem>
-                  <SelectItem value="HDD">HDD</SelectItem>
-                  <SelectItem value="SSD+HDD">SSD+HDD</SelectItem>
-                </SelectContent>
-              </Select>
+                    <Separator className="my-4" />
 
-              <div className="relative">
-                <DollarSign className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
-                <Input
-                  type="number"
-                  placeholder={labels.minPrice}
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  className={cn(isRTL ? 'pr-10' : 'pl-10')}
-                  min="0"
-                />
-              </div>
+                    {/* Condition Section */}
+                    <div className="mb-6">
+                      <div className={cn('flex items-center gap-2 mb-3', isRTL && 'flex-row-reverse')}>
+                        <Filter className="h-5 w-5 text-blue-600" />
+                        <h3 className="text-base font-semibold text-gray-900">{labels.condition}</h3>
+                      </div>
+                      <Select value={condition} onValueChange={(v) => { setCondition(v as any); setPage(1); }}>
+                        <SelectTrigger className="w-full h-12 text-base">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">{labels.allConditions}</SelectItem>
+                          <SelectItem value="new">{labels.new}</SelectItem>
+                          <SelectItem value="used">{labels.used}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-              <div className="relative">
-                <DollarSign className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
-                <Input
-                  type="number"
-                  placeholder={labels.maxPrice}
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  className={cn(isRTL ? 'pr-10' : 'pl-10')}
-                  min="0"
-                />
-              </div>
+                    <Separator className="my-4" />
+
+                    {/* Specifications Section - Key fields highlighted */}
+                    <div className="mb-6">
+                      <div className={cn('flex items-center gap-2 mb-3', isRTL && 'flex-row-reverse')}>
+                        <Laptop className="h-5 w-5 text-blue-600" />
+                        <h3 className="text-base font-semibold text-gray-900">{labels.specifications}</h3>
+                      </div>
+                      <div className="space-y-3">
+                        {/* Brand - Highlighted as key field */}
+                        <div>
+                          <label className={cn('block text-sm font-medium text-gray-700 mb-1.5', isRTL && 'text-right')}>
+                            {labels.brand}
+                          </label>
+                          <Select value={brand || 'all'} onValueChange={(v) => { setBrand(v === 'all' ? '' : v); setPage(1); }}>
+                            <SelectTrigger className="w-full h-12 text-base font-medium border-2">
+                              <SelectValue placeholder={labels.allBrands} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">{labels.allBrands}</SelectItem>
+                              <SelectItem value="Dell">Dell</SelectItem>
+                              <SelectItem value="HP">HP</SelectItem>
+                              <SelectItem value="Lenovo">Lenovo</SelectItem>
+                              <SelectItem value="Asus">Asus</SelectItem>
+                              <SelectItem value="Acer">Acer</SelectItem>
+                              <SelectItem value="Apple">Apple</SelectItem>
+                              <SelectItem value="MSI">MSI</SelectItem>
+                              <SelectItem value="Toshiba">Toshiba</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <label className={cn('block text-sm font-medium text-gray-700 mb-1.5', isRTL && 'text-right')}>
+                            <Cpu className="inline h-4 w-4 mr-1" />
+                            {labels.ram}
+                          </label>
+                          <Select value={minRam || 'all'} onValueChange={(v) => { setMinRam(v === 'all' ? '' : v); setPage(1); }}>
+                            <SelectTrigger className="w-full h-12 text-base">
+                              <SelectValue placeholder={labels.allRam} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">{labels.allRam}</SelectItem>
+                              <SelectItem value="4">4GB+</SelectItem>
+                              <SelectItem value="8">8GB+</SelectItem>
+                              <SelectItem value="16">16GB+</SelectItem>
+                              <SelectItem value="32">32GB+</SelectItem>
+                              <SelectItem value="64">64GB+</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <label className={cn('block text-sm font-medium text-gray-700 mb-1.5', isRTL && 'text-right')}>
+                            <HardDrive className="inline h-4 w-4 mr-1" />
+                            {labels.storage}
+                          </label>
+                          <Select value={storageType || 'all'} onValueChange={(v) => { setStorageType(v === 'all' ? '' : v); setPage(1); }}>
+                            <SelectTrigger className="w-full h-12 text-base">
+                              <SelectValue placeholder={labels.allStorageTypes} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">{labels.allStorageTypes}</SelectItem>
+                              <SelectItem value="SSD">SSD</SelectItem>
+                              <SelectItem value="HDD">HDD</SelectItem>
+                              <SelectItem value="SSD+HDD">SSD+HDD</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Separator className="my-4" />
+
+                    {/* Price Range Section - Highlighted as key field */}
+                    <div className="mb-6">
+                      <div className={cn('flex items-center gap-2 mb-3', isRTL && 'flex-row-reverse')}>
+                        <DollarSign className="h-5 w-5 text-blue-600" />
+                        <h3 className="text-base font-semibold text-gray-900">{labels.priceRange}</h3>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className={cn('block text-sm font-medium text-gray-700 mb-1.5', isRTL && 'text-right')}>
+                            {labels.minPrice}
+                          </label>
+                          <Input
+                            type="number"
+                            placeholder="0"
+                            value={minPrice}
+                            onChange={(e) => setMinPrice(e.target.value)}
+                            className="h-12 text-base font-medium border-2"
+                            min="0"
+                          />
+                        </div>
+                        <div>
+                          <label className={cn('block text-sm font-medium text-gray-700 mb-1.5', isRTL && 'text-right')}>
+                            {labels.maxPrice}
+                          </label>
+                          <Input
+                            type="number"
+                            placeholder="∞"
+                            value={maxPrice}
+                            onChange={(e) => setMaxPrice(e.target.value)}
+                            className="h-12 text-base font-medium border-2"
+                            min="0"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <DrawerFooter className="border-t pt-4">
+                    <div className="grid grid-cols-2 gap-3 w-full">
+                      <Button 
+                        variant="outline" 
+                        onClick={handleClearFilters}
+                        className="h-12 text-base font-medium"
+                      >
+                        <X className={cn('h-5 w-5', isRTL ? 'ml-2' : 'mr-2')} />
+                        {labels.clearFilters}
+                      </Button>
+                      <Button 
+                        onClick={handleSearch}
+                        className="h-12 text-base font-medium bg-blue-600 hover:bg-blue-700"
+                      >
+                        <Search className={cn('h-5 w-5', isRTL ? 'ml-2' : 'mr-2')} />
+                        {labels.applyFilters}
+                      </Button>
+                    </div>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
             </div>
 
             {/* Results count */}
-            <div className={cn('mt-3 text-sm text-gray-600', isRTL && 'text-right')}>
+            <div className={cn('mt-4 text-sm text-gray-600', isRTL && 'text-right')}>
               {totalCount} {labels.results}
             </div>
           </div>
