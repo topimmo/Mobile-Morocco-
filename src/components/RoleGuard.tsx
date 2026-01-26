@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/supabase/client';
 import { UserRole } from '@/services/authService';
+import { getExponentialBackoffDelay, sleep } from '@/utils/retry';
 
 interface RoleGuardProps {
   children: ReactNode;
@@ -56,10 +57,7 @@ export function RoleGuard({
         while (retryCount < 3 && !profile) {
           if (retryCount > 0) {
             console.log(`RoleGuard: Retrying profile fetch (attempt ${retryCount + 1}/3)...`);
-            // Exponential backoff formula: 2^(retryCount-1) * 500ms
-            // First retry (retryCount=1): 2^0 * 500 = 500ms
-            // Second retry (retryCount=2): 2^1 * 500 = 1000ms
-            await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount - 1) * 500));
+            await sleep(getExponentialBackoffDelay(retryCount));
           }
 
           const result = await supabase

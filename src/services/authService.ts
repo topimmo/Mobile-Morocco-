@@ -1,6 +1,7 @@
 import { supabase } from '@/utils/supabaseClient';
 import { CustomerProfile, ImporterProfile, TechnicianProfile } from '@/models/User';
 import type { User } from '@supabase/supabase-js';
+import { getExponentialBackoffDelay, sleep } from '@/utils/retry';
 
 // Role types matching the database constraint
 export type UserRole = 'user' | 'agent' | 'merchant' | 'admin';
@@ -486,10 +487,7 @@ export const signInAndRedirect = async (
     while (retryCount < 3 && !role) {
       if (retryCount > 0) {
         console.log(`signInAndRedirect: Retrying role fetch (attempt ${retryCount + 1}/3)...`);
-        // Exponential backoff formula: 2^(retryCount-1) * 500ms
-        // First retry (retryCount=1): 2^0 * 500 = 500ms
-        // Second retry (retryCount=2): 2^1 * 500 = 1000ms
-        await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount - 1) * 500));
+        await sleep(getExponentialBackoffDelay(retryCount));
       }
 
       const result = await getUserRole(userId);

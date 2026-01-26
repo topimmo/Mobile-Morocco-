@@ -100,9 +100,9 @@ CREATE POLICY "Service role can insert profiles" ON profiles
   FOR INSERT
   WITH CHECK (true);
 
--- Step 6: Create index on role if not exists
+-- Step 7: Create index on role for better query performance
 CREATE INDEX IF NOT EXISTS profiles_role_idx ON profiles(role);
 
--- Step 7: Add helpful comments
+-- Step 8: Add helpful comments for documentation
 COMMENT ON COLUMN profiles.role IS 'User role: user (default/private seller), agent (technician/craftsman), merchant (store/importer), admin';
 COMMENT ON CONSTRAINT profiles_role_check ON profiles IS 'Ensures role is one of: user, agent, merchant, admin';
