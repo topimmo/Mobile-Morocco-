@@ -15,6 +15,7 @@ import { getNeighborhoodsByCity, Neighborhood } from '@/lib/supabase/neighborhoo
 import { apiCache, SimpleCache } from '@/lib/cache';
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
+import { SEO } from '@/components/SEO';
 import {
   Laptop,
   MapPin,
@@ -27,6 +28,7 @@ import {
   Plus,
   Cpu,
   HardDrive,
+  DollarSign,
 } from 'lucide-react';
 
 export default function ComputersPage() {
@@ -50,6 +52,8 @@ export default function ComputersPage() {
   const [brand, setBrand] = useState(searchParams.get('brand') || '');
   const [minRam, setMinRam] = useState(searchParams.get('minRam') || '');
   const [storageType, setStorageType] = useState(searchParams.get('storageType') || '');
+  const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '');
+  const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
   const [page, setPage] = useState(1);
   
   // Debounce search keyword for better performance
@@ -66,6 +70,8 @@ export default function ComputersPage() {
     allBrands: isRTL ? 'جميع الماركات' : 'Toutes les marques',
     allRam: isRTL ? 'جميع الذاكرة' : 'Toute la RAM',
     allStorageTypes: isRTL ? 'جميع أنواع التخزين' : 'Tous les types de stockage',
+    minPrice: isRTL ? 'السعر الأدنى' : 'Prix min',
+    maxPrice: isRTL ? 'السعر الأقصى' : 'Prix max',
     new: isRTL ? 'جديد' : 'Neuf',
     used: isRTL ? 'مستعمل' : 'Occasion',
     noResults: isRTL ? 'لا توجد حواسيب متاحة' : 'Aucun ordinateur disponible',
@@ -119,6 +125,8 @@ export default function ComputersPage() {
       if (brand) filters.brand = brand;
       if (minRam) filters.minRam = parseInt(minRam);
       if (storageType) filters.storageType = storageType;
+      if (minPrice) filters.minPrice = parseFloat(minPrice);
+      if (maxPrice) filters.maxPrice = parseFloat(maxPrice);
 
       // Generate cache key
       const cacheKey = SimpleCache.generateKey('computers', { ...filters, page, perPage: 20 });
@@ -153,7 +161,7 @@ export default function ComputersPage() {
     };
 
     loadItems();
-  }, [debouncedKeyword, cityId, neighborhoodId, condition, brand, minRam, storageType, page]);
+  }, [debouncedKeyword, cityId, neighborhoodId, condition, brand, minRam, storageType, minPrice, maxPrice, page]);
 
   const handleSearch = () => {
     setPage(1);
@@ -165,6 +173,8 @@ export default function ComputersPage() {
     if (brand) params.set('brand', brand);
     if (minRam) params.set('minRam', minRam);
     if (storageType) params.set('storageType', storageType);
+    if (minPrice) params.set('minPrice', minPrice);
+    if (maxPrice) params.set('maxPrice', maxPrice);
     setSearchParams(params);
   };
 
@@ -186,6 +196,16 @@ export default function ComputersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50" dir={isRTL ? 'rtl' : 'ltr'}>
+      <SEO
+        title={labels.title}
+        description={labels.subtitle}
+        canonical="/computers"
+        keywords={isRTL 
+          ? 'حواسيب، لابتوب، كمبيوتر، ديل، اتش بي، لينوفو، المغرب، أجهزة حاسوب' 
+          : 'ordinateurs, laptops, computers, Dell, HP, Lenovo, Maroc, PC portables'
+        }
+        type="website"
+      />
       <Navigation />
 
       <BannerSlot page="computers" slot="top" />
@@ -282,7 +302,7 @@ export default function ComputersPage() {
             </div>
 
             {/* Additional Computer Filters */}
-            <div className={cn('grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3', isRTL && 'lg:grid-flow-dense')}>
+            <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 mt-3', isRTL && 'lg:grid-flow-dense')}>
               <Select value={brand || 'all'} onValueChange={(v) => { setBrand(v === 'all' ? '' : v); setPage(1); }}>
                 <SelectTrigger className="w-full">
                   <Laptop className="h-4 w-4 mr-2" />
@@ -328,6 +348,32 @@ export default function ComputersPage() {
                   <SelectItem value="SSD+HDD">SSD+HDD</SelectItem>
                 </SelectContent>
               </Select>
+
+              <div className="relative">
+                <DollarSign className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
+                <Input
+                  type="number"
+                  placeholder={labels.minPrice}
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  className={cn(isRTL ? 'pr-10' : 'pl-10')}
+                  min="0"
+                />
+              </div>
+
+              <div className="relative">
+                <DollarSign className={cn('absolute top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400', isRTL ? 'right-3' : 'left-3')} />
+                <Input
+                  type="number"
+                  placeholder={labels.maxPrice}
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  className={cn(isRTL ? 'pr-10' : 'pl-10')}
+                  min="0"
+                />
+              </div>
             </div>
 
             {/* Results count */}

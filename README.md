@@ -1,6 +1,33 @@
 # Mobile Morocco Platform
 
-A marketplace platform for buying and selling mobile phones, accessories, and repair services in Morocco.
+A marketplace platform for buying and selling mobile phones, computers, accessories, and repair services in Morocco.
+
+## Features
+
+### Product Categories
+- **📱 Mobile Phones**: Buy and sell new and used smartphones with detailed specifications
+- **💻 Computers**: Browse and publish computer listings (laptops, desktops) with specs like CPU, RAM, GPU, Storage
+- **🔧 Spare Parts**: Find mobile and computer parts
+- **🛠️ Repair Services**: Connect with repair shops and technicians
+- **📦 Equipment**: Browse mobile and computer equipment
+
+### Key Routes
+- `/phones` - Browse all phone listings
+- `/publish-phone` - Publish a phone listing (requires login)
+- `/computers` - Browse all computer listings
+- `/publish-computer` - Publish a computer listing (requires login)
+- `/computer-parts` - Browse computer parts
+- `/publish-computer-part` - Publish a computer part listing (requires login)
+- `/items/:slug` - View detailed item page with SEO metadata
+- `/stores` - Browse stores and sellers
+- `/repair-shops` - Find repair services
+
+### SEO Features
+- ✅ Meta tags (title, description, keywords) on all pages
+- ✅ Open Graph tags for social media sharing
+- ✅ JSON-LD structured data (Product schema) on item detail pages
+- ✅ Canonical URLs for better indexing
+- ✅ Multilingual support (Arabic, French, English)
 
 ## Quick Start
 

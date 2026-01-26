@@ -12,6 +12,7 @@ import { getItemWithSimilar, ItemWithRelations, getItemTitle, getStoreName } fro
 import { getCityName, City } from '@/lib/supabase/cities';
 import { cn } from '@/lib/utils';
 import { BackendFallback } from '@/components/ErrorBoundary';
+import { SEO, generateProductSchema } from '@/components/SEO';
 import {
   Smartphone,
   Settings,
@@ -196,9 +197,43 @@ export default function ItemDetailsPage() {
   }
 
   const images = item.images || [];
+  
+  // Generate SEO metadata and JSON-LD schema
+  const itemTitle = getItemTitle(item, language);
+  const itemDescription = language === 'ar' 
+    ? item.description_ar || item.description_fr || `${item.brand || ''} ${item.model || ''}`.trim() || 'Product listing'
+    : item.description_fr || `${item.brand || ''} ${item.model || ''}`.trim() || 'Annonce produit';
+  const itemImage = images.length > 0 ? images[0].image_url : '/placeholder-image.jpg';
+  const itemPrice = item.price || 0;
+  
+  // Build keywords excluding undefined values
+  const keywords = [item.brand, item.model, item.item_type, 'Maroc', 'Morocco']
+    .filter(k => k && k !== '')
+    .join(', ');
+  
+  const productSchema = generateProductSchema({
+    name: itemTitle,
+    description: itemDescription,
+    image: itemImage,
+    price: itemPrice,
+    currency: 'MAD',
+    condition: item.condition === 'new' ? 'NewCondition' : 'UsedCondition',
+    brand: item.brand || undefined,
+    seller: item.store ? getStoreName(item.store, language) : undefined,
+    sku: item.id,
+  });
 
   return (
     <div className="min-h-screen bg-gray-50" dir={isRTL ? 'rtl' : 'ltr'}>
+      <SEO
+        title={itemTitle}
+        description={itemDescription}
+        canonical={`/items/${item.slug}`}
+        image={itemImage}
+        type="product"
+        structuredData={productSchema}
+        keywords={keywords}
+      />
       <Navigation />
       <BannerSlot page="item_details" slot="top" />
 
