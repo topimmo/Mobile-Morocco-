@@ -602,3 +602,232 @@ export const rejectNeighborhood = async (neighborhoodId: string): Promise<{ succ
     return { success: false, error: error.message };
   }
 };
+
+// ===============================================
+// ITEMS MANAGEMENT (Phones, Computers, Parts, Equipment)
+// ===============================================
+
+export interface PendingItem {
+  id: string;
+  title_fr: string;
+  title_ar: string;
+  slug: string;
+  item_type: string;
+  condition: string;
+  brand?: string;
+  model?: string;
+  price?: number;
+  status: string;
+  created_at: string;
+  store_id?: string;
+  store_name?: string;
+  city_name?: string;
+  image_url?: string;
+}
+
+// Fetch pending items (all types) for moderation with pagination
+export const getPendingItems = async (
+  pagination: PaginationParams = {},
+  itemType?: string
+): Promise<PaginatedResult<PendingItem>> => {
+  const { page = 1, limit = 20 } = pagination;
+  const offset = (page - 1) * limit;
+
+  try {
+    let query = supabase
+      .from('items')
+      .select(`
+        id,
+        title_fr,
+        title_ar,
+        slug,
+        item_type,
+        condition,
+        brand,
+        model,
+        price,
+        status,
+        created_at,
+        store_id,
+        stores (name_fr),
+        cities (name_fr),
+        item_images (image_url)
+      `, { count: 'exact' })
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    // Filter by item type if specified
+    if (itemType) {
+      query = query.eq('item_type', itemType);
+    }
+
+    const { data, error, count } = await query;
+
+    if (error) throw error;
+
+    const total = count || 0;
+    const mappedData = (data || []).map((item: any) => ({
+      id: item.id,
+      title_fr: item.title_fr,
+      title_ar: item.title_ar,
+      slug: item.slug,
+      item_type: item.item_type,
+      condition: item.condition,
+      brand: item.brand,
+      model: item.model,
+      price: item.price,
+      status: item.status,
+      created_at: item.created_at,
+      store_id: item.store_id,
+      store_name: item.stores?.name_fr || 'Non spécifié',
+      city_name: item.cities?.name_fr || 'Non spécifié',
+      image_url: item.item_images?.[0]?.image_url,
+    }));
+
+    return {
+      data: mappedData,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      hasMore: offset + limit < total,
+    };
+  } catch (error) {
+    console.error('Error fetching pending items:', error);
+    return { data: [], total: 0, page: 1, totalPages: 0, hasMore: false };
+  }
+};
+
+// Approve an item
+export const approveItem = async (itemId: string): Promise<{ success: boolean; error?: string }> => {
+  try {
+    const { error } = await supabase
+      .from('items')
+      .update({ status: 'approved', updated_at: new Date().toISOString() })
+      .eq('id', itemId);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error approving item:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+// Reject an item
+export const rejectItem = async (itemId: string): Promise<{ success: boolean; error?: string }> => {
+  try {
+    const { error } = await supabase
+      .from('items')
+      .update({ status: 'rejected', updated_at: new Date().toISOString() })
+      .eq('id', itemId);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error rejecting item:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+// Get all items with filters and pagination
+export const getAllItems = async (
+  options?: {
+    status?: string;
+    itemType?: string;
+    limit?: number;
+    offset?: number;
+  }
+): Promise<{ data: any[]; count: number }> => {
+  try {
+    let query = supabase
+      .from('items')
+      .select(`
+        id,
+        title_fr,
+        title_ar,
+        slug,
+        item_type,
+        condition,
+        brand,
+        model,
+        price,
+        status,
+        created_at,
+        updated_at,
+        store_id,
+        stores (name_fr, name_ar),
+        cities (name_fr, name_ar),
+        item_images (image_url)
+      `, { count: 'exact' })
+      .order('created_at', { ascending: false });
+
+    if (options?.status) {
+      query = query.eq('status', options.status);
+    }
+    if (options?.itemType) {
+      query = query.eq('item_type', options.itemType);
+    }
+    if (options?.limit) {
+      query = query.limit(options.limit);
+    }
+    if (options?.offset) {
+      query = query.range(options.offset, options.offset + (options.limit || 20) - 1);
+    }
+
+    const { data, error, count } = await query;
+
+    if (error) throw error;
+    return { data: data || [], count: count || 0 };
+  } catch (error) {
+    console.error('Error fetching all items:', error);
+    return { data: [], count: 0 };
+  }
+};
+
+// Update admin stats to include items
+export const getAdminStatsWithItems = async (): Promise<AdminStats & {
+  totalItems: number;
+  pendingItems: number;
+  approvedItems: number;
+  pendingComputers: number;
+  pendingComputerParts: number;
+}> => {
+  try {
+    const baseStats = await getAdminStats();
+    
+    const [
+      itemsResult,
+      pendingItemsResult,
+      approvedItemsResult,
+      pendingComputersResult,
+      pendingComputerPartsResult,
+    ] = await Promise.all([
+      supabase.from('items').select('id', { count: 'exact', head: true }),
+      supabase.from('items').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+      supabase.from('items').select('id', { count: 'exact', head: true }).eq('status', 'approved'),
+      supabase.from('items').select('id', { count: 'exact', head: true }).eq('status', 'pending').eq('item_type', 'computer'),
+      supabase.from('items').select('id', { count: 'exact', head: true }).eq('status', 'pending').eq('item_type', 'computer_part'),
+    ]);
+
+    return {
+      ...baseStats,
+      totalItems: itemsResult.count || 0,
+      pendingItems: pendingItemsResult.count || 0,
+      approvedItems: approvedItemsResult.count || 0,
+      pendingComputers: pendingComputersResult.count || 0,
+      pendingComputerParts: pendingComputerPartsResult.count || 0,
+    };
+  } catch (error) {
+    console.error('Error fetching admin stats with items:', error);
+    const baseStats = await getAdminStats();
+    return {
+      ...baseStats,
+      totalItems: 0,
+      pendingItems: 0,
+      approvedItems: 0,
+      pendingComputers: 0,
+      pendingComputerParts: 0,
+    };
+  }
+};

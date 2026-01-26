@@ -1,6 +1,6 @@
 import { supabase } from './client';
 
-export type PageKey = 'home' | 'categories' | 'listings' | 'listing_details' | 'repair_shops' | 'repair_shop_details' | 'advertise' | 'services' | 'stores' | 'store_details' | 'phones' | 'spare_parts' | 'equipment' | 'item_details' | 'category' | 'city';
+export type PageKey = 'home' | 'categories' | 'listings' | 'listing_details' | 'repair_shops' | 'repair_shop_details' | 'advertise' | 'services' | 'stores' | 'store_details' | 'phones' | 'spare_parts' | 'equipment' | 'item_details' | 'category' | 'city' | 'computers' | 'computer-parts' | 'computer-repair';
 export type SlotType = 'top' | 'middle' | 'bottom' | 'sidebar';
 
 export interface AdCampaign {

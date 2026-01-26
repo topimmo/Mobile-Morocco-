@@ -28,6 +28,9 @@ const TechniciansPage = lazy(() => import("@/components/TechniciansPage"));
 const PhonesPage = lazy(() => import("@/pages/PhonesPage"));
 const SparePartsPage = lazy(() => import("@/pages/SparePartsPage"));
 const EquipmentPage = lazy(() => import("@/pages/EquipmentPage"));
+const ComputersPage = lazy(() => import("@/pages/ComputersPage"));
+const ComputerPartsPage = lazy(() => import("@/pages/ComputerPartsPage"));
+const ComputerRepairPage = lazy(() => import("@/pages/ComputerRepairPage"));
 const ServicesPage = lazy(() => import("@/pages/ServicesPage"));
 const StoresPage = lazy(() => import("@/pages/StoresPage"));
 const StoreProfilePage = lazy(() => import("@/pages/StoreProfilePage"));
@@ -35,6 +38,8 @@ const ItemDetailsPage = lazy(() => import("@/pages/ItemDetailsPage"));
 const AdvertisePage = lazy(() => import("@/pages/AdvertisePage"));
 const AdRequestPage = lazy(() => import("@/pages/AdRequestPage"));
 const PublishPhonePage = lazy(() => import("@/pages/PublishPhonePage"));
+const PublishComputerPage = lazy(() => import("@/pages/PublishComputerPage"));
+const PublishComputerPartPage = lazy(() => import("@/pages/PublishComputerPartPage"));
 const ComparePage = lazy(() => import("@/pages/ComparePage"));
 const FavoritesPage = lazy(() => import("@/components/FavoritesPage"));
 const TestCreateListingPage = lazy(() => import("@/pages/TestCreateListingPage"));
@@ -102,6 +107,9 @@ function AppContent() {
           <Route path="/phones" element={<PageErrorBoundary><PhonesPage /></PageErrorBoundary>} />
           <Route path="/spare-parts" element={<PageErrorBoundary><SparePartsPage /></PageErrorBoundary>} />
           <Route path="/equipment" element={<PageErrorBoundary><EquipmentPage /></PageErrorBoundary>} />
+          <Route path="/computers" element={<PageErrorBoundary><ComputersPage /></PageErrorBoundary>} />
+          <Route path="/computer-parts" element={<PageErrorBoundary><ComputerPartsPage /></PageErrorBoundary>} />
+          <Route path="/computer-repair" element={<PageErrorBoundary><ComputerRepairPage /></PageErrorBoundary>} />
           <Route path="/services" element={<PageErrorBoundary><ServicesPage /></PageErrorBoundary>} />
           <Route path="/stores" element={<PageErrorBoundary><StoresPage /></PageErrorBoundary>} />
           <Route path="/stores/:slug" element={<PageErrorBoundary><StoreProfilePage /></PageErrorBoundary>} />
@@ -111,6 +119,16 @@ function AppContent() {
           <Route path="/publish-phone" element={
             <ProtectedRoute>
               <PageErrorBoundary><PublishPhonePage /></PageErrorBoundary>
+            </ProtectedRoute>
+          } />
+          <Route path="/publish-computer" element={
+            <ProtectedRoute>
+              <PageErrorBoundary><PublishComputerPage /></PageErrorBoundary>
+            </ProtectedRoute>
+          } />
+          <Route path="/publish-computer-part" element={
+            <ProtectedRoute>
+              <PageErrorBoundary><PublishComputerPartPage /></PageErrorBoundary>
             </ProtectedRoute>
           } />
           <Route path="/compare" element={<PageErrorBoundary><ComparePage /></PageErrorBoundary>} />
