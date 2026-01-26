@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -15,7 +14,6 @@ import {
   Store, 
   Wrench, 
   UserCircle, 
-  Megaphone,
   CheckCircle,
   ArrowLeft,
   ArrowRight,
@@ -24,22 +22,25 @@ import {
 } from 'lucide-react';
 import { trackRegistration } from '@/services/analyticsService';
 import { cn } from '@/lib/utils';
+import { signUpWithRole, UserRole as DbRole } from '@/services/authService';
 
-type UserRole = 'shop' | 'technician' | 'individual';
+type UIRole = 'shop' | 'technician' | 'individual';
 
 interface RoleOption {
-  id: UserRole;
+  id: UIRole;
   icon: React.ElementType;
   title: { ar: string; fr: string };
   description: { ar: string; fr: string };
   features: { ar: string[]; fr: string[] };
   color: string;
+  dbRole: DbRole; // Map UI role to database role
 }
 
 const ROLE_OPTIONS: RoleOption[] = [
   {
     id: 'shop',
     icon: Store,
+    dbRole: 'merchant', // Private seller → user, Store/Importer → merchant
     title: { ar: 'متجر / مستورد', fr: 'Boutique / Importateur' },
     description: { 
       ar: 'أملك متجراً وأريد بيع الهواتف والإكسسوارات',
@@ -64,6 +65,7 @@ const ROLE_OPTIONS: RoleOption[] = [
   {
     id: 'technician',
     icon: Wrench,
+    dbRole: 'agent', // Technician/Craftsman → agent
     title: { ar: 'فني / حرفي', fr: 'Technicien / Artisan' },
     description: { 
       ar: 'أقدم خدمات إصلاح الهواتف',
@@ -88,6 +90,7 @@ const ROLE_OPTIONS: RoleOption[] = [
   {
     id: 'individual',
     icon: UserCircle,
+    dbRole: 'user', // Private seller → user
     title: { ar: 'فرد / بائع خاص', fr: 'Particulier / Vendeur individuel' },
     description: { 
       ar: 'أريد بيع هاتفي أو قطع غيار',
@@ -113,12 +116,11 @@ const ROLE_OPTIONS: RoleOption[] = [
 
 export default function RegisterPage() {
   const { language, t } = useLanguage();
-  const { signUp } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
   const [step, setStep] = useState<'role' | 'details'>('role');
-  const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
+  const [selectedRole, setSelectedRole] = useState<UIRole | null>(null);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -136,7 +138,7 @@ export default function RegisterPage() {
   useEffect(() => {
     const roleParam = searchParams.get('role');
     if (roleParam && ROLE_OPTIONS.some(r => r.id === roleParam)) {
-      setSelectedRole(roleParam as UserRole);
+      setSelectedRole(roleParam as UIRole);
       setStep('details');
     }
   }, [searchParams]);
@@ -169,7 +171,7 @@ export default function RegisterPage() {
       : 'Si vous cherchez seulement des produits à acheter, vous pouvez naviguer sans compte'
   };
 
-  const handleRoleSelect = (role: UserRole) => {
+  const handleRoleSelect = (role: UIRole) => {
     setSelectedRole(role);
     setStep('details');
   };
@@ -195,20 +197,34 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      // Map role to user type for backend
-      const userTypeMap: Record<UserRole, string> = {
-        shop: 'importer',
-        technician: 'technician',
-        individual: 'customer'
-      };
+      // Get the database role mapping from selected role option
+      const selectedRoleOption = ROLE_OPTIONS.find(r => r.id === selectedRole);
+      if (!selectedRoleOption) {
+        setError('Invalid role selected');
+        return;
+      }
 
-      await signUp(email, password, fullName, {
-        user_type: userTypeMap[selectedRole],
+      const dbRole = selectedRoleOption.dbRole;
+
+      // Use new signUpWithRole function to save role to profiles table
+      const { user, error: signUpError } = await signUpWithRole(
+        email, 
+        password, 
+        dbRole,
+        fullName,
         phone,
         city
-      });
+      );
+
+      if (signUpError || !user) {
+        setError(signUpError || labels.registrationFailed);
+        return;
+      }
       
-      trackRegistration(userTypeMap[selectedRole]);
+      // Track registration with the database role
+      trackRegistration(dbRole);
+      
+      // Redirect to login with success message
       navigate('/auth/login?registered=true');
     } catch (err: any) {
       setError(err.message || labels.registrationFailed);

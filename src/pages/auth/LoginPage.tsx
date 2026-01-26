@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
 import { Mail, Lock, Loader } from 'lucide-react';
 import { trackLogin } from '@/services/analyticsService';
-import { supabase } from '@/lib/supabase/client';
+import { signInAndRedirect } from '@/services/authService';
 
 export default function LoginPage() {
   const { t } = useLanguage();
-  const { signIn } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,63 +22,20 @@ export default function LoginPage() {
     setError('');
 
     try {
-      await signIn(email, password);
-      trackLogin(); // Track successful login
-      
-      // Get user session and profile to determine redirect
-      // We need to fetch fresh data after signIn as the AuthContext
-      // state might not have updated yet
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        // Fetch user profile to check role
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id)
-          .single();
+      // Use the new signInAndRedirect function that fetches role from profiles
+      const { user, redirectPath, role, error: signInError } = await signInAndRedirect(email, password);
 
-        // Handle profile query errors
-        if (profileError) {
-          // Check if it's a "profile not found" error vs database error
-          if (profileError.code === 'PGRST116') {
-            // Profile doesn't exist - redirect to account setup
-            console.warn('No profile found for user, redirecting to account setup');
-            navigate('/auth/select-account-type');
-            return;
-          }
-          // Other database errors - log and try to continue
-          console.error('Error fetching profile:', profileError);
-        }
-
-        // Admin users go to admin dashboard (only if profile exists and role is admin)
-        if (profile && profile.role === 'admin') {
-          navigate('/admin');
-          return;
-        }
-
-        // Regular users: check account type
-        const accountType = user.user_metadata?.account_type;
-
-        // If user doesn't have an account type set, redirect to selection page
-        if (!accountType) {
-          navigate('/auth/select-account-type');
-          return;
-        }
-
-        // Redirect to appropriate dashboard based on account type
-        switch (accountType) {
-          case 'shop':
-            navigate('/dashboard/my-store');
-            break;
-          case 'technician':
-          case 'individual':
-          default:
-            navigate('/dashboard');
-            break;
-        }
-      } else {
-        navigate('/dashboard');
+      if (signInError || !user) {
+        setError(signInError || 'Login failed');
+        return;
       }
+
+      // Track successful login
+      trackLogin();
+
+      // Redirect based on role
+      console.log('Login successful, redirecting to:', redirectPath, 'Role:', role);
+      navigate(redirectPath);
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
