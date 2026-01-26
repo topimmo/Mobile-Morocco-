@@ -72,7 +72,6 @@ export default function ComputersPage() {
     allStorageTypes: isRTL ? 'جميع أنواع التخزين' : 'Tous les types de stockage',
     minPrice: isRTL ? 'السعر الأدنى' : 'Prix min',
     maxPrice: isRTL ? 'السعر الأقصى' : 'Prix max',
-    pricePlaceholder: isRTL ? '0 درهم' : '0 MAD',
     new: isRTL ? 'جديد' : 'Neuf',
     used: isRTL ? 'مستعمل' : 'Occasion',
     noResults: isRTL ? 'لا توجد حواسيب متاحة' : 'Aucun ordinateur disponible',
@@ -303,7 +302,7 @@ export default function ComputersPage() {
             </div>
 
             {/* Additional Computer Filters */}
-            <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mt-3', isRTL && 'lg:grid-flow-dense')}>
+            <div className={cn('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 mt-3', isRTL && 'lg:grid-flow-dense')}>
               <Select value={brand || 'all'} onValueChange={(v) => { setBrand(v === 'all' ? '' : v); setPage(1); }}>
                 <SelectTrigger className="w-full">
                   <Laptop className="h-4 w-4 mr-2" />
@@ -359,6 +358,7 @@ export default function ComputersPage() {
                   onChange={(e) => setMinPrice(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                   className={cn(isRTL ? 'pr-10' : 'pl-10')}
+                  min="0"
                 />
               </div>
 
@@ -371,6 +371,7 @@ export default function ComputersPage() {
                   onChange={(e) => setMaxPrice(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                   className={cn(isRTL ? 'pr-10' : 'pl-10')}
+                  min="0"
                 />
               </div>
             </div>

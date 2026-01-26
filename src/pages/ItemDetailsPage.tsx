@@ -201,10 +201,15 @@ export default function ItemDetailsPage() {
   // Generate SEO metadata and JSON-LD schema
   const itemTitle = getItemTitle(item, language);
   const itemDescription = language === 'ar' 
-    ? item.description_ar || item.description_fr || `${item.brand} ${item.model}`.trim()
-    : item.description_fr || `${item.brand} ${item.model}`.trim();
+    ? item.description_ar || item.description_fr || `${item.brand || ''} ${item.model || ''}`.trim() || 'Product listing'
+    : item.description_fr || `${item.brand || ''} ${item.model || ''}`.trim() || 'Annonce produit';
   const itemImage = images.length > 0 ? images[0].image_url : '/placeholder-image.jpg';
   const itemPrice = item.price || 0;
+  
+  // Build keywords excluding undefined values
+  const keywords = [item.brand, item.model, item.item_type, 'Maroc', 'Morocco']
+    .filter(k => k && k !== '')
+    .join(', ');
   
   const productSchema = generateProductSchema({
     name: itemTitle,
@@ -227,7 +232,7 @@ export default function ItemDetailsPage() {
         image={itemImage}
         type="product"
         structuredData={productSchema}
-        keywords={`${item.brand}, ${item.model}, ${item.item_type}, Maroc, Morocco`}
+        keywords={keywords}
       />
       <Navigation />
       <BannerSlot page="item_details" slot="top" />
