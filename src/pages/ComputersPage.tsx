@@ -305,7 +305,7 @@ export default function ComputersPage() {
                     <SlidersHorizontal className={cn('h-5 w-5', isRTL ? 'ml-2' : 'mr-2')} />
                     {labels.filters}
                     {getActiveFiltersCount() > 0 && (
-                      <Badge className={cn('ml-2 bg-blue-600', isRTL && 'mr-2 ml-0')}>
+                      <Badge className={cn('bg-blue-600', isRTL ? 'mr-2' : 'ml-2')}>
                         {getActiveFiltersCount()}
                       </Badge>
                     )}
@@ -415,7 +415,7 @@ export default function ComputersPage() {
 
                         <div>
                           <label className={cn('block text-sm font-medium text-gray-700 mb-1.5', isRTL && 'text-right')}>
-                            <Cpu className="inline h-4 w-4 mr-1" />
+                            <Cpu className={cn('inline h-4 w-4', isRTL ? 'ml-1' : 'mr-1')} />
                             {labels.ram}
                           </label>
                           <Select value={minRam || 'all'} onValueChange={(v) => { setMinRam(v === 'all' ? '' : v); setPage(1); }}>
@@ -435,7 +435,7 @@ export default function ComputersPage() {
 
                         <div>
                           <label className={cn('block text-sm font-medium text-gray-700 mb-1.5', isRTL && 'text-right')}>
-                            <HardDrive className="inline h-4 w-4 mr-1" />
+                            <HardDrive className={cn('inline h-4 w-4', isRTL ? 'ml-1' : 'mr-1')} />
                             {labels.storage}
                           </label>
                           <Select value={storageType || 'all'} onValueChange={(v) => { setStorageType(v === 'all' ? '' : v); setPage(1); }}>
