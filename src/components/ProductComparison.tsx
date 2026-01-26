@@ -44,14 +44,19 @@ const ProductComparison = () => {
             <div className="bg-gray-100 rounded-full p-6 w-24 h-24 mx-auto mb-4 flex items-center justify-center">
               <Star className="h-12 w-12 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">
+            <h3 className="text-xl font-semibold mb-2 text-gray-900">
               No products to compare
             </h3>
             <p className="text-gray-500 mb-6">
               Add products to comparison by clicking the comparison icon on
               product cards.
             </p>
-            <Button onClick={() => navigate("/phones")}>Browse Phones</Button>
+            <Button 
+              onClick={() => navigate("/phones")}
+              className="bg-primary text-white hover:bg-primary/90"
+            >
+              Browse Phones
+            </Button>
           </div>
         </div>
       </div>

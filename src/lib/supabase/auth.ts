@@ -32,6 +32,7 @@ export const signUpWithEmail = async (
         full_name: fullName,
         role,
       },
+      emailRedirectTo: `${window.location.origin}/auth/callback`,
     },
   });
   return { data, error };

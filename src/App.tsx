@@ -56,6 +56,7 @@ const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
 const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
 const ResetPasswordPage = lazy(() => import("@/pages/auth/ResetPasswordPage"));
 const AccountTypeSelectionPage = lazy(() => import("@/pages/auth/AccountTypeSelectionPage"));
+const AuthCallbackPage = lazy(() => import("@/pages/auth/AuthCallbackPage"));
 
 // Admin dashboard
 const AdminDashboard = lazy(() => import("@/pages/admin/DashboardPage"));
@@ -156,6 +157,7 @@ function AppContent() {
           <Route path="/auth/login" element={<PageErrorBoundary><LoginPage /></PageErrorBoundary>} />
           <Route path="/auth/register" element={<PageErrorBoundary><RegisterPage /></PageErrorBoundary>} />
           <Route path="/auth/reset-password" element={<PageErrorBoundary><ResetPasswordPage /></PageErrorBoundary>} />
+          <Route path="/auth/callback" element={<PageErrorBoundary><AuthCallbackPage /></PageErrorBoundary>} />
           <Route path="/auth/select-account-type" element={
             <ProtectedRoute>
               <PageErrorBoundary><AccountTypeSelectionPage /></PageErrorBoundary>

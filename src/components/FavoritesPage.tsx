@@ -55,12 +55,17 @@ const FavoritesPage = () => {
             <div className="bg-gray-100 rounded-full p-6 w-24 h-24 mx-auto mb-4 flex items-center justify-center">
               <Heart className="h-12 w-12 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">No favorites yet</h3>
+            <h3 className="text-xl font-semibold mb-2 text-gray-900">No favorites yet</h3>
             <p className="text-gray-500 mb-6">
               Start adding products to your favorites by clicking the heart icon
               on product cards.
             </p>
-            <Button onClick={() => navigate("/")}>Browse Products</Button>
+            <Button 
+              onClick={() => navigate("/")}
+              className="bg-primary text-white hover:bg-primary/90"
+            >
+              Browse Products
+            </Button>
           </div>
         </div>
       </div>
