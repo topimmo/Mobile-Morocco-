@@ -3,6 +3,7 @@ import { getActiveBanner, getAdsenseUnit, logAdImpression, logAdClick } from '@/
 import type { PageKey, SlotType } from '@/lib/supabase/ads';
 import { cn } from '@/lib/utils';
 import { Megaphone } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface BannerSlotProps {
   page: PageKey;
@@ -11,33 +12,44 @@ interface BannerSlotProps {
 }
 
 // Sample banners for demo/placeholder (like "Maroc Telecom" style)
-const PLACEHOLDER_BANNERS = {
+const getPlaceholderBanners = (isRTL: boolean) => ({
   top: {
     gradient: 'from-orange-500 via-orange-600 to-red-600',
-    text: 'إعلان هنا • Votre publicité ici',
-    subtext: 'تواصل معنا للإعلان • Contactez-nous pour annoncer',
+    text: isRTL ? 'إعلانك هنا' : 'Votre publicité ici',
+    subtext: isRTL ? 'تواصل معنا للإعلان' : 'Contactez-nous pour annoncer',
   },
   middle: {
     gradient: 'from-blue-600 via-blue-700 to-indigo-700',
-    text: 'عروض حصرية • Offres Exclusives',
-    subtext: 'احجز مساحتك الإعلانية الآن • Réservez votre espace publicitaire',
+    text: isRTL ? 'عروض حصرية' : 'Offres Exclusives',
+    subtext: isRTL ? 'احجز مساحتك الإعلانية الآن' : 'Réservez votre espace publicitaire',
   },
   bottom: {
     gradient: 'from-green-500 via-emerald-600 to-teal-600',
-    text: 'شريكك الموثوق • Votre Partenaire de Confiance',
-    subtext: 'Mobile Maroc - منصة الهواتف المغربية',
+    text: isRTL ? 'شريكك الموثوق' : 'Votre Partenaire de Confiance',
+    subtext: isRTL ? 'منصة الهواتف المغربية' : 'Plateforme Mobile Maroc',
   },
   sidebar: {
     gradient: 'from-purple-500 via-purple-600 to-pink-600',
-    text: 'إعلان',
-    subtext: 'Publicité',
+    text: isRTL ? 'إعلان' : 'Publicité',
+    subtext: isRTL ? 'مساحة إعلانية' : 'Espace publicitaire',
   },
-};
+});
 
 export function BannerSlot({ page, slot, showPlaceholder = true }: BannerSlotProps) {
   const [banner, setBanner] = useState<any>(null);
   const [adsenseUnit, setAdsenseUnit] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  // Get language context with fallback
+  let language = 'fr';
+  try {
+    const langContext = useLanguage();
+    language = langContext.language;
+  } catch {
+    // Language context not available, using default
+  }
+  const isRTL = language === 'ar';
+  const PLACEHOLDER_BANNERS = getPlaceholderBanners(isRTL);
 
   useEffect(() => {
     const loadBanner = async () => {
