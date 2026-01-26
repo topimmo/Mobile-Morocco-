@@ -1,5 +1,27 @@
 import { supabase } from '@/utils/supabaseClient';
 import { CustomerProfile, ImporterProfile, TechnicianProfile } from '@/models/User';
+import type { User } from '@supabase/supabase-js';
+
+// Role types matching the database constraint
+export type UserRole = 'user' | 'agent' | 'merchant' | 'admin';
+
+// Redirect paths constants
+export const REDIRECT_PATHS = {
+  ADMIN: '/admin',
+  AGENT: '/agent',
+  MERCHANT: '/merchant',
+  USER: '/dashboard',
+  ACCOUNT_SETUP: '/auth/select-account-type',
+  LOGIN: '/auth/login',
+} as const;
+
+// Sign in result interface
+export interface SignInResult {
+  user: User | null;
+  redirectPath: string;
+  role: UserRole | null;
+  error: string | null;
+}
 
 // User registration with profile creation
 export const registerUser = async (
@@ -313,5 +335,177 @@ export const verifyEmail = async (token: string) => {
   } catch (error) {
     console.error('Email verification error:', error);
     return { success: false, error: 'Failed to verify email' };
+  }
+};
+
+// ============================================
+// NEW ROLE-BASED AUTHENTICATION FUNCTIONS
+// ============================================
+
+/**
+ * Sign up a new user with a specific role
+ * The role is saved to user metadata and automatically copied to profiles table via database trigger
+ */
+export const signUpWithRole = async (
+  email: string,
+  password: string,
+  role: UserRole,
+  fullName?: string,
+  phone?: string,
+  city?: string
+) => {
+  try {
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          role, // This will be picked up by the database trigger
+          full_name: fullName,
+          phone,
+          city,
+        },
+      },
+    });
+
+    if (authError) {
+      console.error('Sign up error:', authError);
+      return { user: null, error: authError.message };
+    }
+
+    if (!authData.user) {
+      return { user: null, error: 'User registration failed' };
+    }
+
+    return { user: authData.user, error: null };
+  } catch (error) {
+    console.error('Sign up error:', error);
+    return { user: null, error: 'Registration failed' };
+  }
+};
+
+/**
+ * Get the role of the current user from the profiles table
+ * This is the single source of truth for user roles
+ */
+export const getUserRole = async (userId?: string): Promise<{ role: UserRole | null; error: string | null }> => {
+  try {
+    let targetUserId = userId;
+    
+    // If no userId provided, get current user
+    if (!targetUserId) {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user) {
+        return { role: null, error: userError?.message || 'No user found' };
+      }
+      targetUserId = userData.user.id;
+    }
+
+    // Fetch role from profiles table
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', targetUserId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching user role:', error);
+      return { role: null, error: error.message };
+    }
+
+    if (!data || !data.role) {
+      return { role: null, error: 'Profile not found' };
+    }
+
+    return { role: data.role as UserRole, error: null };
+  } catch (error) {
+    console.error('Error getting user role:', error);
+    return { role: null, error: 'Failed to get user role' };
+  }
+};
+
+/**
+ * Sign in and determine redirect path based on user role
+ * Returns the user and the appropriate redirect path
+ */
+export const signInAndRedirect = async (
+  email: string,
+  password: string
+): Promise<SignInResult> => {
+  try {
+    // Step 1: Sign in
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInError) {
+      console.error('Sign in error:', signInError);
+      return { 
+        user: null, 
+        redirectPath: REDIRECT_PATHS.LOGIN, 
+        role: null,
+        error: signInError.message 
+      };
+    }
+
+    if (!data.user) {
+      return { 
+        user: null, 
+        redirectPath: REDIRECT_PATHS.LOGIN,
+        role: null, 
+        error: 'Login failed' 
+      };
+    }
+
+    // Step 2: Wait for login to succeed and get user.id
+    const userId = data.user.id;
+
+    // Step 3: Fetch role from profiles table
+    const { role, error: roleError } = await getUserRole(userId);
+
+    if (roleError || !role) {
+      console.error('Error fetching role:', roleError);
+      // If profile doesn't exist, redirect to account setup
+      return {
+        user: data.user,
+        redirectPath: REDIRECT_PATHS.ACCOUNT_SETUP,
+        role: null,
+        error: 'Profile not found',
+      };
+    }
+
+    // Step 4: Determine redirect path based on role
+    let redirectPath: string;
+    switch (role) {
+      case 'admin':
+        redirectPath = REDIRECT_PATHS.ADMIN;
+        break;
+      case 'agent':
+        redirectPath = REDIRECT_PATHS.AGENT;
+        break;
+      case 'merchant':
+        redirectPath = REDIRECT_PATHS.MERCHANT;
+        break;
+      case 'user':
+      default:
+        redirectPath = REDIRECT_PATHS.USER;
+        break;
+    }
+
+    return {
+      user: data.user,
+      redirectPath,
+      role,
+      error: null,
+    };
+  } catch (error) {
+    console.error('Sign in and redirect error:', error);
+    return {
+      user: null,
+      redirectPath: REDIRECT_PATHS.LOGIN,
+      role: null,
+      error: 'Login failed',
+    };
   }
 };

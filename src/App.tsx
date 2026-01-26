@@ -11,6 +11,7 @@ import ErrorBoundary, { GlobalErrorBoundary, PageErrorBoundary } from "@/compone
 import { NetworkErrorBanner } from "@/components/common/InlineError";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { ProtectedRoute, AdminRoute, TechnicianRoute, ImporterRoute } from "@/components/ProtectedRoute";
+import { AdminGuard, AgentGuard, MerchantGuard } from "@/components/RoleGuard";
 import { isEnvValid } from "@/config/env";
 import EnvErrorFallback from "@/components/EnvErrorFallback";
 
@@ -61,13 +62,20 @@ const AuthCallbackPage = lazy(() => import("@/pages/auth/AuthCallbackPage"));
 // Admin dashboard
 const AdminDashboard = lazy(() => import("@/pages/admin/DashboardPage"));
 
+// Agent dashboard
+const AgentDashboard = lazy(() => import("@/pages/agent/DashboardPage"));
+
+// Merchant dashboard
+const MerchantDashboard = lazy(() => import("@/pages/merchant/DashboardPage"));
+
 // User dashboard pages
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const MyStorePage = lazy(() => import("@/pages/dashboard/MyStorePage"));
 const CreateItemPage = lazy(() => import("@/pages/dashboard/CreateItemPage"));
 
-// 404 Page
+// Error pages
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
+const UnauthorizedPage = lazy(() => import("@/pages/UnauthorizedPage"));
 
 function AppContent() {
   // Track page views on route changes
@@ -164,16 +172,30 @@ function AppContent() {
             </ProtectedRoute>
           } />
 
-          {/* Admin Dashboard - Protected */}
+          {/* Admin Dashboard - Protected with RoleGuard */}
           <Route path="/admin" element={
-            <AdminRoute>
+            <AdminGuard>
               <PageErrorBoundary><AdminDashboard /></PageErrorBoundary>
-            </AdminRoute>
+            </AdminGuard>
           } />
           <Route path="/admin/dashboard" element={
-            <AdminRoute>
+            <AdminGuard>
               <PageErrorBoundary><AdminDashboard /></PageErrorBoundary>
-            </AdminRoute>
+            </AdminGuard>
+          } />
+
+          {/* Agent Dashboard - Protected with RoleGuard */}
+          <Route path="/agent" element={
+            <AgentGuard>
+              <PageErrorBoundary><AgentDashboard /></PageErrorBoundary>
+            </AgentGuard>
+          } />
+
+          {/* Merchant Dashboard - Protected with RoleGuard */}
+          <Route path="/merchant" element={
+            <MerchantGuard>
+              <PageErrorBoundary><MerchantDashboard /></PageErrorBoundary>
+            </MerchantGuard>
           } />
 
           {/* User Dashboard - Protected */}
@@ -192,6 +214,9 @@ function AppContent() {
               <PageErrorBoundary><CreateItemPage /></PageErrorBoundary>
             </ProtectedRoute>
           } />
+
+          {/* Error Pages */}
+          <Route path="/unauthorized" element={<PageErrorBoundary><UnauthorizedPage /></PageErrorBoundary>} />
 
           {/* 404 Page for unknown routes */}
           <Route path="*" element={<NotFoundPage />} />
