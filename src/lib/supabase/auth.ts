@@ -1,7 +1,7 @@
 import { supabase } from './client';
 import type { Tables } from '@/types/supabase';
 
-export type UserRole = 'admin' | 'user';
+export type UserRole = 'user' | 'agent' | 'merchant' | 'admin';
 export type Profile = Tables<'profiles'>;
 
 export interface AuthUser {
