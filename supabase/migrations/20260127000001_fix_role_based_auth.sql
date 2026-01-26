@@ -19,7 +19,7 @@ ALTER TABLE profiles
   DROP CONSTRAINT IF EXISTS profiles_role_check,
   ADD CONSTRAINT profiles_role_check CHECK (role IN ('user', 'agent', 'merchant', 'admin'));
 
--- Step 4: Update the trigger function to ensure role is always set
+-- Step 5: Update the trigger function to ensure role is always set
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -52,7 +52,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Step 5: Ensure RLS policies are correctly configured
+-- Step 6: Ensure RLS policies are correctly configured
 -- Drop existing policies
 DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
 DROP POLICY IF EXISTS "Admins can view all profiles" ON profiles;

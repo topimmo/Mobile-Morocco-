@@ -54,8 +54,8 @@ export function RoleGuard({
         while (retryCount < 3 && !profile) {
           if (retryCount > 0) {
             console.log(`RoleGuard: Retrying profile fetch (attempt ${retryCount + 1}/3)...`);
-            // Exponential backoff: 500ms, 1000ms, 2000ms (standardized with authService)
-            await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount - 1) * 500));
+            // Exponential backoff: 500ms (2^0 * 500), 1000ms (2^1 * 500), 2000ms (2^2 * 500)
+            await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount) * 500));
           }
 
           const result = await supabase
