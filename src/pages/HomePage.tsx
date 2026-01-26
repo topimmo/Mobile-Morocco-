@@ -539,8 +539,7 @@ export default function HomePage() {
             <Link to="/listings" className="w-full sm:w-auto">
               <Button 
                 size="lg" 
-                variant="outline" 
-                className="w-full sm:w-auto text-base font-semibold border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="w-full sm:w-auto text-base font-semibold bg-white text-primary border-2 border-white hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md"
               >
                 {isRTL ? 'تصفح الإعلانات' : 'Parcourir les annonces'}
               </Button>
