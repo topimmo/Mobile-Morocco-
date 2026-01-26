@@ -289,7 +289,7 @@ export const getComputerRepairServices = async (
       city:cities(*),
       neighborhood:neighborhoods(*)
     `, { count: 'exact' })
-    .contains('device_types', ['computer', 'laptop', 'pc']);
+    .or('device_types.cs.{computer},device_types.cs.{laptop},device_types.cs.{pc}');
 
   // Apply filters
   if (filters.storeId) {
