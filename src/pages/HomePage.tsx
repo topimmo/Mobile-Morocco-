@@ -531,7 +531,7 @@ export default function HomePage() {
               <Button 
                 size="lg" 
                 variant="secondary"
-                className="w-full sm:w-auto min-h-[52px] text-[16px] md:text-base px-8 md:px-10 hover:scale-[1.02] active:scale-[0.98] transition-all font-semibold"
+                className="w-full sm:w-auto text-base font-semibold hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 {isRTL ? 'إنشاء حساب' : 'Créer un compte'}
               </Button>
@@ -540,7 +540,7 @@ export default function HomePage() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="w-full sm:w-auto min-h-[52px] text-[16px] md:text-base px-8 md:px-10 border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary hover:scale-[1.02] active:scale-[0.98] transition-all font-semibold"
+                className="w-full sm:w-auto text-base font-semibold border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 {isRTL ? 'تصفح الإعلانات' : 'Parcourir les annonces'}
               </Button>

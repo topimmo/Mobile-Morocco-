@@ -119,7 +119,7 @@ function Navigation() {
           <div className={cn('hidden md:flex items-center gap-2', isRTL && 'flex-row-reverse')}>
             {/* Publish Phone CTA - Swiss Design */}
             <Link to="/publish-phone">
-              <Button size="sm" className={cn('bg-primary hover:bg-primary/90 font-medium whitespace-nowrap px-4 py-2', isRTL && 'flex-row-reverse')}>
+              <Button size="sm" className={cn('bg-primary hover:bg-primary/90 font-medium whitespace-nowrap', isRTL && 'flex-row-reverse')}>
                 <Plus className={cn('h-4 w-4', isRTL ? 'ml-1.5' : 'mr-1.5')} />
                 {isRTL ? 'نشر تلفوني' : 'Publier'}
               </Button>
@@ -142,7 +142,7 @@ function Navigation() {
               <>
                 {isAdmin && (
                   <Link to="/admin">
-                    <Button variant="default" size="sm" className={cn('bg-red-600 hover:bg-red-700 px-3', isRTL && 'flex-row-reverse')}>
+                    <Button variant="default" size="sm" className={cn('bg-red-600 hover:bg-red-700', isRTL && 'flex-row-reverse')}>
                       <Shield className={cn('h-4 w-4', isRTL ? 'ml-1.5' : 'mr-1.5')} />
                       {labels.admin}
                     </Button>
@@ -154,7 +154,7 @@ function Navigation() {
                   onClick={async () => {
                     await signOut();
                   }}
-                  className={cn('px-3', isRTL && 'flex-row-reverse')}
+                  className={cn(isRTL && 'flex-row-reverse')}
                 >
                   <LogOut className={cn('h-4 w-4', isRTL ? 'ml-1.5' : 'mr-1.5')} />
                   {labels.logout}
@@ -163,13 +163,13 @@ function Navigation() {
             ) : (
               <>
                 <Link to="/auth/login">
-                  <Button variant="outline" size="sm" className={cn('px-3', isRTL && 'flex-row-reverse')}>
+                  <Button variant="outline" size="sm" className={cn(isRTL && 'flex-row-reverse')}>
                     <LogIn className={cn('h-4 w-4', isRTL ? 'ml-1.5' : 'mr-1.5')} />
                     {labels.login}
                   </Button>
                 </Link>
                 <Link to="/auth/register">
-                  <Button size="sm" className="px-4">
+                  <Button size="sm">
                     {labels.register}
                   </Button>
                 </Link>
