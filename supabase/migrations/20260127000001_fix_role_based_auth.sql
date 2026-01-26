@@ -1,20 +1,23 @@
 -- Fix Role-Based Authentication Issues
 -- This migration addresses schema conflicts and ensures all users have proper roles
 
--- Step 1: Ensure role column exists and has correct constraint
+-- Step 1: Ensure role column has default value
 ALTER TABLE profiles 
-  DROP CONSTRAINT IF EXISTS profiles_role_check,
-  ADD CONSTRAINT profiles_role_check CHECK (role IN ('user', 'agent', 'merchant', 'admin'));
+  ALTER COLUMN role SET DEFAULT 'user';
 
--- Step 2: Ensure role has a NOT NULL constraint with default
-ALTER TABLE profiles 
-  ALTER COLUMN role SET DEFAULT 'user',
-  ALTER COLUMN role SET NOT NULL;
-
--- Step 3: Backfill any NULL roles for existing users
+-- Step 2: Backfill any NULL roles for existing users (must be done before adding NOT NULL constraint)
 UPDATE profiles 
 SET role = 'user' 
 WHERE role IS NULL;
+
+-- Step 3: Add NOT NULL constraint (after backfilling NULL values)
+ALTER TABLE profiles 
+  ALTER COLUMN role SET NOT NULL;
+
+-- Step 4: Ensure role has correct constraint
+ALTER TABLE profiles 
+  DROP CONSTRAINT IF EXISTS profiles_role_check,
+  ADD CONSTRAINT profiles_role_check CHECK (role IN ('user', 'agent', 'merchant', 'admin'));
 
 -- Step 4: Update the trigger function to ensure role is always set
 CREATE OR REPLACE FUNCTION public.handle_new_user()
