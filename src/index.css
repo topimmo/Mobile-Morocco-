@@ -163,19 +163,19 @@
 
   /* Safe area utilities for mobile devices with notches */
   .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
   .pt-safe {
-    padding-top: env(safe-area-inset-top);
+    padding-top: max(1rem, env(safe-area-inset-top));
   }
 
   .pl-safe {
-    padding-left: env(safe-area-inset-left);
+    padding-left: max(1rem, env(safe-area-inset-left));
   }
 
   .pr-safe {
-    padding-right: env(safe-area-inset-right);
+    padding-right: max(1rem, env(safe-area-inset-right));
   }
 
   /* Global container utility for consistent page width and spacing */

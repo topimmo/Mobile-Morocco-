@@ -25,6 +25,10 @@ module.exports = {
       mono: ['JetBrains Mono', 'monospace'],
     },
     extend: {
+      zIndex: {
+        'floating': '40',
+        'sticky': '50',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

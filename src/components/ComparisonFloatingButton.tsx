@@ -20,7 +20,7 @@ const ComparisonFloatingButton = () => {
 
   return (
     <div 
-      className={`fixed z-40 ${isRTL ? 'left-4 sm:left-6' : 'right-4 sm:right-6'}`}
+      className={`fixed z-floating ${isRTL ? 'left-4 sm:left-6' : 'right-4 sm:right-6'}`}
       style={{ 
         bottom: 'max(1.5rem, calc(1.5rem + env(safe-area-inset-bottom)))' 
       }}

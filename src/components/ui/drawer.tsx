@@ -70,7 +70,6 @@ const DrawerFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn("mt-auto flex flex-col gap-2 p-4 pb-safe", className)}
-    style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
     {...props}
   />
 )
