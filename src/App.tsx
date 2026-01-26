@@ -35,6 +35,8 @@ const ItemDetailsPage = lazy(() => import("@/pages/ItemDetailsPage"));
 const AdvertisePage = lazy(() => import("@/pages/AdvertisePage"));
 const AdRequestPage = lazy(() => import("@/pages/AdRequestPage"));
 const PublishPhonePage = lazy(() => import("@/pages/PublishPhonePage"));
+const PublishComputerPage = lazy(() => import("@/pages/PublishComputerPage"));
+const PublishComputerPartPage = lazy(() => import("@/pages/PublishComputerPartPage"));
 const ComparePage = lazy(() => import("@/pages/ComparePage"));
 const FavoritesPage = lazy(() => import("@/components/FavoritesPage"));
 const TestCreateListingPage = lazy(() => import("@/pages/TestCreateListingPage"));
@@ -111,6 +113,16 @@ function AppContent() {
           <Route path="/publish-phone" element={
             <ProtectedRoute>
               <PageErrorBoundary><PublishPhonePage /></PageErrorBoundary>
+            </ProtectedRoute>
+          } />
+          <Route path="/publish-computer" element={
+            <ProtectedRoute>
+              <PageErrorBoundary><PublishComputerPage /></PageErrorBoundary>
+            </ProtectedRoute>
+          } />
+          <Route path="/publish-computer-part" element={
+            <ProtectedRoute>
+              <PageErrorBoundary><PublishComputerPartPage /></PageErrorBoundary>
             </ProtectedRoute>
           } />
           <Route path="/compare" element={<PageErrorBoundary><ComparePage /></PageErrorBoundary>} />

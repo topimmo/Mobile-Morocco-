@@ -85,7 +85,6 @@ export interface ComputerPartFilters {
 export interface ComputerRepairFilters {
   storeId?: string;
   cityId?: string;
-  repairType?: 'software' | 'hardware' | 'both';
   search?: string;
   status?: 'pending' | 'approved' | 'rejected' | 'hidden';
 }
@@ -298,9 +297,6 @@ export const getComputerRepairServices = async (
   }
   if (filters.cityId) {
     query = query.eq('city_id', filters.cityId);
-  }
-  if (filters.repairType) {
-    query = query.eq('repair_type', filters.repairType);
   }
   if (filters.search) {
     query = query.or(`service_name_fr.ilike.%${filters.search}%,service_name_ar.ilike.%${filters.search}%,description_fr.ilike.%${filters.search}%`);
