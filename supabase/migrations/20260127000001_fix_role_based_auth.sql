@@ -25,7 +25,8 @@ RETURNS TRIGGER AS $$
 DECLARE
   user_role TEXT;
 BEGIN
-  -- Get role from user metadata, default to 'user'
+  -- Get role from user metadata, default to 'user' if not provided or NULL
+  -- The ->>'role' operator extracts the JSON string value
   user_role := COALESCE(NEW.raw_user_meta_data->>'role', 'user');
   
   -- Ensure role is valid, default to 'user' if not
@@ -33,20 +34,19 @@ BEGIN
     user_role := 'user';
   END IF;
 
-  -- Check if profile already exists (avoid duplicates)
-  IF NOT EXISTS (SELECT 1 FROM public.profiles WHERE id = NEW.id) THEN
-    -- Create profile with role from metadata
-    INSERT INTO public.profiles (id, email, role, full_name, phone, created_at, updated_at)
-    VALUES (
-      NEW.id,
-      NEW.email,
-      user_role,
-      COALESCE(NEW.raw_user_meta_data->>'full_name', NULL),
-      COALESCE(NEW.raw_user_meta_data->>'phone', NULL),
-      NOW(),
-      NOW()
-    );
-  END IF;
+  -- Insert profile with ON CONFLICT DO NOTHING to handle race conditions
+  -- This ensures no duplicate key errors if profile somehow already exists
+  INSERT INTO public.profiles (id, email, role, full_name, phone, created_at, updated_at)
+  VALUES (
+    NEW.id,
+    NEW.email,
+    user_role,
+    COALESCE(NEW.raw_user_meta_data->>'full_name', NULL),
+    COALESCE(NEW.raw_user_meta_data->>'phone', NULL),
+    NOW(),
+    NOW()
+  )
+  ON CONFLICT (id) DO NOTHING;
 
   RETURN NEW;
 END;
