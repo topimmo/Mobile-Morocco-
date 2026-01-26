@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getUserRole, REDIRECT_PATHS, UserRole } from '@/services/authService';
 
 export default function AuthCallbackPage() {
   const navigate = useNavigate();
@@ -41,9 +42,46 @@ export default function AuthCallbackPage() {
 
           setStatus('success');
           
-          // Redirect to dashboard after successful confirmation
-          setTimeout(() => {
-            navigate('/dashboard', { replace: true });
+          // Get user's role and redirect to appropriate dashboard
+          setTimeout(async () => {
+            try {
+              const { data: { user } } = await supabase.auth.getUser();
+              
+              if (user) {
+                // Fetch role and redirect accordingly
+                const { role } = await getUserRole(user.id);
+                
+                let redirectPath = REDIRECT_PATHS.USER; // default
+                
+                if (role) {
+                  switch (role as UserRole) {
+                    case 'admin':
+                      redirectPath = REDIRECT_PATHS.ADMIN;
+                      break;
+                    case 'agent':
+                      redirectPath = REDIRECT_PATHS.AGENT;
+                      break;
+                    case 'merchant':
+                      redirectPath = REDIRECT_PATHS.MERCHANT;
+                      break;
+                    case 'user':
+                    default:
+                      redirectPath = REDIRECT_PATHS.USER;
+                      break;
+                  }
+                }
+                
+                console.log('AuthCallback: Redirecting to role-based path:', redirectPath);
+                navigate(redirectPath, { replace: true });
+              } else {
+                // No user, go to login
+                navigate('/auth/login', { replace: true });
+              }
+            } catch (error) {
+              console.error('AuthCallback: Error determining redirect:', error);
+              // Fallback to default dashboard
+              navigate('/dashboard', { replace: true });
+            }
           }, 2000);
         } else {
           // No code parameter - might be a legacy link or direct access

@@ -33,9 +33,9 @@ export default function LoginPage() {
       // Track successful login
       trackLogin();
 
-      // Redirect based on role
+      // Redirect based on role using replace to avoid back button issues
       console.log('Login successful, redirecting to:', redirectPath, 'Role:', role);
-      navigate(redirectPath);
+      navigate(redirectPath, { replace: true });
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {

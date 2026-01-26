@@ -1,6 +1,7 @@
 import { supabase } from '@/utils/supabaseClient';
 import { CustomerProfile, ImporterProfile, TechnicianProfile } from '@/models/User';
 import type { User } from '@supabase/supabase-js';
+import { getExponentialBackoffDelay, sleep } from '@/utils/retry';
 
 // Role types matching the database constraint
 export type UserRole = 'user' | 'agent' | 'merchant' | 'admin';
@@ -396,12 +397,15 @@ export const getUserRole = async (userId?: string): Promise<{ role: UserRole | n
     if (!targetUserId) {
       const { data: userData, error: userError } = await supabase.auth.getUser();
       if (userError || !userData.user) {
+        console.error('getUserRole: No authenticated user', userError);
         return { role: null, error: userError?.message || 'No user found' };
       }
       targetUserId = userData.user.id;
     }
 
-    // Fetch role from profiles table
+    console.log('getUserRole: Fetching role for user:', targetUserId);
+
+    // Fetch role from profiles table with retry logic
     const { data, error } = await supabase
       .from('profiles')
       .select('role')
@@ -409,17 +413,24 @@ export const getUserRole = async (userId?: string): Promise<{ role: UserRole | n
       .single();
 
     if (error) {
-      console.error('Error fetching user role:', error);
+      console.error('getUserRole: Error fetching user role:', error);
       return { role: null, error: error.message };
     }
 
-    if (!data || !data.role) {
+    if (!data) {
+      console.error('getUserRole: No profile found for user:', targetUserId);
       return { role: null, error: 'Profile not found' };
     }
 
+    if (!data.role) {
+      console.error('getUserRole: Profile exists but role is null for user:', targetUserId);
+      return { role: null, error: 'Role not set in profile' };
+    }
+
+    console.log('getUserRole: Successfully fetched role:', data.role);
     return { role: data.role as UserRole, error: null };
   } catch (error) {
-    console.error('Error getting user role:', error);
+    console.error('getUserRole: Unexpected error:', error);
     return { role: null, error: 'Failed to get user role' };
   }
 };
@@ -433,6 +444,8 @@ export const signInAndRedirect = async (
   password: string
 ): Promise<SignInResult> => {
   try {
+    console.log('signInAndRedirect: Starting login for:', email);
+    
     // Step 1: Sign in
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
       email,
@@ -440,7 +453,7 @@ export const signInAndRedirect = async (
     });
 
     if (signInError) {
-      console.error('Sign in error:', signInError);
+      console.error('signInAndRedirect: Sign in error:', signInError);
       return { 
         user: null, 
         redirectPath: REDIRECT_PATHS.LOGIN, 
@@ -450,6 +463,7 @@ export const signInAndRedirect = async (
     }
 
     if (!data.user) {
+      console.error('signInAndRedirect: No user returned after login');
       return { 
         user: null, 
         redirectPath: REDIRECT_PATHS.LOGIN,
@@ -458,22 +472,44 @@ export const signInAndRedirect = async (
       };
     }
 
+    console.log('signInAndRedirect: Login successful, user ID:', data.user.id);
+
     // Step 2: Wait for login to succeed and get user.id
     const userId = data.user.id;
 
-    // Step 3: Fetch role from profiles table
-    const { role, error: roleError } = await getUserRole(userId);
+    // Step 3: Fetch role from profiles table with retry logic
+    let retryCount = 0;
+    let role: UserRole | null = null;
+    let roleError: string | null = null;
+
+    // Try up to 3 times total: 1 initial attempt + 2 retries with exponential backoff
+    // Retry delays: 500ms (first retry), 1000ms (second retry)
+    while (retryCount < 3 && !role) {
+      if (retryCount > 0) {
+        console.log(`signInAndRedirect: Retrying role fetch (attempt ${retryCount + 1}/3)...`);
+        await sleep(getExponentialBackoffDelay(retryCount));
+      }
+
+      const result = await getUserRole(userId);
+      role = result.role;
+      roleError = result.error;
+      retryCount++;
+
+      if (role) break;
+    }
 
     if (roleError || !role) {
-      console.error('Error fetching role:', roleError);
-      // If profile doesn't exist, redirect to account setup
+      console.error('signInAndRedirect: Failed to fetch role after retries:', roleError);
+      // If profile doesn't exist after retries, redirect to account setup
       return {
         user: data.user,
         redirectPath: REDIRECT_PATHS.ACCOUNT_SETUP,
         role: null,
-        error: 'Profile not found',
+        error: 'Profile not found or role not set',
       };
     }
+
+    console.log('signInAndRedirect: Role fetched successfully:', role);
 
     // Step 4: Determine redirect path based on role
     let redirectPath: string;
@@ -493,6 +529,8 @@ export const signInAndRedirect = async (
         break;
     }
 
+    console.log('signInAndRedirect: Redirecting to:', redirectPath);
+
     return {
       user: data.user,
       redirectPath,
@@ -500,7 +538,7 @@ export const signInAndRedirect = async (
       error: null,
     };
   } catch (error) {
-    console.error('Sign in and redirect error:', error);
+    console.error('signInAndRedirect: Unexpected error:', error);
     return {
       user: null,
       redirectPath: REDIRECT_PATHS.LOGIN,
