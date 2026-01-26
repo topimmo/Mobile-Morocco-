@@ -78,8 +78,8 @@ function Navigation() {
 
   return (
     <nav className={cn('bg-white border-b border-border sticky top-0 z-sticky shadow-sm')} dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="containerPage px-3 md:px-6 py-2 md:py-3 flex items-center">
-        <div className={cn('flex justify-between items-center w-full', isRTL && 'flex-row-reverse')}>
+      <div className="containerPage px-3 md:px-6 py-3 md:py-3.5 flex items-center">
+        <div className={cn('flex justify-between items-center w-full gap-4', isRTL && 'flex-row-reverse')}>
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <div className="h-10 md:h-12 flex items-center bg-white p-1 border border-gray-200 rounded-lg">
@@ -96,15 +96,15 @@ function Navigation() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <div className={cn('hidden md:flex items-center gap-1', isRTL && 'flex-row-reverse')}>
+          <div className={cn('hidden md:flex items-center gap-2', isRTL && 'flex-row-reverse')}>
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
                 className={cn(
-                  'px-3 py-2 text-sm font-medium transition-colors flex items-center gap-2',
+                  'px-3 py-2.5 text-sm font-medium transition-colors flex items-center gap-1.5 rounded-md hover:bg-muted whitespace-nowrap',
                   isActive(link.to)
-                    ? 'text-primary'
+                    ? 'text-primary bg-primary/5'
                     : 'text-muted-foreground hover:text-foreground',
                   isRTL && 'flex-row-reverse'
                 )}
@@ -116,11 +116,11 @@ function Navigation() {
           </div>
 
           {/* Desktop Right Section */}
-          <div className={cn('hidden md:flex items-center gap-3', isRTL && 'flex-row-reverse')}>
+          <div className={cn('hidden md:flex items-center gap-2', isRTL && 'flex-row-reverse')}>
             {/* Publish Phone CTA - Swiss Design */}
             <Link to="/publish-phone">
-              <Button size="sm" className={cn('bg-primary hover:bg-primary/90 font-medium whitespace-nowrap', isRTL && 'flex-row-reverse')}>
-                <Plus className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
+              <Button size="sm" className={cn('bg-primary hover:bg-primary/90 font-medium whitespace-nowrap px-4 py-2', isRTL && 'flex-row-reverse')}>
+                <Plus className={cn('h-4 w-4', isRTL ? 'ml-1.5' : 'mr-1.5')} />
                 {isRTL ? 'نشر تلفوني' : 'Publier'}
               </Button>
             </Link>
@@ -129,7 +129,7 @@ function Navigation() {
             <button
               onClick={() => setLanguage(language === 'ar' ? 'fr' : 'ar')}
               className={cn(
-                'flex items-center gap-2 px-3 py-2 hover:bg-muted transition-colors font-medium',
+                'flex items-center gap-1.5 px-3 py-2 rounded-md hover:bg-muted transition-colors font-medium',
                 isRTL && 'flex-row-reverse'
               )}
             >
@@ -142,8 +142,8 @@ function Navigation() {
               <>
                 {isAdmin && (
                   <Link to="/admin">
-                    <Button variant="default" size="sm" className={cn('bg-red-600 hover:bg-red-700', isRTL && 'flex-row-reverse')}>
-                      <Shield className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
+                    <Button variant="default" size="sm" className={cn('bg-red-600 hover:bg-red-700 px-3', isRTL && 'flex-row-reverse')}>
+                      <Shield className={cn('h-4 w-4', isRTL ? 'ml-1.5' : 'mr-1.5')} />
                       {labels.admin}
                     </Button>
                   </Link>
@@ -154,22 +154,22 @@ function Navigation() {
                   onClick={async () => {
                     await signOut();
                   }}
-                  className={cn(isRTL && 'flex-row-reverse')}
+                  className={cn('px-3', isRTL && 'flex-row-reverse')}
                 >
-                  <LogOut className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
+                  <LogOut className={cn('h-4 w-4', isRTL ? 'ml-1.5' : 'mr-1.5')} />
                   {labels.logout}
                 </Button>
               </>
             ) : (
               <>
                 <Link to="/auth/login">
-                  <Button variant="outline" size="sm" className={cn(isRTL && 'flex-row-reverse')}>
-                    <LogIn className={cn('h-4 w-4', isRTL ? 'ml-2' : 'mr-2')} />
+                  <Button variant="outline" size="sm" className={cn('px-3', isRTL && 'flex-row-reverse')}>
+                    <LogIn className={cn('h-4 w-4', isRTL ? 'ml-1.5' : 'mr-1.5')} />
                     {labels.login}
                   </Button>
                 </Link>
                 <Link to="/auth/register">
-                  <Button size="sm">
+                  <Button size="sm" className="px-4">
                     {labels.register}
                   </Button>
                 </Link>

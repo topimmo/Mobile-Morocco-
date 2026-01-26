@@ -516,22 +516,22 @@ export default function HomePage() {
       </section>
 
       {/* Call to Action Section - Enhanced Mobile Visibility */}
-      <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-primary text-primary-foreground">
+      <section className="py-10 sm:py-12 md:py-14 lg:py-16 bg-primary text-primary-foreground">
         <div className="containerPage text-center px-4 md:px-0">
-          <h2 className="text-[22px] sm:text-[26px] md:text-3xl font-bold mb-3 md:mb-4">
+          <h2 className="text-[24px] sm:text-[28px] md:text-3xl lg:text-4xl font-bold mb-4 md:mb-5">
             {isRTL ? 'انضم إلينا اليوم' : 'Rejoignez-nous Aujourd\'hui'}
           </h2>
-          <p className="text-[14px] sm:text-[16px] md:text-lg mb-5 md:mb-6">
+          <p className="text-[15px] sm:text-[17px] md:text-lg lg:text-xl mb-6 md:mb-8 max-w-2xl mx-auto">
             {isRTL 
               ? 'سجل الآن واستفد من خدماتنا المميزة'
               : 'Inscrivez-vous maintenant et profitez de nos services exclusifs'}
           </p>
-          <div className={cn('flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0', isRTL && 'sm:flex-row-reverse')}>
+          <div className={cn('flex flex-col sm:flex-row gap-4 justify-center px-4 sm:px-0 max-w-lg mx-auto', isRTL && 'sm:flex-row-reverse')}>
             <Link to="/auth/register" className="w-full sm:w-auto">
               <Button 
                 size="lg" 
                 variant="secondary"
-                className="w-full sm:w-auto h-[50px] md:h-auto text-[15px] sm:text-[16px] md:text-base px-8 md:px-10 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="w-full sm:w-auto min-h-[52px] text-[16px] md:text-base px-8 md:px-10 hover:scale-[1.02] active:scale-[0.98] transition-all font-semibold"
               >
                 {isRTL ? 'إنشاء حساب' : 'Créer un compte'}
               </Button>
@@ -540,7 +540,7 @@ export default function HomePage() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="w-full sm:w-auto h-[50px] md:h-auto text-[15px] sm:text-[16px] md:text-base px-8 md:px-10 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="w-full sm:w-auto min-h-[52px] text-[16px] md:text-base px-8 md:px-10 border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary hover:scale-[1.02] active:scale-[0.98] transition-all font-semibold"
               >
                 {isRTL ? 'تصفح الإعلانات' : 'Parcourir les annonces'}
               </Button>
