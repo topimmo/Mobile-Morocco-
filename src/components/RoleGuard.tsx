@@ -21,49 +21,107 @@ export function RoleGuard({
 }: RoleGuardProps) {
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
   const location = useLocation();
 
   useEffect(() => {
+    let isMounted = true;
+
     const checkAuthorization = async () => {
       try {
+        console.log('RoleGuard: Checking authorization for path:', location.pathname);
+        
         // Step 1: Check if user is authenticated
         const { data: { user }, error: authError } = await supabase.auth.getUser();
         
+        if (!isMounted) return;
+
         if (authError || !user) {
+          console.log('RoleGuard: User not authenticated, redirecting to login');
           setAuthorized(false);
+          setRedirectTo('/auth/login');
           setLoading(false);
           return;
         }
 
-        // Step 2: Fetch user role from profiles table
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id)
-          .single();
+        console.log('RoleGuard: User authenticated:', user.id);
+
+        // Step 2: Fetch user role from profiles table with retry
+        let retryCount = 0;
+        let profile = null;
+        let profileError = null;
+
+        while (retryCount < 3 && !profile) {
+          if (retryCount > 0) {
+            console.log(`RoleGuard: Retrying profile fetch (attempt ${retryCount + 1}/3)...`);
+            await new Promise(resolve => setTimeout(resolve, 300 * retryCount));
+          }
+
+          const result = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single();
+
+          if (!isMounted) return;
+
+          profile = result.data;
+          profileError = result.error;
+          retryCount++;
+
+          if (profile) break;
+        }
 
         if (profileError || !profile) {
-          console.error('Error fetching profile:', profileError);
+          console.error('RoleGuard: Error fetching profile:', profileError);
           setAuthorized(false);
+          setRedirectTo('/auth/select-account-type');
+          setLoading(false);
+          return;
+        }
+
+        if (!profile.role) {
+          console.error('RoleGuard: Profile exists but role is null');
+          setAuthorized(false);
+          setRedirectTo('/auth/select-account-type');
           setLoading(false);
           return;
         }
 
         // Step 3: Check if user's role is in the allowed roles
         const userRole = profile.role as UserRole;
+        console.log('RoleGuard: User role:', userRole, 'Allowed roles:', allowedRoles);
+        
+        // Admin role bypasses all checks
         const isAuthorized = allowedRoles.includes(userRole) || userRole === 'admin';
         
-        setAuthorized(isAuthorized);
+        if (isAuthorized) {
+          console.log('RoleGuard: Authorization granted');
+          setAuthorized(true);
+          setRedirectTo(null);
+        } else {
+          console.log('RoleGuard: Authorization denied, redirecting to:', fallbackPath);
+          setAuthorized(false);
+          setRedirectTo(fallbackPath);
+        }
       } catch (error) {
-        console.error('Authorization check failed:', error);
+        console.error('RoleGuard: Authorization check failed:', error);
+        if (!isMounted) return;
         setAuthorized(false);
+        setRedirectTo(fallbackPath);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     checkAuthorization();
-  }, [allowedRoles, location]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [allowedRoles, fallbackPath, location.pathname]);
 
   // Show loading state while checking authorization
   if (loading) {
@@ -78,8 +136,8 @@ export function RoleGuard({
   }
 
   // Redirect if not authorized
-  if (!authorized) {
-    return <Navigate to={fallbackPath} state={{ from: location }} replace />;
+  if (!authorized && redirectTo) {
+    return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
   // Render children if authorized
