@@ -481,13 +481,14 @@ export const signInAndRedirect = async (
     let role: UserRole | null = null;
     let roleError: string | null = null;
 
-    // Retry up to 3 times with exponential backoff
+    // Try up to 3 times total: 1 initial attempt + 2 retries with exponential backoff
+    // Retry delays: 500ms (first retry), 1000ms (second retry)
     while (retryCount < 3 && !role) {
       if (retryCount > 0) {
         console.log(`signInAndRedirect: Retrying role fetch (attempt ${retryCount + 1}/3)...`);
-        // Exponential backoff: 500ms (2^0 * 500), 1000ms (2^1 * 500), 2000ms (2^2 * 500)
-        // On retry 1: 2^(1-1) * 500 = 500ms
-        // On retry 2: 2^(2-1) * 500 = 1000ms
+        // Exponential backoff formula: 2^(retryCount-1) * 500ms
+        // First retry (retryCount=1): 2^0 * 500 = 500ms
+        // Second retry (retryCount=2): 2^1 * 500 = 1000ms
         await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount - 1) * 500));
       }
 
