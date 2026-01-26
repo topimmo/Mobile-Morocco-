@@ -29,6 +29,9 @@ import {
   UserPlus,
   PlusCircle,
   MapPin,
+  Package,
+  Monitor,
+  Cpu,
 } from 'lucide-react';
 import {
   getAdminStats,
@@ -43,11 +46,16 @@ import {
   approveCampaign,
   rejectCampaign,
   getRecentActivity,
+  getPendingItems,
+  approveItem,
+  rejectItem,
+  getAdminStatsWithItems,
   type AdminStats,
   type PendingListing,
   type PendingRepairShop,
   type PendingCampaign,
   type PendingNeighborhood,
+  type PendingItem,
 } from '@/lib/supabase/admin';
 import { useToast } from '@/components/ui/use-toast';
 import { NeighborhoodList } from '@/components/admin/NeighborhoodList';
@@ -58,11 +66,19 @@ export default function AdminDashboard() {
   const { toast } = useToast();
 
   // State
-  const [stats, setStats] = useState<AdminStats | null>(null);
+  const [stats, setStats] = useState<AdminStats & {
+    totalItems?: number;
+    pendingItems?: number;
+    approvedItems?: number;
+    pendingComputers?: number;
+    pendingComputerParts?: number;
+  } | null>(null);
   const [pendingListings, setPendingListings] = useState<PendingListing[]>([]);
   const [pendingShops, setPendingShops] = useState<PendingRepairShop[]>([]);
   const [pendingCampaigns, setPendingCampaigns] = useState<PendingCampaign[]>([]);
   const [pendingNeighborhoods, setPendingNeighborhoods] = useState<PendingNeighborhood[]>([]);
+  const [pendingItems, setPendingItems] = useState<PendingItem[]>([]);
+  const [itemTypeFilter, setItemTypeFilter] = useState<string>('all');
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -71,20 +87,22 @@ export default function AdminDashboard() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [statsData, listingsResult, shopsResult, campaignsResult, neighborhoodsResult, activity] = await Promise.all([
-        getAdminStats(),
+      const [statsData, listingsResult, shopsResult, campaignsResult, neighborhoodsResult, itemsResult, activity] = await Promise.all([
+        getAdminStatsWithItems(),
         getPendingListings(),
         getPendingRepairShops(),
         getPendingCampaigns(),
         getPendingNeighborhoods(),
+        getPendingItems(),
         getRecentActivity(),
       ]);
       setStats(statsData);
-      // Extract data from paginated results (listings is paginated, shops/campaigns return arrays)
+      // Extract data from paginated results (listings and items are paginated, shops/campaigns return arrays)
       setPendingListings(listingsResult.data || []);
       setPendingShops(shopsResult || []);
       setPendingCampaigns(campaignsResult || []);
       setPendingNeighborhoods(neighborhoodsResult || []);
+      setPendingItems(itemsResult.data || []);
       setRecentActivity(activity);
     } catch (error) {
       console.error('Error fetching admin data:', error);
@@ -183,6 +201,32 @@ export default function AdminDashboard() {
     setActionLoading(null);
   };
 
+  const handleApproveItem = async (id: string) => {
+    setActionLoading(id);
+    const result = await approveItem(id);
+    if (result.success) {
+      setPendingItems((prev) => prev.filter((i) => i.id !== id));
+      setStats((prev) => prev ? { ...prev, pendingItems: (prev.pendingItems || 0) - 1, approvedItems: (prev.approvedItems || 0) + 1 } : prev);
+      toast({ title: isRTL ? 'تمت الموافقة' : 'Approuvé', description: isRTL ? 'تمت الموافقة على الصنف' : 'L\'article a été approuvé' });
+    } else {
+      toast({ title: isRTL ? 'خطأ' : 'Erreur', description: result.error, variant: 'destructive' });
+    }
+    setActionLoading(null);
+  };
+
+  const handleRejectItem = async (id: string) => {
+    setActionLoading(id);
+    const result = await rejectItem(id);
+    if (result.success) {
+      setPendingItems((prev) => prev.filter((i) => i.id !== id));
+      setStats((prev) => prev ? { ...prev, pendingItems: (prev.pendingItems || 0) - 1 } : prev);
+      toast({ title: isRTL ? 'تم الرفض' : 'Rejeté', description: isRTL ? 'تم رفض الصنف' : 'L\'article a été rejeté' });
+    } else {
+      toast({ title: isRTL ? 'خطأ' : 'Erreur', description: result.error, variant: 'destructive' });
+    }
+    setActionLoading(null);
+  };
+
   // Auth checks
   if (authLoading) {
     return (
@@ -253,7 +297,7 @@ export default function AdminDashboard() {
         </h1>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           {/* Total Users */}
           <Card>
             <CardHeader className="pb-2">
@@ -338,11 +382,33 @@ export default function AdminDashboard() {
               </p>
             </CardContent>
           </Card>
+
+          {/* Pending Items */}
+          <Card className={stats?.pendingItems ? 'border-orange-500' : ''}>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                {isRTL ? 'أصناف معلقة' : 'Articles en attente'}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between">
+                {loading ? (
+                  <Skeleton className="h-8 w-16" />
+                ) : (
+                  <span className="text-2xl font-bold text-orange-600">{stats?.pendingItems || 0}</span>
+                )}
+                <Package className="h-5 w-5 text-orange-500" />
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {isRTL ? `${stats?.approvedItems || 0} موافق عليها` : `${stats?.approvedItems || 0} approuvés`}
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Moderation Tabs */}
         <Tabs defaultValue="listings" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="listings" className="flex items-center gap-2">
               <ShoppingBag className="h-4 w-4" />
               <span className="hidden sm:inline">{isRTL ? 'الإعلانات' : 'Annonces'}</span>
@@ -362,6 +428,13 @@ export default function AdminDashboard() {
               <span className="hidden sm:inline">{isRTL ? 'الأحياء' : 'Quartiers'}</span>
               {stats?.pendingNeighborhoods ? (
                 <Badge variant="destructive" className="ml-1">{stats.pendingNeighborhoods}</Badge>
+              ) : null}
+            </TabsTrigger>
+            <TabsTrigger value="items" className="flex items-center gap-2">
+              <Package className="h-4 w-4" />
+              <span className="hidden sm:inline">{isRTL ? 'الأصناف' : 'Articles'}</span>
+              {stats?.pendingItems ? (
+                <Badge variant="destructive" className="ml-1">{stats.pendingItems}</Badge>
               ) : null}
             </TabsTrigger>
             <TabsTrigger value="campaigns" className="flex items-center gap-2">
@@ -640,6 +713,171 @@ export default function AdminDashboard() {
               onUpdate={fetchData}
               language={isRTL ? 'ar' : 'fr'}
             />
+          </TabsContent>
+
+          {/* Pending Items Tab */}
+          <TabsContent value="items" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-orange-500" />
+                  {isRTL ? 'الأصناف في انتظار الموافقة' : 'Articles en attente d\'approbation'}
+                </CardTitle>
+                <CardDescription>
+                  {isRTL ? 'راجع الأصناف الجديدة قبل نشرها' : 'Examinez les nouveaux articles avant publication'}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {/* Filter by item type */}
+                <div className="mb-4 flex gap-2 flex-wrap">
+                  <Button
+                    size="sm"
+                    variant={itemTypeFilter === 'all' ? 'default' : 'outline'}
+                    onClick={() => setItemTypeFilter('all')}
+                  >
+                    {isRTL ? 'الكل' : 'Tous'}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={itemTypeFilter === 'phone' ? 'default' : 'outline'}
+                    onClick={() => setItemTypeFilter('phone')}
+                  >
+                    <Phone className="h-4 w-4 mr-1" />
+                    {isRTL ? 'الهواتف' : 'Téléphones'}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={itemTypeFilter === 'computer' ? 'default' : 'outline'}
+                    onClick={() => setItemTypeFilter('computer')}
+                  >
+                    <Monitor className="h-4 w-4 mr-1" />
+                    {isRTL ? 'الحواسيب' : 'Ordinateurs'}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={itemTypeFilter === 'computer_part' ? 'default' : 'outline'}
+                    onClick={() => setItemTypeFilter('computer_part')}
+                  >
+                    <Cpu className="h-4 w-4 mr-1" />
+                    {isRTL ? 'قطع الحواسيب' : 'Pièces PC'}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={itemTypeFilter === 'spare_part' ? 'default' : 'outline'}
+                    onClick={() => setItemTypeFilter('spare_part')}
+                  >
+                    <Package className="h-4 w-4 mr-1" />
+                    {isRTL ? 'قطع الغيار' : 'Pièces détachées'}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={itemTypeFilter === 'equipment' ? 'default' : 'outline'}
+                    onClick={() => setItemTypeFilter('equipment')}
+                  >
+                    <Package className="h-4 w-4 mr-1" />
+                    {isRTL ? 'المعدات' : 'Équipements'}
+                  </Button>
+                </div>
+
+                {loading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <Skeleton key={i} className="h-24 w-full" />
+                    ))}
+                  </div>
+                ) : pendingItems.filter(item => itemTypeFilter === 'all' || item.item_type === itemTypeFilter).length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green-500" />
+                    <p>{isRTL ? 'لا توجد أصناف معلقة' : 'Aucun article en attente'}</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {pendingItems.filter(item => itemTypeFilter === 'all' || item.item_type === itemTypeFilter).map((item) => {
+                      const getItemTypeBadge = (type: string) => {
+                        const types: Record<string, { label: string; labelAr: string; color: string }> = {
+                          phone: { label: 'Téléphone', labelAr: 'هاتف', color: 'bg-blue-500' },
+                          computer: { label: 'Ordinateur', labelAr: 'حاسوب', color: 'bg-purple-500' },
+                          computer_part: { label: 'Pièce PC', labelAr: 'قطعة حاسوب', color: 'bg-green-500' },
+                          spare_part: { label: 'Pièce détachée', labelAr: 'قطعة غيار', color: 'bg-yellow-500' },
+                          equipment: { label: 'Équipement', labelAr: 'معدة', color: 'bg-indigo-500' },
+                        };
+                        const typeInfo = types[type] || { label: type, labelAr: type, color: 'bg-gray-500' };
+                        return (
+                          <Badge className={`${typeInfo.color} text-white`}>
+                            {isRTL ? typeInfo.labelAr : typeInfo.label}
+                          </Badge>
+                        );
+                      };
+
+                      return (
+                        <div key={item.id} className="flex flex-col sm:flex-row gap-4 p-4 border rounded-lg">
+                          <div className="flex-shrink-0">
+                            {item.image_url ? (
+                              <img
+                                src={item.image_url}
+                                alt={isRTL ? item.title_ar : item.title_fr}
+                                className="w-24 h-24 object-cover rounded"
+                              />
+                            ) : (
+                              <div className="w-24 h-24 bg-muted rounded flex items-center justify-center">
+                                <Package className="h-8 w-8 text-muted-foreground" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold truncate">
+                              {isRTL ? item.title_ar : item.title_fr}
+                            </h3>
+                            {item.price && (
+                              <p className="text-lg font-bold text-primary">{formatPrice(item.price)}</p>
+                            )}
+                            <div className="flex flex-wrap gap-2 mt-1">
+                              {getItemTypeBadge(item.item_type)}
+                              {item.brand && (
+                                <Badge variant="outline">{item.brand}</Badge>
+                              )}
+                              {item.model && (
+                                <Badge variant="outline">{item.model}</Badge>
+                              )}
+                              <Badge variant={item.condition === 'new' ? 'default' : 'secondary'}>
+                                {item.condition === 'new' ? (isRTL ? 'جديد' : 'Neuf') : (isRTL ? 'مستعمل' : 'Occasion')}
+                              </Badge>
+                              <Badge variant="secondary">{item.city_name}</Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {isRTL ? 'المحل:' : 'Magasin:'} {item.store_name}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {formatDate(item.created_at)}
+                            </p>
+                          </div>
+                          <div className="flex sm:flex-col gap-2 justify-end">
+                            <Button
+                              size="sm"
+                              onClick={() => handleApproveItem(item.id)}
+                              disabled={actionLoading === item.id}
+                              className="bg-green-600 hover:bg-green-700"
+                            >
+                              <CheckCircle className="h-4 w-4 mr-1" />
+                              {isRTL ? 'موافقة' : 'Approuver'}
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => handleRejectItem(item.id)}
+                              disabled={actionLoading === item.id}
+                            >
+                              <XCircle className="h-4 w-4 mr-1" />
+                              {isRTL ? 'رفض' : 'Rejeter'}
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Activity Tab */}
