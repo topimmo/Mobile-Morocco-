@@ -63,7 +63,7 @@ export function RoleGuard({
     };
 
     checkAuthorization();
-  }, [allowedRoles]);
+  }, [allowedRoles, location]);
 
   // Show loading state while checking authorization
   if (loading) {

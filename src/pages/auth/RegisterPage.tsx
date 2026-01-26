@@ -163,6 +163,8 @@ export default function RegisterPage() {
     login: isRTL ? 'تسجيل الدخول' : 'Se connecter',
     passwordsNotMatch: isRTL ? 'كلمات المرور غير متطابقة' : 'Les mots de passe ne correspondent pas',
     registrationFailed: isRTL ? 'فشل التسجيل' : 'Échec de l\'inscription',
+    invalidRole: isRTL ? 'دور غير صالح' : 'Rôle invalide',
+    selectRoleFirst: isRTL ? 'الرجاء اختيار نوع حساب' : 'Veuillez sélectionner un type de compte',
     notForVisitors: isRTL 
       ? '⚠️ هذا التسجيل ليس للزوار العاديين'
       : '⚠️ Cette inscription n\'est pas pour les visiteurs',
@@ -191,7 +193,7 @@ export default function RegisterPage() {
     }
 
     if (!selectedRole) {
-      setError('Please select a role');
+      setError(labels.selectRoleFirst);
       return;
     }
 
@@ -200,7 +202,7 @@ export default function RegisterPage() {
       // Get the database role mapping from selected role option
       const selectedRoleOption = ROLE_OPTIONS.find(r => r.id === selectedRole);
       if (!selectedRoleOption) {
-        setError('Invalid role selected');
+        setError(labels.invalidRole);
         return;
       }
 

@@ -1,8 +1,27 @@
 import { supabase } from '@/utils/supabaseClient';
 import { CustomerProfile, ImporterProfile, TechnicianProfile } from '@/models/User';
+import type { User } from '@supabase/supabase-js';
 
 // Role types matching the database constraint
 export type UserRole = 'user' | 'agent' | 'merchant' | 'admin';
+
+// Redirect paths constants
+export const REDIRECT_PATHS = {
+  ADMIN: '/admin',
+  AGENT: '/agent',
+  MERCHANT: '/merchant',
+  USER: '/dashboard',
+  ACCOUNT_SETUP: '/auth/select-account-type',
+  LOGIN: '/auth/login',
+} as const;
+
+// Sign in result interface
+export interface SignInResult {
+  user: User | null;
+  redirectPath: string;
+  role: UserRole | null;
+  error: string | null;
+}
 
 // User registration with profile creation
 export const registerUser = async (
@@ -412,12 +431,7 @@ export const getUserRole = async (userId?: string): Promise<{ role: UserRole | n
 export const signInAndRedirect = async (
   email: string,
   password: string
-): Promise<{ 
-  user: any | null; 
-  redirectPath: string; 
-  role: UserRole | null;
-  error: string | null 
-}> => {
+): Promise<SignInResult> => {
   try {
     // Step 1: Sign in
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
@@ -429,7 +443,7 @@ export const signInAndRedirect = async (
       console.error('Sign in error:', signInError);
       return { 
         user: null, 
-        redirectPath: '/auth/login', 
+        redirectPath: REDIRECT_PATHS.LOGIN, 
         role: null,
         error: signInError.message 
       };
@@ -438,7 +452,7 @@ export const signInAndRedirect = async (
     if (!data.user) {
       return { 
         user: null, 
-        redirectPath: '/auth/login',
+        redirectPath: REDIRECT_PATHS.LOGIN,
         role: null, 
         error: 'Login failed' 
       };
@@ -455,7 +469,7 @@ export const signInAndRedirect = async (
       // If profile doesn't exist, redirect to account setup
       return {
         user: data.user,
-        redirectPath: '/auth/select-account-type',
+        redirectPath: REDIRECT_PATHS.ACCOUNT_SETUP,
         role: null,
         error: 'Profile not found',
       };
@@ -465,17 +479,17 @@ export const signInAndRedirect = async (
     let redirectPath: string;
     switch (role) {
       case 'admin':
-        redirectPath = '/admin';
+        redirectPath = REDIRECT_PATHS.ADMIN;
         break;
       case 'agent':
-        redirectPath = '/agent';
+        redirectPath = REDIRECT_PATHS.AGENT;
         break;
       case 'merchant':
-        redirectPath = '/merchant';
+        redirectPath = REDIRECT_PATHS.MERCHANT;
         break;
       case 'user':
       default:
-        redirectPath = '/dashboard';
+        redirectPath = REDIRECT_PATHS.USER;
         break;
     }
 
@@ -489,7 +503,7 @@ export const signInAndRedirect = async (
     console.error('Sign in and redirect error:', error);
     return {
       user: null,
-      redirectPath: '/auth/login',
+      redirectPath: REDIRECT_PATHS.LOGIN,
       role: null,
       error: 'Login failed',
     };
