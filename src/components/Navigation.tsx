@@ -1,7 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Globe, LogOut, LayoutDashboard, LogIn, Menu, X, Home, ShoppingBag, Wrench, Grid3X3, Shield, Users, Smartphone, Settings, Store, Megaphone, Plus, BarChart2 } from 'lucide-react';
+import { Globe, LogOut, LayoutDashboard, LogIn, Menu, X, Home, ShoppingBag, Wrench, Grid3X3, Shield, Users, Smartphone, Settings, Store, Megaphone, Plus, BarChart2, Laptop, Cpu, Monitor } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useState, memo } from 'react';
 import { cn } from '@/lib/utils';
@@ -60,9 +60,12 @@ function Navigation() {
   const navLinks = [
     { to: '/', label: labels.home, icon: Home },
     { to: '/phones', label: isRTL ? 'الهواتف' : 'Téléphones', icon: Smartphone },
+    { to: '/computers', label: isRTL ? 'الحواسيب' : 'Ordinateurs', icon: Laptop },
     { to: '/spare-parts', label: isRTL ? 'قطع الغيار' : 'Pièces', icon: Settings },
+    { to: '/computer-parts', label: isRTL ? 'قطع الحاسوب' : 'Pièces PC', icon: Cpu },
     { to: '/equipment', label: isRTL ? 'المعدات' : 'Équipements', icon: Wrench },
     { to: '/services', label: isRTL ? 'الإصلاح' : 'Réparation', icon: Users },
+    { to: '/computer-repair', label: isRTL ? 'إصلاح الحواسيب' : 'Réparation PC', icon: Monitor },
     { to: '/stores', label: isRTL ? 'المتاجر' : 'Boutiques', icon: Store },
     { to: '/ads/request', label: isRTL ? 'طلب إعلان' : 'Demande pub', icon: Megaphone },
     { to: '/compare', label: isRTL ? 'مقارنة' : 'Comparer', icon: BarChart2 },
