@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getUserRole, REDIRECT_PATHS } from '@/services/authService';
 
 export default function AuthCallbackPage() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function AuthCallbackPage() {
 
         // Exchange code for session
         if (code) {
-          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
           
           if (exchangeError) {
             console.error('Session exchange error:', exchangeError);
@@ -39,12 +40,52 @@ export default function AuthCallbackPage() {
             return;
           }
 
-          setStatus('success');
-          
-          // Redirect to dashboard after successful confirmation
-          setTimeout(() => {
-            navigate('/dashboard', { replace: true });
-          }, 2000);
+          // Session established successfully
+          // Now fetch user role from profiles table (single source of truth for roles)
+          // Note: Roles are stored in public.profiles, NOT in auth.users metadata
+          if (data?.user) {
+            const { role, error: roleError } = await getUserRole(data.user.id);
+
+            if (roleError || !role) {
+              console.error('Error fetching user role from profiles table:', roleError);
+              // Profile doesn't exist - this shouldn't happen but handle gracefully
+              setErrorMessage('Your profile could not be found. Please contact support.');
+              setStatus('error');
+              return;
+            }
+
+            // Determine redirect path based on role
+            let redirectPath: string;
+            switch (role) {
+              case 'admin':
+                redirectPath = REDIRECT_PATHS.ADMIN;
+                break;
+              case 'agent':
+                redirectPath = REDIRECT_PATHS.AGENT;
+                break;
+              case 'merchant':
+                redirectPath = REDIRECT_PATHS.MERCHANT;
+                break;
+              case 'user':
+              default:
+                // Default to user dashboard for any unexpected role
+                if (role !== 'user') {
+                  console.warn(`Unexpected role '${role}' for user ${data.user.id}, defaulting to user dashboard`);
+                }
+                redirectPath = REDIRECT_PATHS.USER;
+                break;
+            }
+
+            setStatus('success');
+            
+            // Redirect to role-specific dashboard after successful confirmation
+            setTimeout(() => {
+              navigate(redirectPath, { replace: true });
+            }, 2000);
+          } else {
+            setErrorMessage('Session verification failed. Please try again or contact support.');
+            setStatus('error');
+          }
         } else {
           // No code parameter - might be a legacy link or direct access
           setErrorMessage('Invalid confirmation link. Please check your email and try again.');

@@ -8,7 +8,7 @@ export type Json =
 
 export type PageKey = 'home' | 'categories' | 'category' | 'city' | 'listings' | 'listing_details' | 'repair_shops' | 'repair_shop_details' | 'services' | 'stores' | 'store_details' | 'phones' | 'spare_parts' | 'equipment' | 'advertise' | 'item_details';
 export type SlotType = 'top' | 'bottom';
-export type UserRole = 'admin' | 'user';
+export type UserRole = 'user' | 'agent' | 'merchant' | 'admin';
 export type ListingStatus = 'pending' | 'approved' | 'rejected' | 'hidden';
 export type CampaignStatus = 'draft' | 'submitted' | 'pending_review' | 'approved' | 'active' | 'expired' | 'rejected' | 'paused' | 'completed';
 export type BookingStatus = 'pending' | 'confirmed' | 'cancelled';
