@@ -365,22 +365,54 @@ export const signUpWithRole = async (
           phone,
           city,
         },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
     if (authError) {
-      console.error('Sign up error:', authError);
-      return { user: null, error: authError.message };
+      // Enhanced error logging with all available details
+      console.error('Sign up error details:', {
+        message: authError.message,
+        status: authError.status,
+        code: (authError as any).code,
+        details: (authError as any).details,
+        hint: (authError as any).hint,
+      });
+      
+      // Provide user-friendly error messages
+      let userMessage = authError.message;
+      if (authError.message?.includes('Database error')) {
+        userMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
+      } else if (authError.message?.includes('already registered')) {
+        userMessage = 'This email is already registered. Please try logging in instead.';
+      } else if (authError.message?.includes('Invalid email')) {
+        userMessage = 'Please provide a valid email address.';
+      } else if (authError.message?.includes('Password')) {
+        userMessage = 'Password must be at least 6 characters long.';
+      }
+      
+      return { user: null, error: userMessage };
     }
 
     if (!authData.user) {
       return { user: null, error: 'User registration failed' };
     }
 
+    // Log successful registration
+    console.log('User registered successfully:', {
+      id: authData.user.id,
+      email: authData.user.email,
+      role,
+    });
+
     return { user: authData.user, error: null };
-  } catch (error) {
-    console.error('Sign up error:', error);
-    return { user: null, error: 'Registration failed' };
+  } catch (error: any) {
+    console.error('Sign up error (catch):', {
+      message: error?.message,
+      stack: error?.stack,
+      error,
+    });
+    return { user: null, error: 'Registration failed. Please check your connection and try again.' };
   }
 };
 
@@ -440,12 +472,27 @@ export const signInAndRedirect = async (
     });
 
     if (signInError) {
-      console.error('Sign in error:', signInError);
+      // Enhanced error logging
+      console.error('Sign in error details:', {
+        message: signInError.message,
+        status: signInError.status,
+        code: (signInError as any).code,
+        details: (signInError as any).details,
+      });
+      
+      // Provide user-friendly error messages
+      let userMessage = signInError.message;
+      if (signInError.message?.includes('Invalid login credentials')) {
+        userMessage = 'Invalid email or password. Please check your credentials and try again.';
+      } else if (signInError.message?.includes('Email not confirmed')) {
+        userMessage = 'Please verify your email address before logging in.';
+      }
+      
       return { 
         user: null, 
         redirectPath: REDIRECT_PATHS.LOGIN, 
         role: null,
-        error: signInError.message 
+        error: userMessage 
       };
     }
 
@@ -471,7 +518,7 @@ export const signInAndRedirect = async (
         user: data.user,
         redirectPath: REDIRECT_PATHS.ACCOUNT_SETUP,
         role: null,
-        error: 'Profile not found',
+        error: 'Profile not found. Please complete your account setup.',
       };
     }
 
@@ -493,19 +540,30 @@ export const signInAndRedirect = async (
         break;
     }
 
+    console.log('Sign in successful:', {
+      userId: data.user.id,
+      email: data.user.email,
+      role,
+      redirectPath,
+    });
+
     return {
       user: data.user,
       redirectPath,
       role,
       error: null,
     };
-  } catch (error) {
-    console.error('Sign in and redirect error:', error);
+  } catch (error: any) {
+    console.error('Sign in and redirect error (catch):', {
+      message: error?.message,
+      stack: error?.stack,
+      error,
+    });
     return {
       user: null,
       redirectPath: REDIRECT_PATHS.LOGIN,
       role: null,
-      error: 'Login failed',
+      error: 'Login failed. Please check your connection and try again.',
     };
   }
 };
