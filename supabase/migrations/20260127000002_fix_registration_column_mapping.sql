@@ -48,7 +48,7 @@ BEGIN
       WHERE table_name = 'profiles' AND column_name = 'lastName'
     ) THEN
       UPDATE profiles 
-      SET full_name = TRIM(CONCAT("firstName", ' ', "lastName"))
+      SET full_name = TRIM(COALESCE("firstName", '') || ' ' || COALESCE("lastName", ''))
       WHERE full_name IS NULL AND ("firstName" IS NOT NULL OR "lastName" IS NOT NULL);
     END IF;
   END IF;

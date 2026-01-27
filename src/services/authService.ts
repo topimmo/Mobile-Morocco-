@@ -391,13 +391,11 @@ export const signUpWithRole = async (
         userMessage = 'Password must be at least 6 characters long.';
       } else if (errorCode === 'invalid_email') {
         userMessage = 'Please provide a valid email address.';
-      } else if (errorCode?.includes('database')) {
+      } else if (errorCode?.includes('database') || authError.message?.toLowerCase().includes('database')) {
         userMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
       }
       // Fallback to message matching if no code match
-      else if (authError.message?.toLowerCase().includes('database error')) {
-        userMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
-      } else if (authError.message?.toLowerCase().includes('already registered')) {
+      else if (authError.message?.toLowerCase().includes('already registered')) {
         userMessage = 'This email is already registered. Please try logging in instead.';
       } else if (authError.message?.toLowerCase().includes('invalid email')) {
         userMessage = 'Please provide a valid email address.';
