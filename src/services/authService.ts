@@ -355,7 +355,22 @@ export const signUpWithRole = async (
   phone?: string,
   city?: string
 ) => {
+  // Get dev mode flag from environment
+  const isDev = import.meta.env.DEV;
+  
   try {
+    // Log registration attempt in dev mode only
+    if (isDev) {
+      console.log('🔵 [DEV] Registration attempt:', {
+        role,
+        email,
+        fullName,
+        phone: phone ? '****' + phone.slice(-4) : undefined,
+        city,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
@@ -371,59 +386,118 @@ export const signUpWithRole = async (
     });
 
     if (authError) {
-      // Enhanced error logging with all available details
-      console.error('Sign up error details:', {
+      // COMPREHENSIVE error logging with ALL available details
+      const errorDetails = {
         message: authError.message,
         status: authError.status,
         code: (authError as any).code,
         details: (authError as any).details,
         hint: (authError as any).hint,
-      });
+        name: authError.name,
+        __isAuthError: (authError as any).__isAuthError,
+      };
+
+      // Always log errors to console for debugging
+      console.error('🔴 Sign up error details:', errorDetails);
+      
+      // In dev mode, also log additional context (but not the full error object)
+      if (isDev) {
+        console.error('🔴 [DEV] Full error context:', {
+          ...errorDetails,
+          attemptedRole: role,
+          attemptedEmail: email,
+          metadata: {
+            full_name: fullName,
+            phone: phone ? '****' + phone.slice(-4) : undefined,
+            city,
+          },
+        });
+      }
       
       // Provide user-friendly error messages based on error code or message
       let userMessage = authError.message;
       const errorCode = (authError as any).code;
+      const errorMsg = authError.message?.toLowerCase() || '';
       
-      // Check error code first (more reliable)
+      // Check error code first (more reliable than message matching)
       if (errorCode === 'email_exists' || errorCode === 'user_already_exists') {
         userMessage = 'This email is already registered. Please try logging in instead.';
       } else if (errorCode === 'weak_password') {
         userMessage = 'Password must be at least 6 characters long.';
       } else if (errorCode === 'invalid_email') {
         userMessage = 'Please provide a valid email address.';
-      } else if (errorCode?.includes('database') || authError.message?.toLowerCase().includes('database')) {
-        userMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
+      } else if (errorCode === 'validation_failed') {
+        userMessage = 'Please check all required fields and try again.';
+      } else if (errorCode?.includes('database') || errorCode?.includes('constraint')) {
+        // Database-level errors - could be trigger failure, constraint violation, etc.
+        const baseMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
+        
+        // In dev mode ONLY, append error code for debugging
+        userMessage = isDev ? `${baseMessage} (DB Error: ${errorCode})` : baseMessage;
       }
       // Fallback to message matching if no code match
-      else if (authError.message?.toLowerCase().includes('already registered')) {
+      else if (errorMsg.includes('already registered') || errorMsg.includes('already exists')) {
         userMessage = 'This email is already registered. Please try logging in instead.';
-      } else if (authError.message?.toLowerCase().includes('invalid email')) {
+      } else if (errorMsg.includes('invalid email') || errorMsg.includes('invalid format')) {
         userMessage = 'Please provide a valid email address.';
-      } else if (authError.message?.toLowerCase().includes('password')) {
+      } else if (errorMsg.includes('password') && (errorMsg.includes('weak') || errorMsg.includes('short'))) {
         userMessage = 'Password must be at least 6 characters long.';
+      } else if (errorMsg.includes('phone') || errorMsg.includes('telephone')) {
+        userMessage = 'Please provide a valid phone number.';
+      } else if (errorMsg.includes('constraint') || errorMsg.includes('violates')) {
+        userMessage = 'Unable to complete registration. Please verify all fields and try again.';
+      } else if (errorMsg.includes('trigger') || errorMsg.includes('function')) {
+        // Database trigger error
+        const baseMessage = 'Unable to complete registration. Please contact support with error code: TRIGGER_ERROR';
+        
+        // In dev mode ONLY, show detailed error
+        userMessage = isDev ? `Database trigger error: ${authError.message}` : baseMessage;
       }
       
       return { user: null, error: userMessage };
     }
 
     if (!authData.user) {
+      console.error('🔴 Sign up failed: No user returned from Supabase');
       return { user: null, error: 'User registration failed' };
     }
 
     // Log successful registration
-    console.log('User registered successfully:', {
+    console.log('✅ User registered successfully:', {
       id: authData.user.id,
       email: authData.user.email,
       role,
     });
+    
+    if (isDev) {
+      console.log('✅ [DEV] Registration successful with metadata:', {
+        userId: authData.user.id,
+        email: authData.user.email,
+        role,
+        metadata: authData.user.user_metadata,
+      });
+    }
 
     return { user: authData.user, error: null };
   } catch (error: any) {
-    console.error('Sign up error (catch):', {
+    // Catch-all for unexpected errors
+    const errorDetails = {
       message: error?.message,
-      stack: error?.stack,
-      error,
-    });
+      name: error?.name,
+      // In dev mode, include stack trace (but not the full error object)
+      ...(isDev ? { stack: error?.stack } : {}),
+    };
+    
+    console.error('🔴 Sign up error (catch):', errorDetails);
+    
+    if (isDev) {
+      console.error('🔴 [DEV] Unexpected registration error:', {
+        ...errorDetails,
+        attemptedRole: role,
+        attemptedEmail: email,
+      });
+    }
+    
     return { user: null, error: 'Registration failed. Please check your connection and try again.' };
   }
 };

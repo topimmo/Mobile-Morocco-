@@ -86,6 +86,7 @@ try {
     APP_ENV: 'production',
     BASE_URL: '/',
     SITE_URL: '',
+    SUPPORT_EMAIL: 'support@mobilemorocco.com',
     IS_PRODUCTION: true,
     IS_DEVELOPMENT: false,
   };

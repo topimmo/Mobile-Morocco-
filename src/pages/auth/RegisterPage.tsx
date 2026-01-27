@@ -208,6 +208,18 @@ export default function RegisterPage() {
 
       const dbRole = selectedRoleOption.dbRole;
 
+      // Log registration attempt in dev mode
+      if (import.meta.env.DEV) {
+        console.log('🔵 [DEV] RegisterPage - Starting registration:', {
+          selectedRole,
+          dbRole,
+          email,
+          fullName,
+          phone: phone ? '****' + phone.slice(-4) : undefined,
+          city,
+        });
+      }
+
       // Use new signUpWithRole function to save role to profiles table
       const { user, error: signUpError } = await signUpWithRole(
         email, 
@@ -219,6 +231,14 @@ export default function RegisterPage() {
       );
 
       if (signUpError || !user) {
+        // Log error in dev mode
+        if (import.meta.env.DEV) {
+          console.error('🔴 [DEV] RegisterPage - Registration failed:', {
+            error: signUpError,
+            selectedRole,
+            dbRole,
+          });
+        }
         setError(signUpError || labels.registrationFailed);
         return;
       }
@@ -226,9 +246,21 @@ export default function RegisterPage() {
       // Track registration with the database role
       trackRegistration(dbRole);
       
+      // Log success in dev mode
+      if (import.meta.env.DEV) {
+        console.log('✅ [DEV] RegisterPage - Registration successful, redirecting to login');
+      }
+      
       // Redirect to login with success message
       navigate('/auth/login?registered=true');
     } catch (err: any) {
+      // Log unexpected errors in dev mode
+      if (import.meta.env.DEV) {
+        console.error('🔴 [DEV] RegisterPage - Unexpected error:', err);
+      } else {
+        // In production, just log basic error info
+        console.error('🔴 RegisterPage - Unexpected error:', err?.message);
+      }
       setError(err.message || labels.registrationFailed);
     } finally {
       setLoading(false);
