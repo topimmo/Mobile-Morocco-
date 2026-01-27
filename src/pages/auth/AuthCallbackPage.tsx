@@ -40,14 +40,16 @@ export default function AuthCallbackPage() {
             return;
           }
 
-          // Session established, now fetch user role from profiles table
+          // Session established successfully
+          // Now fetch user role from profiles table (single source of truth for roles)
+          // Note: Roles are stored in public.profiles, NOT in auth.users metadata
           if (data?.user) {
             const { role, error: roleError } = await getUserRole(data.user.id);
 
             if (roleError || !role) {
-              console.error('Error fetching role:', roleError);
+              console.error('Error fetching user role from profiles table:', roleError);
               // Profile doesn't exist - this shouldn't happen but handle gracefully
-              setErrorMessage('Your account setup is incomplete. Please contact support.');
+              setErrorMessage('Your profile could not be found. Please contact support.');
               setStatus('error');
               return;
             }
@@ -66,6 +68,10 @@ export default function AuthCallbackPage() {
                 break;
               case 'user':
               default:
+                // Default to user dashboard for any unexpected role
+                if (role !== 'user') {
+                  console.warn(`Unexpected role '${role}' for user ${data.user.id}, defaulting to user dashboard`);
+                }
                 redirectPath = REDIRECT_PATHS.USER;
                 break;
             }
@@ -77,7 +83,7 @@ export default function AuthCallbackPage() {
               navigate(redirectPath, { replace: true });
             }, 2000);
           } else {
-            setErrorMessage('Authentication failed. Please try again or contact support.');
+            setErrorMessage('Session verification failed. Please try again or contact support.');
             setStatus('error');
           }
         } else {
