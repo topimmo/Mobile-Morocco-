@@ -40,7 +40,7 @@ BEGIN
       WHERE table_name = 'profiles' AND column_name = 'phoneNumber'
     ) THEN
       ALTER TABLE profiles ADD COLUMN phone TEXT;
-      UPDATE profiles SET phone = "phoneNumber" WHERE phone IS NULL;
+      UPDATE profiles SET phone = phoneNumber WHERE phone IS NULL;
     ELSE
       ALTER TABLE profiles ADD COLUMN phone TEXT;
     END IF;
