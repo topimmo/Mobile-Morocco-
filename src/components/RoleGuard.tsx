@@ -102,7 +102,7 @@ export function AdminGuard({ children }: { children: ReactNode }) {
  */
 export function AgentGuard({ children }: { children: ReactNode }) {
   return (
-    <RoleGuard allowedRoles={['agent']} fallbackPath="/dashboard">
+    <RoleGuard allowedRoles={['agent']} fallbackPath="/unauthorized">
       {children}
     </RoleGuard>
   );
@@ -113,7 +113,7 @@ export function AgentGuard({ children }: { children: ReactNode }) {
  */
 export function MerchantGuard({ children }: { children: ReactNode }) {
   return (
-    <RoleGuard allowedRoles={['merchant']} fallbackPath="/dashboard">
+    <RoleGuard allowedRoles={['merchant']} fallbackPath="/unauthorized">
       {children}
     </RoleGuard>
   );
