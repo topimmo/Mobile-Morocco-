@@ -595,6 +595,15 @@ export const signInAndRedirect = async (
  */
 export const resendConfirmationEmail = async (email: string): Promise<{ success: boolean; error: string | null }> => {
   try {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return { 
+        success: false, 
+        error: 'Please provide a valid email address' 
+      };
+    }
+
     const { error } = await supabase.auth.resend({
       type: 'signup',
       email,

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { getUserRole, REDIRECT_PATHS, resendConfirmationEmail } from '@/services/authService';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { getSupportEmail } from '@/config/env';
 
 export default function AuthCallbackPage() {
   const navigate = useNavigate();
@@ -135,12 +136,14 @@ export default function AuthCallbackPage() {
   const handleResendConfirmation = async (e: React.FormEvent) => {
     e.preventDefault();
     setResendLoading(true);
+    setResendSuccess(false); // Reset success state before attempting resend
     
     try {
       const { success, error } = await resendConfirmationEmail(resendEmail);
       
       if (success) {
         setResendSuccess(true);
+        setShowResendForm(false); // Hide form after successful resend
       } else {
         setErrorMessage(error || 'Failed to resend confirmation email');
       }
@@ -250,7 +253,7 @@ export default function AuthCallbackPage() {
                 <Alert className="border-green-200 bg-green-50 w-full">
                   <CheckCircle2 className="h-4 w-4 text-green-600" />
                   <AlertDescription className="text-green-800">
-                    A new confirmation email has been sent to {resendEmail}. Please check your inbox and spam folder.
+                    A new confirmation email has been sent to <strong>{resendEmail}</strong>. Please check your inbox and spam folder.
                   </AlertDescription>
                 </Alert>
               )}
@@ -260,7 +263,7 @@ export default function AuthCallbackPage() {
                 <Alert className="border-amber-200 bg-amber-50 w-full">
                   <AlertCircle className="h-4 w-4 text-amber-600" />
                   <AlertDescription className="text-amber-800">
-                    This appears to be a system configuration issue. Please contact support at support@mobilemorocco.com with your email address.
+                    This appears to be a system configuration issue. Please contact support at <strong>{getSupportEmail()}</strong> with your email address.
                   </AlertDescription>
                 </Alert>
               )}

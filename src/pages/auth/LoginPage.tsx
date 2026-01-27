@@ -108,7 +108,7 @@ export default function LoginPage() {
           <Alert className="mb-4 border-green-200 bg-green-50">
             <CheckCircle2 className="h-4 w-4 text-green-600" />
             <AlertDescription className="text-green-800">
-              A new confirmation email has been sent to {email}. Please check your inbox and spam folder.
+              A new confirmation email has been sent to <strong>{email}</strong>. Please check your inbox and spam folder.
             </AlertDescription>
           </Alert>
         )}
