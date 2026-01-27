@@ -500,13 +500,13 @@ export const signInAndRedirect = async (
       if (errorCode === 'invalid_credentials') {
         userMessage = 'Invalid email or password. Please check your credentials and try again.';
       } else if (errorCode === 'email_not_confirmed') {
-        userMessage = 'Please verify your email address before logging in.';
+        userMessage = 'Please verify your email address before logging in. Check your inbox for the confirmation email.';
       } 
       // Fallback to message matching
       else if (signInError.message?.toLowerCase().includes('invalid login credentials')) {
         userMessage = 'Invalid email or password. Please check your credentials and try again.';
       } else if (signInError.message?.toLowerCase().includes('email not confirmed')) {
-        userMessage = 'Please verify your email address before logging in.';
+        userMessage = 'Please verify your email address before logging in. Check your inbox for the confirmation email.';
       }
       
       return { 
@@ -585,6 +585,48 @@ export const signInAndRedirect = async (
       redirectPath: REDIRECT_PATHS.LOGIN,
       role: null,
       error: 'Login failed. Please check your connection and try again.',
+    };
+  }
+};
+
+/**
+ * Resend confirmation email for a user
+ * This can be used when users didn't receive the initial confirmation email
+ */
+export const resendConfirmationEmail = async (email: string): Promise<{ success: boolean; error: string | null }> => {
+  try {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return { 
+        success: false, 
+        error: 'Please provide a valid email address' 
+      };
+    }
+
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: {
+        emailRedirectTo: `${getSiteUrl()}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      console.error('Resend confirmation email error:', error);
+      return { 
+        success: false, 
+        error: error.message || 'Failed to resend confirmation email' 
+      };
+    }
+
+    console.log('Confirmation email resent successfully to:', email);
+    return { success: true, error: null };
+  } catch (error: any) {
+    console.error('Resend confirmation email error (catch):', error);
+    return { 
+      success: false, 
+      error: 'Failed to resend confirmation email. Please try again.' 
     };
   }
 };

@@ -15,6 +15,7 @@ const OPTIONAL_ENV_VARS = {
   VITE_APP_ENV: 'production',
   VITE_BASE_URL: '/',
   VITE_SITE_URL: '', // Production URL for auth redirects
+  VITE_SUPPORT_EMAIL: 'support@mobilemorocco.com', // Support email for user contact
 } as const;
 
 export interface EnvConfig {
@@ -23,6 +24,7 @@ export interface EnvConfig {
   APP_ENV: 'development' | 'production' | 'test';
   BASE_URL: string;
   SITE_URL: string; // Production URL (e.g., https://mobilemorocco.com)
+  SUPPORT_EMAIL: string; // Support email address
   IS_PRODUCTION: boolean;
   IS_DEVELOPMENT: boolean;
 }
@@ -63,6 +65,7 @@ function validateEnv(): EnvConfig {
     APP_ENV: appEnv,
     BASE_URL: import.meta.env.BASE_URL || OPTIONAL_ENV_VARS.VITE_BASE_URL,
     SITE_URL: import.meta.env.VITE_SITE_URL || OPTIONAL_ENV_VARS.VITE_SITE_URL,
+    SUPPORT_EMAIL: import.meta.env.VITE_SUPPORT_EMAIL || OPTIONAL_ENV_VARS.VITE_SUPPORT_EMAIL,
     IS_PRODUCTION: appEnv === 'production' || import.meta.env.PROD,
     IS_DEVELOPMENT: appEnv === 'development' || import.meta.env.DEV,
   };
@@ -119,6 +122,11 @@ export function getSiteUrl(): string {
   }
   // Fallback for development/SSR
   return 'http://localhost:5173';
+}
+
+// Helper to get support email
+export function getSupportEmail(): string {
+  return env.SUPPORT_EMAIL || 'support@mobilemorocco.com';
 }
 
 // Export the validation error for use in error boundaries
