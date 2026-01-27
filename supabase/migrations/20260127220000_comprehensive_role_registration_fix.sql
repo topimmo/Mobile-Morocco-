@@ -32,7 +32,7 @@ BEGIN
   END IF;
   
   -- Make email NOT NULL
-  UPDATE profiles SET email = COALESCE(email, 'noemail+' || id::text || '@system.local') WHERE email IS NULL;
+  UPDATE profiles SET email = COALESCE(email, 'noemail+' || id::text || '@example.invalid') WHERE email IS NULL;
   ALTER TABLE profiles ALTER COLUMN email SET NOT NULL;
 
   -- role column (TEXT, NOT NULL, with constraint)
@@ -140,7 +140,7 @@ BEGIN
     )
     VALUES (
       NEW.id,
-      COALESCE(NEW.email, 'noemail+' || NEW.id::text || '@system.local'),
+      COALESCE(NEW.email, 'noemail+' || NEW.id::text || '@example.invalid'),
       user_role,
       user_full_name,
       user_phone,
@@ -237,6 +237,10 @@ CREATE POLICY "profiles_insert_own" ON profiles
   WITH CHECK (auth.uid() = id);
 
 -- UPDATE: Users can update their own profile (but not role or id)
+-- Note: The WITH CHECK subquery ensures role hasn't changed. While this creates
+-- a self-join, it's necessary for security to prevent privilege escalation.
+-- Performance impact is minimal since this only affects UPDATE operations
+-- on a user's own profile (filtered by auth.uid() = id).
 CREATE POLICY "profiles_update_own" ON profiles
   FOR UPDATE
   TO authenticated

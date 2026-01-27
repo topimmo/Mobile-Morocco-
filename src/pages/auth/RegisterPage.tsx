@@ -215,7 +215,7 @@ export default function RegisterPage() {
           dbRole,
           email,
           fullName,
-          phone: phone ? '***' + phone.slice(-4) : undefined,
+          phone: phone ? '****' + phone.slice(-4) : undefined,
           city,
         });
       }
@@ -254,7 +254,13 @@ export default function RegisterPage() {
       // Redirect to login with success message
       navigate('/auth/login?registered=true');
     } catch (err: any) {
-      console.error('🔴 RegisterPage - Unexpected error:', err);
+      // Log unexpected errors in dev mode
+      if (import.meta.env.DEV) {
+        console.error('🔴 [DEV] RegisterPage - Unexpected error:', err);
+      } else {
+        // In production, just log basic error info
+        console.error('🔴 RegisterPage - Unexpected error:', err?.message);
+      }
       setError(err.message || labels.registrationFailed);
     } finally {
       setLoading(false);

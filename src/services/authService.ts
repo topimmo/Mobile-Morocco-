@@ -365,7 +365,7 @@ export const signUpWithRole = async (
         role,
         email,
         fullName,
-        phone: phone ? '***' + phone.slice(-4) : undefined,
+        phone: phone ? '****' + phone.slice(-4) : undefined,
         city,
         timestamp: new Date().toISOString(),
       });
@@ -394,16 +394,13 @@ export const signUpWithRole = async (
         details: (authError as any).details,
         hint: (authError as any).hint,
         name: authError.name,
-        // Additional fields that might be present
         __isAuthError: (authError as any).__isAuthError,
-        // Capture the entire error object in dev mode
-        ...(isDev ? { fullError: authError } : {}),
       };
 
       // Always log errors to console for debugging
       console.error('🔴 Sign up error details:', errorDetails);
       
-      // In dev mode, also log to help debug trigger/RLS issues
+      // In dev mode, also log additional context (but not the full error object)
       if (isDev) {
         console.error('🔴 [DEV] Full error context:', {
           ...errorDetails,
@@ -411,7 +408,7 @@ export const signUpWithRole = async (
           attemptedEmail: email,
           metadata: {
             full_name: fullName,
-            phone: phone ? '***' + phone.slice(-4) : undefined,
+            phone: phone ? '****' + phone.slice(-4) : undefined,
             city,
           },
         });
@@ -433,12 +430,10 @@ export const signUpWithRole = async (
         userMessage = 'Please check all required fields and try again.';
       } else if (errorCode?.includes('database') || errorCode?.includes('constraint')) {
         // Database-level errors - could be trigger failure, constraint violation, etc.
-        userMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
+        const baseMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
         
-        // In dev mode, append more details
-        if (isDev) {
-          userMessage += ` (DB Error: ${errorCode})`;
-        }
+        // In dev mode ONLY, append error code for debugging
+        userMessage = isDev ? `${baseMessage} (DB Error: ${errorCode})` : baseMessage;
       }
       // Fallback to message matching if no code match
       else if (errorMsg.includes('already registered') || errorMsg.includes('already exists')) {
@@ -453,11 +448,10 @@ export const signUpWithRole = async (
         userMessage = 'Unable to complete registration. Please verify all fields and try again.';
       } else if (errorMsg.includes('trigger') || errorMsg.includes('function')) {
         // Database trigger error
-        userMessage = 'Unable to complete registration. Please contact support with error code: TRIGGER_ERROR';
+        const baseMessage = 'Unable to complete registration. Please contact support with error code: TRIGGER_ERROR';
         
-        if (isDev) {
-          userMessage = `Database trigger error: ${authError.message}`;
-        }
+        // In dev mode ONLY, show detailed error
+        userMessage = isDev ? `Database trigger error: ${authError.message}` : baseMessage;
       }
       
       return { user: null, error: userMessage };
@@ -490,8 +484,8 @@ export const signUpWithRole = async (
     const errorDetails = {
       message: error?.message,
       name: error?.name,
-      stack: isDev ? error?.stack : undefined,
-      ...(isDev ? { error } : {}),
+      // In dev mode, include stack trace (but not the full error object)
+      ...(isDev ? { stack: error?.stack } : {}),
     };
     
     console.error('🔴 Sign up error (catch):', errorDetails);
