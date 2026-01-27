@@ -1,5 +1,14 @@
 -- Fix Registration Column Mapping
 -- This migration resolves the registration failure by ensuring column consistency
+--
+-- DIFFERENCE FROM 20260127000001:
+-- The previous migration (20260127000001_fix_profile_creation_and_rls.sql) assumed
+-- the profiles table was already standardized. However, older deployments may still
+-- have the original schema with userType, firstName, lastName, phoneNumber columns.
+-- This migration handles the data migration from those legacy columns to the new
+-- standardized columns (role, full_name, phone) ensuring backward compatibility.
+--
+-- This migration is safe to run even if 20260127000001 was already applied.
 
 -- ============================================
 -- 1. Ensure all required columns exist
@@ -19,13 +28,13 @@ BEGIN
       SELECT 1 FROM information_schema.columns 
       WHERE table_name = 'profiles' AND column_name = 'userType'
     ) THEN
-      -- Map userType values to role values
+      -- Map userType values to role values (update all rows to ensure consistency)
       UPDATE profiles SET role = CASE
         WHEN "userType" = 'Customer' THEN 'user'
         WHEN "userType" = 'Importer' THEN 'merchant'
         WHEN "userType" = 'Technician' THEN 'agent'
         ELSE 'user'
-      END WHERE role IS NULL OR role = 'user';
+      END WHERE "userType" IS NOT NULL;
     END IF;
   END IF;
 END $$;
@@ -48,7 +57,7 @@ BEGIN
       WHERE table_name = 'profiles' AND column_name = 'lastName'
     ) THEN
       UPDATE profiles 
-      SET full_name = TRIM(COALESCE("firstName", '') || ' ' || COALESCE("lastName", ''))
+      SET full_name = NULLIF(TRIM(COALESCE("firstName", '') || ' ' || COALESCE("lastName", '')), '')
       WHERE full_name IS NULL AND ("firstName" IS NOT NULL OR "lastName" IS NOT NULL);
     END IF;
   END IF;
@@ -151,7 +160,7 @@ BEGIN
     AND column_name = 'email'
   ) THEN
     -- Update any NULL emails before adding constraint
-    UPDATE profiles SET email = id::text || '@placeholder.local' WHERE email IS NULL;
+    UPDATE profiles SET email = 'noemail+' || id::text || '@system.local' WHERE email IS NULL;
     
     -- Check if already NOT NULL
     IF EXISTS (
@@ -213,7 +222,7 @@ BEGIN
     )
     VALUES (
       NEW.id,
-      COALESCE(NEW.email, NEW.id::text || '@placeholder.local'),
+      COALESCE(NEW.email, 'noemail+' || NEW.id::text || '@system.local'),
       user_role,
       user_full_name,
       user_phone,
@@ -238,7 +247,6 @@ BEGIN
       -- Log detailed error but don't fail user creation
       RAISE WARNING 'Failed to create profile for user %: % (SQLSTATE: %)', 
         NEW.id, SQLERRM, SQLSTATE;
-      RAISE WARNING 'Error detail: %', SQLSTATE;
   END;
 
   -- Always return NEW to allow user creation to succeed
@@ -310,17 +318,14 @@ CREATE POLICY "profiles_insert_own" ON profiles
   TO authenticated
   WITH CHECK (auth.uid() = id);
 
--- UPDATE: Users can update their own profile (but not role)
+-- UPDATE: Users can update their own profile (but not role or id)
 CREATE POLICY "profiles_update_own" ON profiles
   FOR UPDATE
   TO authenticated
   USING (auth.uid() = id)
   WITH CHECK (
     auth.uid() = id 
-    AND (
-      role IS NULL OR 
-      role = (SELECT role FROM profiles WHERE id = auth.uid())
-    )
+    AND role = (SELECT role FROM profiles WHERE id = auth.uid())
   );
 
 -- UPDATE: Admins can update any profile
