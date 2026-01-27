@@ -1,6 +1,7 @@
 import { supabase } from '@/utils/supabaseClient';
 import { CustomerProfile, ImporterProfile, TechnicianProfile } from '@/models/User';
 import type { User } from '@supabase/supabase-js';
+import { getSiteUrl } from '@/config/env';
 
 // Role types matching the database constraint
 export type UserRole = 'user' | 'agent' | 'merchant' | 'admin';
@@ -365,7 +366,7 @@ export const signUpWithRole = async (
           phone,
           city,
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${getSiteUrl()}/auth/callback`,
       },
     });
 
