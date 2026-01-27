@@ -110,7 +110,15 @@ export function getSiteUrl(): string {
   if (typeof window !== 'undefined') {
     return window.location.origin;
   }
-  return 'http://localhost:5173'; // Fallback for SSR
+  // In production, we should have SITE_URL set. If not, throw error.
+  if (env.IS_PRODUCTION) {
+    throw new Error(
+      'SITE_URL not configured in production environment. ' +
+      'Please set VITE_SITE_URL in your hosting environment.'
+    );
+  }
+  // Fallback for development/SSR
+  return 'http://localhost:5173';
 }
 
 // Export the validation error for use in error boundaries

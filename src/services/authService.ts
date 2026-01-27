@@ -380,15 +380,28 @@ export const signUpWithRole = async (
         hint: (authError as any).hint,
       });
       
-      // Provide user-friendly error messages
+      // Provide user-friendly error messages based on error code or message
       let userMessage = authError.message;
-      if (authError.message?.includes('Database error')) {
-        userMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
-      } else if (authError.message?.includes('already registered')) {
+      const errorCode = (authError as any).code;
+      
+      // Check error code first (more reliable)
+      if (errorCode === 'email_exists' || errorCode === 'user_already_exists') {
         userMessage = 'This email is already registered. Please try logging in instead.';
-      } else if (authError.message?.includes('Invalid email')) {
+      } else if (errorCode === 'weak_password') {
+        userMessage = 'Password must be at least 6 characters long.';
+      } else if (errorCode === 'invalid_email') {
         userMessage = 'Please provide a valid email address.';
-      } else if (authError.message?.includes('Password')) {
+      } else if (errorCode?.includes('database')) {
+        userMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
+      }
+      // Fallback to message matching if no code match
+      else if (authError.message?.toLowerCase().includes('database error')) {
+        userMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
+      } else if (authError.message?.toLowerCase().includes('already registered')) {
+        userMessage = 'This email is already registered. Please try logging in instead.';
+      } else if (authError.message?.toLowerCase().includes('invalid email')) {
+        userMessage = 'Please provide a valid email address.';
+      } else if (authError.message?.toLowerCase().includes('password')) {
         userMessage = 'Password must be at least 6 characters long.';
       }
       
@@ -481,11 +494,20 @@ export const signInAndRedirect = async (
         details: (signInError as any).details,
       });
       
-      // Provide user-friendly error messages
+      // Provide user-friendly error messages based on error code or message
       let userMessage = signInError.message;
-      if (signInError.message?.includes('Invalid login credentials')) {
+      const errorCode = (signInError as any).code;
+      
+      // Check error code first (more reliable)
+      if (errorCode === 'invalid_credentials') {
         userMessage = 'Invalid email or password. Please check your credentials and try again.';
-      } else if (signInError.message?.includes('Email not confirmed')) {
+      } else if (errorCode === 'email_not_confirmed') {
+        userMessage = 'Please verify your email address before logging in.';
+      } 
+      // Fallback to message matching
+      else if (signInError.message?.toLowerCase().includes('invalid login credentials')) {
+        userMessage = 'Invalid email or password. Please check your credentials and try again.';
+      } else if (signInError.message?.toLowerCase().includes('email not confirmed')) {
         userMessage = 'Please verify your email address before logging in.';
       }
       
