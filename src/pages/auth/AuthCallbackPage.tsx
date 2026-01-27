@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getUserRole, REDIRECT_PATHS } from '@/services/authService';
 
 export default function AuthCallbackPage() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function AuthCallbackPage() {
 
         // Exchange code for session
         if (code) {
-          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
           
           if (exchangeError) {
             console.error('Session exchange error:', exchangeError);
@@ -39,12 +40,48 @@ export default function AuthCallbackPage() {
             return;
           }
 
-          setStatus('success');
-          
-          // Redirect to dashboard after successful confirmation
-          setTimeout(() => {
-            navigate('/dashboard', { replace: true });
-          }, 2000);
+          // Session established, now fetch user role from profiles table
+          if (data?.user) {
+            const { role, error: roleError } = await getUserRole(data.user.id);
+
+            if (roleError || !role) {
+              console.error('Error fetching role:', roleError);
+              // If profile doesn't exist, redirect to account setup
+              setStatus('success');
+              setTimeout(() => {
+                navigate(REDIRECT_PATHS.ACCOUNT_SETUP, { replace: true });
+              }, 2000);
+              return;
+            }
+
+            // Determine redirect path based on role
+            let redirectPath: string;
+            switch (role) {
+              case 'admin':
+                redirectPath = REDIRECT_PATHS.ADMIN;
+                break;
+              case 'agent':
+                redirectPath = REDIRECT_PATHS.AGENT;
+                break;
+              case 'merchant':
+                redirectPath = REDIRECT_PATHS.MERCHANT;
+                break;
+              case 'user':
+              default:
+                redirectPath = REDIRECT_PATHS.USER;
+                break;
+            }
+
+            setStatus('success');
+            
+            // Redirect to role-specific dashboard after successful confirmation
+            setTimeout(() => {
+              navigate(redirectPath, { replace: true });
+            }, 2000);
+          } else {
+            setErrorMessage('Session established but user not found');
+            setStatus('error');
+          }
         } else {
           // No code parameter - might be a legacy link or direct access
           setErrorMessage('Invalid confirmation link. Please check your email and try again.');
