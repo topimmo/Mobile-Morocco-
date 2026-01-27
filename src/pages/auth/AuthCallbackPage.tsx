@@ -46,11 +46,9 @@ export default function AuthCallbackPage() {
 
             if (roleError || !role) {
               console.error('Error fetching role:', roleError);
-              // If profile doesn't exist, redirect to account setup
-              setStatus('success');
-              setTimeout(() => {
-                navigate(REDIRECT_PATHS.ACCOUNT_SETUP, { replace: true });
-              }, 2000);
+              // Profile doesn't exist - this shouldn't happen but handle gracefully
+              setErrorMessage('Your account setup is incomplete. Please contact support.');
+              setStatus('error');
               return;
             }
 
@@ -79,7 +77,7 @@ export default function AuthCallbackPage() {
               navigate(redirectPath, { replace: true });
             }, 2000);
           } else {
-            setErrorMessage('Session established but user not found');
+            setErrorMessage('Authentication failed. Please try again or contact support.');
             setStatus('error');
           }
         } else {
