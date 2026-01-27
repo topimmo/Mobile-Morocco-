@@ -1,6 +1,7 @@
 import { supabase } from '@/utils/supabaseClient';
 import { CustomerProfile, ImporterProfile, TechnicianProfile } from '@/models/User';
 import type { User } from '@supabase/supabase-js';
+import { getSiteUrl } from '@/config/env';
 
 // Role types matching the database constraint
 export type UserRole = 'user' | 'agent' | 'merchant' | 'admin';
@@ -365,22 +366,67 @@ export const signUpWithRole = async (
           phone,
           city,
         },
+        emailRedirectTo: `${getSiteUrl()}/auth/callback`,
       },
     });
 
     if (authError) {
-      console.error('Sign up error:', authError);
-      return { user: null, error: authError.message };
+      // Enhanced error logging with all available details
+      console.error('Sign up error details:', {
+        message: authError.message,
+        status: authError.status,
+        code: (authError as any).code,
+        details: (authError as any).details,
+        hint: (authError as any).hint,
+      });
+      
+      // Provide user-friendly error messages based on error code or message
+      let userMessage = authError.message;
+      const errorCode = (authError as any).code;
+      
+      // Check error code first (more reliable)
+      if (errorCode === 'email_exists' || errorCode === 'user_already_exists') {
+        userMessage = 'This email is already registered. Please try logging in instead.';
+      } else if (errorCode === 'weak_password') {
+        userMessage = 'Password must be at least 6 characters long.';
+      } else if (errorCode === 'invalid_email') {
+        userMessage = 'Please provide a valid email address.';
+      } else if (errorCode?.includes('database')) {
+        userMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
+      }
+      // Fallback to message matching if no code match
+      else if (authError.message?.toLowerCase().includes('database error')) {
+        userMessage = 'Unable to complete registration. Please try again or contact support if the issue persists.';
+      } else if (authError.message?.toLowerCase().includes('already registered')) {
+        userMessage = 'This email is already registered. Please try logging in instead.';
+      } else if (authError.message?.toLowerCase().includes('invalid email')) {
+        userMessage = 'Please provide a valid email address.';
+      } else if (authError.message?.toLowerCase().includes('password')) {
+        userMessage = 'Password must be at least 6 characters long.';
+      }
+      
+      return { user: null, error: userMessage };
     }
 
     if (!authData.user) {
       return { user: null, error: 'User registration failed' };
     }
 
+    // Log successful registration
+    console.log('User registered successfully:', {
+      id: authData.user.id,
+      email: authData.user.email,
+      role,
+    });
+
     return { user: authData.user, error: null };
-  } catch (error) {
-    console.error('Sign up error:', error);
-    return { user: null, error: 'Registration failed' };
+  } catch (error: any) {
+    console.error('Sign up error (catch):', {
+      message: error?.message,
+      stack: error?.stack,
+      error,
+    });
+    return { user: null, error: 'Registration failed. Please check your connection and try again.' };
   }
 };
 
@@ -440,12 +486,36 @@ export const signInAndRedirect = async (
     });
 
     if (signInError) {
-      console.error('Sign in error:', signInError);
+      // Enhanced error logging
+      console.error('Sign in error details:', {
+        message: signInError.message,
+        status: signInError.status,
+        code: (signInError as any).code,
+        details: (signInError as any).details,
+      });
+      
+      // Provide user-friendly error messages based on error code or message
+      let userMessage = signInError.message;
+      const errorCode = (signInError as any).code;
+      
+      // Check error code first (more reliable)
+      if (errorCode === 'invalid_credentials') {
+        userMessage = 'Invalid email or password. Please check your credentials and try again.';
+      } else if (errorCode === 'email_not_confirmed') {
+        userMessage = 'Please verify your email address before logging in.';
+      } 
+      // Fallback to message matching
+      else if (signInError.message?.toLowerCase().includes('invalid login credentials')) {
+        userMessage = 'Invalid email or password. Please check your credentials and try again.';
+      } else if (signInError.message?.toLowerCase().includes('email not confirmed')) {
+        userMessage = 'Please verify your email address before logging in.';
+      }
+      
       return { 
         user: null, 
         redirectPath: REDIRECT_PATHS.LOGIN, 
         role: null,
-        error: signInError.message 
+        error: userMessage 
       };
     }
 
@@ -471,7 +541,7 @@ export const signInAndRedirect = async (
         user: data.user,
         redirectPath: REDIRECT_PATHS.ACCOUNT_SETUP,
         role: null,
-        error: 'Profile not found',
+        error: 'Profile not found. Please complete your account setup.',
       };
     }
 
@@ -493,19 +563,30 @@ export const signInAndRedirect = async (
         break;
     }
 
+    console.log('Sign in successful:', {
+      userId: data.user.id,
+      email: data.user.email,
+      role,
+      redirectPath,
+    });
+
     return {
       user: data.user,
       redirectPath,
       role,
       error: null,
     };
-  } catch (error) {
-    console.error('Sign in and redirect error:', error);
+  } catch (error: any) {
+    console.error('Sign in and redirect error (catch):', {
+      message: error?.message,
+      stack: error?.stack,
+      error,
+    });
     return {
       user: null,
       redirectPath: REDIRECT_PATHS.LOGIN,
       role: null,
-      error: 'Login failed',
+      error: 'Login failed. Please check your connection and try again.',
     };
   }
 };

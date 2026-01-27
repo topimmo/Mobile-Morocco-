@@ -14,6 +14,7 @@ const REQUIRED_ENV_VARS = [
 const OPTIONAL_ENV_VARS = {
   VITE_APP_ENV: 'production',
   VITE_BASE_URL: '/',
+  VITE_SITE_URL: '', // Production URL for auth redirects
 } as const;
 
 export interface EnvConfig {
@@ -21,6 +22,7 @@ export interface EnvConfig {
   SUPABASE_ANON_KEY: string;
   APP_ENV: 'development' | 'production' | 'test';
   BASE_URL: string;
+  SITE_URL: string; // Production URL (e.g., https://mobilemorocco.com)
   IS_PRODUCTION: boolean;
   IS_DEVELOPMENT: boolean;
 }
@@ -60,6 +62,7 @@ function validateEnv(): EnvConfig {
     SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY,
     APP_ENV: appEnv,
     BASE_URL: import.meta.env.BASE_URL || OPTIONAL_ENV_VARS.VITE_BASE_URL,
+    SITE_URL: import.meta.env.VITE_SITE_URL || OPTIONAL_ENV_VARS.VITE_SITE_URL,
     IS_PRODUCTION: appEnv === 'production' || import.meta.env.PROD,
     IS_DEVELOPMENT: appEnv === 'development' || import.meta.env.DEV,
   };
@@ -79,6 +82,7 @@ try {
     SUPABASE_ANON_KEY: '',
     APP_ENV: 'production',
     BASE_URL: '/',
+    SITE_URL: '',
     IS_PRODUCTION: true,
     IS_DEVELOPMENT: false,
   };
@@ -95,6 +99,26 @@ export const env = envConfig;
 // Helper to check if env is properly configured
 export function isEnvValid(): boolean {
   return Boolean(env.SUPABASE_URL && env.SUPABASE_ANON_KEY);
+}
+
+// Helper to get the site URL for auth redirects
+export function getSiteUrl(): string {
+  // Use VITE_SITE_URL if set, otherwise fall back to window.location.origin
+  if (env.SITE_URL) {
+    return env.SITE_URL;
+  }
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  // In production, we should have SITE_URL set. If not, throw error.
+  if (env.IS_PRODUCTION) {
+    throw new Error(
+      'SITE_URL not configured in production environment. ' +
+      'Please set VITE_SITE_URL in your hosting environment.'
+    );
+  }
+  // Fallback for development/SSR
+  return 'http://localhost:5173';
 }
 
 // Export the validation error for use in error boundaries

@@ -1,5 +1,6 @@
 import { supabase } from './client';
 import type { Tables } from '@/types/supabase';
+import { getSiteUrl } from '@/config/env';
 
 export type UserRole = 'user' | 'agent' | 'merchant' | 'admin';
 export type Profile = Tables<'profiles'>;
@@ -32,7 +33,7 @@ export const signUpWithEmail = async (
         full_name: fullName,
         role,
       },
-      emailRedirectTo: `${window.location.origin}/auth/callback`,
+      emailRedirectTo: `${getSiteUrl()}/auth/callback`,
     },
   });
   return { data, error };
@@ -112,7 +113,7 @@ export const onAuthStateChange = (callback: (user: AuthUser | null) => void) => 
 
 export const resetPassword = async (email: string) => {
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/auth/reset-password`,
+    redirectTo: `${getSiteUrl()}/auth/reset-password`,
   });
   return { data, error };
 };
