@@ -87,6 +87,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        // Log auth state changes for debugging
+        console.log('🔐 Auth state changed:', event, {
+          hasSession: !!session,
+          userId: session?.user?.id,
+        });
+
         if (session?.user) {
           // Fetch profile with duplicate detection
           const { data: profiles, error, count } = await supabase
@@ -136,8 +142,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
+    // Monitor session expiration and refresh tokens proactively
+    const sessionCheckInterval = setInterval(async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session) {
+          const expiresAt = session.expires_at;
+          const now = Math.floor(Date.now() / 1000);
+          const timeUntilExpiry = expiresAt ? expiresAt - now : 0;
+          
+          // Refresh token if it expires in less than 5 minutes
+          if (timeUntilExpiry < 300 && timeUntilExpiry > 0) {
+            console.log('🔄 Token expiring soon, refreshing session...');
+            const { error } = await supabase.auth.refreshSession();
+            
+            if (error) {
+              console.error('❌ Failed to refresh session:', error);
+            } else {
+              console.log('✅ Session refreshed successfully');
+            }
+          }
+        }
+      } catch (error) {
+        console.error('❌ Error checking session:', error);
+      }
+    }, 60000); // Check every minute
+
     return () => {
       subscription?.unsubscribe();
+      clearInterval(sessionCheckInterval);
     };
   }, []);
 
