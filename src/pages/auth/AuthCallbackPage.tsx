@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getUserRole, REDIRECT_PATHS, resendConfirmationEmail } from '@/services/authService';
+import { getUserRole, REDIRECT_PATHS, resendConfirmationEmail, ensureProfileExists } from '@/services/authService';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { getSupportEmail } from '@/config/env';
@@ -72,6 +72,16 @@ export default function AuthCallbackPage() {
           // Now fetch user role from profiles table (single source of truth for roles)
           // Note: Roles are stored in public.profiles, NOT in auth.users metadata
           if (data?.user) {
+            // Ensure profile exists in database
+            const { success: profileSuccess, error: profileError } = await ensureProfileExists(data.user);
+            if (!profileSuccess) {
+              console.error('Failed to ensure profile exists:', profileError);
+              setErrorType('profile');
+              setErrorMessage('Unable to create or access your profile. Please contact support.');
+              setStatus('error');
+              return;
+            }
+
             const { role, error: roleError } = await getUserRole(data.user.id);
 
             if (roleError || !role) {
