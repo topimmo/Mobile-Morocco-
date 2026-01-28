@@ -667,7 +667,7 @@ export const signInAndRedirect = async (
     if (roleError || !role) {
       // Provide specific error messages based on error type
       let errorMessage = 'Unable to fetch your profile. Please try again.';
-      let redirectPath = REDIRECT_PATHS.LOGIN;
+      let redirectPath: string = REDIRECT_PATHS.LOGIN;
 
       if (roleError === 'PROFILE_NOT_FOUND') {
         console.warn('⚠️ signInAndRedirect: Profile not found, redirecting to account setup');
