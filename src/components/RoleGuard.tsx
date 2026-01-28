@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState, useRef } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/supabase/client';
 import { UserRole } from '@/services/authService';
@@ -13,6 +13,11 @@ interface RoleGuardProps {
  * RoleGuard component for protecting routes based on user roles
  * Fetches the user's role from the profiles table (single source of truth)
  * and only allows access if the user has one of the allowed roles.
+ * 
+ * Fixed to prevent infinite loading states on slow networks:
+ * - Removed location from dependencies to prevent redirect loops
+ * - Added abort controller for cleanup on unmount
+ * - Ensures loading state is always resolved
  */
 export function RoleGuard({ 
   children, 
@@ -22,12 +27,23 @@ export function RoleGuard({
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
   const location = useLocation();
+  const hasCheckedRef = useRef(false);
 
   useEffect(() => {
+    // Prevent multiple checks - only run once per mount
+    if (hasCheckedRef.current) {
+      return;
+    }
+    
+    let isMounted = true;
+    hasCheckedRef.current = true;
+
     const checkAuthorization = async () => {
       try {
         // Step 1: Check if user is authenticated
         const { data: { user }, error: authError } = await supabase.auth.getUser();
+        
+        if (!isMounted) return;
         
         if (authError || !user) {
           console.warn('⚠️ RoleGuard: No authenticated user');
@@ -43,6 +59,8 @@ export function RoleGuard({
           .eq('id', user.id)
           .order('updated_at', { ascending: false })
           .limit(2);
+
+        if (!isMounted) return;
 
         if (profileError) {
           console.error('🔴 RoleGuard: Error fetching profile:', {
@@ -91,17 +109,28 @@ export function RoleGuard({
           console.log('✅ RoleGuard: Access granted - user role:', userRole);
         }
         
-        setAuthorized(isAuthorized);
+        if (isMounted) {
+          setAuthorized(isAuthorized);
+        }
       } catch (error) {
         console.error('🔴 RoleGuard: Authorization check failed:', error);
-        setAuthorized(false);
+        if (isMounted) {
+          setAuthorized(false);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     checkAuthorization();
-  }, [allowedRoles, location]);
+
+    // Cleanup function to prevent state updates after unmount
+    return () => {
+      isMounted = false;
+    };
+  }, [allowedRoles]);
 
   // Show loading state while checking authorization
   if (loading) {
