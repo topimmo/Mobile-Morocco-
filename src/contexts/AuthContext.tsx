@@ -30,22 +30,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { data: { user: authUser } } = await supabase.auth.getUser();
         if (authUser) {
           // Fetch profile with duplicate detection
-          const { data: profiles, error } = await supabase
+          const { data: profiles, error, count } = await supabase
             .from('profiles')
-            .select('*')
+            .select('*', { count: 'exact' })
             .eq('id', authUser.id)
             .order('updated_at', { ascending: false })
             .limit(2);
 
           // Handle errors
           if (error) {
-            const errorCode = (error as any).code;
-            if (errorCode === 'PGRST116') {
-              // No profile found - log warning but don't crash
-              console.warn('⚠️ AuthContext: Profile not found for user:', authUser.id);
-            } else {
-              console.error('🔴 AuthContext: Error fetching profile:', error);
-            }
+            console.error('🔴 AuthContext: Error fetching profile:', error);
             // Set user without profile
             setUser({
               id: authUser.id,
@@ -53,17 +47,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               profile: null,
             });
           } else if (!profiles || profiles.length === 0) {
-            // No profile found
+            // No profile found (empty array, not an error)
             console.warn('⚠️ AuthContext: No profile found for user:', authUser.id);
             setUser({
               id: authUser.id,
               email: authUser.email || null,
               profile: null,
             });
-          } else if (profiles.length > 1) {
-            // Multiple profiles found - use most recent
+          } else if (count && count > 1) {
+            // Multiple profiles found - data integrity issue
             console.error('🔴 AuthContext: DUPLICATE PROFILES for user:', authUser.id, {
-              count: profiles.length,
+              totalCount: count,
+              returnedRows: profiles.length,
             });
             console.warn('⚠️ AuthContext: Using most recent profile');
             setUser({
@@ -94,35 +89,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async (event, session) => {
         if (session?.user) {
           // Fetch profile with duplicate detection
-          const { data: profiles, error } = await supabase
+          const { data: profiles, error, count } = await supabase
             .from('profiles')
-            .select('*')
+            .select('*', { count: 'exact' })
             .eq('id', session.user.id)
             .order('updated_at', { ascending: false })
             .limit(2);
 
           // Handle errors
           if (error) {
-            const errorCode = (error as any).code;
-            if (errorCode === 'PGRST116') {
-              console.warn('⚠️ AuthContext: Profile not found for user:', session.user.id);
-            } else {
-              console.error('🔴 AuthContext: Error fetching profile:', error);
-            }
+            console.error('🔴 AuthContext: Error fetching profile:', error);
             setUser({
               id: session.user.id,
               email: session.user.email || null,
               profile: null,
             });
           } else if (!profiles || profiles.length === 0) {
+            // No profile found (empty array, not an error)
             console.warn('⚠️ AuthContext: No profile found for user:', session.user.id);
             setUser({
               id: session.user.id,
               email: session.user.email || null,
               profile: null,
             });
-          } else if (profiles.length > 1) {
-            console.error('🔴 AuthContext: DUPLICATE PROFILES for user:', session.user.id);
+          } else if (count && count > 1) {
+            // Multiple profiles found - data integrity issue
+            console.error('🔴 AuthContext: DUPLICATE PROFILES for user:', session.user.id, {
+              totalCount: count,
+            });
             console.warn('⚠️ AuthContext: Using most recent profile');
             setUser({
               id: session.user.id,

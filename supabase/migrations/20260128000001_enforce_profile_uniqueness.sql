@@ -186,8 +186,6 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_new_user();
 
-RAISE NOTICE 'Updated trigger: on_auth_user_created with ON CONFLICT handling';
-
 -- ============================================
 -- STEP 5: Add Helpful Indexes
 -- ============================================
@@ -200,8 +198,6 @@ CREATE INDEX IF NOT EXISTS profiles_role_idx ON profiles(role);
 
 -- Index on updated_at for sorting (useful for duplicate detection)
 CREATE INDEX IF NOT EXISTS profiles_updated_at_idx ON profiles(updated_at DESC);
-
-RAISE NOTICE 'Verified/created indexes on profiles table';
 
 -- ============================================
 -- STEP 6: Add Comments

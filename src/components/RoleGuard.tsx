@@ -37,29 +37,25 @@ export function RoleGuard({
         }
 
         // Step 2: Fetch user role from profiles table with duplicate detection
-        const { data: profiles, error: profileError } = await supabase
+        const { data: profiles, error: profileError, count } = await supabase
           .from('profiles')
-          .select('role, id, updated_at')
+          .select('role, id, updated_at', { count: 'exact' })
           .eq('id', user.id)
           .order('updated_at', { ascending: false })
           .limit(2);
 
         if (profileError) {
-          const errorCode = (profileError as any).code;
-          if (errorCode === 'PGRST116') {
-            console.warn('⚠️ RoleGuard: Profile not found for user:', user.id);
-          } else {
-            console.error('🔴 RoleGuard: Error fetching profile:', {
-              code: errorCode,
-              message: profileError.message,
-            });
-          }
+          console.error('🔴 RoleGuard: Error fetching profile:', {
+            code: (profileError as any).code,
+            message: profileError.message,
+          });
           setAuthorized(false);
           setLoading(false);
           return;
         }
 
         if (!profiles || profiles.length === 0) {
+          // No profile found (empty array, not an error)
           console.warn('⚠️ RoleGuard: No profile found for user:', user.id);
           setAuthorized(false);
           setLoading(false);
@@ -67,9 +63,10 @@ export function RoleGuard({
         }
 
         // Handle duplicate profiles
-        if (profiles.length > 1) {
+        if (count && count > 1) {
           console.error('🔴 RoleGuard: DUPLICATE PROFILES detected for user:', user.id, {
-            count: profiles.length,
+            totalCount: count,
+            returnedRows: profiles.length,
             profiles: profiles.map(p => ({ id: p.id, role: p.role, updated_at: p.updated_at })),
           });
           console.warn('⚠️ RoleGuard: Using most recent profile for authorization');

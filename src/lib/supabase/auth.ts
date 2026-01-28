@@ -69,21 +69,16 @@ export const getCurrentUser = async (): Promise<AuthUser | null> => {
   if (!user) return null;
 
   // Fetch profile with duplicate detection
-  const { data: profiles, error } = await supabase
+  const { data: profiles, error, count } = await supabase
     .from('profiles')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('id', user.id)
     .order('updated_at', { ascending: false })
     .limit(2);
 
   // Handle errors
   if (error) {
-    const errorCode = (error as any).code;
-    if (errorCode === 'PGRST116') {
-      console.warn('⚠️ getCurrentUser: Profile not found for user:', user.id);
-    } else {
-      console.error('🔴 getCurrentUser: Error fetching profile:', error);
-    }
+    console.error('🔴 getCurrentUser: Error fetching profile:', error);
     return {
       id: user.id,
       email: user.email || null,
@@ -92,6 +87,7 @@ export const getCurrentUser = async (): Promise<AuthUser | null> => {
   }
 
   if (!profiles || profiles.length === 0) {
+    // No profile found (empty array, not an error)
     console.warn('⚠️ getCurrentUser: No profile found for user:', user.id);
     return {
       id: user.id,
@@ -101,8 +97,10 @@ export const getCurrentUser = async (): Promise<AuthUser | null> => {
   }
 
   // Handle duplicate profiles
-  if (profiles.length > 1) {
-    console.error('🔴 getCurrentUser: DUPLICATE PROFILES for user:', user.id);
+  if (count && count > 1) {
+    console.error('🔴 getCurrentUser: DUPLICATE PROFILES for user:', user.id, {
+      totalCount: count,
+    });
     console.warn('⚠️ getCurrentUser: Using most recent profile');
   }
 
@@ -115,9 +113,9 @@ export const getCurrentUser = async (): Promise<AuthUser | null> => {
 
 export const getProfile = async (userId: string) => {
   // Fetch profile with duplicate detection
-  const { data: profiles, error } = await supabase
+  const { data: profiles, error, count } = await supabase
     .from('profiles')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('id', userId)
     .order('updated_at', { ascending: false })
     .limit(2);
@@ -128,18 +126,16 @@ export const getProfile = async (userId: string) => {
   }
 
   if (!profiles || profiles.length === 0) {
-    return { 
-      data: null, 
-      error: { 
-        code: 'PGRST116', 
-        message: 'Profile not found' 
-      } as any 
-    };
+    // No profile found (empty array, not an error)
+    // Return null with no error (caller should check for null data)
+    return { data: null, error: null };
   }
 
   // Handle duplicate profiles
-  if (profiles.length > 1) {
-    console.error('🔴 getProfile: DUPLICATE PROFILES for user:', userId);
+  if (count && count > 1) {
+    console.error('🔴 getProfile: DUPLICATE PROFILES for user:', userId, {
+      totalCount: count,
+    });
     console.warn('⚠️ getProfile: Returning most recent profile');
   }
 

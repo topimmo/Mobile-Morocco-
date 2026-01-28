@@ -522,6 +522,7 @@ export const getUserRole = async (userId?: string): Promise<{ role: UserRole | n
     }
 
     // Fetch role from profiles table - use limit(2) to detect duplicates
+    // count: 'exact' gives us the total count to detect if more than 2 duplicates exist
     const { data, error, count } = await supabase
       .from('profiles')
       .select('role, id, updated_at', { count: 'exact' })
@@ -530,18 +531,10 @@ export const getUserRole = async (userId?: string): Promise<{ role: UserRole | n
       .limit(2);
 
     if (error) {
-      // Differentiate error types for better logging
+      // Database/network errors
       const errorCode = (error as any).code;
       
-      if (errorCode === 'PGRST116') {
-        // No rows found
-        console.warn('⚠️ getUserRole: Profile not found for user:', targetUserId);
-        return { role: null, error: 'PROFILE_NOT_FOUND' };
-      } else if (errorCode === 'PGRST103') {
-        // Multiple rows found (shouldn't happen with our query but just in case)
-        console.error('🔴 getUserRole: Multiple profiles found for user:', targetUserId);
-        return { role: null, error: 'DUPLICATE_PROFILES' };
-      } else if (errorCode?.includes('permission') || errorCode?.includes('RLS')) {
+      if (errorCode?.includes('permission') || errorCode?.includes('RLS')) {
         // RLS policy issue
         console.error('🔴 getUserRole: Permission denied (RLS):', error);
         return { role: null, error: 'PERMISSION_DENIED' };
@@ -556,24 +549,24 @@ export const getUserRole = async (userId?: string): Promise<{ role: UserRole | n
       }
     }
 
-    // Check for no results
+    // Check for no results (empty array)
     if (!data || data.length === 0) {
       console.warn('⚠️ getUserRole: Profile not found for user:', targetUserId);
       return { role: null, error: 'PROFILE_NOT_FOUND' };
     }
 
-    // Check for duplicate profiles (more than 1 result)
-    if (data.length > 1) {
+    // Check for duplicate profiles using count (more reliable than data.length)
+    // If count > 1, we have duplicates regardless of how many rows were returned
+    if (count && count > 1) {
       console.error('🔴 getUserRole: DUPLICATE PROFILES DETECTED for user:', targetUserId, {
-        count: data.length,
+        totalCount: count,
+        returnedRows: data.length,
         profiles: data.map(p => ({ id: p.id, role: p.role, updated_at: p.updated_at })),
       });
-      // Return the most recent profile (already ordered by updated_at desc)
-      console.warn('⚠️ getUserRole: Using most recent profile (updated_at desc)');
-      const selectedProfile = data[0];
+      // Return error to surface this data integrity issue
       return { 
-        role: selectedProfile.role as UserRole, 
-        error: null // Don't fail login, but log the issue
+        role: null, 
+        error: 'DUPLICATE_PROFILES'
       };
     }
 
