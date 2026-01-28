@@ -56,10 +56,13 @@ export default function LoginPage() {
     setResendSuccess(false);
 
     try {
+      console.log('🔵 Starting login process...');
+      
       // Use the new signInAndRedirect function that fetches role from profiles
       const { user, redirectPath, role, error: signInError } = await signInAndRedirect(email, password);
 
       if (signInError || !user) {
+        console.error('🔴 Login failed:', signInError);
         setError(signInError || 'Login failed');
         
         // Show resend option if email is not confirmed
@@ -71,9 +74,10 @@ export default function LoginPage() {
       }
 
       // Ensure profile exists in database
+      console.log('🔵 Ensuring profile exists...');
       const { success: profileSuccess, error: profileError } = await ensureProfileExists(user);
       if (!profileSuccess) {
-        console.warn('Failed to ensure profile exists:', profileError);
+        console.warn('⚠️ Failed to ensure profile exists:', profileError);
         // Don't block login for profile creation errors - user can complete setup later
       }
 
@@ -81,11 +85,14 @@ export default function LoginPage() {
       trackLogin();
 
       // Redirect based on role
-      console.log('Login successful, redirecting to:', redirectPath, 'Role:', role);
+      console.log('✅ Login successful, redirecting to:', redirectPath, 'Role:', role);
       navigate(redirectPath);
     } catch (err: any) {
+      console.error('🔴 Login error (catch):', err);
       setError(err.message || 'Login failed');
     } finally {
+      // Always ensure loading is set to false
+      console.log('🔵 Setting loading to false');
       setLoading(false);
     }
   };
