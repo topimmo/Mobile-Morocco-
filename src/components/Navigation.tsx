@@ -5,6 +5,8 @@ import { Globe, LogOut, LayoutDashboard, LogIn, Menu, X, Home, ShoppingBag, Wren
 import { Link, useLocation } from 'react-router-dom';
 import { useState, memo } from 'react';
 import { cn } from '@/lib/utils';
+import { getRedirectPath } from '@/components/ProtectedRoute';
+import { cn } from '@/lib/utils';
 import {
   Sheet,
   SheetContent,
@@ -62,24 +64,9 @@ function Navigation() {
     publish: isRTL ? 'نشر إعلان' : 'Publier',
   };
 
-  // Get user role and determine dashboard path
+  // Get user role
   const userRole = user?.profile?.role;
   const isAdmin = userRole === 'admin';
-  const isAgent = userRole === 'agent';
-  const isMerchant = userRole === 'merchant';
-  
-  const getDashboardPath = () => {
-    switch (userRole) {
-      case 'admin':
-        return '/admin';
-      case 'agent':
-        return '/agent';
-      case 'merchant':
-        return '/merchant';
-      default:
-        return '/dashboard';
-    }
-  };
 
   // Grouped navigation structure
   const productsMenu = [
@@ -260,7 +247,7 @@ function Navigation() {
             {/* Auth Links */}
             {user ? (
               <>
-                <Link to={getDashboardPath()}>
+                <Link to={getRedirectPath(userRole)}>
                   <Button 
                     variant={isAdmin ? "outline" : "ghost"} 
                     size="sm" 
@@ -377,7 +364,7 @@ function Navigation() {
                   {user ? (
                     <>
                       <Link
-                        to={getDashboardPath()}
+                        to={getRedirectPath(userRole)}
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
                           'px-3 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2.5',

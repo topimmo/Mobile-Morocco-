@@ -10,7 +10,7 @@ import ComparisonFloatingButton from "@/components/ComparisonFloatingButton";
 import ErrorBoundary, { GlobalErrorBoundary, PageErrorBoundary } from "@/components/ErrorBoundary";
 import { NetworkErrorBanner } from "@/components/common/InlineError";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
-import { ProtectedRoute, AdminRoute, AgentRoute, MerchantRoute } from "@/components/ProtectedRoute";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AdminGuard, AgentGuard, MerchantGuard } from "@/components/RoleGuard";
 import { isEnvValid } from "@/config/env";
 import EnvErrorFallback from "@/components/EnvErrorFallback";

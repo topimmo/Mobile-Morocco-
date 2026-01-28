@@ -65,8 +65,9 @@ export function ProtectedRoute({
 
 /**
  * Get redirect path based on user role
+ * Exported for use in other components
  */
-function getRedirectPath(role?: UserRole | string): string {
+export function getRedirectPath(role?: UserRole | string): string {
   switch (role) {
     case 'admin':
       return '/admin';
