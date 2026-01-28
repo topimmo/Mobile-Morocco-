@@ -734,15 +734,27 @@ export const ensureProfileExists = async (user: User): Promise<{ success: boolea
     // Profile doesn't exist, create minimal profile
     console.log('Creating profile for user:', user.id);
     
+    // Parse full_name into first_name and last_name if available
+    const fullName = user.user_metadata?.full_name;
+    let firstName = null;
+    let lastName = null;
+    if (fullName) {
+      const nameParts = fullName.trim().split(' ');
+      firstName = nameParts[0] || null;
+      lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : null;
+    }
+    
     const { error: insertError } = await supabase
       .from('profiles')
       .insert({
         id: user.id,
         email: user.email,
-        full_name: user.user_metadata?.full_name ?? null,
+        first_name: firstName,
+        last_name: lastName,
         phone: user.user_metadata?.phone ?? null,
         city: user.user_metadata?.city ?? null,
         role: user.user_metadata?.role ?? 'user', // Default to 'user' role if not set
+        subscription_type: 'free', // Default subscription
         // announcer_type is nullable - can be filled later in account setup
       });
 
