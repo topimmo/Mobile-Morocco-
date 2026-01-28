@@ -660,14 +660,28 @@ export const signInAndRedirect = async (
     
     if (sessionError) {
       console.error('🔴 Session verification error:', sessionError);
-    } else if (sessionData.session) {
-      console.log('✅ Session verified:', {
-        userId: sessionData.session.user.id,
-        expiresAt: sessionData.session.expires_at,
-      });
-    } else {
-      console.warn('⚠️ No session found after login');
+      return {
+        user: null,
+        redirectPath: REDIRECT_PATHS.LOGIN,
+        role: null,
+        error: 'Failed to verify session. Please try logging in again.',
+      };
     }
+    
+    if (!sessionData.session) {
+      console.error('🔴 No session found after login');
+      return {
+        user: null,
+        redirectPath: REDIRECT_PATHS.LOGIN,
+        role: null,
+        error: 'Session was not created. Please try logging in again.',
+      };
+    }
+    
+    console.log('✅ Session verified:', {
+      userId: sessionData.session.user.id,
+      expiresAt: sessionData.session.expires_at,
+    });
 
     // Step 3: Get user ID
     const userId = data.user.id;
@@ -750,6 +764,7 @@ export const signInAndRedirect = async (
       message: error?.message,
       name: error?.name,
       stack: error?.stack,
+      fullError: error, // Include full error object for additional debugging info
     });
     
     // Ensure we always return a proper error response
