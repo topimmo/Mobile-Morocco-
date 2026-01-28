@@ -505,6 +505,7 @@ export const signUpWithRole = async (
 /**
  * Get the role of the current user from the profiles table
  * This is the single source of truth for user roles
+ * Handles edge cases: missing profiles, duplicate profiles, network errors
  */
 export const getUserRole = async (userId?: string): Promise<{ role: UserRole | null; error: string | null }> => {
   try {
@@ -514,31 +515,88 @@ export const getUserRole = async (userId?: string): Promise<{ role: UserRole | n
     if (!targetUserId) {
       const { data: userData, error: userError } = await supabase.auth.getUser();
       if (userError || !userData.user) {
+        console.error('🔴 getUserRole: No authenticated user found');
         return { role: null, error: userError?.message || 'No user found' };
       }
       targetUserId = userData.user.id;
     }
 
-    // Fetch role from profiles table
-    const { data, error } = await supabase
+    // Fetch role from profiles table - use limit(2) to detect duplicates
+    const { data, error, count } = await supabase
       .from('profiles')
-      .select('role')
+      .select('role, id, updated_at', { count: 'exact' })
       .eq('id', targetUserId)
-      .single();
+      .order('updated_at', { ascending: false })
+      .limit(2);
 
     if (error) {
-      console.error('Error fetching user role:', error);
-      return { role: null, error: error.message };
+      // Differentiate error types for better logging
+      const errorCode = (error as any).code;
+      
+      if (errorCode === 'PGRST116') {
+        // No rows found
+        console.warn('⚠️ getUserRole: Profile not found for user:', targetUserId);
+        return { role: null, error: 'PROFILE_NOT_FOUND' };
+      } else if (errorCode === 'PGRST103') {
+        // Multiple rows found (shouldn't happen with our query but just in case)
+        console.error('🔴 getUserRole: Multiple profiles found for user:', targetUserId);
+        return { role: null, error: 'DUPLICATE_PROFILES' };
+      } else if (errorCode?.includes('permission') || errorCode?.includes('RLS')) {
+        // RLS policy issue
+        console.error('🔴 getUserRole: Permission denied (RLS):', error);
+        return { role: null, error: 'PERMISSION_DENIED' };
+      } else {
+        // Other database/network errors
+        console.error('🔴 getUserRole: Database error:', {
+          code: errorCode,
+          message: error.message,
+          details: (error as any).details,
+        });
+        return { role: null, error: 'DATABASE_ERROR' };
+      }
     }
 
-    if (!data || !data.role) {
-      return { role: null, error: 'Profile not found' };
+    // Check for no results
+    if (!data || data.length === 0) {
+      console.warn('⚠️ getUserRole: Profile not found for user:', targetUserId);
+      return { role: null, error: 'PROFILE_NOT_FOUND' };
     }
 
-    return { role: data.role as UserRole, error: null };
-  } catch (error) {
-    console.error('Error getting user role:', error);
-    return { role: null, error: 'Failed to get user role' };
+    // Check for duplicate profiles (more than 1 result)
+    if (data.length > 1) {
+      console.error('🔴 getUserRole: DUPLICATE PROFILES DETECTED for user:', targetUserId, {
+        count: data.length,
+        profiles: data.map(p => ({ id: p.id, role: p.role, updated_at: p.updated_at })),
+      });
+      // Return the most recent profile (already ordered by updated_at desc)
+      console.warn('⚠️ getUserRole: Using most recent profile (updated_at desc)');
+      const selectedProfile = data[0];
+      return { 
+        role: selectedProfile.role as UserRole, 
+        error: null // Don't fail login, but log the issue
+      };
+    }
+
+    // Single profile found - normal case
+    const profile = data[0];
+    if (!profile.role) {
+      console.warn('⚠️ getUserRole: Profile exists but role is null/undefined for user:', targetUserId);
+      return { role: null, error: 'ROLE_NOT_SET' };
+    }
+
+    console.log('✅ getUserRole: Role fetched successfully:', {
+      userId: targetUserId,
+      role: profile.role,
+    });
+
+    return { role: profile.role as UserRole, error: null };
+  } catch (error: any) {
+    console.error('🔴 getUserRole: Unexpected error:', {
+      message: error?.message,
+      name: error?.name,
+      userId: userId,
+    });
+    return { role: null, error: 'UNEXPECTED_ERROR' };
   }
 };
 
@@ -607,13 +665,39 @@ export const signInAndRedirect = async (
     const { role, error: roleError } = await getUserRole(userId);
 
     if (roleError || !role) {
-      console.error('Error fetching role:', roleError);
-      // If profile doesn't exist, redirect to account setup
+      // Provide specific error messages based on error type
+      let errorMessage = 'Unable to fetch your profile. Please try again.';
+      let redirectPath = REDIRECT_PATHS.LOGIN;
+
+      if (roleError === 'PROFILE_NOT_FOUND') {
+        console.warn('⚠️ signInAndRedirect: Profile not found, redirecting to account setup');
+        errorMessage = 'Profile not found. Please complete your account setup.';
+        redirectPath = REDIRECT_PATHS.ACCOUNT_SETUP;
+      } else if (roleError === 'DUPLICATE_PROFILES') {
+        console.error('🔴 signInAndRedirect: Duplicate profiles detected, contact support');
+        errorMessage = 'Multiple profiles detected for your account. Please contact support.';
+        redirectPath = REDIRECT_PATHS.LOGIN;
+      } else if (roleError === 'ROLE_NOT_SET') {
+        console.warn('⚠️ signInAndRedirect: Role not set, redirecting to account setup');
+        errorMessage = 'Account role not configured. Please complete your account setup.';
+        redirectPath = REDIRECT_PATHS.ACCOUNT_SETUP;
+      } else if (roleError === 'PERMISSION_DENIED') {
+        console.error('🔴 signInAndRedirect: Permission denied (RLS)');
+        errorMessage = 'Unable to access your profile. Please contact support if this persists.';
+        redirectPath = REDIRECT_PATHS.LOGIN;
+      } else if (roleError === 'DATABASE_ERROR' || roleError === 'UNEXPECTED_ERROR') {
+        console.error('🔴 signInAndRedirect: Database/network error');
+        errorMessage = 'A technical error occurred. Please check your connection and try again.';
+        redirectPath = REDIRECT_PATHS.LOGIN;
+      } else {
+        console.error('🔴 signInAndRedirect: Unknown error:', roleError);
+      }
+
       return {
         user: data.user,
-        redirectPath: REDIRECT_PATHS.ACCOUNT_SETUP,
+        redirectPath,
         role: null,
-        error: 'Profile not found. Please complete your account setup.',
+        error: errorMessage,
       };
     }
 

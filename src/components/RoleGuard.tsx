@@ -30,32 +30,73 @@ export function RoleGuard({
         const { data: { user }, error: authError } = await supabase.auth.getUser();
         
         if (authError || !user) {
+          console.warn('⚠️ RoleGuard: No authenticated user');
           setAuthorized(false);
           setLoading(false);
           return;
         }
 
-        // Step 2: Fetch user role from profiles table
-        const { data: profile, error: profileError } = await supabase
+        // Step 2: Fetch user role from profiles table with duplicate detection
+        const { data: profiles, error: profileError } = await supabase
           .from('profiles')
-          .select('role')
+          .select('role, id, updated_at')
           .eq('id', user.id)
-          .single();
+          .order('updated_at', { ascending: false })
+          .limit(2);
 
-        if (profileError || !profile) {
-          console.error('Error fetching profile:', profileError);
+        if (profileError) {
+          const errorCode = (profileError as any).code;
+          if (errorCode === 'PGRST116') {
+            console.warn('⚠️ RoleGuard: Profile not found for user:', user.id);
+          } else {
+            console.error('🔴 RoleGuard: Error fetching profile:', {
+              code: errorCode,
+              message: profileError.message,
+            });
+          }
           setAuthorized(false);
           setLoading(false);
           return;
         }
 
-        // Step 3: Check if user's role is in the allowed roles
+        if (!profiles || profiles.length === 0) {
+          console.warn('⚠️ RoleGuard: No profile found for user:', user.id);
+          setAuthorized(false);
+          setLoading(false);
+          return;
+        }
+
+        // Handle duplicate profiles
+        if (profiles.length > 1) {
+          console.error('🔴 RoleGuard: DUPLICATE PROFILES detected for user:', user.id, {
+            count: profiles.length,
+            profiles: profiles.map(p => ({ id: p.id, role: p.role, updated_at: p.updated_at })),
+          });
+          console.warn('⚠️ RoleGuard: Using most recent profile for authorization');
+        }
+
+        // Step 3: Check if user's role is in the allowed roles (use most recent profile)
+        const profile = profiles[0];
         const userRole = profile.role as UserRole;
+        
+        if (!userRole) {
+          console.warn('⚠️ RoleGuard: User role is null/undefined for user:', user.id);
+          setAuthorized(false);
+          setLoading(false);
+          return;
+        }
+
         const isAuthorized = allowedRoles.includes(userRole) || userRole === 'admin';
+        
+        if (!isAuthorized) {
+          console.warn('⚠️ RoleGuard: Access denied - user role:', userRole, 'allowed roles:', allowedRoles);
+        } else {
+          console.log('✅ RoleGuard: Access granted - user role:', userRole);
+        }
         
         setAuthorized(isAuthorized);
       } catch (error) {
-        console.error('Authorization check failed:', error);
+        console.error('🔴 RoleGuard: Authorization check failed:', error);
         setAuthorized(false);
       } finally {
         setLoading(false);
