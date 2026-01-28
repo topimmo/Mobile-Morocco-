@@ -106,23 +106,16 @@ export function isEnvValid(): boolean {
 }
 
 // Helper to get the site URL for auth redirects
+// Never rely on window.location.origin for production auth redirects
 export function getSiteUrl(): string {
-  // Use VITE_SITE_URL if set, otherwise fall back to window.location.origin
+  // Use VITE_SITE_URL if set
   if (env.SITE_URL) {
     return env.SITE_URL;
   }
-  if (typeof window !== 'undefined') {
-    return window.location.origin;
-  }
-  // In production, we should have SITE_URL set. If not, throw error.
-  if (env.IS_PRODUCTION) {
-    throw new Error(
-      'SITE_URL not configured in production environment. ' +
-      'Please set VITE_SITE_URL in your hosting environment.'
-    );
-  }
-  // Fallback for development/SSR
-  return 'http://localhost:5173';
+  
+  // Fallback to production URL (required by Supabase configuration)
+  // This ensures auth redirects always go to the correct domain
+  return 'https://www.mobilemorocco.com';
 }
 
 // Helper to get support email

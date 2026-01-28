@@ -29,6 +29,16 @@ export default function AuthCallbackPage() {
         const error = searchParams.get('error');
         const errorDescription = searchParams.get('error_description');
 
+        // Log callback parameters (dev only)
+        if (import.meta.env.DEV) {
+          console.log('🔐 Auth callback received:', {
+            hasCode: !!code,
+            error: error || null,
+            errorDescription: errorDescription || null,
+            url: window.location.href,
+          });
+        }
+
         // Handle error from Supabase
         if (error) {
           console.error('Auth error:', error, errorDescription);
@@ -49,6 +59,15 @@ export default function AuthCallbackPage() {
         // Exchange code for session
         if (code) {
           const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          
+          // Log session result (dev only)
+          if (import.meta.env.DEV) {
+            console.log('🔐 Session exchange result:', {
+              success: !!data?.session,
+              userId: data?.user?.id,
+              error: exchangeError?.message || null,
+            });
+          }
           
           if (exchangeError) {
             console.error('Session exchange error:', exchangeError);
@@ -113,6 +132,15 @@ export default function AuthCallbackPage() {
                 }
                 redirectPath = REDIRECT_PATHS.USER;
                 break;
+            }
+
+            // Log redirect decision (dev only)
+            if (import.meta.env.DEV) {
+              console.log('🔐 Redirecting user:', {
+                userId: data.user.id,
+                role,
+                redirectPath,
+              });
             }
 
             setStatus('success');

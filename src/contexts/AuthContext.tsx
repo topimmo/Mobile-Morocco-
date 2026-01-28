@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import type { AuthUser } from '@/lib/supabase/auth';
+import { getSiteUrl } from '@/config/env';
 
 interface SignUpMetadata {
   user_type?: string;
@@ -204,7 +205,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const resetPassword = useCallback(async (email: string) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
+      redirectTo: `${getSiteUrl()}/auth/reset-password`,
     });
     if (error) throw error;
   }, []);
