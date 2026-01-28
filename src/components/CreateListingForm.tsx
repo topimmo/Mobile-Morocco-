@@ -188,31 +188,49 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
 
     setUploadingImages(true);
     
-    const { urls, errors } = await uploadImages(
-      Array.from(files),
-      `listings/${user?.id || 'anonymous'}`,
-      6 - imageUrls.length
-    );
+    try {
+      const { urls, errors } = await uploadImages(
+        Array.from(files),
+        `listings/${user?.id || 'anonymous'}`,
+        6 - imageUrls.length
+      );
 
-    setUploadingImages(false);
+      if (urls.length > 0) {
+        setImageUrls(prev => [...prev, ...urls]);
+      }
 
-    if (urls.length > 0) {
-      setImageUrls(prev => [...prev, ...urls]);
-    }
-
-    if (errors.length > 0) {
+      if (errors.length > 0) {
+        toast({
+          title: errors[0],
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Error uploading images:', error);
       toast({
-        title: errors[0],
+        title: 'Failed to upload images. Please try again.',
         variant: 'destructive',
       });
+    } finally {
+      setUploadingImages(false);
     }
   };
 
   const removeImage = async (index: number) => {
     const urlToRemove = imageUrls[index];
-    // Delete from storage
-    await deleteImage(urlToRemove);
-    setImageUrls(imageUrls.filter((_, i) => i !== index));
+    
+    try {
+      // Delete from storage
+      await deleteImage(urlToRemove);
+      // Only remove from UI if deletion succeeded
+      setImageUrls(imageUrls.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      toast({
+        title: 'Failed to delete image. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

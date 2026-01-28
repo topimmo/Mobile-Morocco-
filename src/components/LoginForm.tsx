@@ -32,34 +32,24 @@ const LoginForm = () => {
     setError('');
 
     try {
-      // Try real authentication first
+      // Authenticate user
       const { user, error: loginError } = await loginUser(formData.email, formData.password);
       
       if (loginError || !user) {
-        // Fallback to demo mode
-        const userType = formData.email.includes('admin') ? 'admin' : 
-                        formData.email.includes('tech') ? 'technician' :
-                        formData.email.includes('import') ? 'importer' : 'customer';
-        
-        switch (userType) {
-          case 'admin':
-            navigate('/admin');
-            break;
-          case 'technician':
-            navigate('/dashboard/technician');
-            break;
-          case 'importer':
-            navigate('/dashboard/importer');
-            break;
-          default:
-            navigate('/dashboard/customer');
-        }
+        // Show specific error message
+        setError(loginError || 'Email ou mot de passe incorrect');
         return;
       }
 
       // Get user profile to determine user type
-      const { profile } = await getUserProfile();
+      const { profile, error: profileError } = await getUserProfile();
       
+      if (profileError || !profile) {
+        setError('Failed to load user profile. Please try again.');
+        return;
+      }
+      
+      // Navigate based on verified user role from database
       if (profile) {
         switch (profile.userType) {
           case 'technician':
@@ -75,7 +65,8 @@ const LoginForm = () => {
         navigate('/dashboard/customer');
       }
     } catch (err) {
-      setError('Email ou mot de passe incorrect');
+      console.error('Login error:', err);
+      setError('An error occurred during login. Please try again.');
     } finally {
       setIsLoading(false);
     }

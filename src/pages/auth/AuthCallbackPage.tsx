@@ -29,6 +29,16 @@ export default function AuthCallbackPage() {
         const error = searchParams.get('error');
         const errorDescription = searchParams.get('error_description');
 
+        // Log callback parameters (dev only)
+        if (import.meta.env.DEV) {
+          console.log('🔐 Auth callback received:', {
+            hasCode: !!code,
+            error: error || null,
+            errorDescription: errorDescription || null,
+            url: window.location.href,
+          });
+        }
+
         // Handle error from Supabase
         if (error) {
           console.error('Auth error:', error, errorDescription);
@@ -49,6 +59,15 @@ export default function AuthCallbackPage() {
         // Exchange code for session
         if (code) {
           const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          
+          // Log session result (dev only)
+          if (import.meta.env.DEV) {
+            console.log('🔐 Session exchange result:', {
+              success: !!data?.session,
+              userId: data?.user?.id,
+              error: exchangeError?.message || null,
+            });
+          }
           
           if (exchangeError) {
             console.error('Session exchange error:', exchangeError);
@@ -115,11 +134,26 @@ export default function AuthCallbackPage() {
                 break;
             }
 
+            // Log redirect decision (dev only)
+            if (import.meta.env.DEV) {
+              console.log('🔐 Redirecting user:', {
+                userId: data.user.id,
+                role,
+                redirectPath,
+              });
+            }
+
             setStatus('success');
             
             // Redirect to role-specific dashboard after successful confirmation
             setTimeout(() => {
-              navigate(redirectPath, { replace: true });
+              try {
+                navigate(redirectPath, { replace: true });
+              } catch (navError) {
+                console.error('Navigation error:', navError);
+                // Fallback: try direct window navigation
+                window.location.href = redirectPath;
+              }
             }, 2000);
           } else {
             setErrorType('other');

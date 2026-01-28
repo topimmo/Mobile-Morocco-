@@ -77,6 +77,9 @@ const CreateItemPage = lazy(() => import("@/pages/dashboard/CreateItemPage"));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
 const UnauthorizedPage = lazy(() => import("@/pages/UnauthorizedPage"));
 
+// Debug page (admin only)
+const DebugModePage = lazy(() => import("@/pages/DebugModePage"));
+
 function AppContent() {
   // Track page views on route changes
   usePageTracking();
@@ -223,6 +226,13 @@ function AppContent() {
             <ProtectedRoute>
               <PageErrorBoundary><CreateItemPage /></PageErrorBoundary>
             </ProtectedRoute>
+          } />
+
+          {/* Debug Mode - Admin only */}
+          <Route path="/debug" element={
+            <AdminGuard>
+              <PageErrorBoundary><DebugModePage /></PageErrorBoundary>
+            </AdminGuard>
           } />
 
           {/* Error Pages */}

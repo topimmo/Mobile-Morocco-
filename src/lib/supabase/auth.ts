@@ -44,6 +44,7 @@ export const signInWithEmailOtp = async (email: string) => {
     email,
     options: {
       shouldCreateUser: true,
+      emailRedirectTo: `${getSiteUrl()}/auth/callback`,
     },
   });
   return { data, error };
