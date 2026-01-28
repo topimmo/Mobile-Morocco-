@@ -13,6 +13,12 @@ interface RoleGuardProps {
  * RoleGuard component for protecting routes based on user roles
  * Fetches the user's role from the profiles table (single source of truth)
  * and only allows access if the user has one of the allowed roles.
+ * 
+ * Fixed to prevent infinite loading states on slow networks:
+ * - Removed location from dependencies to prevent redirect loops
+ * - Added isMounted flag for cleanup on unmount
+ * - Ensures loading state is always resolved
+ * - Protects all state updates from race conditions
  */
 export function RoleGuard({ 
   children, 
@@ -24,15 +30,21 @@ export function RoleGuard({
   const location = useLocation();
 
   useEffect(() => {
+    let isMounted = true;
+
     const checkAuthorization = async () => {
       try {
         // Step 1: Check if user is authenticated
         const { data: { user }, error: authError } = await supabase.auth.getUser();
         
+        if (!isMounted) return;
+        
         if (authError || !user) {
           console.warn('⚠️ RoleGuard: No authenticated user');
-          setAuthorized(false);
-          setLoading(false);
+          if (isMounted) {
+            setAuthorized(false);
+            setLoading(false);
+          }
           return;
         }
 
@@ -44,21 +56,27 @@ export function RoleGuard({
           .order('updated_at', { ascending: false })
           .limit(2);
 
+        if (!isMounted) return;
+
         if (profileError) {
           console.error('🔴 RoleGuard: Error fetching profile:', {
             code: (profileError as any).code,
             message: profileError.message,
           });
-          setAuthorized(false);
-          setLoading(false);
+          if (isMounted) {
+            setAuthorized(false);
+            setLoading(false);
+          }
           return;
         }
 
         if (!profiles || profiles.length === 0) {
           // No profile found (empty array, not an error)
           console.warn('⚠️ RoleGuard: No profile found for user:', user.id);
-          setAuthorized(false);
-          setLoading(false);
+          if (isMounted) {
+            setAuthorized(false);
+            setLoading(false);
+          }
           return;
         }
 
@@ -78,8 +96,10 @@ export function RoleGuard({
         
         if (!userRole) {
           console.warn('⚠️ RoleGuard: User role is null/undefined for user:', user.id);
-          setAuthorized(false);
-          setLoading(false);
+          if (isMounted) {
+            setAuthorized(false);
+            setLoading(false);
+          }
           return;
         }
 
@@ -91,17 +111,28 @@ export function RoleGuard({
           console.log('✅ RoleGuard: Access granted - user role:', userRole);
         }
         
-        setAuthorized(isAuthorized);
+        if (isMounted) {
+          setAuthorized(isAuthorized);
+        }
       } catch (error) {
         console.error('🔴 RoleGuard: Authorization check failed:', error);
-        setAuthorized(false);
+        if (isMounted) {
+          setAuthorized(false);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     checkAuthorization();
-  }, [allowedRoles, location]);
+
+    // Cleanup function to prevent state updates after unmount
+    return () => {
+      isMounted = false;
+    };
+  }, [allowedRoles]);
 
   // Show loading state while checking authorization
   if (loading) {
