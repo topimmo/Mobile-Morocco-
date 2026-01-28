@@ -5,6 +5,8 @@ import { Globe, LogOut, LayoutDashboard, LogIn, Menu, X, Home, ShoppingBag, Wren
 import { Link, useLocation } from 'react-router-dom';
 import { useState, memo } from 'react';
 import { cn } from '@/lib/utils';
+import { getRedirectPath } from '@/components/ProtectedRoute';
+import { cn } from '@/lib/utils';
 import {
   Sheet,
   SheetContent,
@@ -55,14 +57,16 @@ function Navigation() {
     stores: isRTL ? 'المتاجر' : 'Boutiques',
     compare: isRTL ? 'مقارنة' : 'Comparer',
     admin: isRTL ? 'الإدارة' : 'Admin',
+    dashboard: isRTL ? 'لوحة التحكم' : 'Tableau de bord',
     login: isRTL ? 'تسجيل الدخول' : 'Connexion',
     register: isRTL ? 'إنشاء حساب' : 'S\'inscrire',
     logout: isRTL ? 'تسجيل الخروج' : 'Déconnexion',
     publish: isRTL ? 'نشر إعلان' : 'Publier',
   };
 
-  // Check if user is admin
-  const isAdmin = user?.profile?.role === 'admin';
+  // Get user role
+  const userRole = user?.profile?.role;
+  const isAdmin = userRole === 'admin';
 
   // Grouped navigation structure
   const productsMenu = [
@@ -243,14 +247,24 @@ function Navigation() {
             {/* Auth Links */}
             {user ? (
               <>
-                {isAdmin && (
-                  <Link to="/admin">
-                    <Button variant="outline" size="sm" className={cn('border-red-600 text-red-600 hover:bg-red-50', isRTL && 'flex-row-reverse')}>
+                <Link to={getRedirectPath(userRole)}>
+                  <Button 
+                    variant={isAdmin ? "outline" : "ghost"} 
+                    size="sm" 
+                    className={cn(
+                      isAdmin && 'border-red-600 text-red-600 hover:bg-red-50',
+                      !isAdmin && 'text-muted-foreground',
+                      isRTL && 'flex-row-reverse'
+                    )}
+                  >
+                    {isAdmin ? (
                       <Shield className={cn('h-4 w-4', isRTL ? 'ml-1.5' : 'mr-1.5')} />
-                      {labels.admin}
-                    </Button>
-                  </Link>
-                )}
+                    ) : (
+                      <LayoutDashboard className={cn('h-4 w-4', isRTL ? 'ml-1.5' : 'mr-1.5')} />
+                    )}
+                    {isAdmin ? labels.admin : labels.dashboard}
+                  </Button>
+                </Link>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -349,19 +363,22 @@ function Navigation() {
 
                   {user ? (
                     <>
-                      {isAdmin && (
-                        <Link
-                          to="/admin"
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={cn(
-                            'px-3 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2.5 border-2 border-red-600 text-red-600',
-                            isRTL && 'flex-row-reverse text-right'
-                          )}
-                        >
+                      <Link
+                        to={getRedirectPath(userRole)}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={cn(
+                          'px-3 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2.5',
+                          isAdmin ? 'border-2 border-red-600 text-red-600' : 'hover:bg-muted',
+                          isRTL && 'flex-row-reverse text-right'
+                        )}
+                      >
+                        {isAdmin ? (
                           <Shield className="h-4 w-4" />
-                          {labels.admin}
-                        </Link>
-                      )}
+                        ) : (
+                          <LayoutDashboard className="h-4 w-4" />
+                        )}
+                        {isAdmin ? labels.admin : labels.dashboard}
+                      </Link>
                       <button
                         onClick={async () => {
                           await signOut();

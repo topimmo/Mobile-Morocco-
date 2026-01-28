@@ -10,7 +10,7 @@ import ComparisonFloatingButton from "@/components/ComparisonFloatingButton";
 import ErrorBoundary, { GlobalErrorBoundary, PageErrorBoundary } from "@/components/ErrorBoundary";
 import { NetworkErrorBanner } from "@/components/common/InlineError";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
-import { ProtectedRoute, AdminRoute, TechnicianRoute, ImporterRoute } from "@/components/ProtectedRoute";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AdminGuard, AgentGuard, MerchantGuard } from "@/components/RoleGuard";
 import { isEnvValid } from "@/config/env";
 import EnvErrorFallback from "@/components/EnvErrorFallback";
@@ -190,9 +190,19 @@ function AppContent() {
               <PageErrorBoundary><AgentDashboard /></PageErrorBoundary>
             </AgentGuard>
           } />
+          <Route path="/agent/dashboard" element={
+            <AgentGuard>
+              <PageErrorBoundary><AgentDashboard /></PageErrorBoundary>
+            </AgentGuard>
+          } />
 
           {/* Merchant Dashboard - Protected with RoleGuard */}
           <Route path="/merchant" element={
+            <MerchantGuard>
+              <PageErrorBoundary><MerchantDashboard /></PageErrorBoundary>
+            </MerchantGuard>
+          } />
+          <Route path="/merchant/dashboard" element={
             <MerchantGuard>
               <PageErrorBoundary><MerchantDashboard /></PageErrorBoundary>
             </MerchantGuard>

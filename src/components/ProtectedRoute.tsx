@@ -1,10 +1,11 @@
 import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import type { UserRole } from '@/types/database';
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  requiredRole?: 'admin' | 'technician' | 'importer' | 'customer';
+  requiredRole?: UserRole;
   fallbackPath?: string;
 }
 
@@ -64,14 +65,17 @@ export function ProtectedRoute({
 
 /**
  * Get redirect path based on user role
+ * Exported for use in other components
  */
-function getRedirectPath(role?: string): string {
+export function getRedirectPath(role?: UserRole | string): string {
   switch (role) {
     case 'admin':
       return '/admin';
-    case 'technician':
-      return '/dashboard';
-    case 'importer':
+    case 'agent':
+      return '/agent';
+    case 'merchant':
+      return '/merchant';
+    case 'user':
       return '/dashboard';
     default:
       return '/';
@@ -90,22 +94,22 @@ export function AdminRoute({ children }: { children: ReactNode }) {
 }
 
 /**
- * TechnicianRoute - Shortcut for technician routes
+ * AgentRoute - Shortcut for agent routes
  */
-export function TechnicianRoute({ children }: { children: ReactNode }) {
+export function AgentRoute({ children }: { children: ReactNode }) {
   return (
-    <ProtectedRoute requiredRole="technician" fallbackPath="/auth/login">
+    <ProtectedRoute requiredRole="agent" fallbackPath="/auth/login">
       {children}
     </ProtectedRoute>
   );
 }
 
 /**
- * ImporterRoute - Shortcut for importer (seller) routes
+ * MerchantRoute - Shortcut for merchant routes
  */
-export function ImporterRoute({ children }: { children: ReactNode }) {
+export function MerchantRoute({ children }: { children: ReactNode }) {
   return (
-    <ProtectedRoute requiredRole="importer" fallbackPath="/auth/login">
+    <ProtectedRoute requiredRole="merchant" fallbackPath="/auth/login">
       {children}
     </ProtectedRoute>
   );
