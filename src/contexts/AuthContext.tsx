@@ -29,20 +29,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const { data: { user: authUser } } = await supabase.auth.getUser();
         if (authUser) {
-          const { data: profile } = await supabase
+          // Fetch profile with duplicate detection
+          const { data: profiles, error, count } = await supabase
             .from('profiles')
-            .select('*')
+            .select('*', { count: 'exact' })
             .eq('id', authUser.id)
-            .single();
+            .order('updated_at', { ascending: false })
+            .limit(2);
 
-          setUser({
-            id: authUser.id,
-            email: authUser.email || null,
-            profile,
-          });
+          // Handle errors
+          if (error) {
+            console.error('🔴 AuthContext: Error fetching profile:', error);
+            // Set user without profile
+            setUser({
+              id: authUser.id,
+              email: authUser.email || null,
+              profile: null,
+            });
+          } else if (!profiles || profiles.length === 0) {
+            // No profile found (empty array, not an error)
+            console.warn('⚠️ AuthContext: No profile found for user:', authUser.id);
+            setUser({
+              id: authUser.id,
+              email: authUser.email || null,
+              profile: null,
+            });
+          } else if (count && count > 1) {
+            // Multiple profiles found - data integrity issue
+            console.error('🔴 AuthContext: DUPLICATE PROFILES for user:', authUser.id, {
+              totalCount: count,
+              returnedRows: profiles.length,
+            });
+            console.warn('⚠️ AuthContext: Using most recent profile');
+            setUser({
+              id: authUser.id,
+              email: authUser.email || null,
+              profile: profiles[0], // Most recent (ordered by updated_at desc)
+            });
+          } else {
+            // Single profile found - normal case
+            setUser({
+              id: authUser.id,
+              email: authUser.email || null,
+              profile: profiles[0],
+            });
+          }
         }
       } catch (error) {
-        console.error('Error checking session:', error);
+        console.error('🔴 AuthContext: Error checking session:', error);
       } finally {
         setLoading(false);
       }
@@ -54,17 +88,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (session?.user) {
-          const { data: profile } = await supabase
+          // Fetch profile with duplicate detection
+          const { data: profiles, error, count } = await supabase
             .from('profiles')
-            .select('*')
+            .select('*', { count: 'exact' })
             .eq('id', session.user.id)
-            .single();
+            .order('updated_at', { ascending: false })
+            .limit(2);
 
-          setUser({
-            id: session.user.id,
-            email: session.user.email || null,
-            profile,
-          });
+          // Handle errors
+          if (error) {
+            console.error('🔴 AuthContext: Error fetching profile:', error);
+            setUser({
+              id: session.user.id,
+              email: session.user.email || null,
+              profile: null,
+            });
+          } else if (!profiles || profiles.length === 0) {
+            // No profile found (empty array, not an error)
+            console.warn('⚠️ AuthContext: No profile found for user:', session.user.id);
+            setUser({
+              id: session.user.id,
+              email: session.user.email || null,
+              profile: null,
+            });
+          } else if (count && count > 1) {
+            // Multiple profiles found - data integrity issue
+            console.error('🔴 AuthContext: DUPLICATE PROFILES for user:', session.user.id, {
+              totalCount: count,
+            });
+            console.warn('⚠️ AuthContext: Using most recent profile');
+            setUser({
+              id: session.user.id,
+              email: session.user.email || null,
+              profile: profiles[0],
+            });
+          } else {
+            setUser({
+              id: session.user.id,
+              email: session.user.email || null,
+              profile: profiles[0],
+            });
+          }
         } else {
           setUser(null);
         }

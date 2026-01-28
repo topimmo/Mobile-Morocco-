@@ -68,26 +68,78 @@ export const getCurrentUser = async (): Promise<AuthUser | null> => {
   
   if (!user) return null;
 
-  const { data: profile } = await supabase
+  // Fetch profile with duplicate detection
+  const { data: profiles, error, count } = await supabase
     .from('profiles')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('id', user.id)
-    .single();
+    .order('updated_at', { ascending: false })
+    .limit(2);
+
+  // Handle errors
+  if (error) {
+    console.error('🔴 getCurrentUser: Error fetching profile:', error);
+    return {
+      id: user.id,
+      email: user.email || null,
+      profile: null,
+    };
+  }
+
+  if (!profiles || profiles.length === 0) {
+    // No profile found (empty array, not an error)
+    console.warn('⚠️ getCurrentUser: No profile found for user:', user.id);
+    return {
+      id: user.id,
+      email: user.email || null,
+      profile: null,
+    };
+  }
+
+  // Handle duplicate profiles
+  if (count && count > 1) {
+    console.error('🔴 getCurrentUser: DUPLICATE PROFILES for user:', user.id, {
+      totalCount: count,
+    });
+    console.warn('⚠️ getCurrentUser: Using most recent profile');
+  }
 
   return {
     id: user.id,
     email: user.email || null,
-    profile,
+    profile: profiles[0], // Most recent profile
   };
 };
 
 export const getProfile = async (userId: string) => {
-  const { data, error } = await supabase
+  // Fetch profile with duplicate detection
+  const { data: profiles, error, count } = await supabase
     .from('profiles')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('id', userId)
-    .single();
-  return { data, error };
+    .order('updated_at', { ascending: false })
+    .limit(2);
+  
+  // Handle errors
+  if (error) {
+    return { data: null, error };
+  }
+
+  if (!profiles || profiles.length === 0) {
+    // No profile found (empty array, not an error)
+    // Return null with no error (caller should check for null data)
+    return { data: null, error: null };
+  }
+
+  // Handle duplicate profiles
+  if (count && count > 1) {
+    console.error('🔴 getProfile: DUPLICATE PROFILES for user:', userId, {
+      totalCount: count,
+    });
+    console.warn('⚠️ getProfile: Returning most recent profile');
+  }
+
+  return { data: profiles[0], error: null };
 };
 
 export const updateProfile = async (userId: string, updates: Partial<Profile>) => {
