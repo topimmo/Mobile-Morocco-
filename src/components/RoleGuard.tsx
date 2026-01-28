@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState, useRef } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/supabase/client';
 import { UserRole } from '@/services/authService';
@@ -16,8 +16,9 @@ interface RoleGuardProps {
  * 
  * Fixed to prevent infinite loading states on slow networks:
  * - Removed location from dependencies to prevent redirect loops
- * - Added abort controller for cleanup on unmount
+ * - Added isMounted flag for cleanup on unmount
  * - Ensures loading state is always resolved
+ * - Protects all state updates from race conditions
  */
 export function RoleGuard({ 
   children, 
@@ -27,16 +28,9 @@ export function RoleGuard({
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
   const location = useLocation();
-  const hasCheckedRef = useRef(false);
 
   useEffect(() => {
-    // Prevent multiple checks - only run once per mount
-    if (hasCheckedRef.current) {
-      return;
-    }
-    
     let isMounted = true;
-    hasCheckedRef.current = true;
 
     const checkAuthorization = async () => {
       try {
@@ -47,8 +41,10 @@ export function RoleGuard({
         
         if (authError || !user) {
           console.warn('⚠️ RoleGuard: No authenticated user');
-          setAuthorized(false);
-          setLoading(false);
+          if (isMounted) {
+            setAuthorized(false);
+            setLoading(false);
+          }
           return;
         }
 
@@ -67,16 +63,20 @@ export function RoleGuard({
             code: (profileError as any).code,
             message: profileError.message,
           });
-          setAuthorized(false);
-          setLoading(false);
+          if (isMounted) {
+            setAuthorized(false);
+            setLoading(false);
+          }
           return;
         }
 
         if (!profiles || profiles.length === 0) {
           // No profile found (empty array, not an error)
           console.warn('⚠️ RoleGuard: No profile found for user:', user.id);
-          setAuthorized(false);
-          setLoading(false);
+          if (isMounted) {
+            setAuthorized(false);
+            setLoading(false);
+          }
           return;
         }
 
@@ -96,8 +96,10 @@ export function RoleGuard({
         
         if (!userRole) {
           console.warn('⚠️ RoleGuard: User role is null/undefined for user:', user.id);
-          setAuthorized(false);
-          setLoading(false);
+          if (isMounted) {
+            setAuthorized(false);
+            setLoading(false);
+          }
           return;
         }
 
