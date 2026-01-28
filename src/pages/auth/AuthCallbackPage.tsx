@@ -119,7 +119,13 @@ export default function AuthCallbackPage() {
             
             // Redirect to role-specific dashboard after successful confirmation
             setTimeout(() => {
-              navigate(redirectPath, { replace: true });
+              try {
+                navigate(redirectPath, { replace: true });
+              } catch (navError) {
+                console.error('Navigation error:', navError);
+                // Fallback: try direct window navigation
+                window.location.href = redirectPath;
+              }
             }, 2000);
           } else {
             setErrorType('other');
