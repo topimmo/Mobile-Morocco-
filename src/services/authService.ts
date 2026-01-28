@@ -602,15 +602,17 @@ export const signInAndRedirect = async (
   password: string
 ): Promise<SignInResult> => {
   try {
-    // Step 1: Sign in
+    console.log('🔵 Starting sign in process for:', email);
+    
+    // Step 1: Sign in with password
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (signInError) {
-      // Enhanced error logging
-      console.error('Sign in error details:', {
+      // Enhanced error logging for debugging
+      console.error('🔴 Sign in error details:', {
         message: signInError.message,
         status: signInError.status,
         code: (signInError as any).code,
@@ -643,6 +645,7 @@ export const signInAndRedirect = async (
     }
 
     if (!data.user) {
+      console.error('🔴 Sign in failed: No user returned from Supabase');
       return { 
         user: null, 
         redirectPath: REDIRECT_PATHS.LOGIN,
@@ -651,10 +654,40 @@ export const signInAndRedirect = async (
       };
     }
 
-    // Step 2: Wait for login to succeed and get user.id
-    const userId = data.user.id;
+    // Step 2: Verify session was created successfully
+    console.log('✅ Authentication successful, verifying session...');
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    
+    if (sessionError) {
+      console.error('🔴 Session verification error:', sessionError);
+      return {
+        user: null,
+        redirectPath: REDIRECT_PATHS.LOGIN,
+        role: null,
+        error: 'Failed to verify session. Please try logging in again.',
+      };
+    }
+    
+    if (!sessionData.session) {
+      console.error('🔴 No session found after login');
+      return {
+        user: null,
+        redirectPath: REDIRECT_PATHS.LOGIN,
+        role: null,
+        error: 'Session was not created. Please try logging in again.',
+      };
+    }
+    
+    console.log('✅ Session verified:', {
+      userId: sessionData.session.user.id,
+      expiresAt: sessionData.session.expires_at,
+    });
 
-    // Step 3: Fetch role from profiles table
+    // Step 3: Get user ID
+    const userId = data.user.id;
+    console.log('🔵 Fetching user role for:', userId);
+
+    // Step 4: Fetch role from profiles table
     const { role, error: roleError } = await getUserRole(userId);
 
     if (roleError || !role) {
@@ -694,7 +727,7 @@ export const signInAndRedirect = async (
       };
     }
 
-    // Step 4: Determine redirect path based on role
+    // Step 5: Determine redirect path based on role
     let redirectPath: string;
     switch (role) {
       case 'admin':
@@ -712,7 +745,7 @@ export const signInAndRedirect = async (
         break;
     }
 
-    console.log('Sign in successful:', {
+    console.log('✅ Sign in successful:', {
       userId: data.user.id,
       email: data.user.email,
       role,
@@ -726,16 +759,20 @@ export const signInAndRedirect = async (
       error: null,
     };
   } catch (error: any) {
-    console.error('Sign in and redirect error (catch):', {
+    // Comprehensive error logging for debugging mobile issues
+    console.error('🔴 Sign in and redirect error (catch):', {
       message: error?.message,
+      name: error?.name,
       stack: error?.stack,
-      error,
+      fullError: error, // Include full error object for additional debugging info
     });
+    
+    // Ensure we always return a proper error response
     return {
       user: null,
       redirectPath: REDIRECT_PATHS.LOGIN,
       role: null,
-      error: 'Login failed. Please check your connection and try again.',
+      error: error?.message || 'Login failed. Please check your connection and try again.',
     };
   }
 };
