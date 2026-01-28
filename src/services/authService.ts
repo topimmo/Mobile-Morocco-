@@ -704,3 +704,57 @@ export const resendConfirmationEmail = async (email: string): Promise<{ success:
     };
   }
 };
+
+/**
+ * Ensure a profile exists for the authenticated user
+ * If the profile doesn't exist, create a minimal profile row
+ * This prevents "Profile not found" errors after authentication
+ */
+export const ensureProfileExists = async (user: User): Promise<{ success: boolean; error: string | null }> => {
+  try {
+    // Check if profile already exists
+    const { data: existingProfile, error: selectError } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', user.id)
+      .single();
+
+    // Profile exists, nothing to do
+    if (existingProfile && !selectError) {
+      console.log('Profile already exists for user:', user.id);
+      return { success: true, error: null };
+    }
+
+    // If error is not "no rows", something went wrong
+    if (selectError && selectError.code !== 'PGRST116') {
+      console.error('Error checking profile existence:', selectError);
+      return { success: false, error: selectError.message };
+    }
+
+    // Profile doesn't exist, create minimal profile
+    console.log('Creating profile for user:', user.id);
+    
+    const { error: insertError } = await supabase
+      .from('profiles')
+      .insert({
+        id: user.id,
+        email: user.email,
+        full_name: user.user_metadata?.full_name ?? null,
+        phone: user.user_metadata?.phone ?? null,
+        city: user.user_metadata?.city ?? null,
+        role: user.user_metadata?.role ?? 'user', // Default to 'user' role if not set
+        // announcer_type is nullable - can be filled later in account setup
+      });
+
+    if (insertError) {
+      console.error('Error creating profile:', insertError);
+      return { success: false, error: insertError.message };
+    }
+
+    console.log('Profile created successfully for user:', user.id);
+    return { success: true, error: null };
+  } catch (error: any) {
+    console.error('Error in ensureProfileExists:', error);
+    return { success: false, error: error.message || 'Failed to ensure profile exists' };
+  }
+};

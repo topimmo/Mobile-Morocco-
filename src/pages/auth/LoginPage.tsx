@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { SEO } from '@/components/SEO';
 import { Mail, Lock, Loader, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { trackLogin } from '@/services/analyticsService';
-import { signInAndRedirect, resendConfirmationEmail } from '@/services/authService';
+import { signInAndRedirect, resendConfirmationEmail, ensureProfileExists } from '@/services/authService';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function LoginPage() {
@@ -70,6 +70,13 @@ export default function LoginPage() {
         return;
       }
 
+      // Ensure profile exists in database
+      const { success: profileSuccess, error: profileError } = await ensureProfileExists(user);
+      if (!profileSuccess) {
+        console.warn('Failed to ensure profile exists:', profileError);
+        // Don't block login for profile creation errors - user can complete setup later
+      }
+
       // Track successful login
       trackLogin();
 
@@ -99,7 +106,7 @@ export default function LoginPage() {
           <Alert className="mb-4 border-green-200 bg-green-50">
             <CheckCircle2 className="h-4 w-4 text-green-600" />
             <AlertDescription className="text-green-800">
-              Registration successful! Please check your email to verify your account before logging in.
+              {t('auth.registrationSuccessCheckEmail')}
             </AlertDescription>
           </Alert>
         )}
@@ -108,7 +115,7 @@ export default function LoginPage() {
           <Alert className="mb-4 border-green-200 bg-green-50">
             <CheckCircle2 className="h-4 w-4 text-green-600" />
             <AlertDescription className="text-green-800">
-              A new confirmation email has been sent to <strong>{email}</strong>. Please check your inbox and spam folder.
+              {t('auth.confirmationSent')}
             </AlertDescription>
           </Alert>
         )}
@@ -130,12 +137,12 @@ export default function LoginPage() {
                 {resendLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Sending confirmation email...
+                    {t('common.loading')}
                   </>
                 ) : (
                   <>
                     <Mail className="mr-2 h-4 w-4" />
-                    Resend Confirmation Email
+                    {t('auth.resendConfirmation')}
                   </>
                 )}
               </Button>
