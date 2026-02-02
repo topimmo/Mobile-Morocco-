@@ -6,6 +6,11 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   base: '/',
+  // Expose Vercel and GitHub automatic environment variables
+  define: {
+    'import.meta.env.VERCEL_GIT_COMMIT_SHA': JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA || ''),
+    'import.meta.env.GITHUB_SHA': JSON.stringify(process.env.GITHUB_SHA || ''),
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

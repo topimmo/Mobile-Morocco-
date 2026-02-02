@@ -53,6 +53,26 @@ These MUST be set in Vercel for the application to work:
 
 ---
 
+## Automatic Environment Variables
+
+Vercel and GitHub Actions provide certain environment variables automatically. **You do not need to manually set these**.
+
+### VERCEL_GIT_COMMIT_SHA
+- **Description**: Git commit SHA of the deployment
+- **Provided by**: Vercel (automatically)
+- **Use**: Build information, version tracking
+- **Note**: Available automatically in all Vercel deployments. No manual configuration needed.
+
+### GITHUB_SHA
+- **Description**: Git commit SHA of the workflow run
+- **Provided by**: GitHub Actions (automatically)
+- **Use**: Build information in GitHub Actions workflows
+- **Note**: Available automatically in all GitHub Actions runs. No manual configuration needed.
+
+These variables are automatically used by the application's build-info utility to track deployment versions without requiring any manual setup.
+
+---
+
 ## How to Set in Vercel
 
 ### Via Dashboard

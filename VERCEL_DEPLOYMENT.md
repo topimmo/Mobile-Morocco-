@@ -48,6 +48,18 @@ In your Vercel project dashboard, add these environment variables:
 | `VITE_FROM_EMAIL` | - | From email for notifications |
 | `VITE_RESEND_API_KEY` | - | Resend API key for emails |
 
+#### Automatic Variables (No Setup Required)
+
+Vercel provides these variables automatically for every deployment:
+
+| Variable | Description | Provided By |
+|----------|-------------|-------------|
+| `VERCEL_GIT_COMMIT_SHA` | Git commit SHA of the deployment | Vercel (automatic) |
+
+The application automatically uses `VERCEL_GIT_COMMIT_SHA` for build information and version tracking. **No manual configuration is needed** - Vercel provides this automatically.
+
+GitHub Actions also provides `GITHUB_SHA` automatically for workflow runs.
+
 ### Setting Environment Variables
 
 1. Go to your Vercel project dashboard
