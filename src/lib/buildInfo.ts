@@ -51,7 +51,6 @@ export function getBuildInfo() {
   return {
     commitSha: getCommitSha(),
     shortCommitSha: getShortCommitSha(),
-    buildTime: new Date().toISOString(),
     environment: import.meta.env.MODE,
   };
 }
