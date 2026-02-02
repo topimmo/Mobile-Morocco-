@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { env, getSiteUrl, isEnvValid } from '@/config/env';
+import { getBuildInfo, isCI } from '@/lib/buildInfo';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -207,6 +208,62 @@ export function DebugModeScreen() {
               </>
             ) : (
               <div className="text-sm text-muted-foreground">No active session</div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Build Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              Build Information
+              <StatusIndicator status={isCI()} />
+            </CardTitle>
+            <CardDescription>Deployment and version tracking</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Commit SHA</span>
+              <code className="text-xs bg-muted px-2 py-1 rounded">
+                {getBuildInfo().shortCommitSha}
+              </code>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Full SHA</span>
+              <div className="flex items-center gap-2">
+                <code className="text-xs bg-muted px-2 py-1 rounded max-w-[200px] truncate">
+                  {getBuildInfo().commitSha}
+                </code>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => copyToClipboard(getBuildInfo().commitSha)}
+                >
+                  <Copy className="w-3 h-3" />
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Environment</span>
+              <Badge variant={getBuildInfo().environment === 'production' ? 'default' : 'secondary'}>
+                {getBuildInfo().environment}
+              </Badge>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">CI/CD Build</span>
+              <Badge variant={isCI() ? 'default' : 'secondary'}>
+                {isCI() ? 'Yes' : 'No'}
+              </Badge>
+            </div>
+
+            {isCI() && (
+              <div className="flex items-center gap-2 text-sm text-green-600 mt-4">
+                <CheckCircle className="w-4 h-4" />
+                <span>Deployed from {import.meta.env.VERCEL_GIT_COMMIT_SHA ? 'Vercel' : 'GitHub Actions'}</span>
+              </div>
             )}
           </CardContent>
         </Card>
