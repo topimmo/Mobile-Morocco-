@@ -72,6 +72,8 @@ const MerchantDashboard = lazy(() => import("@/pages/merchant/DashboardPage"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const MyStorePage = lazy(() => import("@/pages/dashboard/MyStorePage"));
 const CreateItemPage = lazy(() => import("@/pages/dashboard/CreateItemPage"));
+const MyListingsPage = lazy(() => import("@/pages/dashboard/MyListingsPage"));
+const EditItemPage = lazy(() => import("@/pages/dashboard/EditItemPage"));
 
 // Error pages
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
@@ -225,6 +227,16 @@ function AppContent() {
           <Route path="/dashboard/create-item" element={
             <ProtectedRoute>
               <PageErrorBoundary><CreateItemPage /></PageErrorBoundary>
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard/my-listings" element={
+            <ProtectedRoute>
+              <PageErrorBoundary><MyListingsPage /></PageErrorBoundary>
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard/edit-item/:itemId" element={
+            <ProtectedRoute>
+              <PageErrorBoundary><EditItemPage /></PageErrorBoundary>
             </ProtectedRoute>
           } />
 
