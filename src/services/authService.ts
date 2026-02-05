@@ -95,6 +95,78 @@ const getTypeSpecificFields = (
   }
 };
 
+/**
+ * CONSOLIDATED REGISTRATION FUNCTION
+ * Merges registerUser and signUpWithRole into single source of truth
+ * Ensures profile.role is set correctly from the start
+ */
+export const unifiedUserRegistration = async (
+  emailAddr: string,
+  passwordStr: string,
+  assignedRole: UserRole,
+  profileMetadata?: {
+    fullName?: string;
+    phoneNumber?: string;
+    cityName?: string;
+  }
+) => {
+  try {
+    // Step 1: Create auth account with role in metadata
+    const { data: authCreationData, error: authCreationError } = await supabase.auth.signUp({
+      email: emailAddr,
+      password: passwordStr,
+      options: {
+        data: {
+          role: assignedRole,
+          full_name: profileMetadata?.fullName,
+          phone: profileMetadata?.phoneNumber,
+          city: profileMetadata?.cityName,
+        },
+        emailRedirectTo: `${getSiteUrl()}/auth/callback`,
+      },
+    });
+
+    if (authCreationError) {
+      console.error('Unified registration auth error:', authCreationError);
+      return { user: null, error: authCreationError.message };
+    }
+
+    if (!authCreationData.user) {
+      return { user: null, error: 'Registration failed - no user created' };
+    }
+
+    // Step 2: Directly create profile with role field
+    const { error: profileCreationError } = await supabase
+      .from('profiles')
+      .insert({
+        id: authCreationData.user.id,
+        email: emailAddr,
+        role: assignedRole,  // Set role directly in database
+        full_name: profileMetadata?.fullName || null,
+        phone: profileMetadata?.phoneNumber || null,
+        city: profileMetadata?.cityName || null,
+      });
+
+    if (profileCreationError) {
+      console.error('Unified registration profile error:', profileCreationError);
+      return { 
+        user: authCreationData.user, 
+        error: 'Account created but profile setup failed' 
+      };
+    }
+
+    console.log('✅ Unified registration successful:', {
+      userId: authCreationData.user.id,
+      role: assignedRole,
+    });
+
+    return { user: authCreationData.user, error: null };
+  } catch (unexpectedError: any) {
+    console.error('Unified registration unexpected error:', unexpectedError);
+    return { user: null, error: 'Registration failed unexpectedly' };
+  }
+};
+
 // User login
 export const loginUser = async (email: string, password: string) => {
   try {
