@@ -1292,6 +1292,180 @@ export type Database = {
           },
         ]
       }
+      influencers: {
+        Row: {
+          id: string
+          name: string
+          username: string
+          platform: string
+          followers_count: number
+          engagement_rate: number | null
+          niche: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          location: string | null
+          bio: string | null
+          profile_url: string | null
+          is_verified: boolean | null
+          is_active: boolean | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          username: string
+          platform: string
+          followers_count: number
+          engagement_rate?: number | null
+          niche?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          location?: string | null
+          bio?: string | null
+          profile_url?: string | null
+          is_verified?: boolean | null
+          is_active?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          username?: string
+          platform?: string
+          followers_count?: number
+          engagement_rate?: number | null
+          niche?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          location?: string | null
+          bio?: string | null
+          profile_url?: string | null
+          is_verified?: boolean | null
+          is_active?: boolean | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          id: string
+          userId: string
+          title: string
+          message: string
+          type: string
+          relatedId: string | null
+          isRead: boolean
+          channel: string
+          createdAt: string | null
+          scheduledFor: string | null
+        }
+        Insert: {
+          id?: string
+          userId: string
+          title: string
+          message: string
+          type: string
+          relatedId?: string | null
+          isRead?: boolean
+          channel: string
+          createdAt?: string | null
+          scheduledFor?: string | null
+        }
+        Update: {
+          id?: string
+          userId?: string
+          title?: string
+          message?: string
+          type?: string
+          relatedId?: string | null
+          isRead?: boolean
+          channel?: string
+          createdAt?: string | null
+          scheduledFor?: string | null
+        }
+        Relationships: []
+      }
+      favorites: {
+        Row: {
+          id: string
+          user_id: string
+          product_id: string
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          product_id: string
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          product_id?: string
+          created_at?: string | null
+        }
+        Relationships: []
+      }
+      jobs: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          creator_id: string
+          status: string
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          title: string
+          description: string
+          creator_id: string
+          status?: string
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          creator_id?: string
+          status?: string
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          id: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          is_read: boolean
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          is_read?: boolean
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          sender_id?: string
+          receiver_id?: string
+          content?: string
+          is_read?: boolean
+          created_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

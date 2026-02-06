@@ -39,7 +39,7 @@ const userTypeIcons: Record<UserType, React.ComponentType<{ className?: string }
 const translations = {
   fr: {
     title: 'Créer un Compte',
-    description: 'Rejoignez la communauté Mobile Maroc',
+    subtitle: 'Rejoignez la communauté Mobile Maroc',
     selectUserType: 'Choisissez votre type de compte',
     accountDetails: 'Informations du compte',
     businessDetails: 'Informations professionnelles',
@@ -64,7 +64,7 @@ const translations = {
   },
   ar: {
     title: 'إنشاء حساب',
-    description: 'انضم إلى مجتمع موبايل ماروك',
+    subtitle: 'انضم إلى مجتمع موبايل ماروك',
     selectUserType: 'اختر نوع حسابك',
     accountDetails: 'معلومات الحساب',
     businessDetails: 'المعلومات المهنية',
@@ -127,7 +127,7 @@ export function RegisterModal({ open, onOpenChange, language }: RegisterModalPro
       <DialogContent className="glass-card border-white/10 max-w-lg max-h-[90vh] overflow-y-auto" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <DialogHeader>
           <DialogTitle className="font-grotesk text-xl">{t.title}</DialogTitle>
-          <DialogDescription>{t.description}</DialogDescription>
+          <DialogDescription>{t.subtitle}</DialogDescription>
         </DialogHeader>
 
         <div className={`py-4 ${language === 'ar' ? 'font-tajawal' : ''}`}>

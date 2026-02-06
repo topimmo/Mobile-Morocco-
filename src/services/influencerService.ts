@@ -2,22 +2,22 @@ import { supabase } from "@/utils/supabaseClient";
 
 // Influencer Service - Types for influencer management
 export interface Influencer {
-  id?: string;
+  id: string;
   name: string;
   username: string;
   platform: string;
   followers_count: number;
-  engagement_rate?: number;
-  niche?: string;
-  contact_email?: string;
-  contact_phone?: string;
-  location?: string;
-  bio?: string;
-  profile_url?: string;
-  is_verified?: boolean;
-  is_active?: boolean;
-  created_at?: Date;
-  updated_at?: Date;
+  engagement_rate: number | null;
+  niche: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  location: string | null;
+  bio: string | null;
+  profile_url: string | null;
+  is_verified: boolean | null;
+  is_active: boolean | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 // Sample influencer data
