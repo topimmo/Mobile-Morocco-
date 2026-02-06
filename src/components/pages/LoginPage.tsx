@@ -27,9 +27,6 @@ export function LoginPage() {
   // Get redirect path from location state or default to dashboard
   const from = (location.state as any)?.from?.pathname || '/dashboard';
 
-  // Log component mount for debugging
-  console.log('✅ LoginPage: Component rendered successfully', { from, location });
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -44,13 +41,14 @@ export function LoginPage() {
     setError('');
 
     try {
-      console.log('🔐 LoginPage: Attempting sign in...', { email: formData.email });
       await signIn(formData.email, formData.password);
-      console.log('✅ LoginPage: Sign in successful, redirecting to', from);
       // Redirect to the page they tried to visit or dashboard
       navigate(from, { replace: true });
     } catch (err: any) {
-      console.error('❌ LoginPage: Sign in failed', err);
+      // Log error for debugging (in production, use proper error tracking like Sentry)
+      if (import.meta.env.DEV) {
+        console.error('Login failed:', err.message);
+      }
       setError(err.message || 'Email ou mot de passe incorrect');
     } finally {
       setIsLoading(false);
