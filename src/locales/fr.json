@@ -1,0 +1,242 @@
+{
+  "common": {
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Soumettre",
+    "close": "Fermer",
+    "all": "Tout",
+    "none": "Aucun",
+    "yes": "Oui",
+    "no": "Non",
+    "or": "ou",
+    "and": "et",
+    "viewAll": "Voir tout",
+    "learnMore": "En savoir plus",
+    "contactUs": "Contactez-nous"
+  },
+  "nav": {
+    "home": "Accueil",
+    "categories": "Catégories",
+    "listings": "Annonces",
+    "repairShops": "Ateliers de Réparation",
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Déconnexion",
+    "profile": "Profil",
+    "dashboard": "Tableau de Bord",
+    "myListings": "Mes Annonces",
+    "myShop": "Mon Atelier",
+    "settings": "Paramètres"
+  },
+  "home": {
+    "hero": {
+      "title": "La Marketplace Mobile du Maroc",
+      "subtitle": "Trouvez des smartphones, accessoires, pièces détachées et services de réparation",
+      "description": "Connectez-vous directement avec les vendeurs et techniciens de votre ville",
+      "searchPlaceholder": "Rechercher un produit ou service..."
+    },
+    "categories": {
+      "title": "Catégories",
+      "smartphones": "Smartphones",
+      "accessories": "Accessoires",
+      "spareParts": "Pièces Détachées",
+      "repairServices": "Services de Réparation"
+    },
+    "recentListings": "Annonces Récentes",
+    "featuredShops": "Ateliers en Vedette",
+    "repairServices": {
+      "title": "Services de Réparation",
+      "description": "Trouvez un technicien près de chez vous"
+    }
+  },
+  "listing": {
+    "condition": {
+      "new": "Neuf",
+      "used": "Occasion",
+      "refurbished": "Reconditionné"
+    },
+    "price": "Prix",
+    "priceNegotiable": "Prix négociable",
+    "contact": "Contacter",
+    "contactSeller": "Contacter le vendeur",
+    "views": "vues",
+    "postedOn": "Publié le",
+    "location": "Localisation",
+    "description": "Description",
+    "specifications": "Caractéristiques",
+    "brand": "Marque",
+    "model": "Modèle",
+    "seller": "Vendeur",
+    "similarListings": "Annonces similaires",
+    "reportListing": "Signaler cette annonce"
+  },
+  "shop": {
+    "about": "À propos",
+    "services": "Services",
+    "gallery": "Galerie",
+    "reviews": "Avis",
+    "workingHours": "Horaires d'ouverture",
+    "location": "Localisation",
+    "specialties": "Spécialités",
+    "contactShop": "Contacter l'atelier",
+    "writeReview": "Écrire un avis",
+    "allShops": "Tous les ateliers"
+  },
+  "contact": {
+    "whatsapp": "WhatsApp",
+    "phone": "Téléphone",
+    "email": "Email",
+    "sendMessage": "Envoyer un message",
+    "callNow": "Appeler maintenant"
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "Inscription",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "fullName": "Nom complet",
+    "phone": "Téléphone",
+    "forgotPassword": "Mot de passe oublié ?",
+    "noAccount": "Pas de compte ?",
+    "hasAccount": "Déjà un compte ?",
+    "signUp": "S'inscrire",
+    "signIn": "Se connecter",
+    "magicLink": "Connexion par lien magique",
+    "whatsappOtp": "Connexion par WhatsApp",
+    "sendOtp": "Envoyer le code",
+    "verifyOtp": "Vérifier le code",
+    "selectAccountType": "Choisissez votre type de compte",
+    "accountTypes": {
+      "user": "Visiteur",
+      "seller_store": "Vendeur / Fournisseur",
+      "repair_shop": "Atelier de Réparation",
+      "advertiser": "Annonceur"
+    }
+  },
+  "filters": {
+    "title": "Filtres",
+    "category": "Catégorie",
+    "city": "Ville",
+    "priceRange": "Fourchette de prix",
+    "minPrice": "Prix min",
+    "maxPrice": "Prix max",
+    "condition": "État",
+    "sortBy": "Trier par",
+    "sortOptions": {
+      "newest": "Plus récent",
+      "oldest": "Plus ancien",
+      "priceAsc": "Prix croissant",
+      "priceDesc": "Prix décroissant",
+      "popular": "Populaire"
+    },
+    "apply": "Appliquer",
+    "clear": "Effacer"
+  },
+  "pagination": {
+    "showing": "Affichage de",
+    "of": "sur",
+    "results": "résultats",
+    "loadMore": "Charger plus"
+  },
+  "reviews": {
+    "rating": "Note",
+    "writeReview": "Écrire un avis",
+    "yourRating": "Votre note",
+    "yourReview": "Votre avis",
+    "submitReview": "Soumettre l'avis",
+    "noReviews": "Aucun avis pour le moment",
+    "beFirst": "Soyez le premier à laisser un avis"
+  },
+  "footer": {
+    "about": "À propos",
+    "aboutText": "La marketplace #1 des mobiles au Maroc",
+    "categories": "Catégories",
+    "registration": "Inscription",
+    "legal": "Légal",
+    "terms": "Conditions d'utilisation",
+    "privacy": "Politique de confidentialité",
+    "legalNotice": "Mentions légales",
+    "contact": "Contact",
+    "copyright": "© 2024 Mobile Maroc. Tous droits réservés. Plateforme d'annonces uniquement.",
+    "disclaimer": {
+      "title": "Avertissement Légal",
+      "text": "Mobile Maroc est une plateforme de mise en relation et d'annonces. Nous ne participons à aucune transaction commerciale, paiement, expédition ou livraison. Toutes les négociations et accords sont conclus directement entre les utilisateurs. La plateforme décline toute responsabilité concernant les transactions effectuées entre utilisateurs."
+    }
+  },
+  "disclaimer": {
+    "banner": "Avis important: Mobile Maroc est une plateforme d'annonces uniquement. Nous ne gérons aucune transaction, paiement ou livraison. Toutes les négociations se font directement entre utilisateurs."
+  },
+  "errors": {
+    "notFound": "Page non trouvée",
+    "serverError": "Erreur serveur",
+    "unauthorized": "Non autorisé",
+    "forbidden": "Accès interdit",
+    "generic": "Une erreur s'est produite"
+  },
+  "advertiser": {
+    "dashboard": "Tableau de Bord Annonceur",
+    "createAd": "Créer une Publicité",
+    "myCampaigns": "Mes Campagnes",
+    "statistics": "Statistiques",
+    "impressions": "Impressions",
+    "clicks": "Clics",
+    "ctr": "Taux de clics",
+    "status": {
+      "pending": "En attente",
+      "active": "Active",
+      "paused": "En pause",
+      "completed": "Terminée",
+      "rejected": "Rejetée"
+    },
+    "form": {
+      "title": "Titre de la campagne",
+      "description": "Description",
+      "targetUrl": "URL de destination",
+      "slot": "Emplacement",
+      "slotTop": "Haut de page",
+      "slotBottom": "Bas de page",
+      "bannerUpload": "Télécharger la bannière",
+      "duration": "Durée",
+      "days": "jours",
+      "startDate": "Date de début",
+      "selectPages": "Sélectionner les pages",
+      "allPages": "Toutes les pages",
+      "checkAvailability": "Vérifier la disponibilité",
+      "available": "Disponible",
+      "unavailable": "Non disponible",
+      "submit": "Soumettre la campagne"
+    },
+    "bannerSizes": {
+      "title": "Tailles de bannière requises",
+      "desktop": "Bureau",
+      "mobile": "Mobile"
+    }
+  },
+  "admin": {
+    "dashboard": "Tableau de Bord Admin",
+    "users": "Utilisateurs",
+    "listings": "Annonces",
+    "repairShops": "Ateliers",
+    "campaigns": "Campagnes Pub",
+    "reviews": "Avis",
+    "adsense": "AdSense",
+    "statistics": "Statistiques",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "pause": "Mettre en pause",
+    "activate": "Activer",
+    "hide": "Masquer"
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "common": {
+    "search": "بحث",
+    "filter": "تصفية",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "view": "عرض",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "close": "إغلاق",
+    "all": "الكل",
+    "none": "لا شيء",
+    "yes": "نعم",
+    "no": "لا",
+    "or": "أو",
+    "and": "و",
+    "viewAll": "عرض الكل",
+    "learnMore": "اعرف المزيد",
+    "contactUs": "اتصل بنا"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "categories": "الفئات",
+    "listings": "الإعلانات",
+    "repairShops": "ورشات الإصلاح",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "profile": "الملف الشخصي",
+    "dashboard": "لوحة التحكم",
+    "myListings": "إعلاناتي",
+    "myShop": "ورشتي",
+    "settings": "الإعدادات"
+  },
+  "home": {
+    "hero": {
+      "title": "سوق الهواتف في المغرب",
+      "subtitle": "اعثر على الهواتف الذكية والإكسسوارات وقطع الغيار وخدمات الإصلاح",
+      "description": "تواصل مباشرة مع البائعين والتقنيين في مدينتك",
+      "searchPlaceholder": "ابحث عن منتج أو خدمة..."
+    },
+    "categories": {
+      "title": "الفئات",
+      "smartphones": "هواتف ذكية",
+      "accessories": "إكسسوارات",
+      "spareParts": "قطع غيار",
+      "repairServices": "خدمات الإصلاح"
+    },
+    "recentListings": "إعلانات حديثة",
+    "featuredShops": "ورشات مميزة",
+    "repairServices": {
+      "title": "خدمات الإصلاح",
+      "description": "اعثر على تقني بالقرب منك"
+    }
+  },
+  "listing": {
+    "condition": {
+      "new": "جديد",
+      "used": "مستعمل",
+      "refurbished": "مجدد"
+    },
+    "price": "السعر",
+    "priceNegotiable": "السعر قابل للتفاوض",
+    "contact": "اتصال",
+    "contactSeller": "اتصل بالبائع",
+    "views": "مشاهدات",
+    "postedOn": "نُشر في",
+    "location": "الموقع",
+    "description": "الوصف",
+    "specifications": "المواصفات",
+    "brand": "العلامة التجارية",
+    "model": "الموديل",
+    "seller": "البائع",
+    "similarListings": "إعلانات مشابهة",
+    "reportListing": "الإبلاغ عن هذا الإعلان"
+  },
+  "shop": {
+    "about": "عن الورشة",
+    "services": "الخدمات",
+    "gallery": "معرض الصور",
+    "reviews": "التقييمات",
+    "workingHours": "ساعات العمل",
+    "location": "الموقع",
+    "specialties": "التخصصات",
+    "contactShop": "اتصل بالورشة",
+    "writeReview": "اكتب تقييم",
+    "allShops": "جميع الورشات"
+  },
+  "contact": {
+    "whatsapp": "واتساب",
+    "phone": "هاتف",
+    "email": "بريد إلكتروني",
+    "sendMessage": "إرسال رسالة",
+    "callNow": "اتصل الآن"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "fullName": "الاسم الكامل",
+    "phone": "الهاتف",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "noAccount": "ليس لديك حساب؟",
+    "hasAccount": "لديك حساب بالفعل؟",
+    "signUp": "إنشاء حساب",
+    "signIn": "تسجيل الدخول",
+    "magicLink": "الدخول برابط سحري",
+    "whatsappOtp": "الدخول بواتساب",
+    "sendOtp": "إرسال الرمز",
+    "verifyOtp": "التحقق من الرمز",
+    "selectAccountType": "اختر نوع حسابك",
+    "accountTypes": {
+      "user": "زائر",
+      "seller_store": "بائع / مورد",
+      "repair_shop": "ورشة إصلاح",
+      "advertiser": "معلن"
+    }
+  },
+  "filters": {
+    "title": "التصفية",
+    "category": "الفئة",
+    "city": "المدينة",
+    "priceRange": "نطاق السعر",
+    "minPrice": "أدنى سعر",
+    "maxPrice": "أقصى سعر",
+    "condition": "الحالة",
+    "sortBy": "ترتيب حسب",
+    "sortOptions": {
+      "newest": "الأحدث",
+      "oldest": "الأقدم",
+      "priceAsc": "السعر: من الأقل للأعلى",
+      "priceDesc": "السعر: من الأعلى للأقل",
+      "popular": "الأكثر شعبية"
+    },
+    "apply": "تطبيق",
+    "clear": "مسح"
+  },
+  "pagination": {
+    "showing": "عرض",
+    "of": "من",
+    "results": "نتائج",
+    "loadMore": "تحميل المزيد"
+  },
+  "reviews": {
+    "rating": "التقييم",
+    "writeReview": "اكتب تقييم",
+    "yourRating": "تقييمك",
+    "yourReview": "تعليقك",
+    "submitReview": "إرسال التقييم",
+    "noReviews": "لا توجد تقييمات حتى الآن",
+    "beFirst": "كن أول من يترك تقييماً"
+  },
+  "footer": {
+    "about": "عن الموقع",
+    "aboutText": "السوق رقم 1 للهواتف في المغرب",
+    "categories": "الفئات",
+    "registration": "التسجيل",
+    "legal": "قانوني",
+    "terms": "شروط الاستخدام",
+    "privacy": "سياسة الخصوصية",
+    "legalNotice": "الإشعارات القانونية",
+    "contact": "اتصل بنا",
+    "copyright": "© 2024 موبايل ماروك. جميع الحقوق محفوظة. منصة إعلانات فقط.",
+    "disclaimer": {
+      "title": "تحذير قانوني",
+      "text": "موبايل ماروك هي منصة للتواصل والإعلانات فقط. نحن لا نشارك في أي معاملات تجارية أو مدفوعات أو شحن أو توصيل. جميع المفاوضات والاتفاقيات تتم مباشرة بين المستخدمين. المنصة غير مسؤولة عن أي معاملات تتم بين المستخدمين."
+    }
+  },
+  "disclaimer": {
+    "banner": "ملاحظة هامة: موبايل ماروك هي منصة إعلانات فقط. نحن لا نتعامل مع أي معاملات أو مدفوعات أو توصيل. جميع المفاوضات تتم مباشرة بين المستخدمين."
+  },
+  "errors": {
+    "notFound": "الصفحة غير موجودة",
+    "serverError": "خطأ في الخادم",
+    "unauthorized": "غير مصرح",
+    "forbidden": "ممنوع الوصول",
+    "generic": "حدث خطأ ما"
+  },
+  "advertiser": {
+    "dashboard": "لوحة تحكم المعلن",
+    "createAd": "إنشاء إعلان",
+    "myCampaigns": "حملاتي",
+    "statistics": "الإحصائيات",
+    "impressions": "مرات الظهور",
+    "clicks": "النقرات",
+    "ctr": "معدل النقر",
+    "status": {
+      "pending": "قيد الانتظار",
+      "active": "نشطة",
+      "paused": "متوقفة",
+      "completed": "مكتملة",
+      "rejected": "مرفوضة"
+    },
+    "form": {
+      "title": "عنوان الحملة",
+      "description": "الوصف",
+      "targetUrl": "رابط الوجهة",
+      "slot": "الموقع",
+      "slotTop": "أعلى الصفحة",
+      "slotBottom": "أسفل الصفحة",
+      "bannerUpload": "رفع البانر",
+      "duration": "المدة",
+      "days": "أيام",
+      "startDate": "تاريخ البدء",
+      "selectPages": "اختر الصفحات",
+      "allPages": "جميع الصفحات",
+      "checkAvailability": "التحقق من التوفر",
+      "available": "متاح",
+      "unavailable": "غير متاح",
+      "submit": "إرسال الحملة"
+    },
+    "bannerSizes": {
+      "title": "أحجام البانر المطلوبة",
+      "desktop": "سطح المكتب",
+      "mobile": "الجوال"
+    }
+  },
+  "admin": {
+    "dashboard": "لوحة تحكم المدير",
+    "users": "المستخدمون",
+    "listings": "الإعلانات",
+    "repairShops": "الورشات",
+    "campaigns": "الحملات الإعلانية",
+    "reviews": "التقييمات",
+    "adsense": "أدسنس",
+    "statistics": "الإحصائيات",
+    "approve": "قبول",
+    "reject": "رفض",
+    "pause": "إيقاف مؤقت",
+    "activate": "تفعيل",
+    "hide": "إخفاء"
+  }
+}
