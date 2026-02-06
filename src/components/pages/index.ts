@@ -1,0 +1,9 @@
+export { HomePage } from './HomePage';
+export { CategoryPage } from './CategoryPage';
+export { ProductPage } from './ProductPage';
+export { SearchResultsPage } from './SearchResultsPage';
+export { VendorProfilePage } from './VendorProfilePage';
+export { RegisterPage } from './RegisterPage';
+export { SiteMapPage } from './SiteMapPage';
+export { StoresPage } from './StoresPage';
+export { ServicesPage } from './ServicesPage';

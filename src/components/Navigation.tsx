@@ -6,7 +6,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState, memo } from 'react';
 import { cn } from '@/lib/utils';
 import { getRedirectPath } from '@/components/ProtectedRoute';
-import { cn } from '@/lib/utils';
 import {
   Sheet,
   SheetContent,

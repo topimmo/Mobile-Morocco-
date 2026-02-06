@@ -141,7 +141,7 @@ export async function getStores(
 function getMockStores(): StoreWithRelations[] {
   return [
     {
-      id: '1', user_id: '1', name_fr: 'TechMobile Casablanca', name_ar: 'تك موبايل الدار البيضاء', slug: 'techmobile-casa', 
+      id: '1', user_id: '1', owner_id: '1', name_fr: 'TechMobile Casablanca', name_ar: 'تك موبايل الدار البيضاء', slug: 'techmobile-casa', 
       description_fr: 'Boutique spécialisée en téléphones et réparation', description_ar: 'متجر متخصص في الهواتف والإصلاح',
       store_type: 'shop' as const, address_fr: 'Bd Mohammed V, Casablanca', address_ar: 'شارع محمد الخامس، الدار البيضاء',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Maarif', lat: null, lng: null,
@@ -151,7 +151,7 @@ function getMockStores(): StoreWithRelations[] {
       meta_title: null, meta_description: null, is_demo: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     },
     {
-      id: '2', user_id: '2', name_fr: 'Mobile Expert Rabat', name_ar: 'خبير الموبايل الرباط', slug: 'mobile-expert-rabat',
+      id: '2', user_id: '2', owner_id: '2', name_fr: 'Mobile Expert Rabat', name_ar: 'خبير الموبايل الرباط', slug: 'mobile-expert-rabat',
       description_fr: 'Vente et réparation de smartphones', description_ar: 'بيع وإصلاح الهواتف الذكية',
       store_type: 'shop' as const, address_fr: 'Av Hassan II, Rabat', address_ar: 'شارع الحسن الثاني، الرباط',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Agdal', lat: null, lng: null,
@@ -161,7 +161,7 @@ function getMockStores(): StoreWithRelations[] {
       meta_title: null, meta_description: null, is_demo: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString()
     },
     {
-      id: '3', user_id: '3', name_fr: 'Vendeur Particulier', name_ar: 'بائع فردي', slug: 'vendeur-particulier',
+      id: '3', user_id: '3', owner_id: '3', name_fr: 'Vendeur Particulier', name_ar: 'بائع فردي', slug: 'vendeur-particulier',
       description_fr: 'Vente de téléphones d\'occasion', description_ar: 'بيع الهواتف المستعملة',
       store_type: 'individual' as const, address_fr: 'Marrakech', address_ar: 'مراكش',
       city_id: null, neighborhood_id: null, neighborhood_custom: 'Guéliz', lat: null, lng: null,
@@ -743,7 +743,7 @@ function getMockServices(): ServiceWithRelations[] {
       status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
       store: {
-        id: '1', user_id: '1', name_fr: 'TechMobile Casablanca', name_ar: 'تك موبايل الدار البيضاء', slug: 'techmobile-casa',
+        id: '1', user_id: '1', owner_id: '1', name_fr: 'TechMobile Casablanca', name_ar: 'تك موبايل الدار البيضاء', slug: 'techmobile-casa',
         description_fr: null, description_ar: null, store_type: 'shop' as const, address_fr: null, address_ar: null,
         city_id: null, neighborhood_id: null, neighborhood_custom: null, lat: null, lng: null,
         phone: '+212 661 234 567', whatsapp: '212661234567', email: null, website: null,
@@ -762,7 +762,7 @@ function getMockServices(): ServiceWithRelations[] {
       status: 'approved' as const, whatsapp_clicks: 0, phone_clicks: 0, view_count: 0, is_demo: false,
       created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
       store: {
-        id: '2', user_id: '2', name_fr: 'Mobile Expert Rabat', name_ar: 'خبير الموبايل الرباط', slug: 'mobile-expert-rabat',
+        id: '2', user_id: '2', owner_id: '2', name_fr: 'Mobile Expert Rabat', name_ar: 'خبير الموبايل الرباط', slug: 'mobile-expert-rabat',
         description_fr: null, description_ar: null, store_type: 'shop' as const, address_fr: null, address_ar: null,
         city_id: null, neighborhood_id: null, neighborhood_custom: null, lat: null, lng: null,
         phone: '+212 662 345 678', whatsapp: '212662345678', email: null, website: null,

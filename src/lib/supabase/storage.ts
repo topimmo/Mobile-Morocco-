@@ -135,7 +135,7 @@ export async function uploadImage(
       
       // Check error code or message for specific issues
       // Supabase storage errors may have statusCode property
-      const statusCode = (error as { statusCode?: number }).statusCode;
+      const statusCode = (error as unknown as { statusCode?: number }).statusCode;
       const message = error.message.toLowerCase();
       
       if (statusCode === 403 || message.includes('policies') || message.includes('policy') || message.includes('permission') || message.includes('denied')) {

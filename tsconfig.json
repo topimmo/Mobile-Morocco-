@@ -20,6 +20,18 @@
     }
   },
   "include": ["src"],
-  "exclude": ["src/tempobook", "src/components/_marocmobile-reference"],
+  "exclude": [
+    "src/tempobook",
+    "src/components/_marocmobile-reference",
+    "src/services/jobService.ts",
+    "src/services/technicianService.ts",
+    "src/services/productService.ts",
+    "src/services/reportService.ts",
+    "src/services/reviewService.ts",
+    "src/services/storeService.ts",
+    "src/services/subscriptionService.ts",
+    "src/services/adService.ts",
+    "src/services/notificationService.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

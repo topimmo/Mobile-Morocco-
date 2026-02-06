@@ -99,8 +99,8 @@ export const getUserNotifications = async (
     const { data, error } = await supabase
       .from("notifications")
       .select("*")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
+      .eq("userId", userId)
+      .order("createdAt", { ascending: false });
 
     if (error) throw error;
     return (data || []).map(mapDatabaseNotificationToModel);
@@ -121,9 +121,9 @@ export const getUnreadNotifications = async (
     const { data, error } = await supabase
       .from("notifications")
       .select("*")
-      .eq("user_id", userId)
-      .eq("is_read", false)
-      .order("created_at", { ascending: false });
+      .eq("userId", userId)
+      .eq("isRead", false)
+      .order("createdAt", { ascending: false });
 
     if (error) throw error;
     return (data || []).map(mapDatabaseNotificationToModel);
@@ -145,7 +145,7 @@ export const markNotificationAsRead = async (
   try {
     const { data, error } = await supabase
       .from("notifications")
-      .update({ is_read: true })
+      .update({ isRead: true })
       .eq("id", id)
       .select()
       .single();
@@ -171,9 +171,9 @@ export const markAllNotificationsAsRead = async (
   try {
     const { data, error } = await supabase
       .from("notifications")
-      .update({ is_read: true })
-      .eq("user_id", userId)
-      .eq("is_read", false)
+      .update({ isRead: true })
+      .eq("userId", userId)
+      .eq("isRead", false)
       .select();
 
     if (error) throw error;
@@ -201,14 +201,14 @@ export const createNotification = async (
 ): Promise<Notification> => {
   try {
     const dbNotification = {
-      user_id: notification.userId,
+      userId: notification.userId,
       title: notification.title,
       message: notification.message,
       type: notification.type,
-      related_id: notification.relatedId,
-      is_read: notification.isRead,
+      relatedId: notification.relatedId,
+      isRead: notification.isRead,
       channel: notification.channel,
-      scheduled_for: notification.scheduledFor,
+      scheduledFor: notification.scheduledFor instanceof Date ? notification.scheduledFor.toISOString() : notification.scheduledFor,
     };
 
     const { data, error } = await supabase
@@ -261,7 +261,7 @@ const mapDatabaseNotificationToModel = (dbNotif: any): Notification => {
     message: dbNotif.message,
     type: dbNotif.type,
     relatedId: dbNotif.related_id,
-    isRead: dbNotif.is_read,
+    isRead: dbNotif.isRead,
     channel: dbNotif.channel,
     createdAt: new Date(dbNotif.created_at),
     scheduledFor: dbNotif.scheduled_for ? new Date(dbNotif.scheduled_for) : undefined,
@@ -358,7 +358,7 @@ export const getNotificationStats = async (userId: string) => {
     const { data, error } = await supabase
       .from("notifications")
       .select("*")
-      .eq("user_id", userId);
+      .eq("userId", userId);
 
     if (error) throw error;
 

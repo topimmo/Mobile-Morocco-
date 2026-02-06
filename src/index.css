@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600&family=Tajawal:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,193 +6,133 @@
 
 @layer base {
   :root {
-    /* Swiss Design - Light theme with Black, White, Orange */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
+    --background: 218 23% 7%;
+    --foreground: 0 0% 100%;
+
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card-foreground: 222.2 84% 4.9%;
+
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
-    --primary: 24 95% 53%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 27 85% 52%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 24 95% 53%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 189 100% 50%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
+
+    --destructive: 6 78% 57%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
-    --ring: 24 95% 53%;
-    --radius: 0.25rem;
-    --chart-1: 24 95% 53%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+
+    --success: 145 63% 49%;
+    --warning: 36 100% 50%;
+
+    --border: 0 0% 100%;
+    --input: 0 0% 100%;
+    --ring: 189 100% 50%;
+
+    --radius: 0.75rem;
   }
 
   .dark {
-    /* Swiss Design - Dark mode with improved readability */
-    --background: 0 0% 10%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 15%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 15%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 24 95% 53%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 25%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 0 0% 20%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 24 95% 53%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 30%;
-    --input: 0 0% 20%;
-    --ring: 24 95% 53%;
-  }
+    --background: 218 23% 7%;
+    --foreground: 0 0% 100%;
 
+    --card: 0 0% 100% / 0.05;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 218 23% 10%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 27 85% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 218 11% 65%;
+
+    --accent: 189 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 6 78% 57%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 100%;
+    --input: 0 0% 100%;
+    --ring: 189 100% 50%;
+  }
+}
+
+@layer base {
   * {
     @apply border-border;
   }
-
-  html, body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', 'Tajawal', sans-serif;
-    max-width: 100%;
-    overflow-x: hidden;
+  html {
+    scroll-behavior: smooth;
   }
-
-  [dir="rtl"] body {
-    font-family: 'Tajawal', 'Inter', sans-serif;
+  body {
+    @apply bg-background text-foreground font-outfit antialiased;
   }
-
-  [dir="rtl"] {
-    text-align: right;
-  }
-
-  [dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-x-reverse: 1;
-  }
-
-  [dir="rtl"] .space-x-3 > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-x-reverse: 1;
-  }
-
-  [dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-x-reverse: 1;
-  }
-
-  [dir="rtl"] .ml-auto {
-    margin-left: 0;
-    margin-right: auto;
-  }
-
-  [dir="rtl"] .mr-auto {
-    margin-right: 0;
-    margin-left: auto;
-  }
-
-  [dir="rtl"] .ml-2 {
-    margin-left: 0;
-    margin-right: 0.5rem;
-  }
-
-  [dir="rtl"] .mr-2 {
-    margin-right: 0;
-    margin-left: 0.5rem;
-  }
-
-  [dir="rtl"] .ml-3 {
-    margin-left: 0;
-    margin-right: 0.75rem;
-  }
-
-  [dir="rtl"] .mr-3 {
-    margin-right: 0;
-    margin-left: 0.75rem;
-  }
-
-  [dir="rtl"] .left-0 {
-    left: auto;
-    right: 0;
-  }
-
-  [dir="rtl"] .right-0 {
-    right: auto;
-    left: 0;
-  }
-
-  [dir="rtl"] .pl-4 {
-    padding-left: 0;
-    padding-right: 1rem;
-  }
-
-  [dir="rtl"] .pr-4 {
-    padding-right: 0;
-    padding-left: 1rem;
-  }
-
-  [dir="rtl"] .text-left {
-    text-align: right;
-  }
-
-  [dir="rtl"] .text-right {
-    text-align: left;
-  }
-
-  [dir="rtl"] .flex-row {
-    flex-direction: row-reverse;
-  }
-
-  [dir="rtl"] .flex-row-reverse {
-    flex-direction: row;
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-grotesk;
   }
 }
 
 @layer utilities {
-  .noise-texture {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  .font-grotesk {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  
+  .font-mono-jet {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .font-outfit {
+    font-family: 'Outfit', sans-serif;
+  }
+  
+  .font-tajawal {
+    font-family: 'Tajawal', sans-serif;
+  }
+  
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .grid-pattern {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  
+  .glow-cyan {
+    box-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
   }
 
-  /* Safe area utilities for mobile devices with notches */
-  .pb-safe {
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
   }
-
-  .pt-safe {
-    padding-top: max(1rem, env(safe-area-inset-top));
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
   }
-
-  .pl-safe {
-    padding-left: max(1rem, env(safe-area-inset-left));
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
   }
-
-  .pr-safe {
-    padding-right: max(1rem, env(safe-area-inset-right));
-  }
-
-  /* Global container utility for consistent page width and spacing */
-  .containerPage {
-    max-width: 1280px;
-    margin-inline: auto;
-    padding-inline: 1rem; /* 16px mobile */
-  }
-
-  @media (min-width: 768px) {
-    .containerPage {
-      padding-inline: 1.5rem; /* 24px tablet */
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .containerPage {
-      padding-inline: 2rem; /* 32px desktop */
-    }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 }
