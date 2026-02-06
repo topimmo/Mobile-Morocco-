@@ -45,6 +45,10 @@ export function LoginPage() {
       // Redirect to the page they tried to visit or dashboard
       navigate(from, { replace: true });
     } catch (err: any) {
+      // Log error for debugging (in production, use proper error tracking like Sentry)
+      if (import.meta.env.DEV) {
+        console.error('Login failed:', err.message);
+      }
       setError(err.message || 'Email ou mot de passe incorrect');
     } finally {
       setIsLoading(false);
