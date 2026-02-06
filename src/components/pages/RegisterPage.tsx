@@ -98,6 +98,11 @@ export function RegisterPage() {
     }
 
     setErrors(newErrors);
+    
+    if (Object.keys(newErrors).length > 0) {
+      console.log('❌ Form validation failed', newErrors);
+    }
+    
     return Object.keys(newErrors).length === 0;
   };
 
@@ -106,7 +111,6 @@ export function RegisterPage() {
 
     // Validate form
     if (!validateForm()) {
-      console.log('❌ Form validation failed', errors);
       toast({
         title: 'Erreur de validation',
         description: 'Veuillez corriger les erreurs dans le formulaire',
@@ -201,33 +205,32 @@ export function RegisterPage() {
         description: 'Bienvenue sur Mobile Maroc. Vous allez être redirigé...',
       });
 
-      // Navigate to appropriate dashboard based on user type
-      setTimeout(() => {
-        switch (userType) {
-          case 'repair_shop':
-          case 'seller':
-            navigate('/dashboard');
-            break;
-          case 'technician':
-            navigate('/dashboard/technician');
-            break;
-          case 'advertiser':
-            navigate('/dashboard/advertiser');
-            break;
-          case 'visitor':
-          default:
-            navigate('/');
-            break;
-        }
-      }, 1500);
+      // Navigate immediately to appropriate dashboard based on user type
+      switch (userType) {
+        case 'repair_shop':
+        case 'seller':
+          navigate('/dashboard');
+          break;
+        case 'technician':
+          navigate('/dashboard/technician');
+          break;
+        case 'advertiser':
+          navigate('/dashboard/advertiser');
+          break;
+        case 'visitor':
+        default:
+          navigate('/');
+          break;
+      }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('❌ Registration failed:', error);
       
       // Display error to user
+      const errorMessage = error instanceof Error ? error.message : 'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.';
       toast({
         title: 'Erreur d\'inscription',
-        description: error.message || 'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
