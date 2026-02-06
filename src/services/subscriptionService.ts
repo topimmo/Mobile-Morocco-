@@ -1,4 +1,4 @@
-import { supabase } from '@/utils/supabaseClient';
+import { supabase } from '@/lib/supabase/client';
 
 // Types for subscription management
 export interface Subscription {

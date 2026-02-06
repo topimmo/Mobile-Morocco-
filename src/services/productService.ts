@@ -1,5 +1,5 @@
-import { supabase } from '../utils/supabaseClient';
-import { shouldUseMockData } from '../utils/supabaseClient';
+import { supabase } from '@/lib/supabase/client';
+import { shouldUseMockData } from '@/lib/supabase/client';
 import { mockProducts } from './mockDataService';
 
 export interface Product {

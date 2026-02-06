@@ -1,6 +1,7 @@
 import { supabase } from './client';
 import type { Tables, TablesInsert, TablesUpdate } from '@/types/supabase';
 import { apiCache, CACHE_KEYS, SimpleCache, invalidateListingsCache } from '@/lib/cache';
+import { generateSlug } from '@/lib/utils';
 
 export type ListingStatus = 'pending' | 'approved' | 'rejected' | 'hidden';
 
@@ -213,21 +214,8 @@ export const getUserListings = async (userId: string, status?: ListingStatus) =>
   return { data: data as unknown as ListingWithRelations[] | null, error };
 };
 
-// Helper to generate slug
-const generateSlug = (text: string): string => {
-  const timestamp = Date.now().toString(36);
-  const baseSlug = text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .trim()
-    .substring(0, 50);
-  return `${baseSlug || 'listing'}-${timestamp}`;
-};
-
 export const createListing = async (listing: Omit<ListingInsertWithPhoneDetails, 'slug'> & { slug?: string }) => {
-  const slug = listing.slug || generateSlug(listing.title_ar || listing.title_fr || 'listing');
+  const slug = listing.slug || generateSlug(listing.title_ar || listing.title_fr || 'listing', { includeTimestamp: true });
   
   const { data, error } = await supabase
     .from('listings')
