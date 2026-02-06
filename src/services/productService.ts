@@ -228,7 +228,7 @@ export const updateProduct = async (id: string, productData: Partial<Product>) =
     
     // Check if user owns the product
     const { data: productCheck, error: checkError } = await supabase
-      .from('products')
+      .from('products' as any)
       .select('seller_id')
       .eq('id', id)
       .single();
@@ -242,7 +242,7 @@ export const updateProduct = async (id: string, productData: Partial<Product>) =
       return { success: false, error: 'Product not found' };
     }
     
-    if (productCheck.seller_id !== user.id) {
+    if ((productCheck as any).seller_id !== user.id) {
       return { success: false, error: 'You do not have permission to update this product' };
     }
     

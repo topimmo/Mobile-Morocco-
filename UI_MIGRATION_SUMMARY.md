@@ -224,7 +224,7 @@ npm install
 npm run dev
 
 # Build for production
-npm run build-no-errors
+npm run build
 
 # Preview production build
 npm run preview
@@ -240,7 +240,7 @@ All existing environment variables are still required:
 
 ### Build Command
 ```bash
-npm run build-no-errors
+npm run build
 ```
 (Uses TypeScript compilation but doesn't fail on type errors)
 
