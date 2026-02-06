@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, Store, Wrench, Settings, Eye, Mail, Lock, Phone, MapPin, Building, ChevronRight, ChevronLeft, AlertTriangle, Check } from 'lucide-react';
+import { User, Store, Wrench, Settings, Eye, Mail, Lock, Phone, MapPin, Building, ChevronRight, ChevronLeft, AlertTriangle, Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,6 +14,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { UserType, USER_TYPES, MOROCCAN_CITIES } from '@/types/user';
+import { supabase } from '@/lib/supabase/client';
+import { toast } from '@/components/ui/use-toast';
 
 const userTypeIcons: Record<UserType, React.ComponentType<{ className?: string }>> = {
   'repair_shop': Wrench,
@@ -23,8 +26,11 @@ const userTypeIcons: Record<UserType, React.ComponentType<{ className?: string }
 };
 
 export function RegisterPage() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [userType, setUserType] = useState<UserType | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -39,6 +45,14 @@ export function RegisterPage() {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error for this field when user starts typing
+    if (errors[field]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   const handleUserTypeSelect = (type: UserType) => {
@@ -46,9 +60,182 @@ export function RegisterPage() {
     setStep(2);
   };
 
-  const handleSubmit = () => {
-    console.log('Register:', { userType, ...formData });
-    // Registration logic would go here
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    // Step 2 validation: Account Details
+    if (!formData.email) {
+      newErrors.email = 'L\'email est requis';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Format d\'email invalide';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Le mot de passe est requis';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Le mot de passe doit contenir au moins 6 caractères';
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
+    }
+
+    // Step 3 validation: Professional Information
+    if (!formData.displayName) {
+      newErrors.displayName = 'Le nom complet est requis';
+    }
+
+    if ((userType === 'repair_shop' || userType === 'seller') && !formData.shopName) {
+      newErrors.shopName = 'Le nom de l\'entreprise est requis';
+    }
+
+    if (!formData.city) {
+      newErrors.city = 'La ville est requise';
+    }
+
+    if (!formData.phone) {
+      newErrors.phone = 'Le numéro de téléphone est requis';
+    }
+
+    setErrors(newErrors);
+    
+    if (Object.keys(newErrors).length > 0) {
+      console.log('❌ Form validation failed', newErrors);
+    }
+    
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async () => {
+    console.log('🔵 Starting registration process...', { userType, formData: { ...formData, password: '[REDACTED]' } });
+
+    // Validate form
+    if (!validateForm()) {
+      toast({
+        title: 'Erreur de validation',
+        description: 'Veuillez corriger les erreurs dans le formulaire',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (!userType) {
+      toast({
+        title: 'Erreur',
+        description: 'Veuillez sélectionner un type de compte',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      console.log('🔵 Step 1: Creating auth account with Supabase...');
+      
+      // Step 1: Create auth account
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            display_name: formData.displayName,
+            user_type: userType,
+          },
+        },
+      });
+
+      console.log('📊 Auth signup response:', { data: authData, error: authError });
+
+      if (authError) {
+        console.error('❌ Auth error:', authError);
+        throw new Error(authError.message);
+      }
+
+      if (!authData.user) {
+        console.error('❌ No user returned from signup');
+        throw new Error('Échec de la création du compte');
+      }
+
+      console.log('✅ Auth account created successfully, user ID:', authData.user.id);
+      console.log('🔵 Step 2: Creating profile in database...');
+
+      // Step 2: Create user profile
+      const profileData = {
+        id: authData.user.id,
+        email: formData.email,
+        user_type: userType,
+        display_name: formData.displayName,
+        shop_name: formData.shopName || null,
+        city: formData.city,
+        phone: formData.phone,
+        whatsapp: formData.whatsapp || null,
+        description: formData.description || null,
+        is_verified: false,
+        subscription_type: 'free',
+      };
+
+      console.log('📊 Attempting to insert profile:', profileData);
+
+      const { data: profileInsertData, error: profileError } = await supabase
+        .from('profiles')
+        .insert(profileData)
+        .select()
+        .single();
+
+      console.log('📊 Profile insert response:', { data: profileInsertData, error: profileError });
+
+      if (profileError) {
+        console.error('❌ Profile creation error:', profileError);
+        console.error('❌ Profile error details:', {
+          code: profileError.code,
+          message: profileError.message,
+          details: profileError.details,
+          hint: profileError.hint,
+        });
+        throw new Error(`Échec de la création du profil: ${profileError.message}`);
+      }
+
+      console.log('✅ Profile created successfully');
+      console.log('✅ Registration completed successfully!');
+
+      // Show success message
+      toast({
+        title: 'Compte créé avec succès!',
+        description: 'Bienvenue sur Mobile Maroc. Vous allez être redirigé...',
+      });
+
+      // Navigate immediately to appropriate dashboard based on user type
+      switch (userType) {
+        case 'repair_shop':
+        case 'seller':
+          navigate('/dashboard');
+          break;
+        case 'technician':
+          navigate('/dashboard/technician');
+          break;
+        case 'advertiser':
+          navigate('/dashboard/advertiser');
+          break;
+        case 'visitor':
+        default:
+          navigate('/');
+          break;
+      }
+
+    } catch (error: unknown) {
+      console.error('❌ Registration failed:', error);
+      
+      // Display error to user
+      const errorMessage = error instanceof Error ? error.message : 'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.';
+      toast({
+        title: 'Erreur d\'inscription',
+        description: errorMessage,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const showShopName = userType === 'repair_shop' || userType === 'seller';
@@ -160,10 +347,13 @@ export function RegisterPage() {
                         type="email"
                         value={formData.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
-                        className="pl-10 bg-white/5 border-white/10"
+                        className={`pl-10 bg-white/5 border-white/10 ${errors.email ? 'border-red-500' : ''}`}
                         placeholder="votre@email.com"
                       />
                     </div>
+                    {errors.email && (
+                      <p className="text-sm text-red-500">{errors.email}</p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -176,9 +366,12 @@ export function RegisterPage() {
                           type="password"
                           value={formData.password}
                           onChange={(e) => handleInputChange('password', e.target.value)}
-                          className="pl-10 bg-white/5 border-white/10"
+                          className={`pl-10 bg-white/5 border-white/10 ${errors.password ? 'border-red-500' : ''}`}
                         />
                       </div>
+                      {errors.password && (
+                        <p className="text-sm text-red-500">{errors.password}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="confirmPassword">Confirmer</Label>
@@ -189,9 +382,12 @@ export function RegisterPage() {
                           type="password"
                           value={formData.confirmPassword}
                           onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                          className="pl-10 bg-white/5 border-white/10"
+                          className={`pl-10 bg-white/5 border-white/10 ${errors.confirmPassword ? 'border-red-500' : ''}`}
                         />
                       </div>
+                      {errors.confirmPassword && (
+                        <p className="text-sm text-red-500">{errors.confirmPassword}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -230,10 +426,13 @@ export function RegisterPage() {
                         id="displayName"
                         value={formData.displayName}
                         onChange={(e) => handleInputChange('displayName', e.target.value)}
-                        className="pl-10 bg-white/5 border-white/10"
+                        className={`pl-10 bg-white/5 border-white/10 ${errors.displayName ? 'border-red-500' : ''}`}
                         placeholder="Votre nom"
                       />
                     </div>
+                    {errors.displayName && (
+                      <p className="text-sm text-red-500">{errors.displayName}</p>
+                    )}
                   </div>
 
                   {showShopName && (
@@ -245,17 +444,20 @@ export function RegisterPage() {
                           id="shopName"
                           value={formData.shopName}
                           onChange={(e) => handleInputChange('shopName', e.target.value)}
-                          className="pl-10 bg-white/5 border-white/10"
+                          className={`pl-10 bg-white/5 border-white/10 ${errors.shopName ? 'border-red-500' : ''}`}
                           placeholder="Nom de votre boutique"
                         />
                       </div>
+                      {errors.shopName && (
+                        <p className="text-sm text-red-500">{errors.shopName}</p>
+                      )}
                     </div>
                   )}
 
                   <div className="space-y-2">
                     <Label>Ville</Label>
                     <Select value={formData.city} onValueChange={(v) => handleInputChange('city', v)}>
-                      <SelectTrigger className="bg-white/5 border-white/10">
+                      <SelectTrigger className={`bg-white/5 border-white/10 ${errors.city ? 'border-red-500' : ''}`}>
                         <MapPin className="h-4 w-4 mr-2" />
                         <SelectValue placeholder="Sélectionnez votre ville" />
                       </SelectTrigger>
@@ -265,6 +467,9 @@ export function RegisterPage() {
                         ))}
                       </SelectContent>
                     </Select>
+                    {errors.city && (
+                      <p className="text-sm text-red-500">{errors.city}</p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -276,10 +481,13 @@ export function RegisterPage() {
                           id="phone"
                           value={formData.phone}
                           onChange={(e) => handleInputChange('phone', e.target.value)}
-                          className="pl-10 bg-white/5 border-white/10"
+                          className={`pl-10 bg-white/5 border-white/10 ${errors.phone ? 'border-red-500' : ''}`}
                           placeholder="+212 6XX-XXXXXX"
                         />
                       </div>
+                      {errors.phone && (
+                        <p className="text-sm text-red-500">{errors.phone}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="whatsapp">WhatsApp (optionnel)</Label>
@@ -317,11 +525,27 @@ export function RegisterPage() {
                 </div>
 
                 <div className="flex gap-3 pt-4">
-                  <Button variant="outline" onClick={() => setStep(2)} className="flex-1 border-white/10">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setStep(2)} 
+                    className="flex-1 border-white/10"
+                    disabled={isLoading}
+                  >
                     Retour
                   </Button>
-                  <Button onClick={handleSubmit} className="flex-1 bg-primary">
-                    Créer mon compte
+                  <Button 
+                    onClick={handleSubmit} 
+                    className="flex-1 bg-primary"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Création en cours...
+                      </>
+                    ) : (
+                      'Créer mon compte'
+                    )}
                   </Button>
                 </div>
               </motion.div>
