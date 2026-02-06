@@ -165,10 +165,11 @@ export const createSubscription = async (
   try {
     const dbSubscriptionData = {
       user_id: subscription.userId,
+      plan_id: subscription.type || 'free',
       plan_type: subscription.type === 'premium' ? 'professional' : 'free',
       status: subscription.isActive ? 'active' : 'pending',
-      start_date: subscription.startDate,
-      end_date: subscription.endDate,
+      start_date: subscription.startDate instanceof Date ? subscription.startDate.toISOString() : subscription.startDate,
+      end_date: subscription.endDate instanceof Date ? subscription.endDate.toISOString() : subscription.endDate,
       payment_method: subscription.paymentMethod,
     };
 

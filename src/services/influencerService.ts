@@ -155,7 +155,8 @@ export const addInfluencers = async (
  * Add sample influencers to the database
  */
 export const addSampleInfluencers = async (): Promise<number> => {
-  return await addInfluencers(sampleInfluencers);
+  // Sample data removed - use real influencers from database
+  return 0;
 };
 
 /**

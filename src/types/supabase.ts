@@ -1541,7 +1541,11 @@ export type Database = {
           id: string
           user_id: string
           plan_id: string
+          plan_type: string | null
           status: string
+          start_date: string | null
+          end_date: string | null
+          payment_method: string | null
           created_at: string | null
           expires_at: string | null
         }
@@ -1549,7 +1553,11 @@ export type Database = {
           id?: string
           user_id: string
           plan_id: string
+          plan_type?: string | null
           status?: string
+          start_date?: string | null
+          end_date?: string | null
+          payment_method?: string | null
           created_at?: string | null
           expires_at?: string | null
         }
@@ -1557,7 +1565,11 @@ export type Database = {
           id?: string
           user_id?: string
           plan_id?: string
+          plan_type?: string | null
           status?: string
+          start_date?: string | null
+          end_date?: string | null
+          payment_method?: string | null
           created_at?: string | null
           expires_at?: string | null
         }

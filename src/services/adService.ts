@@ -295,8 +295,8 @@ export const createAd = async (
       image_url: ad.imageUrl,
       link_url: ad.linkUrl,
       placement: ad.position,
-      start_date: ad.startDate,
-      end_date: ad.endDate,
+      start_date: ad.startDate instanceof Date ? ad.startDate.toISOString() : ad.startDate,
+      end_date: ad.endDate instanceof Date ? ad.endDate.toISOString() : ad.endDate,
       is_active: ad.isActive,
     };
 

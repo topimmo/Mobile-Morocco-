@@ -208,7 +208,7 @@ export const createNotification = async (
       relatedId: notification.relatedId,
       isRead: notification.isRead,
       channel: notification.channel,
-      scheduledFor: notification.scheduledFor,
+      scheduledFor: notification.scheduledFor instanceof Date ? notification.scheduledFor.toISOString() : notification.scheduledFor,
     };
 
     const { data, error } = await supabase
