@@ -7,3 +7,8 @@ export { RegisterPage } from './RegisterPage';
 export { SiteMapPage } from './SiteMapPage';
 export { StoresPage } from './StoresPage';
 export { ServicesPage } from './ServicesPage';
+export { LoginPage } from './LoginPage';
+export { ProfilePage } from './ProfilePage';
+export { ForgotPasswordPage } from './ForgotPasswordPage';
+export { AdminDashboardPage } from './AdminDashboardPage';
+export { ComparisonPage } from './ComparisonPage';

@@ -1,15 +1,22 @@
 import { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import VendorDashboard from "./components/dashboards/VendorDashboard";
-import { HomePage } from "./components/pages/HomePage";
-import { ProductPage } from "./components/pages/ProductPage";
-import { VendorProfilePage } from "./components/pages/VendorProfilePage";
-import { CategoryPage } from "./components/pages/CategoryPage";
-import { SearchResultsPage } from "./components/pages/SearchResultsPage";
-import { RegisterPage } from "./components/pages/RegisterPage";
-import { SiteMapPage } from "./components/pages/SiteMapPage";
-import { StoresPage } from "./components/pages/StoresPage";
-import { ServicesPage } from "./components/pages/ServicesPage";
+import { 
+  HomePage, 
+  ProductPage, 
+  VendorProfilePage, 
+  CategoryPage, 
+  SearchResultsPage, 
+  RegisterPage, 
+  SiteMapPage, 
+  StoresPage, 
+  ServicesPage,
+  LoginPage,
+  ProfilePage,
+  ForgotPasswordPage,
+  AdminDashboardPage,
+  ComparisonPage
+} from "./components/pages";
 import { AdsProvider } from "./lib/ads-context";
 
 function App() {
@@ -20,6 +27,11 @@ function App() {
           <Routes>
             <Route path="/sitemap" element={<SiteMapPage />} />
             <Route path="/dashboard" element={<VendorDashboard />} />
+            <Route path="/admin" element={<AdminDashboardPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/compare" element={<ComparisonPage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/category" element={<CategoryPage />} />
