@@ -1,5 +1,11 @@
-import { supabase } from '../utils/supabaseClient';
-import { shouldUseMockData } from '../utils/supabaseClient';
+/**
+ * @deprecated This service layer is being deprecated in favor of @/lib/supabase/listings
+ * Please use the functions from @/lib/supabase/listings for better performance, caching, and features.
+ * This file remains for backward compatibility during migration.
+ */
+
+import { supabase } from '@/lib/supabase/client';
+import { shouldUseMockData } from '@/lib/supabase/client';
 import { mockProducts } from './mockDataService';
 
 export interface Product {

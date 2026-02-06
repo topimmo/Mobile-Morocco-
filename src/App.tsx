@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import VendorDashboard from "./components/dashboard/VendorDashboard";
+import VendorDashboard from "./components/dashboards/VendorDashboard";
 import { HomePage } from "./components/pages/HomePage";
 import { ProductPage } from "./components/pages/ProductPage";
 import { VendorProfilePage } from "./components/pages/VendorProfilePage";

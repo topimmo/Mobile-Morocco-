@@ -1,4 +1,4 @@
-import { supabase } from '@/utils/supabaseClient';
+import { supabase } from '@/lib/supabase/client';
 
 // Check if Supabase is properly configured
 const isSupabaseConfigured = () => {

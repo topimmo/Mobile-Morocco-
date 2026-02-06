@@ -1,4 +1,5 @@
 import { supabase } from './client';
+import { generateSlug, sanitizeName } from '@/lib/utils';
 
 export interface Neighborhood {
   id: string;
@@ -72,25 +73,13 @@ export async function getNeighborhoodBySlug(cityId: string, slug: string): Promi
   return data;
 }
 
-function sanitizeName(name: string): string {
-  return name.trim().replace(/\s+/g, ' ');
-}
-
-function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/[^a-zA-Z0-9\u0600-\u06FF\-]/g, '');
-}
-
 export async function addNeighborhood(
   cityId: string,
   name: string,
   userId?: string
 ): Promise<Neighborhood | null> {
   const sanitizedName = sanitizeName(name);
-  const slug = generateSlug(name);
+  const slug = generateSlug(name, { preserveArabic: true });
 
   // Check if already exists
   const existing = await getNeighborhoodBySlug(cityId, slug);
@@ -127,7 +116,7 @@ export async function addOrGetNeighborhood(
   name: string,
   userId?: string
 ): Promise<Neighborhood | null> {
-  const slug = generateSlug(name);
+  const slug = generateSlug(name, { preserveArabic: true });
   
   // Try to find existing
   const existing = await getNeighborhoodBySlug(cityId, slug);

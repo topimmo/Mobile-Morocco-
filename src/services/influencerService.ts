@@ -1,4 +1,4 @@
-import { supabase } from "@/utils/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 
 // Influencer Service - Types for influencer management
 export interface Influencer {

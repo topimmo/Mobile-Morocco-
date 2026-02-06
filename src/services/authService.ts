@@ -1,4 +1,4 @@
-import { supabase } from '@/utils/supabaseClient';
+import { supabase } from '@/lib/supabase/client';
 import { CustomerProfile, ImporterProfile, TechnicianProfile } from '@/models/User';
 import type { User } from '@supabase/supabase-js';
 import { getSiteUrl } from '@/config/env';
