@@ -1,3 +1,9 @@
+/**
+ * @deprecated This service layer is being deprecated in favor of @/lib/supabase/stores
+ * Please use the functions from @/lib/supabase/stores for better performance, caching, and comprehensive features.
+ * This file remains for backward compatibility during migration.
+ */
+
 import { supabase } from '@/lib/supabase/client';
 
 export interface Store {

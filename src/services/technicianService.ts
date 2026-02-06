@@ -1,3 +1,9 @@
+/**
+ * @deprecated This service layer is being consolidated with @/lib/supabase/repairShops
+ * For shop management, use @/lib/supabase/repairShops
+ * This file remains for service request workflows during migration.
+ */
+
 import { supabase } from '@/lib/supabase/client';
 
 export interface TechnicianService {
