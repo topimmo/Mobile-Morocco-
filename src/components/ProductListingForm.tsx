@@ -161,7 +161,7 @@ const ProductListingForm: React.FC<ProductListingFormProps> = ({
     "Bluetooth 5.0",
   ];
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | number | boolean | string[]) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -178,7 +178,7 @@ const ProductListingForm: React.FC<ProductListingFormProps> = ({
     }));
   };
 
-  const handleContactInfoChange = (field: string, value: any) => {
+  const handleContactInfoChange = (field: string, value: string | number | boolean | string[]) => {
     setFormData((prev) => ({
       ...prev,
       contactInfo: {

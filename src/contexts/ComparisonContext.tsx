@@ -17,7 +17,19 @@ interface Product {
   enableWhatsApp?: boolean;
   isPremium?: boolean;
   isFeatured?: boolean;
-  specs?: any;
+  specs?: {
+    brand?: string;
+    model?: string;
+    storage?: string;
+    ram?: string;
+    display?: string;
+    camera?: string;
+    battery?: string;
+    os?: string;
+    color?: string;
+    warranty?: string;
+    [key: string]: string | undefined;
+  };
 }
 
 interface ComparisonContextType {

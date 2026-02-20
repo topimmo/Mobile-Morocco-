@@ -74,7 +74,7 @@ export function ProfilePage() {
       if (error) throw error;
 
       setMessage({ type: 'success', text: 'Profil mis à jour avec succès!' });
-    } catch (err: any) {
+    } catch (err) {
       setMessage({ type: 'error', text: err.message || 'Erreur lors de la mise à jour du profil' });
     } finally {
       setIsLoading(false);

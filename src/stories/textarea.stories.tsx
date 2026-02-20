@@ -12,14 +12,14 @@ const meta = {
 export default meta;
 
 export const Default = {
-  render: (args: any) => <Textarea {...args} />,
+  render: (args: Record<string, unknown>) => <Textarea {...args} />,
   args: {
     placeholder: "Type your message here.",
   },
 };
 
 export const Disabled = {
-  render: (args: any) => <Textarea {...args} />,
+  render: (args: Record<string, unknown>) => <Textarea {...args} />,
   args: {
     ...Default.args,
     disabled: true,
@@ -27,7 +27,7 @@ export const Disabled = {
 };
 
 export const WithLabel = {
-  render: (args: any) => (
+  render: (args: Record<string, unknown>) => (
     <div className="grid w-full gap-1.5">
       <Label htmlFor="message">Your message</Label>
       <Textarea {...args} id="message" />
@@ -37,7 +37,7 @@ export const WithLabel = {
 };
 
 export const WithText = {
-  render: (args: any) => (
+  render: (args: Record<string, unknown>) => (
     <div className="grid w-full gap-1.5">
       <Label htmlFor="message-2">Your Message</Label>
       <Textarea {...args} id="message-2" />
@@ -50,7 +50,7 @@ export const WithText = {
 };
 
 export const WithButton = {
-  render: (args: any) => (
+  render: (args: Record<string, unknown>) => (
     <div className="grid w-full gap-2">
       <Textarea {...args} />
       <Button>Send message</Button>

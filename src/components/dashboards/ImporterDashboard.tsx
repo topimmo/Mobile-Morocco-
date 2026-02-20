@@ -29,7 +29,7 @@ export default function ImporterDashboard() {
   const [profile, setProfile] = useState<ImporterProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [stores, setStores] = useState<any[]>([]);
+  const [stores, setStores] = useState<{ id: string; name: string; description: string; city: string; productCount: number }[]>([]);
 
   useEffect(() => {
     const checkAuth = async () => {

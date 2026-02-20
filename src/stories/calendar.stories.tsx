@@ -1,4 +1,5 @@
 // [build] library: 'shadcn'
+import React from "react";
 import { Calendar } from "../components/ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 
@@ -30,7 +31,7 @@ const meta = {
 export default meta;
 
 export const Base = {
-  render: (args: any) => <Calendar {...args}>Calendar</Calendar>,
+  render: (args: Record<string, unknown>) => <Calendar {...(args as unknown as React.ComponentProps<typeof Calendar>)} />,
   args: {
     mode: "single",
     className: "rounded-md border",

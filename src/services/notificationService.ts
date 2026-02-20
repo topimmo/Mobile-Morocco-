@@ -253,18 +253,18 @@ export const deleteNotification = async (id: string): Promise<boolean> => {
   }
 };
 
-const mapDatabaseNotificationToModel = (dbNotif: any): Notification => {
+const mapDatabaseNotificationToModel = (dbNotif: Record<string, unknown>): Notification => {
   return {
-    id: dbNotif.id,
-    userId: dbNotif.user_id,
-    title: dbNotif.title,
-    message: dbNotif.message,
-    type: dbNotif.type,
-    relatedId: dbNotif.related_id,
-    isRead: dbNotif.isRead,
-    channel: dbNotif.channel,
-    createdAt: new Date(dbNotif.created_at),
-    scheduledFor: dbNotif.scheduled_for ? new Date(dbNotif.scheduled_for) : undefined,
+    id: dbNotif.id as string,
+    userId: dbNotif.user_id as string,
+    title: dbNotif.title as string,
+    message: dbNotif.message as string,
+    type: dbNotif.type as NotificationType,
+    relatedId: dbNotif.related_id as string,
+    isRead: dbNotif.isRead as boolean,
+    channel: dbNotif.channel as NotificationChannel,
+    createdAt: new Date(dbNotif.created_at as string),
+    scheduledFor: dbNotif.scheduled_for ? new Date(dbNotif.scheduled_for as string) : undefined,
   };
 };
 

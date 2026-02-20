@@ -130,7 +130,7 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
     "Bluetooth 5.0",
   ];
 
-  const handleFilterChange = (key: keyof SearchFilters, value: any) => {
+  const handleFilterChange = (key: keyof SearchFilters, value: SearchFilters[keyof SearchFilters]) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value,

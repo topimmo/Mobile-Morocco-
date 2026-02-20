@@ -40,7 +40,7 @@ export default function TechnicianDashboard() {
   const [profile, setProfile] = useState<TechnicianProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [serviceRequests, setServiceRequests] = useState<any[]>([]);
+  const [serviceRequests, setServiceRequests] = useState<{ id: string; customerName: string; service: string; device: string; status: string; date: string }[]>([]);
   const [showCreateShopDialog, setShowCreateShopDialog] = useState(false);
 
   useEffect(() => {

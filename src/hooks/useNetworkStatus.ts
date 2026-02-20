@@ -6,6 +6,16 @@ interface NetworkStatus {
   wasOffline: boolean;
 }
 
+interface NetworkInformation extends EventTarget {
+  effectiveType?: string;
+}
+
+interface NavigatorWithConnection extends Navigator {
+  connection?: NetworkInformation;
+  mozConnection?: NetworkInformation;
+  webkitConnection?: NetworkInformation;
+}
+
 /**
  * Hook to detect network connectivity status
  * Provides real-time online/offline detection
@@ -51,9 +61,9 @@ export function useSlowConnection(): boolean {
   const [isSlowConnection, setIsSlowConnection] = useState(false);
 
   useEffect(() => {
-    const connection = (navigator as any).connection || 
-                       (navigator as any).mozConnection || 
-                       (navigator as any).webkitConnection;
+    const connection = (navigator as NavigatorWithConnection).connection || 
+                       (navigator as NavigatorWithConnection).mozConnection || 
+                       (navigator as NavigatorWithConnection).webkitConnection;
 
     if (!connection) return;
 

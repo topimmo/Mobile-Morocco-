@@ -138,7 +138,7 @@ export const updateJobListing = async (id: string, jobData: Partial<JobListing>)
       return { success: false, error: 'You do not have permission to update this job' };
     }
 
-    const dbJobData: any = {};
+    const dbJobData: Record<string, unknown> = {};
     if (jobData.title !== undefined) dbJobData.title = jobData.title;
     if (jobData.description !== undefined) dbJobData.description = jobData.description;
     if (jobData.location !== undefined) dbJobData.location = jobData.location;
@@ -314,7 +314,7 @@ export const updateJobApplication = async (id: string, status: JobApplication['s
   }
 };
 
-const mapDatabaseJobToModel = (dbJob: any): JobListing => {
+const mapDatabaseJobToModel = (dbJob: Record<string, unknown>): JobListing => {
   return {
     id: dbJob.id,
     creatorId: dbJob.creator_id,
@@ -331,7 +331,7 @@ const mapDatabaseJobToModel = (dbJob: any): JobListing => {
   };
 };
 
-const mapDatabaseApplicationToModel = (dbApplication: any): JobApplication => {
+const mapDatabaseApplicationToModel = (dbApplication: Record<string, unknown>): JobApplication => {
   return {
     id: dbApplication.id,
     jobId: dbApplication.job_id,

@@ -102,7 +102,7 @@ export const getReportById = async (id: string) => {
 
 export const updateReportStatus = async (id: string, status: Report['status'], adminNotes?: string) => {
   try {
-    const dbUpdateData: any = {
+    const dbUpdateData: Record<string, unknown> = {
       status,
       updated_at: new Date().toISOString()
     };
@@ -147,7 +147,7 @@ export const deleteReport = async (id: string) => {
   }
 };
 
-const mapDatabaseReportToModel = (dbReport: any): Report => {
+const mapDatabaseReportToModel = (dbReport: Record<string, unknown>): Report => {
   return {
     id: dbReport.id,
     reporterId: dbReport.reporter_id,

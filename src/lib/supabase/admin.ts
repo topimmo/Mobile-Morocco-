@@ -183,18 +183,18 @@ export const getPendingListings = async (
     if (error) throw error;
 
     const total = count || 0;
-    const mappedData = (data || []).map((listing: any) => ({
-      id: listing.id,
-      title: listing.title,
-      slug: listing.slug,
-      price: listing.price,
-      condition: listing.condition,
-      status: listing.status,
-      created_at: listing.created_at,
-      user_id: listing.user_id,
-      image_url: listing.image_url,
-      category_name: listing.categories?.name_fr || 'Non catégorisé',
-      city_name: listing.cities?.name_fr || 'Non spécifié',
+    const mappedData = ((data || []) as unknown as Record<string, unknown>[]).map((listing) => ({
+      id: listing.id as string,
+      title: listing.title as string,
+      slug: listing.slug as string,
+      price: listing.price as number,
+      condition: listing.condition as string,
+      status: listing.status as ListingStatus,
+      created_at: listing.created_at as string,
+      user_id: listing.user_id as string,
+      image_url: listing.image_url as string,
+      category_name: (listing.categories as { name_fr?: string })?.name_fr || 'Non catégorisé',
+      city_name: (listing.cities as { name_fr?: string })?.name_fr || 'Non spécifié',
     }));
 
     return {
@@ -233,17 +233,17 @@ export const getPendingRepairShops = async (limit = 50): Promise<PendingRepairSh
 
     if (error) throw error;
 
-    return (data || []).map((shop: any) => ({
-      id: shop.id,
-      name: shop.name,
-      slug: shop.slug,
-      description: shop.description,
-      status: shop.status,
-      created_at: shop.created_at,
-      user_id: shop.user_id,
-      phone: shop.phone,
-      cover_image: shop.cover_image,
-      city_name: shop.cities?.name_fr || 'Non spécifié',
+    return ((data || []) as unknown as Record<string, unknown>[]).map((shop) => ({
+      id: shop.id as string,
+      name: shop.name as string,
+      slug: shop.slug as string,
+      description: shop.description as string,
+      status: shop.status as ListingStatus,
+      created_at: shop.created_at as string,
+      user_id: shop.user_id as string,
+      phone: shop.phone as string,
+      cover_image: shop.cover_image as string,
+      city_name: (shop.cities as { name_fr?: string })?.name_fr || 'Non spécifié',
     }));
   } catch (error) {
     console.error('Error fetching pending repair shops:', error);
@@ -277,20 +277,20 @@ export const getPendingCampaigns = async (limit = 50): Promise<PendingCampaign[]
 
     if (error) throw error;
 
-    return (data || []).map((campaign: any) => ({
-      id: campaign.id,
-      title: campaign.title,
-      description: campaign.description,
-      target_url: campaign.target_url,
-      slot: campaign.slot,
-      duration_days: campaign.duration_days,
-      start_date: campaign.start_date,
-      end_date: campaign.end_date,
-      status: campaign.status,
-      created_at: campaign.created_at,
-      advertiser_id: campaign.advertiser_id,
-      banner_desktop_url: campaign.banner_desktop_url,
-      banner_mobile_url: campaign.banner_mobile_url,
+    return ((data || []) as unknown as Record<string, unknown>[]).map((campaign) => ({
+      id: campaign.id as string,
+      title: campaign.title as string,
+      description: campaign.description as string,
+      target_url: campaign.target_url as string,
+      slot: campaign.slot as string,
+      duration_days: campaign.duration_days as number,
+      start_date: campaign.start_date as string,
+      end_date: campaign.end_date as string,
+      status: campaign.status as CampaignStatus,
+      created_at: campaign.created_at as string,
+      advertiser_id: campaign.advertiser_id as string,
+      banner_desktop_url: campaign.banner_desktop_url as string,
+      banner_mobile_url: campaign.banner_mobile_url as string,
     }));
   } catch (error) {
     console.error('Error fetching pending campaigns:', error);
@@ -308,7 +308,7 @@ export const approveListing = async (listingId: string): Promise<{ success: bool
 
     if (error) throw error;
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error approving listing:', error);
     return { success: false, error: error.message };
   }
@@ -324,7 +324,7 @@ export const rejectListing = async (listingId: string): Promise<{ success: boole
 
     if (error) throw error;
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error rejecting listing:', error);
     return { success: false, error: error.message };
   }
@@ -340,7 +340,7 @@ export const approveRepairShop = async (shopId: string): Promise<{ success: bool
 
     if (error) throw error;
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error approving repair shop:', error);
     return { success: false, error: error.message };
   }
@@ -356,7 +356,7 @@ export const rejectRepairShop = async (shopId: string): Promise<{ success: boole
 
     if (error) throw error;
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error rejecting repair shop:', error);
     return { success: false, error: error.message };
   }
@@ -372,7 +372,7 @@ export const approveCampaign = async (campaignId: string): Promise<{ success: bo
 
     if (error) throw error;
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error approving campaign:', error);
     return { success: false, error: error.message };
   }
@@ -388,7 +388,7 @@ export const rejectCampaign = async (campaignId: string): Promise<{ success: boo
 
     if (error) throw error;
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error rejecting campaign:', error);
     return { success: false, error: error.message };
   }
@@ -500,19 +500,19 @@ export const getRecentActivity = async (limit = 10) => {
     ]);
 
     const activities = [
-      ...(recentListings.data || []).map((l: any) => ({
+      ...((recentListings.data || []) as unknown as Record<string, unknown>[]).map((l) => ({
         type: 'listing' as const,
-        id: l.id,
-        title: l.title,
-        status: l.status,
-        created_at: l.created_at,
+        id: l.id as string,
+        title: l.title as string,
+        status: l.status as string,
+        created_at: l.created_at as string,
       })),
-      ...(recentShops.data || []).map((s: any) => ({
+      ...((recentShops.data || []) as unknown as Record<string, unknown>[]).map((s) => ({
         type: 'repair_shop' as const,
-        id: s.id,
-        title: s.name,
-        status: s.status,
-        created_at: s.created_at,
+        id: s.id as string,
+        title: s.name as string,
+        status: s.status as string,
+        created_at: s.created_at as string,
       })),
     ];
 
@@ -554,16 +554,16 @@ export const getPendingNeighborhoods = async (): Promise<PendingNeighborhood[]> 
 
     if (error) throw error;
 
-    return (data || []).map((n: any) => ({
-      id: n.id,
-      name: n.name,
-      slug: n.slug,
-      city_id: n.city_id,
-      city_name_fr: n.city?.name_fr,
-      city_name_ar: n.city?.name_ar,
-      is_verified: n.is_verified,
-      created_by: n.created_by,
-      created_at: n.created_at,
+    return ((data || []) as unknown as Record<string, unknown>[]).map((n) => ({
+      id: n.id as string,
+      name: n.name as string,
+      slug: n.slug as string,
+      city_id: n.city_id as string,
+      city_name_fr: (n.city as { name_fr?: string })?.name_fr,
+      city_name_ar: (n.city as { name_ar?: string })?.name_ar,
+      is_verified: n.is_verified as boolean,
+      created_by: n.created_by as string,
+      created_at: n.created_at as string,
     }));
   } catch (error) {
     console.error('Error fetching pending neighborhoods:', error);
@@ -581,7 +581,7 @@ export const approveNeighborhood = async (neighborhoodId: string): Promise<{ suc
 
     if (error) throw error;
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error approving neighborhood:', error);
     return { success: false, error: error.message };
   }
@@ -597,7 +597,7 @@ export const rejectNeighborhood = async (neighborhoodId: string): Promise<{ succ
 
     if (error) throw error;
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error rejecting neighborhood:', error);
     return { success: false, error: error.message };
   }
@@ -667,22 +667,22 @@ export const getPendingItems = async (
     if (error) throw error;
 
     const total = count || 0;
-    const mappedData = (data || []).map((item: any) => ({
-      id: item.id,
-      title_fr: item.title_fr,
-      title_ar: item.title_ar,
-      slug: item.slug,
-      item_type: item.item_type,
-      condition: item.condition,
-      brand: item.brand,
-      model: item.model,
-      price: item.price,
-      status: item.status,
-      created_at: item.created_at,
-      store_id: item.store_id,
-      store_name: item.stores?.name_fr || 'Non spécifié',
-      city_name: item.cities?.name_fr || 'Non spécifié',
-      image_url: item.item_images?.[0]?.image_url,
+    const mappedData = ((data || []) as unknown as Record<string, unknown>[]).map((item) => ({
+      id: item.id as string,
+      title_fr: item.title_fr as string,
+      title_ar: item.title_ar as string,
+      slug: item.slug as string,
+      item_type: item.item_type as string,
+      condition: item.condition as string,
+      brand: item.brand as string,
+      model: item.model as string,
+      price: item.price as number,
+      status: item.status as string,
+      created_at: item.created_at as string,
+      store_id: item.store_id as string,
+      store_name: (item.stores as { name_fr?: string })?.name_fr || 'Non spécifié',
+      city_name: (item.cities as { name_fr?: string })?.name_fr || 'Non spécifié',
+      image_url: (item.item_images as { image_url?: string }[] | undefined)?.[0]?.image_url,
     }));
 
     return {
@@ -708,7 +708,7 @@ export const approveItem = async (itemId: string): Promise<{ success: boolean; e
 
     if (error) throw error;
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error approving item:', error);
     return { success: false, error: error.message };
   }
@@ -724,7 +724,7 @@ export const rejectItem = async (itemId: string): Promise<{ success: boolean; er
 
     if (error) throw error;
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error rejecting item:', error);
     return { success: false, error: error.message };
   }
@@ -738,7 +738,7 @@ export const getAllItems = async (
     limit?: number;
     offset?: number;
   }
-): Promise<{ data: any[]; count: number }> => {
+): Promise<{ data: Record<string, unknown>[]; count: number }> => {
   try {
     let query = supabase
       .from('items')

@@ -94,7 +94,7 @@ try {
   // Re-throw to be caught by error boundary
   if (typeof window !== 'undefined') {
     // Set a global flag for the error boundary to detect
-    (window as any).__ENV_VALIDATION_ERROR__ = error;
+    (window as unknown as Window & { __ENV_VALIDATION_ERROR__: unknown }).__ENV_VALIDATION_ERROR__ = error;
   }
 }
 
