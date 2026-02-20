@@ -31,7 +31,7 @@ const meta = {
 export default meta;
 
 export const Base = {
-  render: (args: Record<string, unknown>) => <Calendar {...(args as unknown as React.ComponentProps<typeof Calendar>)} />,
+  render: (args: React.ComponentProps<typeof Calendar>) => <Calendar {...args} />,
   args: {
     mode: "single",
     className: "rounded-md border",
