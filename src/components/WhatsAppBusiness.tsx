@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { useLanguage } from '../contexts/LanguageContext';
 import { MessageCircle, Phone, Share2, Send } from 'lucide-react';
@@ -17,12 +16,12 @@ interface WhatsAppBusinessProps {
 export default function WhatsAppBusiness({
   productName = "Produit",
   productPrice = 0,
-  productImage,
+  productImage: _productImage,
   sellerPhone = "+212600000000",
   sellerName = "Vendeur"
 }: WhatsAppBusinessProps) {
-  const { t } = useLanguage();
-  const [message, setMessage] = useState('');
+  const { t: _t } = useLanguage();
+  const [_message, _setMessage] = useState('');
   const [customMessage, setCustomMessage] = useState('');
   const [showCustomMessage, setShowCustomMessage] = useState(false);
 

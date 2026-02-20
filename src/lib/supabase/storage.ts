@@ -117,7 +117,13 @@ export async function uploadImage(
     }
 
     const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-    const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+    // Prefix with the authenticated user's UID so the storage DELETE policy
+    // can enforce ownership: policy checks (storage.foldername(name))[1] = auth.uid()
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user?.id) {
+      return { url: null, error: 'You must be logged in to upload images.' };
+    }
+    const fileName = `${user.id}/${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
     const { data, error } = await supabase.storage
       .from(BUCKET_NAME)

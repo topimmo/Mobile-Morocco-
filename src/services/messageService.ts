@@ -173,15 +173,15 @@ export const subscribeToMessages = (userId: string, callback: (message: Message)
   };
 };
 
-const mapDatabaseMessageToModel = (dbMessage: any): Message => {
+const mapDatabaseMessageToModel = (dbMessage: Record<string, unknown>): Message => {
   return {
-    id: dbMessage.id,
-    senderId: dbMessage.sender_id,
-    receiverId: dbMessage.receiver_id,
-    content: dbMessage.content,
-    isRead: dbMessage.is_read,
-    relatedToType: dbMessage.related_to_type,
-    relatedToId: dbMessage.related_to_id,
-    createdAt: dbMessage.created_at
+    id: dbMessage.id as string,
+    senderId: dbMessage.sender_id as string,
+    receiverId: dbMessage.receiver_id as string,
+    content: dbMessage.content as string,
+    isRead: dbMessage.is_read as boolean,
+    relatedToType: dbMessage.related_to_type as string,
+    relatedToId: dbMessage.related_to_id as string,
+    createdAt: dbMessage.created_at as string
   };
 };

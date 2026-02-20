@@ -63,7 +63,7 @@ export const measure = {
         performance.measure(label, `${label}-start`, `${label}-end`);
         const measure = performance.getEntriesByName(label)[0];
         logger.log(`⏱️  ${label}: ${measure.duration.toFixed(2)}ms`);
-      } catch (e) {
+      } catch (_e) {
         // Ignore measurement errors
       }
     }

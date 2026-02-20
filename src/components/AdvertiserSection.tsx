@@ -8,15 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import {
-  ArrowRight,
   BarChart,
-  DollarSign,
   Users,
   Megaphone,
-  Award,
   CheckCircle,
 } from "lucide-react";
 import { Language } from '@/contexts/LanguageContext';

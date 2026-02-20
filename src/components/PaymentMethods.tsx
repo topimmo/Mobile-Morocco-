@@ -7,9 +7,16 @@ import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { useLanguage } from '../contexts/LanguageContext';
 import { CreditCard, Smartphone, Building, Truck } from 'lucide-react';
 
+interface PaymentDetails {
+  method: string;
+  amount: number;
+  phoneNumber?: string;
+  timestamp: string;
+}
+
 interface PaymentMethodsProps {
   amount: number;
-  onPaymentComplete: (method: string, details: any) => void;
+  onPaymentComplete: (method: string, details: PaymentDetails) => void;
   onCancel?: () => void;
 }
 

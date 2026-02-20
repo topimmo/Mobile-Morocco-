@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, ChevronRight, MapPin, Filter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Search, ChevronRight, MapPin } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
   Select,

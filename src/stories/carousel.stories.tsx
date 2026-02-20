@@ -16,7 +16,7 @@ const meta = {
 export default meta;
 
 export const Base = {
-  render: (args: any) => (
+  render: (args: Record<string, unknown>) => (
     <Carousel {...args} className="mx-12 w-full max-w-xs">
       <CarouselContent>
         {Array.from({ length: 5 }).map((_, index) => (
@@ -39,7 +39,7 @@ export const Base = {
 };
 
 export const Size = {
-  render: (args: any) => (
+  render: (args: Record<string, unknown>) => (
     <Carousel {...args} className="mx-12 w-full max-w-xs">
       <CarouselContent>
         {Array.from({ length: 5 }).map((_, index) => (

@@ -36,8 +36,8 @@ const getPlaceholderBanners = (isRTL: boolean) => ({
 });
 
 export function BannerSlot({ page, slot, showPlaceholder = true }: BannerSlotProps) {
-  const [banner, setBanner] = useState<any>(null);
-  const [adsenseUnit, setAdsenseUnit] = useState<any>(null);
+  const [banner, setBanner] = useState<Awaited<ReturnType<typeof getActiveBanner>>>(null);
+  const [adsenseUnit, setAdsenseUnit] = useState<{ unit_id: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Get language context with fallback

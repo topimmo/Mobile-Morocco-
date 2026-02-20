@@ -25,7 +25,7 @@ export function LoginPage() {
   const [error, setError] = useState('');
 
   // Get redirect path from location state or default to dashboard
-  const from = (location.state as any)?.from?.pathname || '/dashboard';
+  const from = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/dashboard';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -44,7 +44,7 @@ export function LoginPage() {
       await signIn(formData.email, formData.password);
       // Redirect to the page they tried to visit or dashboard
       navigate(from, { replace: true });
-    } catch (err: any) {
+    } catch (err) {
       // Log error for debugging (in production, use proper error tracking like Sentry)
       if (import.meta.env.DEV) {
         console.error('Login failed:', err.message);

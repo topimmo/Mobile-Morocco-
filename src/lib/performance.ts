@@ -6,7 +6,7 @@
  * Debounce function for performance optimization
  * Use for search inputs, scroll handlers, etc.
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -29,7 +29,7 @@ export function debounce<T extends (...args: any[]) => any>(
  * Throttle function for performance optimization
  * Use for scroll handlers, resize handlers, etc.
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
@@ -71,9 +71,9 @@ export function runWhenIdle(callback: () => void, timeout = 2000) {
 /**
  * Batch multiple state updates to reduce re-renders
  */
-export function batchUpdates<T>(updates: (() => void)[]): void {
+export function batchUpdates<_T>(updates: (() => void)[]): void {
   if ('unstable_batchedUpdates' in window) {
-    // @ts-ignore - React experimental feature
+    // @ts-expect-error - React experimental feature
     window.unstable_batchedUpdates(() => {
       updates.forEach(update => update());
     });
@@ -112,7 +112,7 @@ export function lazyLoadImage(
 /**
  * Memoize expensive calculations
  */
-export function memoize<T extends (...args: any[]) => any>(
+export function memoize<T extends (...args: unknown[]) => unknown>(
   fn: T,
   maxCacheSize = 100
 ): T {
@@ -135,9 +135,9 @@ export function memoize<T extends (...args: any[]) => any>(
     }
 
     keys.push(key);
-    cache.set(key, result);
+    cache.set(key, result as ReturnType<T>);
 
-    return result;
+    return result as ReturnType<T>;
   }) as T;
 }
 
@@ -161,7 +161,7 @@ export function calculateVisibleRange(
 /**
  * Optimize component re-renders by checking if props changed
  */
-export function shallowEqual(obj1: any, obj2: any): boolean {
+export function shallowEqual(obj1: Record<string, unknown>, obj2: Record<string, unknown>): boolean {
   if (obj1 === obj2) return true;
   
   if (
@@ -209,7 +209,7 @@ export function measureRenderTime(componentName: string) {
 export async function prefetchData<T>(
   fetcher: () => Promise<T>,
   cacheKey: string,
-  cache: Map<string, any>
+  cache: Map<string, unknown>
 ): Promise<void> {
   runWhenIdle(async () => {
     try {
@@ -227,13 +227,13 @@ export async function prefetchData<T>(
 /**
  * Create a stable callback that doesn't change on every render
  */
-export function useStableCallback<T extends (...args: any[]) => any>(
+export function useStableCallback<T extends (...args: unknown[]) => unknown>(
   callback: T
 ): T {
   const callbackRef = { current: callback };
   callbackRef.current = callback;
 
-  const stableCallback = ((...args: any[]) => {
+  const stableCallback = ((...args: unknown[]) => {
     return callbackRef.current(...args);
   }) as T;
 

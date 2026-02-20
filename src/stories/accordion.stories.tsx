@@ -1,4 +1,5 @@
 // [build] library: 'shadcn'
+import React from "react";
 import {
   Accordion,
   AccordionContent,
@@ -16,8 +17,8 @@ const meta = {
 export default meta;
 
 export const Base = {
-  render: (args: any) => (
-    <Accordion {...args}>
+  render: (args: Record<string, unknown>) => (
+    <Accordion type="single" {...(args as unknown as React.ComponentProps<typeof Accordion>)}>
       <AccordionItem value="item-1">
         <AccordionTrigger>Is it accessible?</AccordionTrigger>
         <AccordionContent>

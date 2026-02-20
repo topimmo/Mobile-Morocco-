@@ -18,8 +18,6 @@ import {
   AlertCircle,
   Eye,
   MousePointer,
-  Calendar,
-  DollarSign,
   Plus,
 } from "lucide-react";
 import {
@@ -36,7 +34,7 @@ export default function AdvertiserDashboard() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [ads, setAds] = useState<Advertisement[]>([]);
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<Awaited<ReturnType<typeof getAdStats>> | null>(null);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
 
@@ -60,7 +58,7 @@ export default function AdvertiserDashboard() {
     }
   };
 
-  const handleAddAd = async (adData: AdFormData) => {
+  const handleAddAd = async (_adData: AdFormData) => {
     toast({
       title: "Publicité créée",
       description: "Votre publicité a été créée avec succès. En attente de paiement.",
@@ -85,7 +83,7 @@ export default function AdvertiserDashboard() {
         });
       }
       loadData();
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: "Erreur",
         description: "Une erreur s'est produite lors de la modification.",

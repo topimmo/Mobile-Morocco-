@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Upload, MapPin } from 'lucide-react';
+import { Upload, MapPin } from 'lucide-react';
 import {
   Dialog,
   DialogContent,

@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PublicLayout } from '@/components/layout';
-import { ListingCard } from '@/components/cards';
 import { AdBanner, SidebarAd } from '@/components/ads';
 
 const listing = {

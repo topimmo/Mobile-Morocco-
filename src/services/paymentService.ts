@@ -77,7 +77,7 @@ export const processAdPayment = async (
  * Confirm a payment
  */
 export const confirmPayment = async (
-  transactionId: string
+  _transactionId: string
 ): Promise<boolean> => {
   // In a real app, this would verify the payment with the payment provider
   return new Promise((resolve) => {
@@ -109,7 +109,7 @@ export const calculatePrice = (
  * Get payment history for a user
  */
 export const getPaymentHistory = async (
-  userId: string
+  _userId: string
 ): Promise<PaymentDetails[]> => {
   // Mock payment history
   return [

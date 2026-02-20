@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { ChevronDown, Filter, SlidersHorizontal } from "lucide-react";
+import { Filter, SlidersHorizontal } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 
 interface Product {
@@ -317,7 +317,7 @@ const ProductGrid = ({
                 enableWhatsApp={product.seller.enableWhatsApp}
                 isPremium={product.id === "1" || product.id === "5"}
                 isFeatured={product.id === "2" || product.id === "7"}
-                onReport={(id) => {
+                onReport={(_id) => {
                   toast({
                     title: "Produit signalé",
                     description: "Merci pour votre signalement. Nous allons l'examiner.",

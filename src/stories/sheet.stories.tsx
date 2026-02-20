@@ -17,11 +17,11 @@ const meta = {
 export default meta;
 
 export const Default = {
-  render: (args: any) => {
+  render: (args: Record<string, unknown>) => {
     return (
       <Sheet>
         <SheetTrigger>Open Right</SheetTrigger>
-        <SheetContent side={args.side}>
+        <SheetContent side={args.side as "top" | "bottom" | "left" | "right"}>
           <SheetHeader>
             <SheetTitle>Are you sure absolutely sure?</SheetTitle>
             <SheetDescription>
@@ -39,11 +39,11 @@ export const Default = {
 };
 
 export const Left = {
-  render: (args: any) => {
+  render: (args: Record<string, unknown>) => {
     return (
       <Sheet>
         <SheetTrigger>Open Left</SheetTrigger>
-        <SheetContent side={args.side}>
+        <SheetContent side={args.side as "top" | "bottom" | "left" | "right"}>
           <SheetHeader>
             <SheetTitle>Are you sure absolutely sure?</SheetTitle>
             <SheetDescription>
@@ -61,11 +61,11 @@ export const Left = {
 };
 
 export const Top = {
-  render: (args: any) => {
+  render: (args: Record<string, unknown>) => {
     return (
       <Sheet>
         <SheetTrigger>Open Top</SheetTrigger>
-        <SheetContent side={args.side}>
+        <SheetContent side={args.side as "top" | "bottom" | "left" | "right"}>
           <SheetHeader>
             <SheetTitle>Are you sure absolutely sure?</SheetTitle>
             <SheetDescription>
@@ -83,11 +83,11 @@ export const Top = {
 };
 
 export const Bottom = {
-  render: (args: any) => {
+  render: (args: Record<string, unknown>) => {
     return (
       <Sheet>
         <SheetTrigger>Open Bottom</SheetTrigger>
-        <SheetContent side={args.side}>
+        <SheetContent side={args.side as "top" | "bottom" | "left" | "right"}>
           <SheetHeader>
             <SheetTitle>Are you sure absolutely sure?</SheetTitle>
             <SheetDescription>

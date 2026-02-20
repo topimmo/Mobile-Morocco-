@@ -10,7 +10,7 @@ const meta = {
 export default meta;
 
 export const Base = {
-  render: (args: any) => (
+  render: (args: Record<string, unknown>) => (
     <div className="items-top flex space-x-2">
       <Checkbox {...args} id="terms1" />
       <div className="grid gap-1.5 leading-none">
@@ -29,7 +29,7 @@ export const Base = {
   args: {},
 };
 export const Disabled = {
-  render: (args: any) => (
+  render: (args: Record<string, unknown>) => (
     <div className="flex items-center space-x-2">
       <Checkbox {...args} id="terms2" />
       <label

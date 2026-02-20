@@ -1,6 +1,6 @@
 import { supabase } from './client';
 import type { Tables, TablesInsert, TablesUpdate } from '@/types/supabase';
-import { apiCache, CACHE_KEYS, invalidateListingsCache } from '@/lib/cache';
+import { invalidateListingsCache } from '@/lib/cache';
 
 // Computer-specific types
 export interface ComputerDetails {
@@ -101,7 +101,7 @@ export interface PaginationOptions {
 export const getComputers = async (
   filters: ComputerFilters = {},
   pagination: PaginationOptions = {}
-): Promise<{ data: ComputerWithRelations[] | null; error: any; count: number | null }> => {
+): Promise<{ data: ComputerWithRelations[] | null; error: Error | null; count: number | null }> => {
   const { page = 1, perPage = 20 } = pagination;
   const from = (page - 1) * perPage;
   const to = from + perPage - 1;
@@ -162,7 +162,7 @@ export const getComputers = async (
  */
 export const getComputerById = async (
   idOrSlug: string
-): Promise<{ data: ComputerWithRelations | null; error: any }> => {
+): Promise<{ data: ComputerWithRelations | null; error: Error | null }> => {
   // Check if it's a UUID or slug
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(idOrSlug);
 
@@ -194,7 +194,7 @@ export const getComputerById = async (
 export const getComputerParts = async (
   filters: ComputerPartFilters = {},
   pagination: PaginationOptions = {}
-): Promise<{ data: ComputerPartWithRelations[] | null; error: any; count: number | null }> => {
+): Promise<{ data: ComputerPartWithRelations[] | null; error: Error | null; count: number | null }> => {
   const { page = 1, perPage = 20 } = pagination;
   const from = (page - 1) * perPage;
   const to = from + perPage - 1;
@@ -245,7 +245,7 @@ export const getComputerParts = async (
  */
 export const getComputerPartById = async (
   idOrSlug: string
-): Promise<{ data: ComputerPartWithRelations | null; error: any }> => {
+): Promise<{ data: ComputerPartWithRelations | null; error: Error | null }> => {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(idOrSlug);
 
   let query = supabase
@@ -276,7 +276,7 @@ export const getComputerPartById = async (
 export const getComputerRepairServices = async (
   filters: ComputerRepairFilters = {},
   pagination: PaginationOptions = {}
-): Promise<{ data: ComputerRepairWithRelations[] | null; error: any; count: number | null }> => {
+): Promise<{ data: ComputerRepairWithRelations[] | null; error: Error | null; count: number | null }> => {
   const { page = 1, perPage = 20 } = pagination;
   const from = (page - 1) * perPage;
   const to = from + perPage - 1;
@@ -320,7 +320,7 @@ export const getComputerRepairServices = async (
  */
 export const createComputer = async (
   computer: Omit<TablesInsert<'items'>, 'id' | 'created_at' | 'updated_at'> & { computer_details?: ComputerDetails }
-): Promise<{ data: ComputerItem | null; error: any }> => {
+): Promise<{ data: ComputerItem | null; error: Error | null }> => {
   // Ensure item_type is set to computer
   const computerData = {
     ...computer,
@@ -344,7 +344,7 @@ export const createComputer = async (
  */
 export const createComputerPart = async (
   part: Omit<TablesInsert<'items'>, 'id' | 'created_at' | 'updated_at'> & { computer_details?: ComputerPartDetails }
-): Promise<{ data: ComputerPartItem | null; error: any }> => {
+): Promise<{ data: ComputerPartItem | null; error: Error | null }> => {
   const partData = {
     ...part,
     item_type: 'computer_part' as const,
@@ -366,7 +366,7 @@ export const createComputerPart = async (
  */
 export const createComputerRepairService = async (
   service: Omit<TablesInsert<'repair_services'>, 'id' | 'created_at' | 'updated_at'>
-): Promise<{ data: ComputerRepairService | null; error: any }> => {
+): Promise<{ data: ComputerRepairService | null; error: Error | null }> => {
   const { data, error } = await supabase
     .from('repair_services')
     .insert(service)
@@ -382,7 +382,7 @@ export const createComputerRepairService = async (
 export const updateComputer = async (
   id: string,
   updates: TablesUpdate<'items'>
-): Promise<{ data: ComputerItem | null; error: any }> => {
+): Promise<{ data: ComputerItem | null; error: Error | null }> => {
   const { data, error } = await supabase
     .from('items')
     .update(updates)
@@ -402,7 +402,7 @@ export const updateComputer = async (
 export const updateComputerPart = async (
   id: string,
   updates: TablesUpdate<'items'>
-): Promise<{ data: ComputerPartItem | null; error: any }> => {
+): Promise<{ data: ComputerPartItem | null; error: Error | null }> => {
   const { data, error } = await supabase
     .from('items')
     .update(updates)
@@ -422,7 +422,7 @@ export const updateComputerPart = async (
 export const updateComputerRepairService = async (
   id: string,
   updates: TablesUpdate<'repair_services'>
-): Promise<{ data: ComputerRepairService | null; error: any }> => {
+): Promise<{ data: ComputerRepairService | null; error: Error | null }> => {
   const { data, error } = await supabase
     .from('repair_services')
     .update(updates)
@@ -438,7 +438,7 @@ export const updateComputerRepairService = async (
  */
 export const deleteComputer = async (
   id: string
-): Promise<{ error: any }> => {
+): Promise<{ error: Error | null }> => {
   const { error } = await supabase
     .from('items')
     .delete()
@@ -455,7 +455,7 @@ export const deleteComputer = async (
  */
 export const deleteComputerPart = async (
   id: string
-): Promise<{ error: any }> => {
+): Promise<{ error: Error | null }> => {
   const { error } = await supabase
     .from('items')
     .delete()
@@ -472,7 +472,7 @@ export const deleteComputerPart = async (
  */
 export const deleteComputerRepairService = async (
   id: string
-): Promise<{ error: any }> => {
+): Promise<{ error: Error | null }> => {
   const { error } = await supabase
     .from('repair_services')
     .delete()

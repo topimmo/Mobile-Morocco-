@@ -6,7 +6,7 @@ import { Label } from './ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Alert, AlertDescription } from './ui/alert';
-import { Eye, EyeOff, User, Mail, Lock, Phone, MapPin, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Lock, Phone, ArrowLeft } from 'lucide-react';
 import { registerUser } from '../services/authService';
 
 const RegistrationForm = () => {
@@ -86,7 +86,7 @@ const RegistrationForm = () => {
 
     try {
       // Real registration with Supabase
-      const { user, error: regError } = await registerUser(
+      const { user: _user, error: regError } = await registerUser(
         formData.email,
         formData.password,
         formData.userType as 'customer' | 'importer' | 'technician',
@@ -114,7 +114,7 @@ const RegistrationForm = () => {
         default:
           navigate('/dashboard/customer');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Une erreur est survenue lors de l\'inscription');
     } finally {
       setIsLoading(false);

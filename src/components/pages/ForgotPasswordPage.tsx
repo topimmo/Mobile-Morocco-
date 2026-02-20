@@ -29,7 +29,7 @@ export function ForgotPasswordPage() {
     try {
       await resetPassword(email);
       setSuccess(true);
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message || 'Une erreur est survenue. Veuillez réessayer.');
     } finally {
       setIsLoading(false);

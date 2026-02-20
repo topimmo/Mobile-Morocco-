@@ -60,7 +60,7 @@ export function RoleGuard({
 
         if (profileError) {
           console.error('🔴 RoleGuard: Error fetching profile:', {
-            code: (profileError as any).code,
+            code: (profileError as { code?: string }).code,
             message: profileError.message,
           });
           if (isMounted) {

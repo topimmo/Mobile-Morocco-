@@ -16,8 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import {
-  Calendar,
-  Star,
+    Star,
   Wrench,
   Clock,
   Users,
@@ -41,7 +40,7 @@ export default function TechnicianDashboard() {
   const [profile, setProfile] = useState<TechnicianProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [serviceRequests, setServiceRequests] = useState<any[]>([]);
+  const [serviceRequests, setServiceRequests] = useState<{ id: string; customerName: string; service: string; device: string; status: string; date: string }[]>([]);
   const [showCreateShopDialog, setShowCreateShopDialog] = useState(false);
 
   useEffect(() => {
@@ -363,7 +362,7 @@ export default function TechnicianDashboard() {
                       </DialogDescription>
                     </DialogHeader>
                     <CreateRepairShopForm
-                      onSuccess={(shopId) => {
+                      onSuccess={(_shopId) => {
                         setShowCreateShopDialog(false);
                       }}
                       onCancel={() => setShowCreateShopDialog(false)}

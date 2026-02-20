@@ -115,7 +115,3 @@ export const Base = {
   ),
   args: {},
 };
-
-{
-  (" ");
-}

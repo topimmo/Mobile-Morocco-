@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getActiveAdsByPosition, recordImpression, recordClick, AdPosition } from "@/services/adService";
+import { getActiveAdsByPosition, recordImpression, recordClick, AdPosition, Advertisement } from "@/services/adService";
 import { Card } from "@/components/ui/card";
 import { X } from "lucide-react";
 
@@ -9,12 +9,13 @@ interface AdBannerProps {
 }
 
 const AdBanner: React.FC<AdBannerProps> = ({ position, className = "" }) => {
-  const [ad, setAd] = useState<any>(null);
+  const [ad, setAd] = useState<Advertisement | null>(null);
   const [isVisible, setIsVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     loadAd();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position]);
 
   const loadAd = async () => {

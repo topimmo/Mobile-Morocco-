@@ -240,6 +240,7 @@ export function GlobalErrorBoundary({ children }: { children: ReactNode }) {
 }
 
 // Functional wrapper for easier use with hooks
+// eslint-disable-next-line react-refresh/only-export-components
 export function withErrorBoundary<P extends object>(
   WrappedComponent: React.ComponentType<P>,
   fallback?: ReactNode,
@@ -310,6 +311,7 @@ interface AsyncState<T> {
   isError: boolean;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAsyncWithFallback<T>(
   asyncFn: () => Promise<T>,
   fallbackData: T,
@@ -345,6 +347,7 @@ export function useAsyncWithFallback<T>(
 
   React.useEffect(() => {
     execute();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   return { ...state, retry: execute };

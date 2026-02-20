@@ -17,7 +17,19 @@ interface Product {
   enableWhatsApp?: boolean;
   isPremium?: boolean;
   isFeatured?: boolean;
-  specs?: any;
+  specs?: {
+    brand?: string;
+    model?: string;
+    storage?: string;
+    ram?: string;
+    display?: string;
+    camera?: string;
+    battery?: string;
+    os?: string;
+    color?: string;
+    warranty?: string;
+    [key: string]: string | undefined;
+  };
   dateAdded?: string;
 }
 
@@ -92,6 +104,7 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useFavorites = () => {
   const context = useContext(FavoritesContext);
   if (context === undefined) {

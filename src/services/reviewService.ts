@@ -92,7 +92,7 @@ export const updateReview = async (id: string, reviewData: Partial<Review>) => {
       return { success: false, error: 'You do not have permission to update this review' };
     }
 
-    const dbReviewData: any = {};
+    const dbReviewData: Record<string, unknown> = {};
     if (reviewData.rating !== undefined) dbReviewData.rating = reviewData.rating;
     if (reviewData.comment !== undefined) dbReviewData.comment = reviewData.comment;
     dbReviewData.updated_at = new Date().toISOString();
@@ -154,7 +154,7 @@ export const deleteReview = async (id: string) => {
   }
 };
 
-const mapDatabaseReviewToModel = (dbReview: any): Review => {
+const mapDatabaseReviewToModel = (dbReview: Record<string, unknown>): Review => {
   return {
     id: dbReview.id,
     reviewerId: dbReview.reviewer_id,

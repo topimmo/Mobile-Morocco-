@@ -11,7 +11,7 @@ interface VerificationComponentProps {
 }
 
 export default function VerificationComponent({ onVerificationComplete }: VerificationComponentProps) {
-  const { t } = useLanguage();
+  const { t: _t } = useLanguage();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [step, setStep] = useState<'phone' | 'code' | 'verified'>('phone');
@@ -44,7 +44,7 @@ export default function VerificationComponent({ onVerificationComplete }: Verifi
       await new Promise(resolve => setTimeout(resolve, 2000));
       setStep('code');
       setError('');
-    } catch (err) {
+    } catch (_err) {
       setError('Erreur lors de l\'envoi du code');
     } finally {
       setIsLoading(false);
@@ -71,7 +71,7 @@ export default function VerificationComponent({ onVerificationComplete }: Verifi
       } else {
         setError('Code de vérification incorrect');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Erreur lors de la vérification');
     } finally {
       setIsLoading(false);

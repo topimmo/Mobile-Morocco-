@@ -14,12 +14,12 @@ const data = [
   { date: '30/12', views: 1240, clicks: 134 },
 ];
 
-const CustomTooltip = ({ active, payload, label, language }: any) => {
+const CustomTooltip = ({ active, payload, label, language: _language }: { active?: boolean; payload?: { name: string; value: number; color: string }[]; label?: string; language?: string }) => {
   if (active && payload && payload.length) {
     return (
       <div className="glass-card p-4 border border-white/10 rounded-lg">
         <p className="font-mono-jet text-sm mb-2">{label}</p>
-        {payload.map((entry: any, index: number) => (
+        {payload.map((entry: { name: string; value: number; color: string }, index: number) => (
           <p key={index} className="text-sm" style={{ color: entry.color }}>
             {entry.name}: <span className="font-mono-jet font-bold">{entry.value}</span>
           </p>

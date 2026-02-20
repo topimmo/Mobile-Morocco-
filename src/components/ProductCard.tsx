@@ -71,7 +71,7 @@ const ProductCard = ({
   sellerName = "Tech Marketplace",
   sellerRating = 4.5,
   location = "Casablanca",
-  initialFavorite = false,
+  initialFavorite: _initialFavorite = false,
   phoneNumber = "0612345678",
   showPhoneNumber = false,
   enableWhatsApp = false,
@@ -179,7 +179,7 @@ const ProductCard = ({
             description: "Le produit a été partagé.",
           });
         })
-        .catch((error) => {
+        .catch((_error) => {
           // Fallback to copy link if sharing fails
           copyToClipboard();
         });

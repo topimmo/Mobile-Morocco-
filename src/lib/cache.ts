@@ -10,7 +10,7 @@ interface CacheEntry<T> {
 }
 
 class SimpleCache {
-  private cache = new Map<string, CacheEntry<any>>();
+  private cache = new Map<string, CacheEntry<unknown>>();
   private defaultTTL = 5 * 60 * 1000; // 5 minutes default
 
   /**
@@ -102,7 +102,7 @@ class SimpleCache {
   /**
    * Generate a cache key from filters and pagination
    */
-  static generateKey(prefix: string, params: Record<string, any>): string {
+  static generateKey(prefix: string, params: Record<string, unknown>): string {
     const sortedParams = Object.keys(params)
       .sort()
       .filter(key => params[key] !== undefined && params[key] !== null && params[key] !== '')

@@ -219,7 +219,7 @@ export const createListing = async (listing: Omit<ListingInsertWithPhoneDetails,
   
   const { data, error } = await supabase
     .from('listings')
-    .insert({ ...listing, slug } as any)
+    .insert({ ...listing, slug } as ListingInsertWithPhoneDetails)
     .select()
     .single();
 

@@ -40,7 +40,7 @@ export const supabase = createClient<Database>(
 // Log all Supabase operations in development
 if (env.IS_DEVELOPMENT) {
   const originalFrom = supabase.from.bind(supabase);
-  supabase.from = function(table: any) {
+  supabase.from = function(table: string) {
     const correlationId = generateCorrelationId();
     logger.debug(`📊 Supabase query: ${table}`, { correlationId });
     return originalFrom(table);
@@ -57,12 +57,12 @@ export const isSupabaseConfigured = (): boolean => {
 export const checkSupabaseConnection = async () => {
   try {
     // Simple query to check connection with a short timeout
-    const { data, error } = await Promise.race([
+    const { data: _data, error } = await Promise.race([
       supabase.from('profiles').select('count').limit(1),
       new Promise((_, reject) => 
         setTimeout(() => reject(new Error('Connection timeout')), 2000)
       )
-    ]) as any;
+    ]) as { data: unknown; error: Error | null };
     
     return { connected: !error, error };
   } catch (err) {
