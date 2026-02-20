@@ -29,7 +29,7 @@ export interface Subscription {
 }
 
 // Mock data for development
-let subscriptions: Subscription[] = [
+const subscriptions: Subscription[] = [
   {
     id: "1",
     userId: "user1",
