@@ -14,7 +14,7 @@ const data = [
   { date: '30/12', views: 1240, clicks: 134 },
 ];
 
-const CustomTooltip = ({ active, payload, label, language }: any) => {
+const CustomTooltip = ({ active, payload, label, language: _language }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="glass-card p-4 border border-white/10 rounded-lg">

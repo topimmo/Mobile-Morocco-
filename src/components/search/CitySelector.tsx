@@ -15,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { getCities, getCitiesByRegion, City, getCityName, getRegionName } from '@/lib/supabase/cities';
+import { getCities, getCitiesByRegion, City, getCityName } from '@/lib/supabase/cities';
 import { Language } from '@/contexts/LanguageContext';
 
 interface CitySelectorProps {

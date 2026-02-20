@@ -9,12 +9,10 @@ import { Alert, AlertDescription } from './ui/alert';
 import { Separator } from './ui/separator';
 import { 
   CreditCard, 
-  Smartphone, 
   Truck, 
   Building2, 
   CheckCircle, 
   AlertCircle,
-  Banknote
 } from 'lucide-react';
 
 interface PaymentMethod {
@@ -45,7 +43,7 @@ const PaymentInstructions: React.FC<PaymentInstructionsProps> = ({
   onPaymentComplete,
   onCancel
 }) => {
-  const { t } = useLanguage();
+  const { t: _t } = useLanguage();
   const [selectedMethod, setSelectedMethod] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -123,7 +121,7 @@ const PaymentInstructions: React.FC<PaymentInstructionsProps> = ({
       const transactionId = `TXN${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
       
       onPaymentComplete(selectedMethod, transactionId);
-    } catch (err) {
+    } catch (_err) {
       setError('Erreur lors du traitement du paiement. Veuillez réessayer.');
     } finally {
       setIsProcessing(false);

@@ -15,6 +15,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ position, className = "" }) => {
 
   useEffect(() => {
     loadAd();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position]);
 
   const loadAd = async () => {

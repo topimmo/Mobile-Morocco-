@@ -29,7 +29,7 @@ export function generateSlug(
   // Remove unwanted characters
   if (preserveArabic) {
     // Keep Arabic characters, alphanumeric, and hyphens
-    slug = slug.replace(/[^a-zA-Z0-9\u0600-\u06FF\-]/g, '');
+    slug = slug.replace(/[^a-zA-Z0-9\u0600-\u06FF-]/g, '');
   } else {
     // Keep only alphanumeric and hyphens
     slug = slug.replace(/[^\w\s-]/g, '').replace(/-+/g, '-');

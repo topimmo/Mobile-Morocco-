@@ -142,6 +142,7 @@ export function useDataFetch<T>(
     return () => {
       isMounted.current = false;
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   return {
@@ -175,7 +176,7 @@ export function useMutation<TData, TVariables>(
     isSuccess: false,
   });
 
-  const mutate = useCallback(async (variables: TVariables) => {
+const mutate = useCallback(async (variables: TVariables) => {
     setState(prev => ({ ...prev, isLoading: true, isError: false, isSuccess: false }));
 
     try {
@@ -201,6 +202,7 @@ export function useMutation<TData, TVariables>(
       options.onError?.(error, variables);
       throw error;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mutationFn, options.onSuccess, options.onError]);
 
   const reset = useCallback(() => {

@@ -71,9 +71,9 @@ export function runWhenIdle(callback: () => void, timeout = 2000) {
 /**
  * Batch multiple state updates to reduce re-renders
  */
-export function batchUpdates<T>(updates: (() => void)[]): void {
+export function batchUpdates<_T>(updates: (() => void)[]): void {
   if ('unstable_batchedUpdates' in window) {
-    // @ts-ignore - React experimental feature
+    // @ts-expect-error - React experimental feature
     window.unstable_batchedUpdates(() => {
       updates.forEach(update => update());
     });

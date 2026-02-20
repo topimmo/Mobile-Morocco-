@@ -1,7 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Globe, LogOut, LayoutDashboard, LogIn, Menu, X, Home, ShoppingBag, Wrench, Grid3X3, Shield, Users, Smartphone, Settings, Store, Megaphone, Plus, BarChart2, Laptop, Cpu, Monitor, ChevronDown } from 'lucide-react';
+import { Globe, LogOut, LayoutDashboard, LogIn, Menu, Home, ShoppingBag, Wrench, Shield, Users, Smartphone, Settings, Store, Plus, BarChart2, Laptop, Cpu, Monitor, ChevronDown } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useState, memo } from 'react';
 import { cn } from '@/lib/utils';
@@ -22,7 +22,7 @@ import {
 
 function Navigation() {
   // Default values for when context is not available (e.g., in storyboards)
-  let t = (key: string) => key;
+  let _t = (key: string) => key;
   let language = 'ar';
   let setLanguage = (_lang: string) => {};
   let user = null;
@@ -30,7 +30,7 @@ function Navigation() {
 
   try {
     const langContext = useLanguage();
-    t = langContext.t;
+    _t = langContext.t;
     language = langContext.language;
     setLanguage = langContext.setLanguage;
   } catch {

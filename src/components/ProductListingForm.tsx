@@ -12,10 +12,8 @@ import {
 } from "./ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Separator } from "./ui/separator";
 import { Checkbox } from "./ui/checkbox";
 import {
-  Upload,
   X,
   Plus,
   MapPin,
@@ -25,8 +23,7 @@ import {
   Check,
 } from "lucide-react";
 import { toast } from "./ui/use-toast";
-import { uploadImages, deleteImage } from "@/lib/supabase/storage";
-import { Loader2 } from "lucide-react";
+import { uploadImages as _uploadImages, deleteImage as _deleteImage } from "@/lib/supabase/storage";
 
 interface ProductListingFormProps {
   onSubmit?: (listing: ProductListing) => void;
@@ -302,7 +299,7 @@ const ProductListingForm: React.FC<ProductListingFormProps> = ({
       });
 
       onSubmit(formData);
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: "Error",
         description: "Failed to submit listing. Please try again.",

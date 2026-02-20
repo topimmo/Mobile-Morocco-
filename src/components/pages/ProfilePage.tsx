@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, Mail, Phone, MapPin, Shield, Loader2, Camera } from 'lucide-react';
+import { User, Mail, Phone, Shield, Loader2, Camera } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
 export function ProfilePage() {

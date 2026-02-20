@@ -25,11 +25,9 @@ import {
 import {
   Search,
   MapPin,
-  Filter,
   X,
   SlidersHorizontal,
   Target,
-  Calendar,
 } from "lucide-react";
 
 interface AdvancedSearchProps {
@@ -56,7 +54,7 @@ interface SearchFilters {
 
 const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
   onSearch = () => {},
-  onClose = () => {},
+  onClose: _onClose = () => {},
   initialFilters = {},
 }) => {
   const [filters, setFilters] = useState<SearchFilters>({

@@ -20,7 +20,6 @@ import {
   Package,
   TrendingUp,
   AlertCircle,
-  Smartphone,
   Plus,
 } from "lucide-react";
 import { Link } from "react-router-dom";

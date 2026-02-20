@@ -400,7 +400,7 @@ export const updatePassword = async (newPassword: string) => {
 };
 
 // Verify email
-export const verifyEmail = async (token: string) => {
+export const verifyEmail = async (_token: string) => {
   try {
     // This is handled automatically by Supabase when the user clicks the verification link
     // This function is just a placeholder for any additional logic you might want to add

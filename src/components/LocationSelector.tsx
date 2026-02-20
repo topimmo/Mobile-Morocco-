@@ -80,7 +80,7 @@ const deliveryZones = {
 };
 
 export default function LocationSelector({ onLocationSelect, showDeliveryEstimate = false }: LocationSelectorProps) {
-  const { t } = useLanguage();
+  const { t: _t } = useLanguage();
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedNeighborhood, setSelectedNeighborhood] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');

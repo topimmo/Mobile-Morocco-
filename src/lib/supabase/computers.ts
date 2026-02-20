@@ -1,6 +1,6 @@
 import { supabase } from './client';
 import type { Tables, TablesInsert, TablesUpdate } from '@/types/supabase';
-import { apiCache, CACHE_KEYS, invalidateListingsCache } from '@/lib/cache';
+import { invalidateListingsCache } from '@/lib/cache';
 
 // Computer-specific types
 export interface ComputerDetails {

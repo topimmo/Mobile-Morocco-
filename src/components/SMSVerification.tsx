@@ -51,7 +51,7 @@ export default function SMSVerification({
         title: "SMS envoyé",
         description: `Code de vérification envoyé au ${phoneNumber}`,
       });
-    } catch (err) {
+    } catch (_err) {
       setError('Erreur lors de l\'envoi du SMS');
     } finally {
       setIsLoading(false);
@@ -80,7 +80,7 @@ export default function SMSVerification({
       } else {
         setError('Code de vérification incorrect');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Erreur lors de la vérification');
     } finally {
       setIsLoading(false);
@@ -96,6 +96,7 @@ export default function SMSVerification({
   // Auto-send SMS on component mount
   useEffect(() => {
     handleSendSMS();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isVerified) {

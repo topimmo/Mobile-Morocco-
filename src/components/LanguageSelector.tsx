@@ -2,10 +2,10 @@ import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from './ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
-import { Globe, Languages } from 'lucide-react';
+import { Globe } from 'lucide-react';
 
 const LanguageSelector: React.FC = () => {
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage, t: _t } = useLanguage();
 
   const languages: Array<{ code: 'fr' | 'ar' | 'en'; name: string; flag: string }> = [
     { code: 'fr', name: 'Français', flag: '🇫🇷' },

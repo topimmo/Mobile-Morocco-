@@ -165,12 +165,12 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
     loadCategories();
   }, []);
 
-  const handleCityChange = (id: string, city?: City) => {
+  const handleCityChange = (id: string, _city?: City) => {
     setCityId(id);
     setNeighborhoodId(''); // Reset neighborhood when city changes
   };
 
-  const handleNeighborhoodChange = (id: string, neighborhood?: Neighborhood) => {
+  const handleNeighborhoodChange = (id: string, _neighborhood?: Neighborhood) => {
     setNeighborhoodId(id);
   };
 

@@ -15,7 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingBag, Heart, Search, Ticket, AlertCircle, Smartphone, Plus } from "lucide-react";
+import { ShoppingBag, Heart, Search, Ticket, AlertCircle, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function CustomerDashboard() {

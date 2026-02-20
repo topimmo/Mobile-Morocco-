@@ -18,7 +18,7 @@ import {
   CheckCircle,
   AlertCircle
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
@@ -39,7 +39,7 @@ export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [_selectedImageIndex, _setSelectedImageIndex] = useState(0);
   const { isFavorite, addToFavorites, removeFromFavorites } = useFavorites();
   const { addToComparison, isInComparison } = useComparison();
 

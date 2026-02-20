@@ -52,6 +52,7 @@ const SubscriptionList: React.FC<SubscriptionListProps> = ({ language = 'ar' }) 
 
   useEffect(() => {
     fetchSubscriptions();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRenewSubscription = async (id: string) => {

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  Search, ChevronRight, Star, Phone, MapPin, Wrench, Store,
+  Search, ChevronRight, Star, MapPin, Wrench, Store,
   Smartphone, Settings, Package, Monitor, Cpu, HardDrive,
   ArrowRight, Shield, Clock, MessageCircle, Zap
 } from 'lucide-react';

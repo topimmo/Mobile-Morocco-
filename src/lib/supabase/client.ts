@@ -57,7 +57,7 @@ export const isSupabaseConfigured = (): boolean => {
 export const checkSupabaseConnection = async () => {
   try {
     // Simple query to check connection with a short timeout
-    const { data, error } = await Promise.race([
+    const { data: _data, error } = await Promise.race([
       supabase.from('profiles').select('count').limit(1),
       new Promise((_, reject) => 
         setTimeout(() => reject(new Error('Connection timeout')), 2000)

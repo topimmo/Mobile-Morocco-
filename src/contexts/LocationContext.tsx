@@ -80,6 +80,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useLocation = () => {
   const context = useContext(LocationContext);
   if (context === undefined) {

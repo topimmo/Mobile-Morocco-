@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -82,12 +82,12 @@ export function CreateRepairShopForm({ onSuccess, onCancel }: CreateRepairShopFo
     required: isRTL ? 'يرجى ملء جميع الحقول المطلوبة' : 'Veuillez remplir tous les champs obligatoires',
   };
 
-  const handleCityChange = (id: string, city?: City) => {
+  const handleCityChange = (id: string, _city?: City) => {
     setCityId(id);
     setNeighborhoodId('');
   };
 
-  const handleNeighborhoodChange = (id: string, neighborhood?: Neighborhood) => {
+  const handleNeighborhoodChange = (id: string, _neighborhood?: Neighborhood) => {
     setNeighborhoodId(id);
   };
 

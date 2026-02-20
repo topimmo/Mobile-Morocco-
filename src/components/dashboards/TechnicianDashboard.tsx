@@ -16,8 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import {
-  Calendar,
-  Star,
+    Star,
   Wrench,
   Clock,
   Users,
@@ -363,7 +362,7 @@ export default function TechnicianDashboard() {
                       </DialogDescription>
                     </DialogHeader>
                     <CreateRepairShopForm
-                      onSuccess={(shopId) => {
+                      onSuccess={(_shopId) => {
                         setShowCreateShopDialog(false);
                       }}
                       onCancel={() => setShowCreateShopDialog(false)}

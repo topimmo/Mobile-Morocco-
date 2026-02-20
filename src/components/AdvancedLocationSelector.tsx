@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -68,7 +67,7 @@ const AdvancedLocationSelector: React.FC<AdvancedLocationSelectorProps> = ({
   showDeliveryCalculator = false,
   className = ""
 }) => {
-  const { t } = useLanguage();
+  const { t: _t } = useLanguage();
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('');
   const [currentLocation, setCurrentLocation] = useState<Location | null>(null);

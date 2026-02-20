@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Bell, X, Check, Clock, AlertTriangle, BarChart3 } from "lucide-react";
+import { Bell, Check, Clock, AlertTriangle, BarChart3 } from "lucide-react";
 import {
   Popover,
   PopoverContent,
