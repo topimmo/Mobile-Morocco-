@@ -176,7 +176,7 @@ export function useMutation<TData, TVariables>(
     isSuccess: false,
   });
 
-const mutate = useCallback(async (variables: TVariables) => {
+  const mutate = useCallback(async (variables: TVariables) => {
     setState(prev => ({ ...prev, isLoading: true, isError: false, isSuccess: false }));
 
     try {

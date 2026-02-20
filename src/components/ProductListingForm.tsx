@@ -23,7 +23,6 @@ import {
   Check,
 } from "lucide-react";
 import { toast } from "./ui/use-toast";
-import { uploadImages as _uploadImages, deleteImage as _deleteImage } from "@/lib/supabase/storage";
 
 interface ProductListingFormProps {
   onSubmit?: (listing: ProductListing) => void;
