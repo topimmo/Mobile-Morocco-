@@ -1,4 +1,4 @@
-import { MoreVertical, Edit, Trash2, Copy } from 'lucide-react';
+import { MoveVertical as MoreVertical, CreditCard as Edit, Trash2, Copy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {

@@ -1,4 +1,4 @@
-import { Package, Eye, MousePointerClick, CheckCircle } from 'lucide-react';
+import { Package, Eye, MousePointerClick, CircleCheck as CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface StatsOverviewProps {

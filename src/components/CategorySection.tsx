@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   Phone,
+  Smartphone,
   Headphones,
   Wrench,
   Settings,

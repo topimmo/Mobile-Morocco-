@@ -12,14 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import {
-  BarChart,
-  TrendingUp,
-  AlertCircle,
-  Eye,
-  MousePointer,
-  Plus,
-} from "lucide-react";
+import { BarChart, TrendingUp, CircleAlert as AlertCircle, Eye, MousePointer, Calendar, DollarSign, Plus } from "lucide-react";
 import {
   getAllAds,
   getAdStats,
@@ -34,7 +27,7 @@ export default function AdvertiserDashboard() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [ads, setAds] = useState<Advertisement[]>([]);
-  const [stats, setStats] = useState<Awaited<ReturnType<typeof getAdStats>> | null>(null);
+  const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
 
@@ -58,7 +51,7 @@ export default function AdvertiserDashboard() {
     }
   };
 
-  const handleAddAd = async (_adData: AdFormData) => {
+  const handleAddAd = async (adData: AdFormData) => {
     toast({
       title: "Publicité créée",
       description: "Votre publicité a été créée avec succès. En attente de paiement.",
@@ -83,7 +76,7 @@ export default function AdvertiserDashboard() {
         });
       }
       loadData();
-    } catch (_error) {
+    } catch (error) {
       toast({
         title: "Erreur",
         description: "Une erreur s'est produite lors de la modification.",

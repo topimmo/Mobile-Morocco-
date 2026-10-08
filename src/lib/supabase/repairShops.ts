@@ -113,7 +113,7 @@ export const getRepairShopById = async (id: string) => {
       neighborhood:neighborhoods(*)
     `)
     .eq('id', id)
-    .single();
+    .maybeSingle();
 
   return { data: data as unknown as RepairShopWithRelations | null, error };
 };
@@ -128,7 +128,7 @@ export const getRepairShopBySlug = async (slug: string): Promise<RepairShopWithR
       neighborhood:neighborhoods(*)
     `)
     .eq('slug', slug)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Error fetching repair shop by slug:', error);

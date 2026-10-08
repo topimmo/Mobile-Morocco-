@@ -1013,45 +1013,36 @@ export type Database = {
       reviews: {
         Row: {
           comment: string | null
-          created_at: string | null
+          created_at: string
           id: string
-          is_visible: boolean | null
+          is_visible: boolean
           rating: number
           target_id: string
           target_type: string
-          updated_at: string | null
+          updated_at: string
           user_id: string
-          reviewer_id: string  // Alias for user_id
-          subject_id: string  // Alias for target_id
-          subject_type: string  // Alias for target_type
         }
         Insert: {
           comment?: string | null
-          created_at?: string | null
+          created_at?: string
           id?: string
-          is_visible?: boolean | null
+          is_visible?: boolean
           rating: number
           target_id: string
           target_type: string
-          updated_at?: string | null
+          updated_at?: string
           user_id: string
-          reviewer_id?: string
-          subject_id?: string
-          subject_type?: string
         }
         Update: {
           comment?: string | null
-          created_at?: string | null
+          created_at?: string
           id?: string
-          is_visible?: boolean | null
+          is_visible?: boolean
           rating?: number
           target_id?: string
           target_type?: string
-          updated_at?: string | null
+          updated_at?: string
           user_id?: string
-          reviewer_id?: string
-          subject_id?: string
-          subject_type?: string
         }
         Relationships: []
       }
@@ -1207,7 +1198,6 @@ export type Database = {
           store_type: string
           updated_at: string | null
           user_id: string | null
-          owner_id: string | null  // Alias for user_id
           view_count: number | null
           website: string | null
           whatsapp: string | null
@@ -1362,39 +1352,39 @@ export type Database = {
       notifications: {
         Row: {
           id: string
-          userId: string
+          user_id: string
           title: string
           message: string
           type: string
-          relatedId: string | null
-          isRead: boolean
+          related_id: string | null
+          is_read: boolean
           channel: string
-          createdAt: string | null
-          scheduledFor: string | null
+          created_at: string
+          scheduled_for: string | null
         }
         Insert: {
           id?: string
-          userId: string
+          user_id: string
           title: string
           message: string
-          type: string
-          relatedId?: string | null
-          isRead?: boolean
-          channel: string
-          createdAt?: string | null
-          scheduledFor?: string | null
+          type?: string
+          related_id?: string | null
+          is_read?: boolean
+          channel?: string
+          created_at?: string
+          scheduled_for?: string | null
         }
         Update: {
           id?: string
-          userId?: string
+          user_id?: string
           title?: string
           message?: string
           type?: string
-          relatedId?: string | null
-          isRead?: boolean
+          related_id?: string | null
+          is_read?: boolean
           channel?: string
-          createdAt?: string | null
-          scheduledFor?: string | null
+          created_at?: string
+          scheduled_for?: string | null
         }
         Relationships: []
       }
@@ -1456,7 +1446,9 @@ export type Database = {
           receiver_id: string
           content: string
           is_read: boolean
-          created_at: string | null
+          related_to_type: string | null
+          related_to_id: string | null
+          created_at: string
         }
         Insert: {
           id?: string
@@ -1464,7 +1456,9 @@ export type Database = {
           receiver_id: string
           content: string
           is_read?: boolean
-          created_at?: string | null
+          related_to_type?: string | null
+          related_to_id?: string | null
+          created_at?: string
         }
         Update: {
           id?: string
@@ -1472,7 +1466,9 @@ export type Database = {
           receiver_id?: string
           content?: string
           is_read?: boolean
-          created_at?: string | null
+          related_to_type?: string | null
+          related_to_id?: string | null
+          created_at?: string
         }
         Relationships: []
       }

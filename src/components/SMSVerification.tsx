@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Phone, MessageSquare, Clock, CheckCircle } from 'lucide-react';
+import { Phone, MessageSquare, Clock, CircleCheck as CheckCircle } from 'lucide-react';
 import { useToast } from './ui/use-toast';
 
 interface SMSVerificationProps {
@@ -51,7 +51,7 @@ export default function SMSVerification({
         title: "SMS envoyé",
         description: `Code de vérification envoyé au ${phoneNumber}`,
       });
-    } catch (_err) {
+    } catch (err) {
       setError('Erreur lors de l\'envoi du SMS');
     } finally {
       setIsLoading(false);
@@ -80,7 +80,7 @@ export default function SMSVerification({
       } else {
         setError('Code de vérification incorrect');
       }
-    } catch (_err) {
+    } catch (err) {
       setError('Erreur lors de la vérification');
     } finally {
       setIsLoading(false);
@@ -96,7 +96,6 @@ export default function SMSVerification({
   // Auto-send SMS on component mount
   useEffect(() => {
     handleSendSMS();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isVerified) {

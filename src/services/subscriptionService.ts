@@ -29,7 +29,7 @@ export interface Subscription {
 }
 
 // Mock data for development
-const subscriptions: Subscription[] = [
+let subscriptions: Subscription[] = [
   {
     id: "1",
     userId: "user1",
@@ -116,7 +116,7 @@ export const getSubscriptionById = async (
       .from('subscriptions')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error('Get subscription error:', error);
@@ -142,7 +142,7 @@ export const getUserSubscription = async (
       .select('*')
       .eq('user_id', userId)
       .eq('status', 'active')
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error('Get user subscription error:', error);
@@ -209,7 +209,7 @@ export const updateSubscription = async (
   updates: Partial<Subscription>,
 ): Promise<Subscription | undefined> => {
   try {
-    const dbUpdates: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    const dbUpdates: any = { updated_at: new Date().toISOString() };
     if (updates.type !== undefined) dbUpdates.plan_type = updates.type === 'premium' ? 'professional' : 'free';
     if (updates.isActive !== undefined) dbUpdates.status = updates.isActive ? 'active' : 'cancelled';
     if (updates.startDate !== undefined) dbUpdates.start_date = updates.startDate;
@@ -249,17 +249,17 @@ export const updateSubscription = async (
   }
 };
 
-const mapDatabaseSubscriptionToModel = (dbSub: Record<string, unknown>): Subscription => {
+const mapDatabaseSubscriptionToModel = (dbSub: any): Subscription => {
   const isPremium = dbSub.plan_type === 'professional' || dbSub.plan_type === 'standard';
   return {
-    id: dbSub.id as string,
-    userId: dbSub.user_id as string,
+    id: dbSub.id,
+    userId: dbSub.user_id,
     type: isPremium ? 'premium' : 'free',
-    startDate: new Date(dbSub.start_date as string),
-    endDate: dbSub.end_date ? new Date(dbSub.end_date as string) : new Date('2099-12-31'),
+    startDate: new Date(dbSub.start_date),
+    endDate: dbSub.end_date ? new Date(dbSub.end_date) : new Date('2099-12-31'),
     isActive: dbSub.status === 'active',
     paymentStatus: dbSub.status === 'active' ? 'confirmed' : 'pending',
-    paymentMethod: (dbSub.payment_method as 'other' | 'bank_transfer') || 'bank_transfer',
+    paymentMethod: dbSub.payment_method || 'bank_transfer',
     features: {
       featuredPlacement: isPremium,
       highlightedAds: isPremium,

@@ -48,7 +48,7 @@ export async function getNeighborhoodById(id: string): Promise<Neighborhood | nu
     .from('neighborhoods')
     .select('*')
     .eq('id', id)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Error fetching neighborhood:', error);
@@ -64,7 +64,7 @@ export async function getNeighborhoodBySlug(cityId: string, slug: string): Promi
     .select('*')
     .eq('city_id', cityId)
     .eq('slug', slug)
-    .single();
+    .maybeSingle();
 
   if (error) {
     return null;

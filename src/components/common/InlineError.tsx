@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertCircle, RefreshCw, WifiOff } from 'lucide-react';
+import { CircleAlert as AlertCircle, RefreshCw, WifiOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 

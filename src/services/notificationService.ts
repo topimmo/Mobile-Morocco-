@@ -99,8 +99,8 @@ export const getUserNotifications = async (
     const { data, error } = await supabase
       .from("notifications")
       .select("*")
-      .eq("userId", userId)
-      .order("createdAt", { ascending: false });
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
     return (data || []).map(mapDatabaseNotificationToModel);
@@ -121,9 +121,9 @@ export const getUnreadNotifications = async (
     const { data, error } = await supabase
       .from("notifications")
       .select("*")
-      .eq("userId", userId)
-      .eq("isRead", false)
-      .order("createdAt", { ascending: false });
+      .eq("user_id", userId)
+      .eq("is_read", false)
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
     return (data || []).map(mapDatabaseNotificationToModel);
@@ -145,13 +145,13 @@ export const markNotificationAsRead = async (
   try {
     const { data, error } = await supabase
       .from("notifications")
-      .update({ isRead: true })
+      .update({ is_read: true })
       .eq("id", id)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
-    return mapDatabaseNotificationToModel(data);
+    return data ? mapDatabaseNotificationToModel(data) : undefined;
   } catch (error) {
     console.error("Error marking notification as read:", error);
     // Fallback to mock implementation
@@ -171,9 +171,9 @@ export const markAllNotificationsAsRead = async (
   try {
     const { data, error } = await supabase
       .from("notifications")
-      .update({ isRead: true })
-      .eq("userId", userId)
-      .eq("isRead", false)
+      .update({ is_read: true })
+      .eq("user_id", userId)
+      .eq("is_read", false)
       .select();
 
     if (error) throw error;
@@ -201,14 +201,14 @@ export const createNotification = async (
 ): Promise<Notification> => {
   try {
     const dbNotification = {
-      userId: notification.userId,
+      user_id: notification.userId,
       title: notification.title,
       message: notification.message,
       type: notification.type,
-      relatedId: notification.relatedId,
-      isRead: notification.isRead,
+      related_id: notification.relatedId,
+      is_read: notification.isRead,
       channel: notification.channel,
-      scheduledFor: notification.scheduledFor instanceof Date ? notification.scheduledFor.toISOString() : notification.scheduledFor,
+      scheduled_for: notification.scheduledFor instanceof Date ? notification.scheduledFor.toISOString() : notification.scheduledFor,
     };
 
     const { data, error } = await supabase
@@ -253,18 +253,18 @@ export const deleteNotification = async (id: string): Promise<boolean> => {
   }
 };
 
-const mapDatabaseNotificationToModel = (dbNotif: Record<string, unknown>): Notification => {
+const mapDatabaseNotificationToModel = (dbNotif: any): Notification => {
   return {
-    id: dbNotif.id as string,
-    userId: dbNotif.user_id as string,
-    title: dbNotif.title as string,
-    message: dbNotif.message as string,
-    type: dbNotif.type as NotificationType,
-    relatedId: dbNotif.related_id as string,
-    isRead: dbNotif.isRead as boolean,
-    channel: dbNotif.channel as NotificationChannel,
-    createdAt: new Date(dbNotif.created_at as string),
-    scheduledFor: dbNotif.scheduled_for ? new Date(dbNotif.scheduled_for as string) : undefined,
+    id: dbNotif.id,
+    userId: dbNotif.user_id,
+    title: dbNotif.title,
+    message: dbNotif.message,
+    type: dbNotif.type,
+    relatedId: dbNotif.related_id,
+    isRead: dbNotif.is_read,
+    channel: dbNotif.channel,
+    createdAt: new Date(dbNotif.created_at),
+    scheduledFor: dbNotif.scheduled_for ? new Date(dbNotif.scheduled_for) : undefined,
   };
 };
 
@@ -358,7 +358,7 @@ export const getNotificationStats = async (userId: string) => {
     const { data, error } = await supabase
       .from("notifications")
       .select("*")
-      .eq("userId", userId);
+      .eq("user_id", userId);
 
     if (error) throw error;
 

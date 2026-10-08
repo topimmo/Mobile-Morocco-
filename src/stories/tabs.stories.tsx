@@ -18,7 +18,7 @@ const meta = {
 export default meta;
 
 export const Base = {
-  render: (args: Record<string, unknown>) => (
+  render: (args: any) => (
     <Tabs {...args} className="w-[400px]">
       <TabsList>
         <TabsTrigger value="account">Account</TabsTrigger>

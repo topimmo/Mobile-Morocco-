@@ -115,7 +115,6 @@ export function SEO({
 }
 
 // Helper to generate Product structured data
-// eslint-disable-next-line react-refresh/only-export-components
 export function generateProductSchema(product: {
   name: string;
   description: string;
@@ -155,7 +154,6 @@ export function generateProductSchema(product: {
 }
 
 // Helper to generate LocalBusiness structured data
-// eslint-disable-next-line react-refresh/only-export-components
 export function generateLocalBusinessSchema(business: {
   name: string;
   description: string;
@@ -203,7 +201,6 @@ export function generateLocalBusinessSchema(business: {
 }
 
 // Helper to generate Website structured data
-// eslint-disable-next-line react-refresh/only-export-components
 export function generateWebsiteSchema() {
   return {
     '@context': 'https://schema.org',
@@ -223,7 +220,6 @@ export function generateWebsiteSchema() {
 }
 
 // Helper to generate BreadcrumbList structured data
-// eslint-disable-next-line react-refresh/only-export-components
 export function generateBreadcrumbSchema(items: { name: string; url: string }[]) {
   return {
     '@context': 'https://schema.org',

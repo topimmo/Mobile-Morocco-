@@ -89,7 +89,7 @@ export function FiltersPanel({
     loadCategories();
   }, []);
 
-  const handleCityChange = (cityId: string, _city?: City) => {
+  const handleCityChange = (cityId: string, city?: City) => {
     onChange({
       ...values,
       cityId,
@@ -97,7 +97,7 @@ export function FiltersPanel({
     });
   };
 
-  const handleNeighborhoodChange = (neighborhoodId: string, _neighborhood?: Neighborhood) => {
+  const handleNeighborhoodChange = (neighborhoodId: string, neighborhood?: Neighborhood) => {
     onChange({
       ...values,
       neighborhoodId,

@@ -15,16 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import {
-    Star,
-  Wrench,
-  Clock,
-  Users,
-  AlertCircle,
-  CheckCircle,
-  XCircle,
-  Plus,
-} from "lucide-react";
+import { Calendar, Star, Wrench, Clock, Users, CircleAlert as AlertCircle, CircleCheck as CheckCircle, Circle as XCircle, Plus } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -40,7 +31,7 @@ export default function TechnicianDashboard() {
   const [profile, setProfile] = useState<TechnicianProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [serviceRequests, setServiceRequests] = useState<{ id: string; customerName: string; service: string; device: string; status: string; date: string }[]>([]);
+  const [serviceRequests, setServiceRequests] = useState<any[]>([]);
   const [showCreateShopDialog, setShowCreateShopDialog] = useState(false);
 
   useEffect(() => {
@@ -362,7 +353,7 @@ export default function TechnicianDashboard() {
                       </DialogDescription>
                     </DialogHeader>
                     <CreateRepairShopForm
-                      onSuccess={(_shopId) => {
+                      onSuccess={(shopId) => {
                         setShowCreateShopDialog(false);
                       }}
                       onCancel={() => setShowCreateShopDialog(false)}

@@ -13,7 +13,7 @@ const meta= {
 export default meta;
 
 export const Base = {
-  render: (args: Record<string, unknown>) => (
+  render: (args: any) => (
     <ResizablePanelGroup
       {...args}
       direction="horizontal"

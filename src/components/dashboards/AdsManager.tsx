@@ -1,20 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Plus, 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  Edit, 
-  Trash2, 
-  Eye, 
-  EyeOff,
-  MousePointerClick,
-  ArrowUpDown,
-  Image as ImageIcon,
-  Video,
-  ExternalLink
-} from 'lucide-react';
+import { Plus, Search, Filter, MoveVertical as MoreVertical, CreditCard as Edit, Trash2, Eye, EyeOff, MousePointerClick, ArrowUpDown, Image as ImageIcon, Video, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';

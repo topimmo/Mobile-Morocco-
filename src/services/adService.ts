@@ -246,7 +246,7 @@ export const getAdById = async (
       .from('ads')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error('Get ad error:', error);
@@ -344,7 +344,7 @@ export const updateAd = async (
   }
 
   try {
-    const dbUpdates: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    const dbUpdates: any = { updated_at: new Date().toISOString() };
     if (updates.title !== undefined) dbUpdates.title = updates.title;
     if (updates.imageUrl !== undefined) dbUpdates.image_url = updates.imageUrl;
     if (updates.linkUrl !== undefined) dbUpdates.link_url = updates.linkUrl;
@@ -431,7 +431,7 @@ export const recordImpression = async (
       .from('ads')
       .select('impressions')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     if (getError || !ad) {
       return recordMockImpression();
@@ -450,7 +450,7 @@ export const recordImpression = async (
       .from('ads')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     return data ? mapDatabaseAdToModel(data) : undefined;
   } catch (error) {
@@ -482,7 +482,7 @@ export const recordClick = async (
       .from('ads')
       .select('id')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     if (getError || !ad) {
       return recordMockClick();
@@ -501,7 +501,7 @@ export const recordClick = async (
       .from('ads')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     return data ? mapDatabaseAdToModel(data) : undefined;
   } catch (error) {
@@ -510,22 +510,22 @@ export const recordClick = async (
   }
 };
 
-const mapDatabaseAdToModel = (dbAd: Record<string, unknown>): Advertisement => {
+const mapDatabaseAdToModel = (dbAd: any): Advertisement => {
   return {
-    id: dbAd.id as string,
-    title: dbAd.title as string,
-    imageUrl: dbAd.image_url as string,
-    linkUrl: dbAd.link_url as string,
-    position: dbAd.placement as AdPosition,
-    startDate: new Date(dbAd.start_date as string),
-    endDate: new Date(dbAd.end_date as string),
-    isActive: dbAd.is_active as boolean,
-    userId: dbAd.advertiser_id as string,
+    id: dbAd.id,
+    title: dbAd.title,
+    imageUrl: dbAd.image_url,
+    linkUrl: dbAd.link_url,
+    position: dbAd.placement,
+    startDate: new Date(dbAd.start_date),
+    endDate: new Date(dbAd.end_date),
+    isActive: dbAd.is_active,
+    userId: dbAd.advertiser_id,
     paymentStatus: 'confirmed',
-    impressions: (dbAd.impressions as number) || 0,
-    clicks: (dbAd.clicks as number) || 0,
-    createdAt: new Date(dbAd.created_at as string),
-    updatedAt: new Date(dbAd.updated_at as string),
+    impressions: dbAd.impressions || 0,
+    clicks: dbAd.clicks || 0,
+    createdAt: new Date(dbAd.created_at),
+    updatedAt: new Date(dbAd.updated_at),
   };
 };
 

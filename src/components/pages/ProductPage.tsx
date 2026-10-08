@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Star, Phone, MessageCircle, Share2, MapPin, ChevronRight, Store, Eye, Calendar, AlertTriangle, Flag, Heart, Clock } from 'lucide-react';
+import { Star, Phone, MessageCircle, Share2, MapPin, ChevronRight, Store, Eye, Calendar, TriangleAlert as AlertTriangle, Flag, Heart, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PublicLayout } from '@/components/layout';
+import { ListingCard } from '@/components/cards';
 import { AdBanner, SidebarAd } from '@/components/ads';
 
 const listing = {

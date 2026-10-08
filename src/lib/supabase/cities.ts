@@ -85,7 +85,7 @@ export async function getCityBySlug(slug: string): Promise<City | null> {
     .select('*')
     .eq('slug', slug)
     .eq('is_active', true)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Error fetching city:', error);
@@ -101,7 +101,7 @@ export async function getCityById(id: string): Promise<City | null> {
     .select('*')
     .eq('id', id)
     .eq('is_active', true)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Error fetching city:', error);

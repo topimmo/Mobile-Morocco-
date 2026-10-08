@@ -7,13 +7,7 @@ import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Label } from './ui/label';
 import { Alert, AlertDescription } from './ui/alert';
 import { Separator } from './ui/separator';
-import { 
-  CreditCard, 
-  Truck, 
-  Building2, 
-  CheckCircle, 
-  AlertCircle,
-} from 'lucide-react';
+import { CreditCard, Smartphone, Truck, Building2, CircleCheck as CheckCircle, CircleAlert as AlertCircle, Banknote } from 'lucide-react';
 
 interface PaymentMethod {
   id: string;
@@ -43,7 +37,7 @@ const PaymentInstructions: React.FC<PaymentInstructionsProps> = ({
   onPaymentComplete,
   onCancel
 }) => {
-  const { t: _t } = useLanguage();
+  const { t } = useLanguage();
   const [selectedMethod, setSelectedMethod] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -121,7 +115,7 @@ const PaymentInstructions: React.FC<PaymentInstructionsProps> = ({
       const transactionId = `TXN${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
       
       onPaymentComplete(selectedMethod, transactionId);
-    } catch (_err) {
+    } catch (err) {
       setError('Erreur lors du traitement du paiement. Veuillez réessayer.');
     } finally {
       setIsProcessing(false);

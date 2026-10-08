@@ -67,7 +67,6 @@ export function ProtectedRoute({
  * Get redirect path based on user role
  * Exported for use in other components
  */
-// eslint-disable-next-line react-refresh/only-export-components
 export function getRedirectPath(role?: UserRole | string): string {
   switch (role) {
     case 'admin':

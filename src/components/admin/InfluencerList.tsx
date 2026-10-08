@@ -42,7 +42,6 @@ export default function InfluencerList() {
 
   useEffect(() => {
     loadInfluencers();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAddSampleInfluencers = async () => {

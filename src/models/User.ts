@@ -25,8 +25,8 @@ export interface CustomerProfile extends Profile {
   user_type: 'customer';
   support_tickets?: number;
   orders_count?: number;
-  purchaseHistory?: Array<{ productId: string; date: string; price: number }>;
-  favoriteProducts?: string[];
+  purchaseHistory?: any[];
+  favoriteProducts?: any[];
   recentSearches?: string[];
   country?: string;
   notificationPreferences?: {

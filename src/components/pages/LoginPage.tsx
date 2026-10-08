@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Loader as Loader2 } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -25,7 +25,7 @@ export function LoginPage() {
   const [error, setError] = useState('');
 
   // Get redirect path from location state or default to dashboard
-  const from = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/dashboard';
+  const from = (location.state as any)?.from?.pathname || '/dashboard';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -44,7 +44,7 @@ export function LoginPage() {
       await signIn(formData.email, formData.password);
       // Redirect to the page they tried to visit or dashboard
       navigate(from, { replace: true });
-    } catch (err) {
+    } catch (err: any) {
       // Log error for debugging (in production, use proper error tracking like Sentry)
       if (import.meta.env.DEV) {
         console.error('Login failed:', err.message);

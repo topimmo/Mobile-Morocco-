@@ -25,9 +25,11 @@ import {
 import {
   Search,
   MapPin,
+  Filter,
   X,
   SlidersHorizontal,
   Target,
+  Calendar,
 } from "lucide-react";
 
 interface AdvancedSearchProps {
@@ -54,7 +56,7 @@ interface SearchFilters {
 
 const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
   onSearch = () => {},
-  onClose: _onClose = () => {},
+  onClose = () => {},
   initialFilters = {},
 }) => {
   const [filters, setFilters] = useState<SearchFilters>({
@@ -130,7 +132,7 @@ const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
     "Bluetooth 5.0",
   ];
 
-  const handleFilterChange = (key: keyof SearchFilters, value: SearchFilters[keyof SearchFilters]) => {
+  const handleFilterChange = (key: keyof SearchFilters, value: any) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value,

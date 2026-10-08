@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Star, MapPin, Calendar, Shield, MessageCircle, Phone, ChevronRight, Eye, Clock, Wrench, Package, AlertTriangle } from 'lucide-react';
+import { Star, MapPin, Calendar, Shield, MessageCircle, Phone, ChevronRight, Eye, Clock, Wrench, Package, TriangleAlert as AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

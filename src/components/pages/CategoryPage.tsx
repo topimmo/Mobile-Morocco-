@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, ChevronRight, ChevronDown, SlidersHorizontal, Grid, List, MapPin, Filter, X } from 'lucide-react';
+import { Search, ChevronRight, ChevronDown, SlidersHorizontal, Grid2x2 as Grid, List, MapPin, Filter, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';

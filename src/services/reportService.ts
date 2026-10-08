@@ -85,7 +85,7 @@ export const getReportById = async (id: string) => {
       .from('reports')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error('Get report error:', error);
@@ -102,7 +102,7 @@ export const getReportById = async (id: string) => {
 
 export const updateReportStatus = async (id: string, status: Report['status'], adminNotes?: string) => {
   try {
-    const dbUpdateData: Record<string, unknown> = {
+    const dbUpdateData: any = {
       status,
       updated_at: new Date().toISOString()
     };
@@ -147,7 +147,7 @@ export const deleteReport = async (id: string) => {
   }
 };
 
-const mapDatabaseReportToModel = (dbReport: Record<string, unknown>): Report => {
+const mapDatabaseReportToModel = (dbReport: any): Report => {
   return {
     id: dbReport.id,
     reporterId: dbReport.reporter_id,

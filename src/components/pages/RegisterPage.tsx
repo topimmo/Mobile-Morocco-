@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, Store, Wrench, Settings, Eye, Mail, Lock, Phone, MapPin, Building, ChevronRight, ChevronLeft, AlertTriangle, Check, Loader2 } from 'lucide-react';
+import { User, Store, Wrench, Settings, Eye, Mail, Lock, Phone, MapPin, Building, ChevronRight, ChevronLeft, TriangleAlert as AlertTriangle, Check, Loader as Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

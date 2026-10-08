@@ -21,7 +21,7 @@ import { City } from '@/lib/supabase/cities';
 import { Neighborhood } from '@/lib/supabase/neighborhoods';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
-import { Loader2, X, Upload, Info } from 'lucide-react';
+import { Loader as Loader2, X, Upload, Info } from 'lucide-react';
 import { trackListingCreated } from '@/services/analyticsService';
 import { uploadImages, deleteImage } from '@/lib/supabase/storage';
 
@@ -165,12 +165,12 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
     loadCategories();
   }, []);
 
-  const handleCityChange = (id: string, _city?: City) => {
+  const handleCityChange = (id: string, city?: City) => {
     setCityId(id);
     setNeighborhoodId(''); // Reset neighborhood when city changes
   };
 
-  const handleNeighborhoodChange = (id: string, _neighborhood?: Neighborhood) => {
+  const handleNeighborhoodChange = (id: string, neighborhood?: Neighborhood) => {
     setNeighborhoodId(id);
   };
 

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Smartphone, Phone, Mail, MapPin, ExternalLink, Globe, MessageSquare, PlusCircle, AlertTriangle } from 'lucide-react';
+import { Smartphone, Phone, Mail, MapPin, ExternalLink, Globe, MessageSquare, CirclePlus as PlusCircle, TriangleAlert as AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const FOOTER_CATEGORIES = [

@@ -1,7 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode, useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { AlertTriangle, RefreshCw, Home, WifiOff, ServerCrash, AlertCircle } from 'lucide-react';
+import { TriangleAlert as AlertTriangle, RefreshCw, Home, WifiOff, ServerCrash, CircleAlert as AlertCircle } from 'lucide-react';
 
 // Error types for better categorization
 export type ErrorType = 'network' | 'server' | 'auth' | 'notfound' | 'unknown';
@@ -240,7 +240,6 @@ export function GlobalErrorBoundary({ children }: { children: ReactNode }) {
 }
 
 // Functional wrapper for easier use with hooks
-// eslint-disable-next-line react-refresh/only-export-components
 export function withErrorBoundary<P extends object>(
   WrappedComponent: React.ComponentType<P>,
   fallback?: ReactNode,
@@ -311,7 +310,6 @@ interface AsyncState<T> {
   isError: boolean;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useAsyncWithFallback<T>(
   asyncFn: () => Promise<T>,
   fallbackData: T,
@@ -347,7 +345,6 @@ export function useAsyncWithFallback<T>(
 
   React.useEffect(() => {
     execute();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   return { ...state, retry: execute };

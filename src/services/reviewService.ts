@@ -16,8 +16,8 @@ export const getReviewsBySubject = async (subjectType: string, subjectId: string
     const { data, error } = await supabase
       .from('reviews')
       .select('*')
-      .eq('subject_type', subjectType)
-      .eq('subject_id', subjectId)
+      .eq('target_type', subjectType)
+      .eq('target_id', subjectId)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -43,9 +43,9 @@ export const createReview = async (reviewData: Omit<Review, 'id' | 'createdAt' |
     }
 
     const dbReviewData = {
-      reviewer_id: user.id,
-      subject_type: reviewData.subjectType,
-      subject_id: reviewData.subjectId,
+      user_id: user.id,
+      target_type: reviewData.subjectType,
+      target_id: reviewData.subjectId,
       rating: reviewData.rating,
       comment: reviewData.comment
     };
@@ -80,19 +80,19 @@ export const updateReview = async (id: string, reviewData: Partial<Review>) => {
 
     const { data: reviewCheck, error: checkError } = await supabase
       .from('reviews')
-      .select('reviewer_id')
+      .select('user_id')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     if (checkError || !reviewCheck) {
       return { success: false, error: 'Review not found' };
     }
 
-    if (reviewCheck.reviewer_id !== user.id) {
+    if (reviewCheck.user_id !== user.id) {
       return { success: false, error: 'You do not have permission to update this review' };
     }
 
-    const dbReviewData: Record<string, unknown> = {};
+    const dbReviewData: any = {};
     if (reviewData.rating !== undefined) dbReviewData.rating = reviewData.rating;
     if (reviewData.comment !== undefined) dbReviewData.comment = reviewData.comment;
     dbReviewData.updated_at = new Date().toISOString();
@@ -125,15 +125,15 @@ export const deleteReview = async (id: string) => {
 
     const { data: reviewCheck, error: checkError } = await supabase
       .from('reviews')
-      .select('reviewer_id')
+      .select('user_id')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     if (checkError || !reviewCheck) {
       return { success: false, error: 'Review not found' };
     }
 
-    if (reviewCheck.reviewer_id !== user.id) {
+    if (reviewCheck.user_id !== user.id) {
       return { success: false, error: 'You do not have permission to delete this review' };
     }
 
@@ -154,12 +154,12 @@ export const deleteReview = async (id: string) => {
   }
 };
 
-const mapDatabaseReviewToModel = (dbReview: Record<string, unknown>): Review => {
+const mapDatabaseReviewToModel = (dbReview: any): Review => {
   return {
     id: dbReview.id,
-    reviewerId: dbReview.reviewer_id,
-    subjectType: dbReview.subject_type,
-    subjectId: dbReview.subject_id,
+    reviewerId: dbReview.user_id,
+    subjectType: dbReview.target_type,
+    subjectId: dbReview.target_id,
     rating: dbReview.rating,
     comment: dbReview.comment,
     createdAt: dbReview.created_at,

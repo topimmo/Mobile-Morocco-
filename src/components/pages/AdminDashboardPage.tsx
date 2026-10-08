@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2 } from 'lucide-react';
+import { Loader as Loader2 } from 'lucide-react';
 import RealTimeStats from '@/components/admin/RealTimeStats';
 import AdList from '@/components/admin/AdList';
 import NeighborhoodList from '@/components/admin/NeighborhoodList';

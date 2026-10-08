@@ -37,7 +37,7 @@ export async function getActiveBanner(page: PageKey, slot: SlotType) {
     .eq('status', 'active')
     .lte('start_date', today)
     .gte('end_date', today)
-    .single();
+    .maybeSingle();
 
   if (error || !booking) {
     return null;
@@ -58,7 +58,7 @@ export async function getAdsenseUnit(page: PageKey, slot: SlotType) {
     .eq('page', page)
     .eq('slot', slot)
     .eq('is_active', true)
-    .single();
+    .maybeSingle();
 
   return { data, error };
 }

@@ -54,7 +54,7 @@ export default defineConfig({
     strictPort: true,
   },
   server: {
-    // @ts-expect-error - TEMPO allowedHosts uses boolean which is not in standard Vite types
+    // @ts-ignore
     allowedHosts: process.env.TEMPO === "true" ? true : undefined,
     host: process.env.TEMPO === "true" ? '0.0.0.0' : undefined
   }

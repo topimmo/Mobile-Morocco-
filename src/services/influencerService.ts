@@ -44,7 +44,7 @@ export const getInfluencerById = async (
     .from("influencers")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error(`Error fetching influencer with ID ${id}:`, error);

@@ -167,7 +167,7 @@ export const getListingById = async (id: string) => {
       neighborhood:neighborhoods(*)
     `)
     .eq('id', id)
-    .single();
+    .maybeSingle();
 
   return { data: data as unknown as ListingWithRelations | null, error };
 };
@@ -183,7 +183,7 @@ export const getListingBySlug = async (slug: string): Promise<ListingWithRelatio
       neighborhood:neighborhoods(*)
     `)
     .eq('slug', slug)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Error fetching listing by slug:', error);
@@ -219,7 +219,7 @@ export const createListing = async (listing: Omit<ListingInsertWithPhoneDetails,
   
   const { data, error } = await supabase
     .from('listings')
-    .insert({ ...listing, slug } as ListingInsertWithPhoneDetails)
+    .insert({ ...listing, slug } as any)
     .select()
     .single();
 

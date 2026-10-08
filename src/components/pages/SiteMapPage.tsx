@@ -1,19 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import {
-  AlertCircle,
-  BarChart3,
-  Globe,
-  Grid,
-  Home,
-  List,
-  MapPin,
-  Search,
-  Settings,
-  User,
-  Wrench,
-  Zap,
-} from 'lucide-react';
+import { CircleAlert as AlertCircle, BarChart3, Globe, Grid2x2 as Grid, Home, List, MapPin, Search, Settings, User, Wrench, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const pages = [

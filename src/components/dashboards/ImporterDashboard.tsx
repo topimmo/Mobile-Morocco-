@@ -14,14 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-  BarChart,
-  Store,
-  Package,
-  TrendingUp,
-  AlertCircle,
-  Plus,
-} from "lucide-react";
+import { BarChart, Store, Package, TrendingUp, CircleAlert as AlertCircle, Smartphone, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function ImporterDashboard() {
@@ -29,7 +22,7 @@ export default function ImporterDashboard() {
   const [profile, setProfile] = useState<ImporterProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [stores, setStores] = useState<{ id: string; name: string; description: string; city: string; productCount: number }[]>([]);
+  const [stores, setStores] = useState<any[]>([]);
 
   useEffect(() => {
     const checkAuth = async () => {

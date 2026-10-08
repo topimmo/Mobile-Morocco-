@@ -17,19 +17,7 @@ interface Product {
   enableWhatsApp?: boolean;
   isPremium?: boolean;
   isFeatured?: boolean;
-  specs?: {
-    brand?: string;
-    model?: string;
-    storage?: string;
-    ram?: string;
-    display?: string;
-    camera?: string;
-    battery?: string;
-    os?: string;
-    color?: string;
-    warranty?: string;
-    [key: string]: string | undefined;
-  };
+  specs?: any;
 }
 
 interface ComparisonContextType {
@@ -110,7 +98,6 @@ export const ComparisonProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useComparison = () => {
   const context = useContext(ComparisonContext);
   if (context === undefined) {

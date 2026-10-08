@@ -8,12 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  BarChart,
-  Users,
-  Megaphone,
-  CheckCircle,
-} from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { ArrowRight, BarChart, DollarSign, Users, Megaphone, Award, CircleCheck as CheckCircle } from "lucide-react";
 import { Language } from '@/contexts/LanguageContext';
 
 interface AdvertiserSectionProps {

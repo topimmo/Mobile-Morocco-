@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { MapPin, Plus, Check, Loader2 } from 'lucide-react';
+import { MapPin, Plus, Check, Loader as Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   getNeighborhoodsByCity,
   searchNeighborhoods,

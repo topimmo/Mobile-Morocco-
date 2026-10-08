@@ -95,9 +95,9 @@ export const isFavorite = async (productId: string) => {
       .select('id')
       .eq('user_id', user.id)
       .eq('product_id', productId)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
       console.error('Check favorite error:', error);
       return { isFavorite: false, error: error.message };
     }

@@ -1,4 +1,4 @@
-import { CheckCircle, MessageSquare, AlertCircle, Clock } from 'lucide-react';
+import { CircleCheck as CheckCircle, MessageSquare, CircleAlert as AlertCircle, Clock } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface NotificationsFeedProps {

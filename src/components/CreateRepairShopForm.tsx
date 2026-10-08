@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ import { City } from '@/lib/supabase/cities';
 import { Neighborhood } from '@/lib/supabase/neighborhoods';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
-import { Loader2, X, Upload } from 'lucide-react';
+import { Loader as Loader2, X, Upload } from 'lucide-react';
 import { uploadImages, deleteImage } from '@/lib/supabase/storage';
 
 interface CreateRepairShopFormProps {
@@ -82,12 +82,12 @@ export function CreateRepairShopForm({ onSuccess, onCancel }: CreateRepairShopFo
     required: isRTL ? 'يرجى ملء جميع الحقول المطلوبة' : 'Veuillez remplir tous les champs obligatoires',
   };
 
-  const handleCityChange = (id: string, _city?: City) => {
+  const handleCityChange = (id: string, city?: City) => {
     setCityId(id);
     setNeighborhoodId('');
   };
 
-  const handleNeighborhoodChange = (id: string, _neighborhood?: Neighborhood) => {
+  const handleNeighborhoodChange = (id: string, neighborhood?: Neighborhood) => {
     setNeighborhoodId(id);
   };
 

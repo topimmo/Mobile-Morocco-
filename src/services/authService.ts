@@ -3,12 +3,6 @@ import { CustomerProfile, ImporterProfile, TechnicianProfile } from '@/models/Us
 import type { User } from '@supabase/supabase-js';
 import { getSiteUrl } from '@/config/env';
 
-interface AuthErrorWithDetails {
-  code?: string;
-  details?: string;
-  hint?: string;
-}
-
 // Role types matching the database constraint
 export type UserRole = 'user' | 'agent' | 'merchant' | 'admin';
 
@@ -82,7 +76,7 @@ export const registerUser = async (
 // Helper function to extract type-specific fields
 const getTypeSpecificFields = (
   userType: string,
-  userData: Record<string, unknown>
+  userData: any
 ) => {
   switch (userType) {
     case 'technician':
@@ -167,7 +161,7 @@ export const unifiedUserRegistration = async (
     });
 
     return { user: authCreationData.user, error: null };
-  } catch (unexpectedError) {
+  } catch (unexpectedError: any) {
     console.error('Unified registration unexpected error:', unexpectedError);
     return { user: null, error: 'Registration failed unexpectedly' };
   }
@@ -224,7 +218,7 @@ export const getUserProfile = async () => {
       .from('profiles')
       .select('*')
       .eq('id', user.id)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error('Get profile error:', error);
@@ -246,7 +240,7 @@ export const getUserProfile = async () => {
 };
 
 // Map database fields to our model
-const mapDatabaseProfileToModel = (dbProfile: Record<string, unknown>) => {
+const mapDatabaseProfileToModel = (dbProfile: any) => {
   const baseProfile = {
     id: dbProfile.id,
     email: dbProfile.email,
@@ -324,8 +318,8 @@ export const updateUserProfile = async (profileData: Partial<CustomerProfile | I
 };
 
 // Map our model fields to database fields
-const mapModelToDatabase = (profileData: Record<string, unknown>) => {
-  const baseData: Record<string, unknown> = {};
+const mapModelToDatabase = (profileData: any) => {
+  const baseData: any = {};
   
   // Map common fields
   if (profileData.firstName !== undefined) baseData.first_name = profileData.firstName;
@@ -406,7 +400,7 @@ export const updatePassword = async (newPassword: string) => {
 };
 
 // Verify email
-export const verifyEmail = async (_token: string) => {
+export const verifyEmail = async (token: string) => {
   try {
     // This is handled automatically by Supabase when the user clicks the verification link
     // This function is just a placeholder for any additional logic you might want to add
@@ -468,11 +462,11 @@ export const signUpWithRole = async (
       const errorDetails = {
         message: authError.message,
         status: authError.status,
-        code: (authError as AuthErrorWithDetails).code,
-        details: (authError as AuthErrorWithDetails).details,
-        hint: (authError as AuthErrorWithDetails).hint,
+        code: (authError as any).code,
+        details: (authError as any).details,
+        hint: (authError as any).hint,
         name: authError.name,
-        __isAuthError: (authError as unknown as { __isAuthError?: boolean }).__isAuthError,
+        __isAuthError: (authError as any).__isAuthError,
       };
 
       // Always log errors to console for debugging
@@ -494,7 +488,7 @@ export const signUpWithRole = async (
       
       // Provide user-friendly error messages based on error code or message
       let userMessage = authError.message;
-      const errorCode = (authError as AuthErrorWithDetails).code;
+      const errorCode = (authError as any).code;
       const errorMsg = authError.message?.toLowerCase() || '';
       
       // Check error code first (more reliable than message matching)
@@ -557,7 +551,7 @@ export const signUpWithRole = async (
     }
 
     return { user: authData.user, error: null };
-  } catch (error) {
+  } catch (error: any) {
     // Catch-all for unexpected errors
     const errorDetails = {
       message: error?.message,
@@ -610,7 +604,7 @@ export const getUserRole = async (userId?: string): Promise<{ role: UserRole | n
 
     if (error) {
       // Database/network errors
-      const errorCode = (error as { code?: string; details?: string }).code;
+      const errorCode = (error as any).code;
       
       if (errorCode?.includes('permission') || errorCode?.includes('RLS')) {
         // RLS policy issue
@@ -621,7 +615,7 @@ export const getUserRole = async (userId?: string): Promise<{ role: UserRole | n
         console.error('🔴 getUserRole: Database error:', {
           code: errorCode,
           message: error.message,
-          details: (error as { code?: string; details?: string }).details,
+          details: (error as any).details,
         });
         return { role: null, error: 'DATABASE_ERROR' };
       }
@@ -661,7 +655,7 @@ export const getUserRole = async (userId?: string): Promise<{ role: UserRole | n
     });
 
     return { role: profile.role as UserRole, error: null };
-  } catch (error) {
+  } catch (error: any) {
     console.error('🔴 getUserRole: Unexpected error:', {
       message: error?.message,
       name: error?.name,
@@ -693,13 +687,13 @@ export const signInAndRedirect = async (
       console.error('🔴 Sign in error details:', {
         message: signInError.message,
         status: signInError.status,
-        code: (signInError as AuthErrorWithDetails).code,
-        details: (signInError as AuthErrorWithDetails).details,
+        code: (signInError as any).code,
+        details: (signInError as any).details,
       });
       
       // Provide user-friendly error messages based on error code or message
       let userMessage = signInError.message;
-      const errorCode = (signInError as AuthErrorWithDetails).code;
+      const errorCode = (signInError as any).code;
       
       // Check error code first (more reliable)
       if (errorCode === 'invalid_credentials') {
@@ -836,7 +830,7 @@ export const signInAndRedirect = async (
       role,
       error: null,
     };
-  } catch (error) {
+  } catch (error: any) {
     // Comprehensive error logging for debugging mobile issues
     console.error('🔴 Sign in and redirect error (catch):', {
       message: error?.message,
@@ -888,7 +882,7 @@ export const resendConfirmationEmail = async (email: string): Promise<{ success:
 
     console.log('Confirmation email resent successfully to:', email);
     return { success: true, error: null };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Resend confirmation email error (catch):', error);
     return { 
       success: false, 
@@ -909,7 +903,7 @@ export const ensureProfileExists = async (user: User): Promise<{ success: boolea
       .from('profiles')
       .select('id')
       .eq('id', user.id)
-      .single();
+      .maybeSingle();
 
     // Profile exists, nothing to do
     if (existingProfile && !selectError) {
@@ -957,7 +951,7 @@ export const ensureProfileExists = async (user: User): Promise<{ success: boolea
 
     console.log('Profile created successfully for user:', user.id);
     return { success: true, error: null };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in ensureProfileExists:', error);
     return { success: false, error: error.message || 'Failed to ensure profile exists' };
   }

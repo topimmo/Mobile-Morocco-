@@ -12,17 +12,12 @@ import {
 } from "./ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
+import { Separator } from "./ui/separator";
 import { Checkbox } from "./ui/checkbox";
-import {
-  X,
-  Plus,
-  MapPin,
-  Phone,
-  MessageCircle,
-  AlertCircle,
-  Check,
-} from "lucide-react";
+import { Upload, X, Plus, MapPin, Phone, MessageCircle, CircleAlert as AlertCircle, Check } from "lucide-react";
 import { toast } from "./ui/use-toast";
+import { uploadImages, deleteImage } from "@/lib/supabase/storage";
+import { Loader as Loader2 } from "lucide-react";
 
 interface ProductListingFormProps {
   onSubmit?: (listing: ProductListing) => void;
@@ -161,7 +156,7 @@ const ProductListingForm: React.FC<ProductListingFormProps> = ({
     "Bluetooth 5.0",
   ];
 
-  const handleInputChange = (field: string, value: string | number | boolean | string[]) => {
+  const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -178,7 +173,7 @@ const ProductListingForm: React.FC<ProductListingFormProps> = ({
     }));
   };
 
-  const handleContactInfoChange = (field: string, value: string | number | boolean | string[]) => {
+  const handleContactInfoChange = (field: string, value: any) => {
     setFormData((prev) => ({
       ...prev,
       contactInfo: {
@@ -298,7 +293,7 @@ const ProductListingForm: React.FC<ProductListingFormProps> = ({
       });
 
       onSubmit(formData);
-    } catch (_error) {
+    } catch (error) {
       toast({
         title: "Error",
         description: "Failed to submit listing. Please try again.",

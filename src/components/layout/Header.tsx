@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, Menu, X, PlusCircle, ChevronDown, Bell, User, Smartphone } from 'lucide-react';
+import { Search, Menu, X, CirclePlus as PlusCircle, ChevronDown, Bell, User, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
