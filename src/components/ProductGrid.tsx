@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import ProductCard from "./ProductCard";
 import {
   Pagination,
@@ -53,161 +53,167 @@ const ProductGrid = ({
   const { toast } = useToast();
 
   // Mock products if none provided
-  const mockProducts: Product[] = [
-    {
-      id: "1",
-      title: "Smartphone - Apple iPhone 13 Pro Max - New",
-      price: 8500,
-      condition: "new",
-      image:
-        "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=400&q=80",
-      images: [
-        "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=400&q=80",
-        "https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400&q=80",
-        "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=400&q=80",
-      ],
-      seller: {
-        name: "Tech Imports",
-        rating: 4.8,
-        location: "Casablanca",
-        phoneNumber: "0612345678",
-        showPhoneNumber: true,
-        enableWhatsApp: true,
+  const mockProducts: Product[] = useMemo(
+    () => [
+      {
+        id: "1",
+        title: "Smartphone - Apple iPhone 13 Pro Max - New",
+        price: 8500,
+        condition: "new",
+        image:
+          "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=400&q=80",
+        images: [
+          "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=400&q=80",
+          "https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400&q=80",
+          "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=400&q=80",
+        ],
+        seller: {
+          name: "Tech Imports",
+          rating: 4.8,
+          location: "Casablanca",
+          phoneNumber: "0612345678",
+          showPhoneNumber: true,
+          enableWhatsApp: true,
+        },
       },
-    },
-    {
-      id: "2",
-      title: "Smartphone - Samsung Galaxy S21 - Used",
-      price: 5200,
-      condition: "used",
-      image:
-        "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80",
-      seller: {
-        name: "Mobile World",
-        rating: 4.5,
-        location: "Rabat",
-        phoneNumber: "0623456789",
-        showPhoneNumber: true,
-        enableWhatsApp: false,
+      {
+        id: "2",
+        title: "Smartphone - Samsung Galaxy S21 - Used",
+        price: 5200,
+        condition: "used",
+        image:
+          "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80",
+        seller: {
+          name: "Mobile World",
+          rating: 4.5,
+          location: "Rabat",
+          phoneNumber: "0623456789",
+          showPhoneNumber: true,
+          enableWhatsApp: false,
+        },
       },
-    },
-    {
-      id: "3",
-      title: "Smartphone - Xiaomi Redmi Note 10 - New",
-      price: 2300,
-      condition: "new",
-      image:
-        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&q=80",
-      seller: {
-        name: "Smart Phones",
-        rating: 4.2,
-        location: "Marrakech",
-        phoneNumber: "0634567890",
-        showPhoneNumber: false,
-        enableWhatsApp: true,
+      {
+        id: "3",
+        title: "Smartphone - Xiaomi Redmi Note 10 - New",
+        price: 2300,
+        condition: "new",
+        image:
+          "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&q=80",
+        seller: {
+          name: "Smart Phones",
+          rating: 4.2,
+          location: "Marrakech",
+          phoneNumber: "0634567890",
+          showPhoneNumber: false,
+          enableWhatsApp: true,
+        },
       },
-    },
-    {
-      id: "4",
-      title: "Smartphone - Oppo Reno 6 - Used",
-      price: 3800,
-      condition: "used",
-      image:
-        "https://images.unsplash.com/photo-1606041011872-596597976b25?w=400&q=80",
-      seller: {
-        name: "Phone Experts",
-        rating: 4.0,
-        location: "Tangier",
-        phoneNumber: "0645678901",
-        showPhoneNumber: false,
-        enableWhatsApp: false,
+      {
+        id: "4",
+        title: "Smartphone - Oppo Reno 6 - Used",
+        price: 3800,
+        condition: "used",
+        image:
+          "https://images.unsplash.com/photo-1606041011872-596597976b25?w=400&q=80",
+        seller: {
+          name: "Phone Experts",
+          rating: 4.0,
+          location: "Tangier",
+          phoneNumber: "0645678901",
+          showPhoneNumber: false,
+          enableWhatsApp: false,
+        },
       },
-    },
-    {
-      id: "5",
-      title: "Smartphone - Huawei P40 Pro - New",
-      price: 6200,
-      condition: "new",
-      image:
-        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=400&q=80",
-      seller: {
-        name: "Digital Hub",
-        rating: 4.7,
-        location: "Fes",
-        phoneNumber: "0656789012",
-        showPhoneNumber: true,
-        enableWhatsApp: true,
+      {
+        id: "5",
+        title: "Smartphone - Huawei P40 Pro - New",
+        price: 6200,
+        condition: "new",
+        image:
+          "https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=400&q=80",
+        seller: {
+          name: "Digital Hub",
+          rating: 4.7,
+          location: "Fes",
+          phoneNumber: "0656789012",
+          showPhoneNumber: true,
+          enableWhatsApp: true,
+        },
       },
-    },
-    {
-      id: "6",
-      title: "Smartphone - OnePlus 9 - Used",
-      price: 5800,
-      condition: "used",
-      image:
-        "https://images.unsplash.com/photo-1614796740292-50ae67262ff0?w=400&q=80",
-      seller: {
-        name: "Tech Valley",
-        rating: 4.4,
-        location: "Agadir",
-        phoneNumber: "0667890123",
-        showPhoneNumber: true,
-        enableWhatsApp: false,
+      {
+        id: "6",
+        title: "Smartphone - OnePlus 9 - Used",
+        price: 5800,
+        condition: "used",
+        image:
+          "https://images.unsplash.com/photo-1614796740292-50ae67262ff0?w=400&q=80",
+        seller: {
+          name: "Tech Valley",
+          rating: 4.4,
+          location: "Agadir",
+          phoneNumber: "0667890123",
+          showPhoneNumber: true,
+          enableWhatsApp: false,
+        },
       },
-    },
-    {
-      id: "7",
-      title: "Smartphone - Google Pixel 6 - New",
-      price: 7200,
-      condition: "new",
-      image:
-        "https://images.unsplash.com/photo-1635870723802-e88d76ae3ec9?w=400&q=80",
-      seller: {
-        name: "Phone Gallery",
-        rating: 4.6,
-        location: "Casablanca",
-        phoneNumber: "0678901234",
-        showPhoneNumber: false,
-        enableWhatsApp: true,
+      {
+        id: "7",
+        title: "Smartphone - Google Pixel 6 - New",
+        price: 7200,
+        condition: "new",
+        image:
+          "https://images.unsplash.com/photo-1635870723802-e88d76ae3ec9?w=400&q=80",
+        seller: {
+          name: "Phone Gallery",
+          rating: 4.6,
+          location: "Casablanca",
+          phoneNumber: "0678901234",
+          showPhoneNumber: false,
+          enableWhatsApp: true,
+        },
       },
-    },
-    {
-      id: "8",
-      title: "Smartphone - Realme GT - Used",
-      price: 4100,
-      condition: "used",
-      image:
-        "https://images.unsplash.com/photo-1592434134753-a70baf7979d5?w=400&q=80",
-      seller: {
-        name: "Mobile Zone",
-        rating: 4.3,
-        location: "Meknes",
-        phoneNumber: "0689012345",
-        showPhoneNumber: false,
-        enableWhatsApp: false,
+      {
+        id: "8",
+        title: "Smartphone - Realme GT - Used",
+        price: 4100,
+        condition: "used",
+        image:
+          "https://images.unsplash.com/photo-1592434134753-a70baf7979d5?w=400&q=80",
+        seller: {
+          name: "Mobile Zone",
+          rating: 4.3,
+          location: "Meknes",
+          phoneNumber: "0689012345",
+          showPhoneNumber: false,
+          enableWhatsApp: false,
+        },
       },
-    },
-  ];
+    ],
+    [],
+  );
 
-  const displayProducts = products.length > 0 ? products : mockProducts;
+  const displayProducts = useMemo(
+    () => (products.length > 0 ? products : mockProducts),
+    [products, mockProducts],
+  );
 
   // Pagination logic
   const productsPerPage = 8;
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = displayProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct,
-  );
+  const currentProducts = useMemo(() => {
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    return displayProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  }, [displayProducts, currentPage]);
+
   const totalPages = Math.ceil(displayProducts.length / productsPerPage);
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
     // Use requestAnimationFrame for better performance
     requestAnimationFrame(() => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
-  };
+  }, []);
 
   const handleSortChange = (value: string) => {
     setSortBy(value);
