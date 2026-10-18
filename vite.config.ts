@@ -17,8 +17,8 @@ export default defineConfig({
     },
   },
   build: {
-    // Ensure source maps for debugging production issues
-    sourcemap: true,
+    // Do not publish source maps with the production site
+    sourcemap: false,
     // Optimize chunk splitting for better caching
     rollupOptions: {
       output: {
