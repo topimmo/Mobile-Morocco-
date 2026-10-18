@@ -95,6 +95,8 @@ export function RegisterPage() {
 
     if (!formData.phone) {
       newErrors.phone = 'Le numéro de téléphone est requis';
+    } else if (!/^(?:\+212|00212|0)[5-7]\d{8}$/.test(formData.phone.replace(/[\s.\-()]/g, ''))) {
+      newErrors.phone = 'Numéro marocain invalide (ex: +212 6XX-XXXXXX ou 06XXXXXXXX)';
     }
 
     setErrors(newErrors);
@@ -106,14 +108,29 @@ export function RegisterPage() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Maps the UI account type to the DB role allowed by the profiles CHECK constraint
+  const roleForUserType = (type: UserType | null): 'user' | 'agent' | 'merchant' => {
+    if (type === 'seller' || type === 'repair_shop') return 'merchant';
+    if (type === 'technician') return 'agent';
+    return 'user';
+  };
+
   const handleSubmit = async () => {
-    console.log('🔵 Starting registration process...', { userType, formData: { ...formData, password: '[REDACTED]' } });
 
     // Validate form
     if (!validateForm()) {
+      // Errors state is set asynchronously, so recompute the list for the toast
+      const missing: string[] = [];
+      if (!formData.email) missing.push('email');
+      if (!formData.password || formData.password.length < 6) missing.push('mot de passe (6 caractères min.)');
+      if (formData.password !== formData.confirmPassword) missing.push('confirmation du mot de passe');
+      if (!formData.displayName) missing.push('nom complet');
+      if ((userType === 'repair_shop' || userType === 'seller') && !formData.shopName) missing.push("nom de l'entreprise");
+      if (!formData.city) missing.push('ville');
+      if (!formData.phone || !/^(?:\+212|00212|0)[5-7]\d{8}$/.test(formData.phone.replace(/[\s.\-()]/g, ''))) missing.push('téléphone valide');
       toast({
         title: 'Erreur de validation',
-        description: 'Veuillez corriger les erreurs dans le formulaire',
+        description: missing.length ? `À corriger : ${missing.join(', ')}` : 'Veuillez corriger les erreurs dans le formulaire',
         variant: 'destructive',
       });
       return;
@@ -133,71 +150,34 @@ export function RegisterPage() {
     try {
       console.log('🔵 Step 1: Creating auth account with Supabase...');
       
-      // Step 1: Create auth account
+      // Create the auth account. The database trigger (handle_new_user) creates the
+      // profiles row from this metadata, so the client must NOT insert into profiles
+      // (the row already exists and the old columns no longer exist).
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
           data: {
-            display_name: formData.displayName,
+            full_name: formData.displayName,
+            phone: formData.phone,
+            role: roleForUserType(userType),
+            // Extra info kept in auth metadata (no matching profiles columns yet)
             user_type: userType,
+            shop_name: formData.shopName || null,
+            city: formData.city,
+            whatsapp: formData.whatsapp || null,
+            description: formData.description || null,
           },
         },
       });
 
-      console.log('📊 Auth signup response:', { data: authData, error: authError });
-
       if (authError) {
-        console.error('❌ Auth error:', authError);
         throw new Error(authError.message);
       }
 
       if (!authData.user) {
-        console.error('❌ No user returned from signup');
         throw new Error('Échec de la création du compte');
       }
-
-      console.log('✅ Auth account created successfully, user ID:', authData.user.id);
-      console.log('🔵 Step 2: Creating profile in database...');
-
-      // Step 2: Create user profile
-      const profileData = {
-        id: authData.user.id,
-        email: formData.email,
-        user_type: userType,
-        display_name: formData.displayName,
-        shop_name: formData.shopName || null,
-        city: formData.city,
-        phone: formData.phone,
-        whatsapp: formData.whatsapp || null,
-        description: formData.description || null,
-        is_verified: false,
-        subscription_type: 'free',
-      };
-
-      console.log('📊 Attempting to insert profile:', profileData);
-
-      const { data: profileInsertData, error: profileError } = await supabase
-        .from('profiles')
-        .insert(profileData)
-        .select()
-        .single();
-
-      console.log('📊 Profile insert response:', { data: profileInsertData, error: profileError });
-
-      if (profileError) {
-        console.error('❌ Profile creation error:', profileError);
-        console.error('❌ Profile error details:', {
-          code: profileError.code,
-          message: profileError.message,
-          details: profileError.details,
-          hint: profileError.hint,
-        });
-        throw new Error(`Échec de la création du profil: ${profileError.message}`);
-      }
-
-      console.log('✅ Profile created successfully');
-      console.log('✅ Registration completed successfully!');
 
       // Show success message
       toast({
@@ -574,4 +554,4 @@ function Badge({ children, variant, className }: { children: React.ReactNode; va
       {children}
     </span>
   );
-}
+  }
